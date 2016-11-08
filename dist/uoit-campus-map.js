@@ -544,13 +544,14 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(MapDetailCtrl, null, [{
 			key: '$inject',
 			get: function get() {
-				return ['$sce'];
+				return ['$sce', '$state'];
 			}
 		}]);
 	
-		function MapDetailCtrl($sce) {
+		function MapDetailCtrl($sce, $state) {
 			_classCallCheck(this, MapDetailCtrl);
 	
+			this.$state = $state;
 			if (this.feature.getProperty('linked')) {
 				this.building = this.feature.getProperty('building');
 	
@@ -574,8 +575,12 @@ return /******/ (function(modules) { // webpackBootstrap
 				this.mdPanelRef.close();
 				var location = this.location,
 				    building = this.building;
+				// callback({
+				// 	location: this.location.code,
+				// 	building: this.building.code
+				// });
 	
-				callback({
+				this.$state.go('building', {
 					location: this.location.code,
 					building: this.building.code
 				});
