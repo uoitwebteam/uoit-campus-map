@@ -19,10 +19,11 @@ class MapDetailCtrl {
 		this.detailsShowing = !this.detailsShowing;
 	}
 	goto(building) {
-		this.$state.go('building', {
-			location: this.location.code,
-			building: this.building.code
-		});
+		// this.$state.go('building', {
+		// 	location: this.location.code,
+		// 	building: this.building.code
+		// });
+		console.log(this.location.code, this.building.code);
 	}
 	close() {
 		this.mdPanelRef.close();
