@@ -110,8 +110,10 @@
   <script type="text/javascript">
     angular.module('app', ['ngMaterial', 'ngResource', 'ngMap', 'ui.router', 'campusMap'])
     	.controller('mainCtrl', function() {
-    		this.onGotoBldg = function(data) {
-    			alert(JSON.stringify(data));
+    		this.onGotoBldg = function() {
+    			return function(data) {
+	    			alert(JSON.stringify(data));
+	    		}
     		}
     	});
   </script>

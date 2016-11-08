@@ -115,7 +115,7 @@ class MapCtrl {
 			    panelClass: 'demo-dialog-example',
 			    position: position,
 			    locals: {
-			    	callback: this.onGotoBldg,
+			    	callback: this.onGotoBldg(),
 			    	location: this.currentLocation,
 			    	feature
 			    },

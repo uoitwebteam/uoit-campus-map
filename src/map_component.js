@@ -1,7 +1,7 @@
 const campusMap = {
   // transclude: true,
   bindings: {
-    onGotoBldg: '&',
+    onGotoBldg: '<',
     markers: '<?'
   },
   templateUrl: '_map.html',
