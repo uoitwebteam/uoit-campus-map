@@ -571,10 +571,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'goto',
 			value: function goto(building) {
-				this.$state.go('building', {
-					location: this.location.code,
-					building: this.building.code
-				});
+				// this.$state.go('building', {
+				// 	location: this.location.code,
+				// 	building: this.building.code
+				// });
+				console.log(this.location.code, this.building.code);
 			}
 		}, {
 			key: 'close',
