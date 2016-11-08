@@ -343,7 +343,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				if (newVal && newVal.showAll) {
 					instance.data.addGeoJson(newVal.collection);
 				} else {
-					instance.data.loadGeoJson('http://localhost:3000/api/v1/feature-collections/' + newVal.collection._id, null, function () {
+					instance.data.loadGeoJson('https://virtualtour-cms.herokuapp.com/api/v1/feature-collections/' + newVal.collection._id, null, function () {
 						_this4.fitBounds(instance);
 					});
 				}
