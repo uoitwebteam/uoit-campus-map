@@ -7,6 +7,7 @@ class MapControlsCtrl {
     this.CollectionResource = CollectionResource;
     this.CategoryResource = CategoryResource;
     this.LocationResource = LocationResource;
+    this.$timeout = $timeout;
 	}
 	$onInit() {
 		this.loadLocations(locations => {
@@ -18,7 +19,7 @@ class MapControlsCtrl {
 		return this.LocationResource.query().$promise.then(locations => {
 			this.locations = locations;
 			callback&&callback(locations);
-			$timeout(
+			this.$timeout(
 				() => angular.element($window).triggerHandler('resize')
 			);
 		});
