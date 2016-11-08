@@ -1,5 +1,3 @@
-import MapDetailCtrl from './detail/map-detail_controller';
-
 class MapCtrl {
 	static get $inject() {
 		return [
@@ -110,7 +108,7 @@ class MapCtrl {
 
 			  const config = {
 			    attachTo: angular.element(document.body),
-			    controller: MapDetailCtrl,
+			    controller: 'MapDetailCtrl',
 			    controllerAs: 'ctrl',
 			    templateUrl: 'detail/_map-detail.html',
 			    hasBackdrop: true,

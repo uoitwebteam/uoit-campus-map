@@ -68,15 +68,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _map_controller2 = _interopRequireDefault(_map_controller);
 	
-	var _mapControls_component = __webpack_require__(4);
+	var _mapControls_component = __webpack_require__(3);
 	
 	var _mapControls_component2 = _interopRequireDefault(_mapControls_component);
 	
-	var _mapControls_controller = __webpack_require__(5);
+	var _mapControls_controller = __webpack_require__(4);
 	
 	var _mapControls_controller2 = _interopRequireDefault(_mapControls_controller);
 	
-	var _mapDetail_controller = __webpack_require__(3);
+	var _mapDetail_controller = __webpack_require__(5);
 	
 	var _mapDetail_controller2 = _interopRequireDefault(_mapDetail_controller);
 	
@@ -135,7 +135,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
 	
@@ -144,12 +144,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _mapDetail_controller = __webpack_require__(3);
-	
-	var _mapDetail_controller2 = _interopRequireDefault(_mapDetail_controller);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -274,7 +268,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 						var config = {
 							attachTo: angular.element(document.body),
-							controller: _mapDetail_controller2.default,
+							controller: 'MapDetailCtrl',
 							controllerAs: 'ctrl',
 							templateUrl: 'detail/_map-detail.html',
 							hasBackdrop: true,
@@ -290,6 +284,10 @@ return /******/ (function(modules) { // webpackBootstrap
 							focusOnOpen: true
 						};
 						_this.$mdPanel.open(config);
+	
+						var bounds = new google.maps.LatLngBounds();
+						_this.processBounds(feature.getGeometry(), bounds.extend, bounds);
+						instance.fitBounds(bounds);
 					});
 	
 					_this.$scope.$watch(function () {
@@ -387,60 +385,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var MapDetailCtrl = function () {
-		_createClass(MapDetailCtrl, null, [{
-			key: '$inject',
-			get: function get() {
-				return ['$sce'];
-			}
-		}]);
-	
-		function MapDetailCtrl($sce) {
-			_classCallCheck(this, MapDetailCtrl);
-	
-			if (this.feature.getProperty('linked')) {
-				this.building = this.feature.getProperty('building');
-	
-				this.name = this.building.name;
-				this.description = $sce.trustAsHtml(this.building.desc);
-			} else {
-				this.name = this.feature.getProperty('name');
-				this.description = $sce.trustAsHtml(this.feature.getProperty('desc'));
-			}
-			this.detailsShowing = false;
-		}
-	
-		_createClass(MapDetailCtrl, [{
-			key: 'showDetails',
-			value: function showDetails() {
-				this.detailsShowing = !this.detailsShowing;
-			}
-		}, {
-			key: 'close',
-			value: function close() {
-				this.mdPanelRef.close();
-			}
-		}]);
-	
-		return MapDetailCtrl;
-	}();
-	
-	exports.default = MapDetailCtrl;
-
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	var campusMapControls = {
@@ -455,7 +399,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = campusMapControls;
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -472,11 +416,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(MapControlsCtrl, null, [{
 			key: '$inject',
 			get: function get() {
-				return ['LocationResource', 'CategoryResource', 'CollectionResource', 'FeatureResource'];
+				return ['LocationResource', 'CategoryResource', 'CollectionResource', 'FeatureResource', '$timeout'];
 			}
 		}]);
 	
-		function MapControlsCtrl(LocationResource, CategoryResource, CollectionResource, FeatureResource) {
+		function MapControlsCtrl(LocationResource, CategoryResource, CollectionResource, FeatureResource, $timeout) {
 			_classCallCheck(this, MapControlsCtrl);
 	
 			this.FeatureResource = FeatureResource;
@@ -503,6 +447,9 @@ return /******/ (function(modules) { // webpackBootstrap
 				return this.LocationResource.query().$promise.then(function (locations) {
 					_this2.locations = locations;
 					callback && callback(locations);
+					$timeout(function () {
+						return angular.element($window).triggerHandler('resize');
+					});
 				});
 			}
 		}, {
@@ -573,6 +520,60 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	
 	exports.default = MapControlsCtrl;
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var MapDetailCtrl = function () {
+		_createClass(MapDetailCtrl, null, [{
+			key: '$inject',
+			get: function get() {
+				return ['$sce'];
+			}
+		}]);
+	
+		function MapDetailCtrl($sce) {
+			_classCallCheck(this, MapDetailCtrl);
+	
+			if (this.feature.getProperty('linked')) {
+				this.building = this.feature.getProperty('building');
+	
+				this.name = this.building.name;
+				this.description = $sce.trustAsHtml(this.building.desc);
+			} else {
+				this.name = this.feature.getProperty('name');
+				this.description = $sce.trustAsHtml(this.feature.getProperty('desc'));
+			}
+			this.detailsShowing = false;
+		}
+	
+		_createClass(MapDetailCtrl, [{
+			key: 'showDetails',
+			value: function showDetails() {
+				this.detailsShowing = !this.detailsShowing;
+			}
+		}, {
+			key: 'close',
+			value: function close() {
+				this.mdPanelRef.close();
+			}
+		}]);
+	
+		return MapDetailCtrl;
+	}();
+	
+	exports.default = MapDetailCtrl;
 
 /***/ },
 /* 6 */

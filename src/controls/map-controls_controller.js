@@ -1,8 +1,8 @@
 class MapControlsCtrl {
 	static get $inject(){
-		return ['LocationResource', 'CategoryResource', 'CollectionResource', 'FeatureResource'];
+		return ['LocationResource', 'CategoryResource', 'CollectionResource', 'FeatureResource', '$timeout'];
 	}
-	constructor(LocationResource, CategoryResource, CollectionResource, FeatureResource) {
+	constructor(LocationResource, CategoryResource, CollectionResource, FeatureResource, $timeout) {
     this.FeatureResource = FeatureResource;
     this.CollectionResource = CollectionResource;
     this.CategoryResource = CategoryResource;
@@ -18,6 +18,9 @@ class MapControlsCtrl {
 		return this.LocationResource.query().$promise.then(locations => {
 			this.locations = locations;
 			callback&&callback(locations);
+			$timeout(
+				() => angular.element($window).triggerHandler('resize')
+			);
 		});
 	}
 	loadCategories(callback) {
