@@ -89,9 +89,9 @@
 		}
   </style>
 </head>
-<body ng-app="app" ng-cloak layout="column">
+<body ng-app="app" ng-cloak layout="column" ng-controller="mainCtrl as $ctrl">
 
-  <campus-map layout layout-fill flex></campus-map>
+  <campus-map on-goto-bldg="$ctrl.onGotoBldg" layout layout-fill flex></campus-map>
 
   <script src="https://maps.googleapis.com/maps/api/js"></script>
   <!-- Angular Material requires Angular.js Libraries -->
@@ -108,7 +108,12 @@
   <!-- Application bootstrap  -->
   <script src="../dist/uoit-campus-map.js"></script>
   <script type="text/javascript">
-    angular.module('app', ['ngMaterial', 'ngResource', 'ngMap', 'ui.router', 'campusMap']);
+    angular.module('app', ['ngMaterial', 'ngResource', 'ngMap', 'ui.router', 'campusMap'])
+    	.controller('mainCtrl', function() {
+    		this.onGotoBldg = function(data) {
+    			alert(JSON.stringify(data));
+    		}
+    	});
   </script>
   
 </body>

@@ -1,8 +1,8 @@
 const campusMap = {
   // transclude: true,
   bindings: {
-    // onToggle: '&?',
-    markers: '<'
+    onGotoBldg: '&',
+    markers: '<?'
   },
   templateUrl: '_map.html',
   controller: 'MapCtrl'
