@@ -1,13 +1,14 @@
 class MapControlsCtrl {
 	static get $inject(){
-		return ['LocationResource', 'CategoryResource', 'CollectionResource', 'FeatureResource', '$timeout'];
+		return ['LocationResource', 'CategoryResource', 'CollectionResource', 'FeatureResource', '$timeout', '$window'];
 	}
-	constructor(LocationResource, CategoryResource, CollectionResource, FeatureResource, $timeout) {
+	constructor(LocationResource, CategoryResource, CollectionResource, FeatureResource, $timeout, $window) {
     this.FeatureResource = FeatureResource;
     this.CollectionResource = CollectionResource;
     this.CategoryResource = CategoryResource;
     this.LocationResource = LocationResource;
     this.$timeout = $timeout;
+    this.$window = $window;
 	}
 	$onInit() {
 		this.loadLocations(locations => {
@@ -20,7 +21,7 @@ class MapControlsCtrl {
 			this.locations = locations;
 			callback&&callback(locations);
 			this.$timeout(
-				() => angular.element($window).triggerHandler('resize')
+				() => angular.element(this.$window).triggerHandler('resize')
 			);
 		});
 	}
