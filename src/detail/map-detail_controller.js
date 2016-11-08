@@ -1,8 +1,9 @@
 class MapDetailCtrl {
 	static get $inject() {
-		return ['$sce'];
+		return ['$sce', '$state'];
 	}
-	constructor($sce) {
+	constructor($sce, $state) {
+		this.$state = $state;
   	if (this.feature.getProperty('linked')) {
   		this.building = this.feature.getProperty('building');
 
@@ -16,6 +17,12 @@ class MapDetailCtrl {
   }
 	showDetails() {
 		this.detailsShowing = !this.detailsShowing;
+	}
+	goto(building) {
+		this.$state.go('building', {
+			location: this.location.code,
+			building: this.building.code
+		});
 	}
 	close() {
 		this.mdPanelRef.close();

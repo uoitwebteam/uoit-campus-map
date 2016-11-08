@@ -115,6 +115,7 @@ class MapCtrl {
 			    panelClass: 'demo-dialog-example',
 			    position: position,
 			    locals: {
+			    	location: this.currentLocation,
 			    	feature
 			    },
 			    trapFocus: true,
@@ -129,6 +130,7 @@ class MapCtrl {
 	    this.$scope.$watch( () => this.mapControls, (newVal) => {
 	    	this.clearMapData(instance);
 	    	this.updateMapData(instance, newVal);
+	    	this.currentLocation = newVal.location;
 	    });
 
     });
@@ -161,7 +163,7 @@ class MapCtrl {
 		if (newVal && newVal.showAll) {
       instance.data.addGeoJson(newVal.collection);
 		} else {
-  		instance.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${newVal}`, null, () => {
+  		instance.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${newVal.collection._id}`, null, () => {
 			  this.fitBounds(instance);
   		});
 		}

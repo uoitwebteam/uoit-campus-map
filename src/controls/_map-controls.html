@@ -6,24 +6,24 @@
   <div layout="row">
     <md-input-container>
       <label>Location</label>
-      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" ng-change="$ctrl.updateLocation()">
-        <md-option ng-repeat="location in $ctrl.locations" ng-value="location._id" ng-disabled="$ctrl.location === location._id">
+      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" ng-change="$ctrl.updateLocation()" ng-model-options="{trackBy: '$value._id'}">
+        <md-option ng-repeat="location in $ctrl.locations" ng-value="location" ng-disabled="$ctrl.location === location">
           {{location.label}}
         </md-option>
       </md-select>
     </md-input-container>
     <md-input-container>
       <label>Feature category</label>
-      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()">
-        <md-option ng-repeat="category in $ctrl.categories" ng-value="category._id" ng-disabled="$ctrl.category === category">
+      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()" ng-model-options="{trackBy: '$value._id'}">
+        <md-option ng-repeat="category in $ctrl.categories" ng-value="category" ng-disabled="$ctrl.category === category">
           {{ category.name }}
         </md-option>
       </md-select>
     </md-input-container>
     <md-input-container ng-if="$ctrl.category">
       <label>Feature collection</label>
-      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()">
-        <md-option ng-repeat="collection in $ctrl.collections" ng-value="collection._id" ng-disabled="$ctrl.collection === collection._id">
+      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()" ng-model-options="{trackBy: '$value._id'}">
+        <md-option ng-repeat="collection in $ctrl.collections" ng-value="collection" ng-disabled="$ctrl.collection === collection">
           {{ collection.name }}
         </md-option>
       </md-select>

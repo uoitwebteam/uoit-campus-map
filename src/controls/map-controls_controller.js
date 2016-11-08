@@ -11,7 +11,7 @@ class MapControlsCtrl {
 	}
 	$onInit() {
 		this.loadLocations(locations => {
-			this.location = locations[1]._id;
+			this.location = locations[1];
 			this.updateLocation();
 		});
 	}
@@ -33,7 +33,7 @@ class MapControlsCtrl {
 	loadCollections(callback) {
 		const {location, category} = this;
 		return this.CollectionResource.query({
-			filter: { location, category }
+			filter: { location: location._id, category: category._id }
 		}).$promise.then(collections => {
 			this.collections = collections;
 			callback&&callback(collections);
@@ -41,18 +41,19 @@ class MapControlsCtrl {
 	}
 	updateLocation() {
 		this.loadCategories(categories => {
-			this.category = categories[0]._id;
+			this.category = categories[0];
 			this.updateCategory();
 		});
 	}
 	updateCategory() {
 		this.loadCollections(collections => {
-			this.collection = collections[0]._id;
+			this.collection = collections[0];
 			this.updateCollection();
 		});
 	}
 	updateCollection() {
-		this.$ngModel.$setViewValue(this.collection);
+		const { location, category, collection } = this;
+		this.$ngModel.$setViewValue({ location, category, collection });
 	}
 	showAll() {
 		this.FeatureResource.query({}).$promise.then(features => {
