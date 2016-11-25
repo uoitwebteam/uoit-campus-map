@@ -579,15 +579,15 @@ return /******/ (function(modules) { // webpackBootstrap
 				this.mdPanelRef.close();
 				var location = this.location,
 				    building = this.building;
-				// callback({
-				// 	location: this.location.code,
-				// 	building: this.building.code
-				// });
 	
-				this.$state.go('building', {
+				callback({
 					location: this.location.code,
 					building: this.building.code
 				});
+				// this.$state.go('building', {
+				// 	location: this.location.code,
+				// 	building: this.building.code
+				// });
 			}
 		}, {
 			key: 'close',

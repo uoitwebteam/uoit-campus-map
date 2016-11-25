@@ -21,14 +21,14 @@ class MapDetailCtrl {
 	goToBldg(callback) {
 		this.mdPanelRef.close();
 		const { location, building } = this;
-		// callback({
-		// 	location: this.location.code,
-		// 	building: this.building.code
-		// });
-		this.$state.go('building', {
+		callback({
 			location: this.location.code,
 			building: this.building.code
 		});
+		// this.$state.go('building', {
+		// 	location: this.location.code,
+		// 	building: this.building.code
+		// });
 	}
 	close() {
 		this.mdPanelRef.close();
