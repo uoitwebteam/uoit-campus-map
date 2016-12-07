@@ -27,15 +27,15 @@ export default angular.module('campusMap', [])
  //  .factory('BuildingResource', ['$resource', function($resource) {
 	//   return $resource('https://virtualtour-cms.herokuapp.com/api/v1/buildings/:id');
 	// }])
-  .factory('CategoryResource', ['$resource', function($resource) {
-	  return $resource('https://virtualtour-cms.herokuapp.com/api/v1/categories/:id');
-	}])
+ //  .factory('CategoryResource', ['$resource', function($resource) {
+	//   return $resource('https://virtualtour-cms.herokuapp.com/api/v1/categories/:id');
+	// }])
  //  .factory('LocationResource', ['$resource', function($resource) {
 	//   return $resource('https://virtualtour-cms.herokuapp.com/api/v1/locations/:id');
 	// }])
-  .factory('CollectionResource', ['$resource', function($resource) {
-	  return $resource('https://virtualtour-cms.herokuapp.com/api/v1/feature-collections/:id');
-	}])
-  .factory('FeatureResource', ['$resource', function($resource) {
-	  return $resource('https://virtualtour-cms.herokuapp.com/api/v1/features/:id');
-	}])
+ //  .factory('CollectionResource', ['$resource', function($resource) {
+	//   return $resource('https://virtualtour-cms.herokuapp.com/api/v1/feature-collections/:id');
+	// }])
+ //  .factory('FeatureResource', ['$resource', function($resource) {
+	//   return $resource('https://virtualtour-cms.herokuapp.com/api/v1/features/:id');
+	// }])
