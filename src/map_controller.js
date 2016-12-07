@@ -164,7 +164,7 @@ class MapCtrl {
 		if (newVal && newVal.showAll) {
       instance.data.addGeoJson(newVal.collection);
 		} else {
-  		newVal.collection&&instance.data.loadGeoJson(`/api/v1/feature-collections/${newVal.collection._id}`, null, () => {
+  		newVal&&instance.data.loadGeoJson(`/api/v1/feature-collections/${newVal.collection._id}`, null, () => {
 			  this.fitBounds(instance);
   		});
 		}
