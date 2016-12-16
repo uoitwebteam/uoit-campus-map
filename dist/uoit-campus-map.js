@@ -405,7 +405,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(MapControlsCtrl, null, [{
 			key: '$inject',
 			get: function get() {
-				return ['$mapApi', '$timeout', '$window'];
+				return ['$mapApi', '$tourApi', '$timeout', '$window'];
 			}
 		}]);
 	
