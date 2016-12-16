@@ -98,22 +98,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	// ----------------
 	
 	exports.default = angular.module('campusMap', []).run(_templates2.default).controller('MapCtrl', _map_controller2.default).controller('MapControlsCtrl', _mapControls_controller2.default).controller('MapDetailCtrl', _mapDetail_controller2.default).component('campusMap', _map_component2.default).component('campusMapControls', _mapControls_component2.default).constant('MAP_SETTINGS', _mapSettings_constant2.default).constant('MAP_ICONS', _mapIcons_constant2.default);
-	//  .factory('BuildingResource', ['$resource', function($resource) {
-	//   return $resource('https://virtualtour-cms.herokuapp.com/api/v1/buildings/:id');
-	// }])
-	//  .factory('CategoryResource', ['$resource', function($resource) {
-	//   return $resource('https://virtualtour-cms.herokuapp.com/api/v1/categories/:id');
-	// }])
-	//  .factory('LocationResource', ['$resource', function($resource) {
-	//   return $resource('https://virtualtour-cms.herokuapp.com/api/v1/locations/:id');
-	// }])
-	//  .factory('CollectionResource', ['$resource', function($resource) {
-	//   return $resource('https://virtualtour-cms.herokuapp.com/api/v1/feature-collections/:id');
-	// }])
-	//  .factory('FeatureResource', ['$resource', function($resource) {
-	//   return $resource('https://virtualtour-cms.herokuapp.com/api/v1/features/:id');
-	// }])
-	
 	
 	// development only
 	//
@@ -345,7 +329,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				if (newVal && newVal.showAll) {
 					instance.data.addGeoJson(newVal.collection);
 				} else {
-					newVal.collection && instance.data.loadGeoJson('/api/v1/feature-collections/' + newVal.collection._id, null, function () {
+					newVal && instance.data.loadGeoJson('/api/v1/feature-collections/' + newVal.collection._id, null, function () {
 						_this4.fitBounds(instance);
 					});
 				}
@@ -421,17 +405,17 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(MapControlsCtrl, null, [{
 			key: '$inject',
 			get: function get() {
-				return ['LocationResource', 'CategoryResource', 'CollectionResource', 'FeatureResource', '$timeout', '$window'];
+				return ['$mapApi', '$timeout', '$window'];
 			}
 		}]);
 	
-		function MapControlsCtrl(LocationResource, CategoryResource, CollectionResource, FeatureResource, $timeout, $window) {
+		function MapControlsCtrl($mapApi, $tourApi, $timeout, $window) {
 			_classCallCheck(this, MapControlsCtrl);
 	
-			this.FeatureResource = FeatureResource;
-			this.CollectionResource = CollectionResource;
-			this.CategoryResource = CategoryResource;
-			this.LocationResource = LocationResource;
+			this.FeatureResource = $mapApi.feature;
+			this.CollectionResource = $mapApi.collection;
+			this.CategoryResource = $mapApi.category;
+			this.LocationResource = $tourApi.location;
 			this.$timeout = $timeout;
 			this.$window = $window;
 		}

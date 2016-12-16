@@ -1,12 +1,12 @@
 class MapControlsCtrl {
 	static get $inject(){
-		return ['LocationResource', 'CategoryResource', 'CollectionResource', 'FeatureResource', '$timeout', '$window'];
+		return ['$mapApi', '$timeout', '$window'];
 	}
-	constructor(LocationResource, CategoryResource, CollectionResource, FeatureResource, $timeout, $window) {
-    this.FeatureResource = FeatureResource;
-    this.CollectionResource = CollectionResource;
-    this.CategoryResource = CategoryResource;
-    this.LocationResource = LocationResource;
+	constructor($mapApi, $tourApi, $timeout, $window) {
+    this.FeatureResource = $mapApi.feature;
+    this.CollectionResource = $mapApi.collection;
+    this.CategoryResource = $mapApi.category;
+    this.LocationResource = $tourApi.location;
     this.$timeout = $timeout;
     this.$window = $window;
 	}

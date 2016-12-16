@@ -23,19 +23,4 @@ export default angular.module('campusMap', [])
   .component('campusMap', campusMap)
   .component('campusMapControls', campusMapControls)
   .constant('MAP_SETTINGS', MAP_SETTINGS)
-  .constant('MAP_ICONS', MAP_ICONS)
- //  .factory('BuildingResource', ['$resource', function($resource) {
-	//   return $resource('https://virtualtour-cms.herokuapp.com/api/v1/buildings/:id');
-	// }])
- //  .factory('CategoryResource', ['$resource', function($resource) {
-	//   return $resource('https://virtualtour-cms.herokuapp.com/api/v1/categories/:id');
-	// }])
- //  .factory('LocationResource', ['$resource', function($resource) {
-	//   return $resource('https://virtualtour-cms.herokuapp.com/api/v1/locations/:id');
-	// }])
- //  .factory('CollectionResource', ['$resource', function($resource) {
-	//   return $resource('https://virtualtour-cms.herokuapp.com/api/v1/feature-collections/:id');
-	// }])
- //  .factory('FeatureResource', ['$resource', function($resource) {
-	//   return $resource('https://virtualtour-cms.herokuapp.com/api/v1/features/:id');
-	// }])
+  .constant('MAP_ICONS', MAP_ICONS);
