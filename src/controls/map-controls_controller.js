@@ -1,6 +1,6 @@
 class MapControlsCtrl {
 	static get $inject(){
-		return ['$mapApi', '$timeout', '$window'];
+		return ['$mapApi', '$tourApi', '$timeout', '$window'];
 	}
 	constructor($mapApi, $tourApi, $timeout, $window) {
     this.FeatureResource = $mapApi.feature;
