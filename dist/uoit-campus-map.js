@@ -276,7 +276,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: '$onDestroy',
 			value: function $onDestroy() {
-				google.maps.event.clearInstanceListeners(this._map);
+				google.maps.event.clearInstanceListeners(this._map.data);
+				console.log('map instance destroyed');
 			}
 		}, {
 			key: 'showToast',
@@ -360,20 +361,6 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 			}
 		}, {
-			key: 'getOffsetFromEvent',
-			value: function getOffsetFromEvent(event) {
-				var clientX = void 0,
-				    clientY = void 0;
-				for (var prop in event) {
-					if (event[prop] && event[prop].clientX && event[prop].clientY) {
-						var _event$prop = event[prop];
-						clientX = _event$prop.clientX;
-						clientY = _event$prop.clientY;
-					}
-				}
-				return { clientX: clientX, clientY: clientY };
-			}
-		}, {
 			key: 'processBounds',
 			value: function processBounds(geometry, callback, thisArg) {
 				var _this6 = this;
@@ -398,6 +385,20 @@ return /******/ (function(modules) { // webpackBootstrap
 					_this7.processBounds(feature.getGeometry(), bounds.extend, bounds);
 				});
 				this._map.fitBounds(bounds);
+			}
+		}, {
+			key: 'getOffsetFromEvent',
+			value: function getOffsetFromEvent(event) {
+				var clientX = void 0,
+				    clientY = void 0;
+				for (var prop in event) {
+					if (event[prop] && event[prop].clientX && event[prop].clientY) {
+						var _event$prop = event[prop];
+						clientX = _event$prop.clientX;
+						clientY = _event$prop.clientY;
+					}
+				}
+				return { clientX: clientX, clientY: clientY };
 			}
 		}]);
 	
