@@ -9,9 +9,19 @@ const MAP_ICONS = {
     anchor: new google.maps.Point(12, 12),
     size: new google.maps.Size(24, 24)
 	},
+	ACCESS: {
+		path: 'M21,9H15V22H13V16H11V22H9V9H3V7H21M12,2A2,2 0 0,1 14,4A2,2 0 0,1 12,6C10.89,6 10,5.1 10,4C10,2.89 10.89,2 12,2Z',
+		fillColor: '#0077CA',
+		fillOpacity: 1,
+    strokeOpacity: 0.5,
+    strokeWeight: 2,
+    strokeColor: 'white',
+    anchor: new google.maps.Point(12, 12),
+    size: new google.maps.Size(24, 24)
+	},
 	FOOD: {
 		path: 'M3,3A1,1 0 0,0 2,4V8L2,9.5C2,11.19 3.03,12.63 4.5,13.22V19.5A1.5,1.5 0 0,0 6,21A1.5,1.5 0 0,0 7.5,19.5V13.22C8.97,12.63 10,11.19 10,9.5V8L10,4A1,1 0 0,0 9,3A1,1 0 0,0 8,4V8A0.5,0.5 0 0,1 7.5,8.5A0.5,0.5 0 0,1 7,8V4A1,1 0 0,0 6,3A1,1 0 0,0 5,4V8A0.5,0.5 0 0,1 4.5,8.5A0.5,0.5 0 0,1 4,8V4A1,1 0 0,0 3,3M19.88,3C19.75,3 19.62,3.09 19.5,3.16L16,5.25V9H12V11H13L14,21H20L21,11H22V9H18V6.34L20.5,4.84C21,4.56 21.13,4 20.84,3.5C20.63,3.14 20.26,2.95 19.88,3Z',
-		fillColor: '#1a875c',
+		fillColor: '#5F259F',
 		fillOpacity: 0.8,
     strokeOpacity: 0.5,
     strokeWeight: 2,
@@ -22,6 +32,16 @@ const MAP_ICONS = {
 	SERVICE: {
 		path: 'M18,16H6V15.1C6,13.1 10,12 12,12C14,12 18,13.1 18,15.1M12,5.3C13.5,5.3 14.7,6.5 14.7,8C14.7,9.5 13.5,10.7 12,10.7C10.5,10.7 9.3,9.5 9.3,8C9.3,6.5 10.5,5.3 12,5.3M19,2H5C3.89,2 3,2.89 3,4V18A2,2 0 0,0 5,20H9L12,23L15,20H19A2,2 0 0,0 21,18V4C21,2.89 20.1,2 19,2Z',
 		fillColor: '#003c71',
+		fillOpacity: 0.8,
+    strokeOpacity: 0.5,
+    strokeWeight: 2,
+    strokeColor: 'white',
+    anchor: new google.maps.Point(12, 12),
+    size: new google.maps.Size(24, 24)
+	},
+	OUTDOOR: {
+		path: 'M10,21V18H3L8,13H5L10,8H7L12,3L17,8H14L19,13H16L21,18H14V21H10Z',
+		fillColor: '#1a875c',
 		fillOpacity: 0.8,
     strokeOpacity: 0.5,
     strokeWeight: 2,
