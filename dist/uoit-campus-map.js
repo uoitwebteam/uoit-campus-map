@@ -260,7 +260,9 @@ return /******/ (function(modules) { // webpackBootstrap
 						_this.hideToast();
 					});
 	
-					instance.data.addListener('click', _this.showDetail.bind(_this));
+					instance.data.addListener('click', function (event) {
+						_this.showDetail(event.feature, _this.getOffsetFromEvent(event));
+					});
 	
 					_this.$scope.$watch(function () {
 						return _this.mapControls;
@@ -274,9 +276,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: '$onDestroy',
 			value: function $onDestroy() {
-				this._getMap().then(function (instance) {
-					return google.maps.event.clearInstanceListeners(instance);
-				});
+				google.maps.event.clearInstanceListeners(this._map);
 			}
 		}, {
 			key: 'showToast',
@@ -307,18 +307,14 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 		}, {
 			key: 'showDetail',
-			value: function showDetail(event) {
-				var feature = event.feature,
-				    xy = { clientX: 0, clientY: 0 };
+			value: function showDetail(feature) {
+				var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+				    _ref$clientX = _ref.clientX,
+				    clientX = _ref$clientX === undefined ? 0 : _ref$clientX,
+				    _ref$clientY = _ref.clientY,
+				    clientY = _ref$clientY === undefined ? 0 : _ref$clientY;
 	
-				for (var prop in event) {
-					if (event[prop] && event[prop].clientX && event[prop].clientY) {
-						xy.clientX = event[prop].clientX;
-						xy.clientY = event[prop].clientY;
-					}
-				}
-	
-				var position = this.$mdPanel.newPanelPosition().absolute().top(xy.clientY + 'px').left(xy.clientX + 'px');
+				var position = this.$mdPanel.newPanelPosition().absolute().top(clientY + 'px').left(clientX + 'px');
 	
 				var config = {
 					attachTo: angular.element(document.body),
@@ -362,6 +358,20 @@ return /******/ (function(modules) { // webpackBootstrap
 						_this5.fitBounds(_this5._map);
 					});
 				}
+			}
+		}, {
+			key: 'getOffsetFromEvent',
+			value: function getOffsetFromEvent(event) {
+				var clientX = void 0,
+				    clientY = void 0;
+				for (var prop in event) {
+					if (event[prop] && event[prop].clientX && event[prop].clientY) {
+						var _event$prop = event[prop];
+						clientX = _event$prop.clientX;
+						clientY = _event$prop.clientY;
+					}
+				}
+				return { clientX: clientX, clientY: clientY };
 			}
 		}, {
 			key: 'processBounds',

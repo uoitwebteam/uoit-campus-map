@@ -102,7 +102,9 @@ class MapCtrl {
         this.hideToast();
       });
 
-      instance.data.addListener('click', this.showDetail.bind(this));
+      instance.data.addListener('click', event => {
+        this.showDetail(event.feature, this.getOffsetFromEvent(event));
+      });
 
 	    this.$scope.$watch( () => this.mapControls, (newVal) => {
 	    	this.clearMapData();
@@ -134,21 +136,12 @@ class MapCtrl {
 			this._toastActive = false;
 	  }, 3000);
 	}
-	showDetail(event) {
-		const feature = event.feature,
-					xy = { clientX: 0, clientY: 0 };
-
-		for (const prop in event) {
-			if (event[prop] && event[prop].clientX && event[prop].clientY) {
-				xy.clientX = event[prop].clientX;
-				xy.clientY = event[prop].clientY;
-			}
-		}
+	showDetail(feature, { clientX = 0, clientY = 0 } = {}) {
 
 	  const position = this.$mdPanel.newPanelPosition()
 	    .absolute()
-	    .top(`${ xy.clientY }px`)
-	    .left(`${ xy.clientX }px`);
+	    .top(`${ clientY }px`)
+	    .left(`${ clientX }px`);
 
 	  const config = {
 	    attachTo: angular.element(document.body),
@@ -184,6 +177,15 @@ class MapCtrl {
 			  this.fitBounds(this._map);
   		});
 		}
+	}
+	getOffsetFromEvent(event) {
+		let clientX, clientY;
+		for (const prop in event) {
+			if (event[prop] && event[prop].clientX && event[prop].clientY) {
+				({ clientX, clientY } = event[prop]);
+			}
+		}
+		return { clientX, clientY };
 	}
 	processBounds(geometry, callback, thisArg) {
 	  if (geometry instanceof google.maps.LatLng) {
