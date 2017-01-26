@@ -113,7 +113,7 @@ class MapCtrl {
     });
 	}
 	$onDestroy() {
-		this._getMap().then(instance => google.maps.event.clearInstanceListeners(instance))
+		google.maps.event.clearInstanceListeners(this._map);
 	}
 	showToast(feature) {
 		let featureName = feature.getProperty('name');
