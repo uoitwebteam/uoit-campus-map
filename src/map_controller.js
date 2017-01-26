@@ -1,3 +1,5 @@
+import MapDetailCtrl from './detail/map-detail_controller.js'
+
 class MapCtrl {
 	static get $inject() {
 		return [
@@ -20,14 +22,15 @@ class MapCtrl {
     this.$mdPanel = $mdPanel;
 
     // init helper vars
-    this.getMap = NgMap.getMap;
-    this.toast = $mdToast.simple();
-    this.toastCanceler = null;
-    this.toastActive = false;
+    this._getMap = NgMap.getMap;
+    this._toast = $mdToast.simple();
+    this._toastCanceler = null;
+    this._toastActive = false;
   }
   $onInit() {
   	// unwrap promise supplied by ngMap
-    this.getMap().then(instance => {
+    this._getMap().then(instance => {
+    	this._map = instance;
     	// force map to fill entire content (glitch?)
       google.maps.event.trigger(instance, 'resize');
 
@@ -44,7 +47,7 @@ class MapCtrl {
         	case '581a2c77d9ff16e787aa1b22': // Restaurants and food courts
         		return { 
         			icon: this.MAP_ICONS.FOOD,
-		          fillColor: '#1a875c',
+		          fillColor: '#5F259F',
 		          fillOpacity: 1,
 		          strokeWeight: 3,
 		          strokeColor: 'white',
@@ -54,11 +57,21 @@ class MapCtrl {
         	case '581a2c8ad9ff16e787aa1b24': // Parking
         		return { 
         			icon: this.MAP_ICONS.PARKING,
-		          fillColor: '#1a875c',
-		          fillOpacity: 1,
+		          fillColor: '#53565A',
+		          fillOpacity: 0.5,
 		          strokeWeight: 3,
 		          strokeColor: 'white',
 		          strokeOpacity: 0.3
+		        }
+        		break;
+        	case '581a2c8fd9ff16e787aa1b25': // Parking
+        		return { 
+        			icon: this.MAP_ICONS.OUTDOOR,
+		          fillColor: '#1a875c',
+		          fillOpacity: 0.5,
+		          strokeWeight: 3,
+		          strokeColor: 'white',
+		          strokeOpacity: 0.1
 		        }
         		break;
       		default: // other
@@ -74,7 +87,6 @@ class MapCtrl {
       });
 
       instance.data.addListener('mouseover', event => {
-        instance.data.revertStyle();
         instance.data.overrideStyle(event.feature, {
           fillColor: '#C71566',
           fillOpacity: 0.7,
@@ -90,82 +102,86 @@ class MapCtrl {
         this.hideToast();
       });
 
-      instance.data.addListener('click', event => {
-				let feature = event.feature;
-				
-				let xy = { clientX: 0, clientY: 0 };
-				for (const prop in event) {
-					if (event[prop] && event[prop].clientX && event[prop].clientY) {
-						xy.clientX = event[prop].clientX;
-						xy.clientY = event[prop].clientY;
-					}
-				}
-
-			  const position = this.$mdPanel.newPanelPosition()
-			    .absolute()
-			    .top(`${ xy.clientY }px`)
-			    .left(`${ xy.clientX }px`);
-
-			  const config = {
-			    attachTo: angular.element(document.body),
-			    controller: 'MapDetailCtrl',
-			    controllerAs: 'ctrl',
-			    templateUrl: 'detail/_map-detail.html',
-			    hasBackdrop: true,
-			    panelClass: 'demo-dialog-example',
-			    position: position,
-			    locals: {
-			    	callback: this.onGotoBldg(),
-			    	location: this.currentLocation,
-			    	feature
-			    },
-			    trapFocus: true,
-			    zIndex: 150,
-			    clickOutsideToClose: true,
-			    escapeToClose: true,
-			    focusOnOpen: true
-			  };
-			  this.$mdPanel.open(config);
-			});
+      instance.data.addListener('click', this.showDetail.bind(this));
 
 	    this.$scope.$watch( () => this.mapControls, (newVal) => {
-	    	this.clearMapData(instance);
-	    	this.updateMapData(instance, newVal);
+	    	this.clearMapData();
+	    	this.updateMapData(newVal);
 	    	this.currentLocation = newVal.location;
 	    });
 
     });
 	}
+	$onDestroy() {
+		this._getMap().then(instance => google.maps.event.clearInstanceListeners(instance))
+	}
 	showToast(feature) {
 		let featureName = feature.getProperty('name');
-		if (!this.toastActive) {
-			this.toast.textContent(featureName).position('bottom left').hideDelay(0);
-			this.$mdToast.show(this.toast);
-			this.toastActive = true;
+		if (!this._toastActive) {
+			this._toast.textContent(featureName).position('bottom left').hideDelay(0);
+			this.$mdToast.show(this._toast);
+			this._toastActive = true;
 		} else {
-			this.$timeout.cancel(this.toastCanceler);
+			this.$timeout.cancel(this._toastCanceler);
 			this.$timeout( () => {
 				this.$mdToast.updateTextContent(featureName);
 			})
 		}
 	}
 	hideToast() {
-		this.toastCanceler = this.$timeout( () => {
-			this.$mdToast.hide(this.toast);
-			this.toastActive = false;
+		this._toastCanceler = this.$timeout( () => {
+			this.$mdToast.hide(this._toast);
+			this._toastActive = false;
 	  }, 3000);
 	}
-	clearMapData(instance) {
-		instance.data.forEach(feature => {
-			instance.data.remove(feature);
+	showDetail(event) {
+		const feature = event.feature,
+					xy = { clientX: 0, clientY: 0 };
+
+		for (const prop in event) {
+			if (event[prop] && event[prop].clientX && event[prop].clientY) {
+				xy.clientX = event[prop].clientX;
+				xy.clientY = event[prop].clientY;
+			}
+		}
+
+	  const position = this.$mdPanel.newPanelPosition()
+	    .absolute()
+	    .top(`${ xy.clientY }px`)
+	    .left(`${ xy.clientX }px`);
+
+	  const config = {
+	    attachTo: angular.element(document.body),
+	    controller: MapDetailCtrl,
+	    controllerAs: 'ctrl',
+	    templateUrl: 'detail/_map-detail.html',
+	    hasBackdrop: true,
+	    panelClass: 'demo-dialog-example',
+	    locals: {
+	    	callback: this.onGotoBldg(),
+	    	location: this.currentLocation,
+	    	feature
+	    },
+	    trapFocus: true,
+	    zIndex: 150,
+	    clickOutsideToClose: true,
+	    escapeToClose: true,
+	    focusOnOpen: true,
+	    position
+	  };
+	  this.$mdPanel.open(config);
+	}
+	clearMapData() {
+		this._map.data.forEach(feature => {
+			this._map.data.remove(feature);
 		});
 	}
-	updateMapData(instance, newVal) {
+	updateMapData(newVal) {
 		if (newVal && newVal.showAll) {
-      instance.data.addGeoJson(newVal.collection);
+      this._map.data.addGeoJson(newVal.collection);
 		} else {
-  		newVal&&instance.data.loadGeoJson(`/api/v1/feature-collections/${newVal.collection._id}`, null, () => {
-			  this.fitBounds(instance);
+  		newVal&&this._map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${newVal.collection._id}`, null, () => {
+			  this.fitBounds(this._map);
   		});
 		}
 	}
@@ -180,12 +196,12 @@ class MapCtrl {
 	    });
 	  }
 	}
-	fitBounds(instance) {
+	fitBounds() {
 	  const bounds = new google.maps.LatLngBounds();
-	  instance.data.forEach(feature => {
+	  this._map.data.forEach(feature => {
 	    this.processBounds(feature.getGeometry(), bounds.extend, bounds);
 	  });
-	  instance.fitBounds(bounds);
+	  this._map.fitBounds(bounds);
 	}
 }
 
