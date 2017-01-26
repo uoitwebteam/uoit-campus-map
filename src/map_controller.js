@@ -115,7 +115,8 @@ class MapCtrl {
     });
 	}
 	$onDestroy() {
-		google.maps.event.clearInstanceListeners(this._map);
+		google.maps.event.clearInstanceListeners(this._map.data);
+		console.log('map instance destroyed');
 	}
 	showToast(feature) {
 		let featureName = feature.getProperty('name');
@@ -178,15 +179,6 @@ class MapCtrl {
   		});
 		}
 	}
-	getOffsetFromEvent(event) {
-		let clientX, clientY;
-		for (const prop in event) {
-			if (event[prop] && event[prop].clientX && event[prop].clientY) {
-				({ clientX, clientY } = event[prop]);
-			}
-		}
-		return { clientX, clientY };
-	}
 	processBounds(geometry, callback, thisArg) {
 	  if (geometry instanceof google.maps.LatLng) {
 	    callback.call(thisArg, geometry);
@@ -204,6 +196,15 @@ class MapCtrl {
 	    this.processBounds(feature.getGeometry(), bounds.extend, bounds);
 	  });
 	  this._map.fitBounds(bounds);
+	}
+	getOffsetFromEvent(event) {
+		let clientX, clientY;
+		for (const prop in event) {
+			if (event[prop] && event[prop].clientX && event[prop].clientY) {
+				({ clientX, clientY } = event[prop]);
+			}
+		}
+		return { clientX, clientY };
 	}
 }
 
