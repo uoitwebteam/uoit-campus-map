@@ -68,15 +68,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _map_controller2 = _interopRequireDefault(_map_controller);
 	
-	var _mapControls_component = __webpack_require__(3);
+	var _mapControls_component = __webpack_require__(4);
 	
 	var _mapControls_component2 = _interopRequireDefault(_mapControls_component);
 	
-	var _mapControls_controller = __webpack_require__(4);
+	var _mapControls_controller = __webpack_require__(5);
 	
 	var _mapControls_controller2 = _interopRequireDefault(_mapControls_controller);
 	
-	var _mapDetail_controller = __webpack_require__(5);
+	var _mapDetail_controller = __webpack_require__(3);
 	
 	var _mapDetail_controller2 = _interopRequireDefault(_mapDetail_controller);
 	
@@ -97,7 +97,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//
 	// ----------------
 	
-	exports.default = angular.module('campusMap', []).run(_templates2.default).controller('MapCtrl', _map_controller2.default).controller('MapControlsCtrl', _mapControls_controller2.default).controller('MapDetailCtrl', _mapDetail_controller2.default).component('campusMap', _map_component2.default).component('campusMapControls', _mapControls_component2.default).constant('MAP_SETTINGS', _mapSettings_constant2.default).constant('MAP_ICONS', _mapIcons_constant2.default);
+	exports.default = angular.module('campusMap', []).run(_templates2.default).controller('MapCtrl', _map_controller2.default).controller('MapControlsCtrl', _mapControls_controller2.default).component('campusMap', _map_component2.default).component('campusMapControls', _mapControls_component2.default).constant('MAP_SETTINGS', _mapSettings_constant2.default).constant('MAP_ICONS', _mapIcons_constant2.default);
 	
 	// development only
 	//
@@ -125,7 +125,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
@@ -134,6 +134,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _mapDetail_controller = __webpack_require__(3);
+	
+	var _mapDetail_controller2 = _interopRequireDefault(_mapDetail_controller);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -163,10 +169,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			this.$mdPanel = $mdPanel;
 	
 			// init helper vars
-			this.getMap = NgMap.getMap;
-			this.toast = $mdToast.simple();
-			this.toastCanceler = null;
-			this.toastActive = false;
+			this._getMap = NgMap.getMap;
+			this._toast = $mdToast.simple();
+			this._toastCanceler = null;
+			this._toastActive = false;
 		}
 	
 		_createClass(MapCtrl, [{
@@ -175,7 +181,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				var _this = this;
 	
 				// unwrap promise supplied by ngMap
-				this.getMap().then(function (instance) {
+				this._getMap().then(function (instance) {
+					_this._map = instance;
 					// force map to fill entire content (glitch?)
 					google.maps.event.trigger(instance, 'resize');
 	
@@ -195,7 +202,7 @@ return /******/ (function(modules) { // webpackBootstrap
 								// Restaurants and food courts
 								return {
 									icon: _this.MAP_ICONS.FOOD,
-									fillColor: '#1a875c',
+									fillColor: '#5F259F',
 									fillOpacity: 1,
 									strokeWeight: 3,
 									strokeColor: 'white',
@@ -206,11 +213,22 @@ return /******/ (function(modules) { // webpackBootstrap
 								// Parking
 								return {
 									icon: _this.MAP_ICONS.PARKING,
-									fillColor: '#1a875c',
-									fillOpacity: 1,
+									fillColor: '#53565A',
+									fillOpacity: 0.5,
 									strokeWeight: 3,
 									strokeColor: 'white',
 									strokeOpacity: 0.3
+								};
+								break;
+							case '581a2c8fd9ff16e787aa1b25':
+								// Parking
+								return {
+									icon: _this.MAP_ICONS.OUTDOOR,
+									fillColor: '#1a875c',
+									fillOpacity: 0.5,
+									strokeWeight: 3,
+									strokeColor: 'white',
+									strokeOpacity: 0.1
 								};
 								break;
 							default:
@@ -227,7 +245,6 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 	
 					instance.data.addListener('mouseover', function (event) {
-						instance.data.revertStyle();
 						instance.data.overrideStyle(event.feature, {
 							fillColor: '#C71566',
 							fillOpacity: 0.7,
@@ -243,48 +260,22 @@ return /******/ (function(modules) { // webpackBootstrap
 						_this.hideToast();
 					});
 	
-					instance.data.addListener('click', function (event) {
-						var feature = event.feature;
-	
-						var xy = { clientX: 0, clientY: 0 };
-						for (var prop in event) {
-							if (event[prop] && event[prop].clientX && event[prop].clientY) {
-								xy.clientX = event[prop].clientX;
-								xy.clientY = event[prop].clientY;
-							}
-						}
-	
-						var position = _this.$mdPanel.newPanelPosition().absolute().top(xy.clientY + 'px').left(xy.clientX + 'px');
-	
-						var config = {
-							attachTo: angular.element(document.body),
-							controller: 'MapDetailCtrl',
-							controllerAs: 'ctrl',
-							templateUrl: 'detail/_map-detail.html',
-							hasBackdrop: true,
-							panelClass: 'demo-dialog-example',
-							position: position,
-							locals: {
-								callback: _this.onGotoBldg(),
-								location: _this.currentLocation,
-								feature: feature
-							},
-							trapFocus: true,
-							zIndex: 150,
-							clickOutsideToClose: true,
-							escapeToClose: true,
-							focusOnOpen: true
-						};
-						_this.$mdPanel.open(config);
-					});
+					instance.data.addListener('click', _this.showDetail.bind(_this));
 	
 					_this.$scope.$watch(function () {
 						return _this.mapControls;
 					}, function (newVal) {
-						_this.clearMapData(instance);
-						_this.updateMapData(instance, newVal);
+						_this.clearMapData();
+						_this.updateMapData(newVal);
 						_this.currentLocation = newVal.location;
 					});
+				});
+			}
+		}, {
+			key: '$onDestroy',
+			value: function $onDestroy() {
+				this._getMap().then(function (instance) {
+					return google.maps.event.clearInstanceListeners(instance);
 				});
 			}
 		}, {
@@ -293,12 +284,12 @@ return /******/ (function(modules) { // webpackBootstrap
 				var _this2 = this;
 	
 				var featureName = feature.getProperty('name');
-				if (!this.toastActive) {
-					this.toast.textContent(featureName).position('bottom left').hideDelay(0);
-					this.$mdToast.show(this.toast);
-					this.toastActive = true;
+				if (!this._toastActive) {
+					this._toast.textContent(featureName).position('bottom left').hideDelay(0);
+					this.$mdToast.show(this._toast);
+					this._toastActive = true;
 				} else {
-					this.$timeout.cancel(this.toastCanceler);
+					this.$timeout.cancel(this._toastCanceler);
 					this.$timeout(function () {
 						_this2.$mdToast.updateTextContent(featureName);
 					});
@@ -309,35 +300,73 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function hideToast() {
 				var _this3 = this;
 	
-				this.toastCanceler = this.$timeout(function () {
-					_this3.$mdToast.hide(_this3.toast);
-					_this3.toastActive = false;
+				this._toastCanceler = this.$timeout(function () {
+					_this3.$mdToast.hide(_this3._toast);
+					_this3._toastActive = false;
 				}, 3000);
 			}
 		}, {
+			key: 'showDetail',
+			value: function showDetail(event) {
+				var feature = event.feature,
+				    xy = { clientX: 0, clientY: 0 };
+	
+				for (var prop in event) {
+					if (event[prop] && event[prop].clientX && event[prop].clientY) {
+						xy.clientX = event[prop].clientX;
+						xy.clientY = event[prop].clientY;
+					}
+				}
+	
+				var position = this.$mdPanel.newPanelPosition().absolute().top(xy.clientY + 'px').left(xy.clientX + 'px');
+	
+				var config = {
+					attachTo: angular.element(document.body),
+					controller: _mapDetail_controller2.default,
+					controllerAs: 'ctrl',
+					templateUrl: 'detail/_map-detail.html',
+					hasBackdrop: true,
+					panelClass: 'demo-dialog-example',
+					locals: {
+						callback: this.onGotoBldg(),
+						location: this.currentLocation,
+						feature: feature
+					},
+					trapFocus: true,
+					zIndex: 150,
+					clickOutsideToClose: true,
+					escapeToClose: true,
+					focusOnOpen: true,
+					position: position
+				};
+				this.$mdPanel.open(config);
+			}
+		}, {
 			key: 'clearMapData',
-			value: function clearMapData(instance) {
-				instance.data.forEach(function (feature) {
-					instance.data.remove(feature);
+			value: function clearMapData() {
+				var _this4 = this;
+	
+				this._map.data.forEach(function (feature) {
+					_this4._map.data.remove(feature);
 				});
 			}
 		}, {
 			key: 'updateMapData',
-			value: function updateMapData(instance, newVal) {
-				var _this4 = this;
+			value: function updateMapData(newVal) {
+				var _this5 = this;
 	
 				if (newVal && newVal.showAll) {
-					instance.data.addGeoJson(newVal.collection);
+					this._map.data.addGeoJson(newVal.collection);
 				} else {
-					newVal && instance.data.loadGeoJson('/api/v1/feature-collections/' + newVal.collection._id, null, function () {
-						_this4.fitBounds(instance);
+					newVal && this._map.data.loadGeoJson('http://localhost:3000/api/v1/feature-collections/' + newVal.collection._id, null, function () {
+						_this5.fitBounds(_this5._map);
 					});
 				}
 			}
 		}, {
 			key: 'processBounds',
 			value: function processBounds(geometry, callback, thisArg) {
-				var _this5 = this;
+				var _this6 = this;
 	
 				if (geometry instanceof google.maps.LatLng) {
 					callback.call(thisArg, geometry);
@@ -345,20 +374,20 @@ return /******/ (function(modules) { // webpackBootstrap
 					callback.call(thisArg, geometry.get());
 				} else {
 					geometry.getArray().forEach(function (g) {
-						_this5.processBounds(g, callback, thisArg);
+						_this6.processBounds(g, callback, thisArg);
 					});
 				}
 			}
 		}, {
 			key: 'fitBounds',
-			value: function fitBounds(instance) {
-				var _this6 = this;
+			value: function fitBounds() {
+				var _this7 = this;
 	
 				var bounds = new google.maps.LatLngBounds();
-				instance.data.forEach(function (feature) {
-					_this6.processBounds(feature.getGeometry(), bounds.extend, bounds);
+				this._map.data.forEach(function (feature) {
+					_this7.processBounds(feature.getGeometry(), bounds.extend, bounds);
 				});
-				instance.fitBounds(bounds);
+				this._map.fitBounds(bounds);
 			}
 		}]);
 	
@@ -369,6 +398,77 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 3 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var MapDetailCtrl = function () {
+		_createClass(MapDetailCtrl, null, [{
+			key: '$inject',
+			get: function get() {
+				return ['$sce', '$state'];
+			}
+		}]);
+	
+		function MapDetailCtrl($sce, $state) {
+			_classCallCheck(this, MapDetailCtrl);
+	
+			this.$state = $state;
+			if (this.feature.getProperty('linked')) {
+				this.building = this.feature.getProperty('building');
+	
+				this.name = this.building.name;
+				this.description = $sce.trustAsHtml(this.building.desc);
+			} else {
+				this.name = this.feature.getProperty('name');
+				this.description = $sce.trustAsHtml(this.feature.getProperty('desc'));
+			}
+			this.detailsShowing = false;
+		}
+	
+		_createClass(MapDetailCtrl, [{
+			key: 'showDetails',
+			value: function showDetails() {
+				this.detailsShowing = !this.detailsShowing;
+			}
+		}, {
+			key: 'goToBldg',
+			value: function goToBldg(callback) {
+				this.mdPanelRef.close();
+				var location = this.location,
+				    building = this.building;
+	
+				callback({
+					location: this.location.code,
+					building: this.building.code
+				});
+				// this.$state.go('building', {
+				// 	location: this.location.code,
+				// 	building: this.building.code
+				// });
+			}
+		}, {
+			key: 'close',
+			value: function close() {
+				this.mdPanelRef.close();
+			}
+		}]);
+	
+		return MapDetailCtrl;
+	}();
+	
+	exports.default = MapDetailCtrl;
+
+/***/ },
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -388,7 +488,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = campusMapControls;
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -515,77 +615,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	
 	exports.default = MapControlsCtrl;
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var MapDetailCtrl = function () {
-		_createClass(MapDetailCtrl, null, [{
-			key: '$inject',
-			get: function get() {
-				return ['$sce', '$state'];
-			}
-		}]);
-	
-		function MapDetailCtrl($sce, $state) {
-			_classCallCheck(this, MapDetailCtrl);
-	
-			this.$state = $state;
-			if (this.feature.getProperty('linked')) {
-				this.building = this.feature.getProperty('building');
-	
-				this.name = this.building.name;
-				this.description = $sce.trustAsHtml(this.building.desc);
-			} else {
-				this.name = this.feature.getProperty('name');
-				this.description = $sce.trustAsHtml(this.feature.getProperty('desc'));
-			}
-			this.detailsShowing = false;
-		}
-	
-		_createClass(MapDetailCtrl, [{
-			key: 'showDetails',
-			value: function showDetails() {
-				this.detailsShowing = !this.detailsShowing;
-			}
-		}, {
-			key: 'goToBldg',
-			value: function goToBldg(callback) {
-				this.mdPanelRef.close();
-				var location = this.location,
-				    building = this.building;
-	
-				callback({
-					location: this.location.code,
-					building: this.building.code
-				});
-				// this.$state.go('building', {
-				// 	location: this.location.code,
-				// 	building: this.building.code
-				// });
-			}
-		}, {
-			key: 'close',
-			value: function close() {
-				this.mdPanelRef.close();
-			}
-		}]);
-	
-		return MapDetailCtrl;
-	}();
-	
-	exports.default = MapDetailCtrl;
 
 /***/ },
 /* 6 */
@@ -715,9 +744,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    anchor: new google.maps.Point(12, 12),
 	    size: new google.maps.Size(24, 24)
 	  },
+	  ACCESS: {
+	    path: 'M21,9H15V22H13V16H11V22H9V9H3V7H21M12,2A2,2 0 0,1 14,4A2,2 0 0,1 12,6C10.89,6 10,5.1 10,4C10,2.89 10.89,2 12,2Z',
+	    fillColor: '#0077CA',
+	    fillOpacity: 1,
+	    strokeOpacity: 0.5,
+	    strokeWeight: 2,
+	    strokeColor: 'white',
+	    anchor: new google.maps.Point(12, 12),
+	    size: new google.maps.Size(24, 24)
+	  },
 	  FOOD: {
 	    path: 'M3,3A1,1 0 0,0 2,4V8L2,9.5C2,11.19 3.03,12.63 4.5,13.22V19.5A1.5,1.5 0 0,0 6,21A1.5,1.5 0 0,0 7.5,19.5V13.22C8.97,12.63 10,11.19 10,9.5V8L10,4A1,1 0 0,0 9,3A1,1 0 0,0 8,4V8A0.5,0.5 0 0,1 7.5,8.5A0.5,0.5 0 0,1 7,8V4A1,1 0 0,0 6,3A1,1 0 0,0 5,4V8A0.5,0.5 0 0,1 4.5,8.5A0.5,0.5 0 0,1 4,8V4A1,1 0 0,0 3,3M19.88,3C19.75,3 19.62,3.09 19.5,3.16L16,5.25V9H12V11H13L14,21H20L21,11H22V9H18V6.34L20.5,4.84C21,4.56 21.13,4 20.84,3.5C20.63,3.14 20.26,2.95 19.88,3Z',
-	    fillColor: '#1a875c',
+	    fillColor: '#5F259F',
 	    fillOpacity: 0.8,
 	    strokeOpacity: 0.5,
 	    strokeWeight: 2,
@@ -728,6 +767,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  SERVICE: {
 	    path: 'M18,16H6V15.1C6,13.1 10,12 12,12C14,12 18,13.1 18,15.1M12,5.3C13.5,5.3 14.7,6.5 14.7,8C14.7,9.5 13.5,10.7 12,10.7C10.5,10.7 9.3,9.5 9.3,8C9.3,6.5 10.5,5.3 12,5.3M19,2H5C3.89,2 3,2.89 3,4V18A2,2 0 0,0 5,20H9L12,23L15,20H19A2,2 0 0,0 21,18V4C21,2.89 20.1,2 19,2Z',
 	    fillColor: '#003c71',
+	    fillOpacity: 0.8,
+	    strokeOpacity: 0.5,
+	    strokeWeight: 2,
+	    strokeColor: 'white',
+	    anchor: new google.maps.Point(12, 12),
+	    size: new google.maps.Size(24, 24)
+	  },
+	  OUTDOOR: {
+	    path: 'M10,21V18H3L8,13H5L10,8H7L12,3L17,8H14L19,13H16L21,18H14V21H10Z',
+	    fillColor: '#1a875c',
 	    fillOpacity: 0.8,
 	    strokeOpacity: 0.5,
 	    strokeWeight: 2,
