@@ -20,9 +20,9 @@
         </md-option>
       </md-select>
     </md-input-container>
-    <md-input-container ng-if="$ctrl.category">
+    <md-input-container>
       <label>Feature collection</label>
-      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()" ng-model-options="{trackBy: '$value._id'}">
+      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()" ng-model-options="{trackBy: '$value._id'}" ng-disabled="!$ctrl.category">
         <md-option ng-repeat="collection in $ctrl.collections" ng-value="collection" ng-disabled="$ctrl.collection === collection">
           {{ collection.name }}
         </md-option>

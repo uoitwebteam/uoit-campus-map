@@ -11,57 +11,71 @@ class MapControlsCtrl {
     this.$window = $window;
 	}
 	$onInit() {
-		this.loadLocations(locations => {
-			this.location = locations[1];
-			this.updateLocation();
-		});
+		// this.loadLocations().then(locations => {
+		// 	this.location = locations[1];
+		// 	this.updateLocation();
+		// 	angular.element(this.$window).triggerHandler('resize');
+		// });
+		this.showAll();//.then(() => angular.element(this.$window).triggerHandler('resize'));
 	}
-	loadLocations(callback) {
+	loadLocations() {
 		return this.LocationResource.query().$promise.then(locations => {
 			this.locations = locations;
-			callback&&callback(locations);
-			this.$timeout(
-				() => angular.element(this.$window).triggerHandler('resize')
-			);
+			return locations;
 		});
 	}
-	loadCategories(callback) {
+	loadCategories() {
 		return this.CategoryResource.query().$promise.then(categories => {
 			this.categories = categories;
-			callback&&callback(categories);
+			return categories;
 		});
 	}
-	loadCollections(callback) {
-		const {location, category} = this;
+	loadCollections() {
+		const { location: { _id: location }, category: { _id: category } } = this;
 		return this.CollectionResource.query({
-			filter: { location: location._id, category: category._id }
+			filter: { location, category }
 		}).$promise.then(collections => {
 			this.collections = collections;
-			callback&&callback(collections);
+			return collections;
 		});
 	}
 	updateLocation() {
-		this.loadCategories(categories => {
+		this.loadCategories().then(categories => {
 			this.category = categories[0];
 			this.updateCategory();
 		});
 	}
 	updateCategory() {
-		this.loadCollections(collections => {
+		this.loadCollections().then(collections => {
 			this.collection = collections[0];
 			this.updateCollection();
 		});
 	}
 	updateCollection() {
 		const { location, category, collection } = this;
-		this.$ngModel.$setViewValue({ location, category, collection });
+		this.setCollection({
+			location,
+			category,
+			collection
+		});
+	}
+	setCollection({ location, category, collection }, showAll = false) {
+		this.$ngModel.$setViewValue({
+			location,
+			category,
+			collection,
+			showAll
+		});
 	}
 	showAll() {
-		this.FeatureResource.query({}).$promise.then(features => {
-			this.$ngModel.$setViewValue({
-				showAll: true, 
-				collection: { type: 'FeatureCollection', features }
-			});
+		return this.FeatureResource.query({}).$promise.then(features => {
+			this.setCollection({
+				collection: {
+					type: 'FeatureCollection',
+					features
+				}
+			}, true);
+			return features;
 		});
 	}
 }

@@ -534,69 +534,66 @@ return /******/ (function(modules) { // webpackBootstrap
 		_createClass(MapControlsCtrl, [{
 			key: '$onInit',
 			value: function $onInit() {
-				var _this = this;
-	
-				this.loadLocations(function (locations) {
-					_this.location = locations[1];
-					_this.updateLocation();
-				});
+				// this.loadLocations().then(locations => {
+				// 	this.location = locations[1];
+				// 	this.updateLocation();
+				// 	angular.element(this.$window).triggerHandler('resize');
+				// });
+				this.showAll(); //.then(() => angular.element(this.$window).triggerHandler('resize'));
 			}
 		}, {
 			key: 'loadLocations',
-			value: function loadLocations(callback) {
-				var _this2 = this;
+			value: function loadLocations() {
+				var _this = this;
 	
 				return this.LocationResource.query().$promise.then(function (locations) {
-					_this2.locations = locations;
-					callback && callback(locations);
-					_this2.$timeout(function () {
-						return angular.element(_this2.$window).triggerHandler('resize');
-					});
+					_this.locations = locations;
+					return locations;
 				});
 			}
 		}, {
 			key: 'loadCategories',
-			value: function loadCategories(callback) {
-				var _this3 = this;
+			value: function loadCategories() {
+				var _this2 = this;
 	
 				return this.CategoryResource.query().$promise.then(function (categories) {
-					_this3.categories = categories;
-					callback && callback(categories);
+					_this2.categories = categories;
+					return categories;
 				});
 			}
 		}, {
 			key: 'loadCollections',
-			value: function loadCollections(callback) {
-				var _this4 = this;
+			value: function loadCollections() {
+				var _this3 = this;
 	
-				var location = this.location,
-				    category = this.category;
+				var location = this.location._id,
+				    category = this.category._id;
 	
 				return this.CollectionResource.query({
-					filter: { location: location._id, category: category._id }
+					filter: { location: location, category: category }
 				}).$promise.then(function (collections) {
-					_this4.collections = collections;
-					callback && callback(collections);
+					_this3.collections = collections;
+					return collections;
 				});
 			}
 		}, {
 			key: 'updateLocation',
 			value: function updateLocation() {
-				var _this5 = this;
+				var _this4 = this;
 	
-				this.loadCategories(function (categories) {
-					_this5.category = categories[0];
-					_this5.updateCategory();
+				this.loadCategories().then(function (categories) {
+					_this4.category = categories[0];
+					_this4.updateCategory();
 				});
 			}
 		}, {
 			key: 'updateCategory',
 			value: function updateCategory() {
-				var _this6 = this;
+				var _this5 = this;
 	
-				this.loadCollections(function (collections) {
-					_this6.collection = collections[0];
-					_this6.updateCollection();
+				this.loadCollections().then(function (collections) {
+					_this5.collection = collections[0];
+					_this5.updateCollection();
 				});
 			}
 		}, {
@@ -606,18 +603,40 @@ return /******/ (function(modules) { // webpackBootstrap
 				    category = this.category,
 				    collection = this.collection;
 	
-				this.$ngModel.$setViewValue({ location: location, category: category, collection: collection });
+				this.setCollection({
+					location: location,
+					category: category,
+					collection: collection
+				});
+			}
+		}, {
+			key: 'setCollection',
+			value: function setCollection(_ref) {
+				var location = _ref.location,
+				    category = _ref.category,
+				    collection = _ref.collection;
+				var showAll = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	
+				this.$ngModel.$setViewValue({
+					location: location,
+					category: category,
+					collection: collection,
+					showAll: showAll
+				});
 			}
 		}, {
 			key: 'showAll',
 			value: function showAll() {
-				var _this7 = this;
+				var _this6 = this;
 	
-				this.FeatureResource.query({}).$promise.then(function (features) {
-					_this7.$ngModel.$setViewValue({
-						showAll: true,
-						collection: { type: 'FeatureCollection', features: features }
-					});
+				return this.FeatureResource.query({}).$promise.then(function (features) {
+					_this6.setCollection({
+						collection: {
+							type: 'FeatureCollection',
+							features: features
+						}
+					}, true);
+					return features;
 				});
 			}
 		}]);
@@ -832,7 +851,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	var templates = ['$templateCache', function ($templateCache) {
 	  $templateCache.put('_map.html', '<ng-map\n  center="43.9443802,-78.8975857"\n  zoom="17"\n  styles="{{ $ctrl.MAP_SETTINGS.styles }}"\n  map-type-id="{{ $ctrl.MAP_SETTINGS.type }}"\n  disable-default-u-i="true"\n  tilt="45"\n  heading="0"\n  layout\n  layout-fill>\n  <custom-control id="map-controls" position="TOP_LEFT" index="1">\n\t\t<campus-map-controls ng-model="$ctrl.mapControls"></campus-map-controls>\n  </custom-control>\n</ng-map>');
-	  $templateCache.put('controls/_map-controls.html', '<md-whiteframe\n  class="md-whiteframe-16dp map-controls"\n  layout="column"\n  layout-align="center center"\n  layout-fill>\n  <div layout="row">\n    <md-input-container>\n      <label>Location</label>\n      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" ng-change="$ctrl.updateLocation()" ng-model-options="{trackBy: \'$value._id\'}">\n        <md-option ng-repeat="location in $ctrl.locations" ng-value="location" ng-disabled="$ctrl.location === location">\n          {{location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature category</label>\n      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()" ng-model-options="{trackBy: \'$value._id\'}">\n        <md-option ng-repeat="category in $ctrl.categories" ng-value="category" ng-disabled="$ctrl.category === category">\n          {{ category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container ng-if="$ctrl.category">\n      <label>Feature collection</label>\n      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()" ng-model-options="{trackBy: \'$value._id\'}">\n        <md-option ng-repeat="collection in $ctrl.collections" ng-value="collection" ng-disabled="$ctrl.collection === collection">\n          {{ collection.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n  </div>\n  <div layout="row">\n    <md-button class="md-primary" ng-click="$ctrl.showAll()">\n    \tShow all\n    </md-button>\n  </div>\n</md-whiteframe>');
+	  $templateCache.put('controls/_map-controls.html', '<md-whiteframe\n  class="md-whiteframe-16dp map-controls"\n  layout="column"\n  layout-align="center center"\n  layout-fill>\n  <div layout="row">\n    <md-input-container>\n      <label>Location</label>\n      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" ng-change="$ctrl.updateLocation()" ng-model-options="{trackBy: \'$value._id\'}">\n        <md-option ng-repeat="location in $ctrl.locations" ng-value="location" ng-disabled="$ctrl.location === location">\n          {{location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature category</label>\n      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()" ng-model-options="{trackBy: \'$value._id\'}">\n        <md-option ng-repeat="category in $ctrl.categories" ng-value="category" ng-disabled="$ctrl.category === category">\n          {{ category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature collection</label>\n      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.category">\n        <md-option ng-repeat="collection in $ctrl.collections" ng-value="collection" ng-disabled="$ctrl.collection === collection">\n          {{ collection.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n  </div>\n  <div layout="row">\n    <md-button class="md-primary" ng-click="$ctrl.showAll()">\n    \tShow all\n    </md-button>\n  </div>\n</md-whiteframe>');
 	  $templateCache.put('detail/_map-detail.html', '<md-whiteframe\n  class="md-whiteframe-16dp map-detail"\n  layout="column"\n  layout-align="center center">\n  <md-toolbar>\n    <div class="md-toolbar-tools">\n      <h2>\n        <span>{{ ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class="md-icon-button" aria-label="Close info" ng-click="ctrl.close()">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div layout="column" layout-margin>\n    <md-button ng-click="ctrl.showDetails()">{{ ctrl.detailsShowing ? \'Hide\' : \'Show\'}} details <span class="detail-arrow" ng-class="{ \'arrow-up\' : ctrl.detailsShowing }"></span></md-button>\n  \t<md-content layout-padding layout-margin class="details-text" ng-bind-html="ctrl.description" ng-show="ctrl.detailsShowing"></md-content>\n  \t<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="ctrl.building" ng-click="ctrl.goToBldg(ctrl.callback)">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>');
 	}];exports.default = templates;
 
