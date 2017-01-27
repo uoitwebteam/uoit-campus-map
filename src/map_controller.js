@@ -1,15 +1,20 @@
 import MapDetailCtrl from './detail/map-detail_controller.js';
 
+/**
+ * The `MapCtrl` is the lead orchestrator of the component: it wraps the
+ * `NgMap` directive's methods and provides its own for interfacing with
+ * the map's controls, generating dialogs, and re-rendering the map elements.
+ */
 class MapCtrl {
 	static get $inject() {
 		return [
-			'$timeout', '$scope', // angular core
+			'$timeout', '$scope', '$window', // angular core
 			'NgMap', // external deps
 			'$mdToast', '$mdPanel', // md deps
 			'MAP_SETTINGS', 'MAP_ICONS' // constants
 		];
 	}
-	constructor($timeout, $scope, NgMap, $mdToast, $mdPanel, MAP_SETTINGS, MAP_ICONS) {
+	constructor($timeout, $scope, $window, NgMap, $mdToast, $mdPanel, MAP_SETTINGS, MAP_ICONS) {
     
     // init constants
     this.MAP_SETTINGS = MAP_SETTINGS;
@@ -18,6 +23,7 @@ class MapCtrl {
     // attach dependencies
     this.$timeout = $timeout;
     this.$scope = $scope;
+    this.$window = $window;
     this.$mdToast = $mdToast;
     this.$mdPanel = $mdPanel;
 
@@ -31,8 +37,10 @@ class MapCtrl {
   	// unwrap promise supplied by ngMap
     this._getMap().then(instance => {
     	this._map = instance;
+
     	// force map to fill entire content (glitch?)
-      google.maps.event.trigger(instance, 'resize');
+      // google.maps.event.trigger(instance, 'resize');
+      angular.element(this.$window).triggerHandler('resize');
 
       // set styles of ma
       instance.data.setStyle(feature => {
@@ -110,7 +118,6 @@ class MapCtrl {
 	    	this.clearMapData();
 	    	this.updateMapData(newVal);
 	    	if (newVal.location && this.currentLocation !== newVal.location) {
-		    	console.log(this.currentLocation, newVal.location);
 		    	this.currentLocation = newVal.location;
 		    }
 	    });

@@ -143,11 +143,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	/**
+	 * The `MapCtrl` is the lead orchestrator of the component: it wraps the
+	 * `NgMap` directive's methods and provides its own for interfacing with
+	 * the map's controls, generating dialogs, and re-rendering the map elements.
+	 */
 	var MapCtrl = function () {
 		_createClass(MapCtrl, null, [{
 			key: '$inject',
 			get: function get() {
-				return ['$timeout', '$scope', // angular core
+				return ['$timeout', '$scope', '$window', // angular core
 				'NgMap', // external deps
 				'$mdToast', '$mdPanel', // md deps
 				'MAP_SETTINGS', 'MAP_ICONS' // constants
@@ -155,7 +160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 		}]);
 	
-		function MapCtrl($timeout, $scope, NgMap, $mdToast, $mdPanel, MAP_SETTINGS, MAP_ICONS) {
+		function MapCtrl($timeout, $scope, $window, NgMap, $mdToast, $mdPanel, MAP_SETTINGS, MAP_ICONS) {
 			_classCallCheck(this, MapCtrl);
 	
 			// init constants
@@ -165,6 +170,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			// attach dependencies
 			this.$timeout = $timeout;
 			this.$scope = $scope;
+			this.$window = $window;
 			this.$mdToast = $mdToast;
 			this.$mdPanel = $mdPanel;
 	
@@ -183,8 +189,10 @@ return /******/ (function(modules) { // webpackBootstrap
 				// unwrap promise supplied by ngMap
 				this._getMap().then(function (instance) {
 					_this._map = instance;
+	
 					// force map to fill entire content (glitch?)
-					google.maps.event.trigger(instance, 'resize');
+					// google.maps.event.trigger(instance, 'resize');
+					angular.element(_this.$window).triggerHandler('resize');
 	
 					// set styles of ma
 					instance.data.setStyle(function (feature) {
@@ -270,7 +278,6 @@ return /******/ (function(modules) { // webpackBootstrap
 						_this.clearMapData();
 						_this.updateMapData(newVal);
 						if (newVal.location && _this.currentLocation !== newVal.location) {
-							console.log(_this.currentLocation, newVal.location);
 							_this.currentLocation = newVal.location;
 						}
 					});
