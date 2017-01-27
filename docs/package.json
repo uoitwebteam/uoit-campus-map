@@ -56,6 +56,5 @@
   "babelBoilerplateOptions": {
     "entryFileName": "index.js",
     "mainVarName": "campusMap"
-  },
-  "dependencies": {}
+  }
 }

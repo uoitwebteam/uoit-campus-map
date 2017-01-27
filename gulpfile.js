@@ -102,6 +102,7 @@ function docs() {
   	.pipe($.esdoc({
   		destination: './docs',
   		title: 'UOIT Campus Map',
+  		// autoPrivate: false,
 		  experimentalProposal: {
 		    classProperties: true,
 		    objectRestSpread: true,

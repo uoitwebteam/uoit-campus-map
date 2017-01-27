@@ -16,7 +16,7 @@
  */
 class MapControlsCtrl {
   static get $inject(){
-    return ['$mapApi', '$tourApi', '$timeout', '$window'];
+    return ['$mapApi', '$tourApi'];
   }
 
   /**
@@ -24,16 +24,13 @@ class MapControlsCtrl {
    * 
    * @param  {Object} $mapApi  Map $resource service
    * @param  {Object} $tourApi Tour $resource service
-   * @param  {Object} $timeout Angular's setTimeout() wrapper
    * @param  {Object} $window  Angular's window wrapper
    */
-  constructor($mapApi, $tourApi, $timeout, $window) {
+  constructor($mapApi, $tourApi) {
     this.FeatureResource = $mapApi.feature;
     this.CollectionResource = $mapApi.collection;
     this.CategoryResource = $mapApi.category;
     this.LocationResource = $tourApi.location;
-    this.$timeout = $timeout;
-    this.$window = $window;
   }
 
   /**

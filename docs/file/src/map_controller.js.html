@@ -45,43 +45,81 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/map_controller.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import MapDetailCtrl from &apos;./detail/map-detail_controller.js&apos;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import MapDetailCtrl from &apos;./detail/map-detail_controller.js&apos;;
 
+/**
+ * The `MapCtrl` is the lead orchestrator of the component: it wraps the
+ * `NgMap` directive&apos;s methods and provides its own for interfacing with
+ * the map&apos;s controls, generating dialogs, and re-rendering the map elements.
+ */
 class MapCtrl {
 	static get $inject() {
 		return [
-			&apos;$timeout&apos;, &apos;$scope&apos;, // angular core
+			&apos;$timeout&apos;, &apos;$scope&apos;, &apos;$window&apos;, // angular core
 			&apos;NgMap&apos;, // external deps
 			&apos;$mdToast&apos;, &apos;$mdPanel&apos;, // md deps
 			&apos;MAP_SETTINGS&apos;, &apos;MAP_ICONS&apos; // constants
 		];
 	}
-	constructor($timeout, $scope, NgMap, $mdToast, $mdPanel, MAP_SETTINGS, MAP_ICONS) {
-    
-    // init constants
-    this.MAP_SETTINGS = MAP_SETTINGS;
-    this.MAP_ICONS = MAP_ICONS;
-
+	/**
+	 * Initialize the controller&apos;s dependencies.
+	 * 
+	 * @param  {Object} $timeout     Angular&apos;s setTimeout wrapper
+	 * @param  {Object} $scope       The current scope
+	 * @param  {Object} $window      Angular&apos;s window wrapper
+	 * @param  {Object} NgMap        Angular Google Maps
+	 * @param  {Object} $mdToast     Material toast service
+	 * @param  {Object} $mdPanel     Material panel service
+	 * @param  {Object} MAP_SETTINGS Constant for map config object
+	 * @param  {Object} MAP_ICONS    Constant for map icon definitions
+	 */
+	constructor($timeout, $scope, $window, NgMap, $mdToast, $mdPanel, MAP_SETTINGS, MAP_ICONS) {
     // attach dependencies
-    this.$timeout = $timeout;
-    this.$scope = $scope;
-    this.$mdToast = $mdToast;
-    this.$mdPanel = $mdPanel;
-
-    // init helper vars
-    this._getMap = NgMap.getMap;
-    this._toast = $mdToast.simple();
-    this._toastCanceler = null;
-    this._toastActive = false;
+    this._$timeout = $timeout;
+    this._$scope = $scope;
+    this._$window = $window;
+    this._$mdToast = $mdToast;
+    this._$mdPanel = $mdPanel;
+    // init constants
+    this._MAP_SETTINGS = MAP_SETTINGS;
+    this._MAP_ICONS = MAP_ICONS;
+    /**
+     * Function for resolving map instance from promise.
+     * @type {Function}
+     */
+    this.getMap = NgMap.getMap;
+    /**
+     * Property to store the loaded map instance.
+     * @type {null|Object}
+     */
+    this.map = null;
+    /**
+     * Helper factory object for deploying simple toasts.
+     * @type {Object}
+     */
+    this.toast = $mdToast.simple();
+    /**
+     * Token to hold a toast&apos;s `$timeout`.
+     * @type {null|Promise}
+     */
+    this.toastCanceler = null;
+    /**
+     * Flag to determine whether there is already an active toast.
+     * @type {Boolean}
+     */
+    this.toastActive = false;
   }
   $onInit() {
-  	// unwrap promise supplied by ngMap
-    this._getMap().then(instance =&gt; {
-    	this._map = instance;
-    	// force map to fill entire content (glitch?)
-      google.maps.event.trigger(instance, &apos;resize&apos;);
+    this.getMap().then(instance =&gt; {
+    	this.map = instance;
 
-      // set styles of ma
+    	/*
+    		This is a stupid hack that makes the map fill space by force.
+    		Best not used whenever possible.
+    	 */
+      // angular.element(this._$window).triggerHandler(&apos;resize&apos;);
+      // google.maps.event.trigger(instance, &apos;resize&apos;);
+
       instance.data.setStyle(feature =&gt; {
         var category = feature.getProperty(&apos;category&apos;);
         switch(category) {
@@ -146,58 +184,101 @@ class MapCtrl {
 
       instance.data.addListener(&apos;mouseout&apos;, event =&gt; {
         instance.data.revertStyle();
-        this.hideToast();
+        this.toastCanceler = this.hideToast();
       });
 
       instance.data.addListener(&apos;click&apos;, event =&gt; {
         this.showDetail(event.feature, this.getOffsetFromEvent(event));
       });
 
-	    this.$scope.$watch( () =&gt; this.mapControls, (newVal) =&gt; {
-	    	this.clearMapData();
-	    	this.updateMapData(newVal);
-	    	this.currentLocation = newVal.location; // ****!!!!!
+	    this._$scope.$watch( () =&gt; this.mapControls, (newVal) =&gt; {
+	    	if (newVal) {
+		    	this.clearMapData();
+		    	this.updateMapData(newVal);
+		    	if (newVal.location &amp;&amp; this.currentLocation !== newVal.location) {
+			    	this.currentLocation = newVal.location;
+			    }
+	    	}
 	    });
 
     });
 	}
+
+	/**
+	 * Clean up event listeners that the controller has attached via
+	 * the Google Maps API. This is especially important for the map
+	 * component in general, whose listeners may not always exist in
+	 * a context that Angular is aware of (and therefore will lead to
+	 * memory leaks if left attached).
+	 */
 	$onDestroy() {
-		google.maps.event.clearInstanceListeners(this._map.data);
-		console.log(&apos;map instance destroyed&apos;);
+		google.maps.event.clearInstanceListeners(this.map.data);
 	}
+
+	/**
+	 * Shows a simple toast notification containing the name of the 
+	 * future being hovered over. If there is already a toast active,
+	 * it updates the name in the toast instead of making a new one.
+	 * 
+	 * @param  {Object} feature The feature being hovered over
+	 */
 	showToast(feature) {
 		let featureName = feature.getProperty(&apos;name&apos;);
-		if (!this._toastActive) {
-			this._toast.textContent(featureName).position(&apos;bottom left&apos;).hideDelay(0);
-			this.$mdToast.show(this._toast);
-			this._toastActive = true;
+		if (!this.toastActive) {
+			this.toast.textContent(featureName).position(&apos;bottom left&apos;).hideDelay(0);
+			this._$mdToast.show(this.toast);
+			this.toastActive = true;
 		} else {
-			this.$timeout.cancel(this._toastCanceler);
-			this.$timeout( () =&gt; {
-				this.$mdToast.updateTextContent(featureName);
-			})
+			this._$timeout.cancel(this.toastCanceler);
+			this._$timeout( () =&gt; {
+				this._$mdToast.updateTextContent(featureName);
+			});
 		}
 	}
+
+	/**
+	 * Hides the toast notification after 3 seconds, but provides
+	 * a way to cancel the 3 seconds (`toastCanceler`).
+	 *
+	 * It is meant to be called on mouseout, so that the toast will
+	 * remain on screen for a few seconds, and only disappear if
+	 * another isn&apos;t needed within those seconds.
+	 * 
+	 * @return {Promise} Resolves to completed timeout
+	 */
 	hideToast() {
-		this._toastCanceler = this.$timeout( () =&gt; {
-			this.$mdToast.hide(this._toast);
-			this._toastActive = false;
+		return this._$timeout( () =&gt; {
+			this._$mdToast.hide(this.toast);
+			this.toastActive = false;
 	  }, 3000);
 	}
+
+	/**
+	 * Shows a detail popup, called by user clicking map feature. This
+	 * method uses ng-material&apos;s `$mdPanel` service to build a floating
+	 * panel config, immediately show it, and manually clean up its scope
+	 * listeners on close.
+	 * @param  {Object} feature         The feature that was clicked
+	 * @param  {Object} options
+	 * @param  {Number} options.clientX Horizontal position of user&apos;s click
+	 * @param  {Number} options.clientY Vertical position of user&apos;s click
+	 * @return {Promise}                Resolves to panel reference
+	 */
 	showDetail(feature, { clientX = 0, clientY = 0 } = {}) {
 
-	  const position = this.$mdPanel.newPanelPosition()
+		let panelRef;
+	  const position = this._$mdPanel.newPanelPosition()
 	    .absolute()
 	    .top(`${ clientY }px`)
 	    .left(`${ clientX }px`);
 
-	  const config = {
+	  return this._$mdPanel.open({
 	    attachTo: angular.element(document.body),
 	    controller: MapDetailCtrl,
 	    controllerAs: &apos;ctrl&apos;,
 	    templateUrl: &apos;detail/_map-detail.html&apos;,
 	    hasBackdrop: true,
-	    panelClass: &apos;demo-dialog-example&apos;,
+	    panelClass: &apos;map-detail&apos;,
 	    locals: {
 	    	callback: this.onGotoBldg(),
 	    	location: this.currentLocation,
@@ -208,21 +289,25 @@ class MapCtrl {
 	    clickOutsideToClose: true,
 	    escapeToClose: true,
 	    focusOnOpen: true,
+	    onDomRemoved() {
+	    	panelRef.config.scope.$destroy();
+	    },
 	    position
-	  };
-	  this.$mdPanel.open(config);
+	  }).then(panel =&gt; {
+	  	panelRef = panel;
+	  });
 	}
 	clearMapData() {
-		this._map.data.forEach(feature =&gt; {
-			this._map.data.remove(feature);
+		this.map.data.forEach(feature =&gt; {
+			this.map.data.remove(feature);
 		});
 	}
 	updateMapData(newVal) {
 		if (newVal &amp;&amp; newVal.showAll) {
-      this._map.data.addGeoJson(newVal.collection);
+      this.map.data.addGeoJson(newVal.collection);
 		} else {
-  		newVal&amp;&amp;this._map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${newVal.collection._id}`, null, () =&gt; {
-			  this.fitBounds(this._map);
+  		newVal.collection&amp;&amp;this.map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${newVal.collection._id}`, null, () =&gt; {
+			  this.fitBounds(this.map);
   		});
 		}
 	}
@@ -239,10 +324,10 @@ class MapCtrl {
 	}
 	fitBounds() {
 	  const bounds = new google.maps.LatLngBounds();
-	  this._map.data.forEach(feature =&gt; {
+	  this.map.data.forEach(feature =&gt; {
 	    this.processBounds(feature.getGeometry(), bounds.extend, bounds);
 	  });
-	  this._map.fitBounds(bounds);
+	  this.map.fitBounds(bounds);
 	}
 	getOffsetFromEvent(event) {
 		let clientX, clientY;

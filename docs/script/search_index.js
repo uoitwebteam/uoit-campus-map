@@ -414,18 +414,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/controls/map-controls_controller.js~mapcontrolsctrl#$timeout",
-    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-member-$timeout",
-    "src/controls/map-controls_controller.js~MapControlsCtrl#$timeout",
-    "member"
-  ],
-  [
-    "src/controls/map-controls_controller.js~mapcontrolsctrl#$window",
-    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-member-$window",
-    "src/controls/map-controls_controller.js~MapControlsCtrl#$window",
-    "member"
-  ],
-  [
     "src/controls/map-controls_controller.js~mapcontrolsctrl#categoryresource",
     "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-member-CategoryResource",
     "src/controls/map-controls_controller.js~MapControlsCtrl#CategoryResource",
@@ -546,12 +534,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/detail/map-detail_controller.js~mapdetailctrl#$state",
-    "class/src/detail/map-detail_controller.js~MapDetailCtrl.html#instance-member-$state",
-    "src/detail/map-detail_controller.js~MapDetailCtrl#$state",
-    "member"
-  ],
-  [
     "src/detail/map-detail_controller.js~mapdetailctrl#building",
     "class/src/detail/map-detail_controller.js~MapDetailCtrl.html#instance-member-building",
     "src/detail/map-detail_controller.js~MapDetailCtrl#building",
@@ -624,18 +606,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/map_controller.js~mapctrl#$mdpanel",
-    "class/src/map_controller.js~MapCtrl.html#instance-member-$mdPanel",
-    "src/map_controller.js~MapCtrl#$mdPanel",
-    "member"
-  ],
-  [
-    "src/map_controller.js~mapctrl#$mdtoast",
-    "class/src/map_controller.js~MapCtrl.html#instance-member-$mdToast",
-    "src/map_controller.js~MapCtrl#$mdToast",
-    "member"
-  ],
-  [
     "src/map_controller.js~mapctrl#$ondestroy",
     "class/src/map_controller.js~MapCtrl.html#instance-method-$onDestroy",
     "src/map_controller.js~MapCtrl#$onDestroy",
@@ -646,30 +616,6 @@ window.esdocSearchIndex = [
     "class/src/map_controller.js~MapCtrl.html#instance-method-$onInit",
     "src/map_controller.js~MapCtrl#$onInit",
     "method"
-  ],
-  [
-    "src/map_controller.js~mapctrl#$scope",
-    "class/src/map_controller.js~MapCtrl.html#instance-member-$scope",
-    "src/map_controller.js~MapCtrl#$scope",
-    "member"
-  ],
-  [
-    "src/map_controller.js~mapctrl#$timeout",
-    "class/src/map_controller.js~MapCtrl.html#instance-member-$timeout",
-    "src/map_controller.js~MapCtrl#$timeout",
-    "member"
-  ],
-  [
-    "src/map_controller.js~mapctrl#map_icons",
-    "class/src/map_controller.js~MapCtrl.html#instance-member-MAP_ICONS",
-    "src/map_controller.js~MapCtrl#MAP_ICONS",
-    "member"
-  ],
-  [
-    "src/map_controller.js~mapctrl#map_settings",
-    "class/src/map_controller.js~MapCtrl.html#instance-member-MAP_SETTINGS",
-    "src/map_controller.js~MapCtrl#MAP_SETTINGS",
-    "member"
   ],
   [
     "src/map_controller.js~mapctrl#clearmapdata",
@@ -696,6 +642,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/map_controller.js~mapctrl#getmap",
+    "class/src/map_controller.js~MapCtrl.html#instance-member-getMap",
+    "src/map_controller.js~MapCtrl#getMap",
+    "member"
+  ],
+  [
     "src/map_controller.js~mapctrl#getoffsetfromevent",
     "class/src/map_controller.js~MapCtrl.html#instance-method-getOffsetFromEvent",
     "src/map_controller.js~MapCtrl#getOffsetFromEvent",
@@ -706,6 +658,12 @@ window.esdocSearchIndex = [
     "class/src/map_controller.js~MapCtrl.html#instance-method-hideToast",
     "src/map_controller.js~MapCtrl#hideToast",
     "method"
+  ],
+  [
+    "src/map_controller.js~mapctrl#map",
+    "class/src/map_controller.js~MapCtrl.html#instance-member-map",
+    "src/map_controller.js~MapCtrl#map",
+    "member"
   ],
   [
     "src/map_controller.js~mapctrl#processbounds",
@@ -724,6 +682,24 @@ window.esdocSearchIndex = [
     "class/src/map_controller.js~MapCtrl.html#instance-method-showToast",
     "src/map_controller.js~MapCtrl#showToast",
     "method"
+  ],
+  [
+    "src/map_controller.js~mapctrl#toast",
+    "class/src/map_controller.js~MapCtrl.html#instance-member-toast",
+    "src/map_controller.js~MapCtrl#toast",
+    "member"
+  ],
+  [
+    "src/map_controller.js~mapctrl#toastactive",
+    "class/src/map_controller.js~MapCtrl.html#instance-member-toastActive",
+    "src/map_controller.js~MapCtrl#toastActive",
+    "member"
+  ],
+  [
+    "src/map_controller.js~mapctrl#toastcanceler",
+    "class/src/map_controller.js~MapCtrl.html#instance-member-toastCanceler",
+    "src/map_controller.js~MapCtrl#toastCanceler",
+    "member"
   ],
   [
     "src/map_controller.js~mapctrl#updatemapdata",

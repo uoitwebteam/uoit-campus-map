@@ -45,13 +45,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import MapCtrl from &apos;<span><a href="file/src/map_controller.js.html#lineNumber3">uoit-campus-map/src/map_controller.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import MapCtrl from &apos;<span><a href="file/src/map_controller.js.html#lineNumber8">uoit-campus-map/src/map_controller.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/map_controller.js.html#lineNumber3">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/map_controller.js.html#lineNumber8">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -71,7 +71,10 @@
 
   
   
-  
+  <div class="description" data-ice="description"><p>The <code>MapCtrl</code> is the lead orchestrator of the component: it wraps the
+<code>NgMap</code> directive&apos;s methods and provides its own for interfacing with
+the map&apos;s controls, generating dialogs, and re-rendering the map elements.</p>
+</div>
 
   
 
@@ -130,13 +133,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">($timeout: <span>*</span>, $scope: <span>*</span>, NgMap: <span>*</span>, $mdToast: <span>*</span>, $mdPanel: <span>*</span>, MAP_SETTINGS: <span>*</span>, MAP_ICONS: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">($timeout: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, $scope: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, $window: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, NgMap: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, $mdToast: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, $mdPanel: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, MAP_SETTINGS: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, MAP_ICONS: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Initialize the controller&apos;s dependencies.</p>
+</div>
       </div>
     </td>
     <td>
@@ -162,156 +166,6 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-member-$mdPanel">$mdPanel</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-member-$mdToast">$mdToast</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-member-$scope">$scope</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-member-$timeout">$timeout</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-member-MAP_ICONS">MAP_ICONS</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-member-MAP_SETTINGS">MAP_SETTINGS</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
            <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-member-currentLocation">currentLocation</a></span></span><span data-ice="signature">: <span>*</span></span>
         </p>
       </div>
@@ -319,6 +173,136 @@
         
         
         
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-member-getMap">getMap</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Function for resolving map instance from promise.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-member-map">map</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null">null</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Property to store the loaded map instance.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-member-toast">toast</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Helper factory object for deploying simple toasts.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-member-toastActive">toastActive</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Flag to determine whether there is already an active toast.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-member-toastCanceler">toastCanceler</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null">null</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Token to hold a toast&apos;s <code>$timeout</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -350,7 +334,9 @@
       <div>
         
         
-        
+        <div data-ice="description"><p>Clean up event listeners that the controller has attached via
+the Google Maps API.</p>
+</div>
       </div>
     </td>
     <td>
@@ -469,13 +455,15 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-method-hideToast">hideToast</a></span></span><span data-ice="signature">()</span>
+           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-method-hideToast">hideToast</a></span></span><span data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Hides the toast notification after 3 seconds, but provides
+a way to cancel the 3 seconds (<code>toastCanceler</code>).</p>
+</div>
       </div>
     </td>
     <td>
@@ -519,13 +507,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-method-showDetail">showDetail</a></span></span><span data-ice="signature">(feature: <span>*</span>, objectPattern1: {&quot;clientX&quot;: <span>*</span>, &quot;clientY&quot;: <span>*</span>})</span>
+           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-method-showDetail">showDetail</a></span></span><span data-ice="signature">(feature: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Shows a detail popup, called by user clicking map feature.</p>
+</div>
       </div>
     </td>
     <td>
@@ -544,13 +533,15 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-method-showToast">showToast</a></span></span><span data-ice="signature">(feature: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-method-showToast">showToast</a></span></span><span data-ice="signature">(feature: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Shows a simple toast notification containing the name of the 
+future being hovered over.</p>
+</div>
       </div>
     </td>
     <td>
@@ -602,7 +593,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber4">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber9">source</a></span></span>
     </span>
   </h3>
 
@@ -642,18 +633,19 @@
     
     
     
-    <span data-ice="name">constructor</span><span data-ice="signature">($timeout: <span>*</span>, $scope: <span>*</span>, NgMap: <span>*</span>, $mdToast: <span>*</span>, $mdPanel: <span>*</span>, MAP_SETTINGS: <span>*</span>, MAP_ICONS: <span>*</span>)</span>
+    <span data-ice="name">constructor</span><span data-ice="signature">($timeout: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, $scope: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, $window: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, NgMap: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, $mdToast: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, $mdPanel: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, MAP_SETTINGS: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, MAP_ICONS: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber12">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber29">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Initialize the controller&apos;s dependencies.</p>
+</div>
 
   
 
@@ -667,45 +659,59 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">$timeout</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Angular&apos;s setTimeout wrapper</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">$scope</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The current scope</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">$window</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Angular&apos;s window wrapper</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">NgMap</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Angular Google Maps</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">$mdToast</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Material toast service</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">$mdPanel</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Material panel service</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">MAP_SETTINGS</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Constant for map config object</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">MAP_ICONS</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Constant for map icon definitions</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -731,246 +737,6 @@
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-$mdPanel">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">$mdPanel</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber22">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-$mdToast">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">$mdToast</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber21">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-$scope">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">$scope</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber20">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-$timeout">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">$timeout</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber19">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-MAP_ICONS">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">MAP_ICONS</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber16">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-MAP_SETTINGS">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">MAP_SETTINGS</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber15">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-currentLocation">
     <span class="access" data-ice="access">public</span>
     
@@ -981,7 +747,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber112">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber152">source</a></span></span>
     </span>
   </h3>
 
@@ -989,6 +755,211 @@
   
   
   
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-getMap">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">getMap</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber43">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Function for resolving map instance from promise.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-map">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">map</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null">null</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber48">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Property to store the loaded map instance.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-toast">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">toast</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber53">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Helper factory object for deploying simple toasts.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-toastActive">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">toastActive</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber63">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Flag to determine whether there is already an active toast.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-toastCanceler">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">toastCanceler</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null">null</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber58">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Token to hold a toast&apos;s <code>$timeout</code>.</p>
+</div>
 
   
 
@@ -1024,14 +995,19 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber117">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber167">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Clean up event listeners that the controller has attached via
+the Google Maps API. This is especially important for the map
+component in general, whose listeners may not always exist in
+a context that Angular is aware of (and therefore will lead to
+memory leaks if left attached).</p>
+</div>
 
   
 
@@ -1064,7 +1040,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber30">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber65">source</a></span></span>
     </span>
   </h3>
 
@@ -1104,7 +1080,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber168">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber253">source</a></span></span>
     </span>
   </h3>
 
@@ -1144,7 +1120,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber193">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber278">source</a></span></span>
     </span>
   </h3>
 
@@ -1184,7 +1160,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber200">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber285">source</a></span></span>
     </span>
   </h3>
 
@@ -1246,25 +1222,41 @@
     
     
     
-    <span data-ice="name">hideToast</span><span data-ice="signature">()</span>
+    <span data-ice="name">hideToast</span><span data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber134">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber202">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Hides the toast notification after 3 seconds, but provides
+a way to cancel the 3 seconds (<code>toastCanceler</code>).</p>
+<p>It is meant to be called on mouseout, so that the toast will
+remain on screen for a few seconds, and only disappear if
+another isn&apos;t needed within those seconds.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tr>
+        <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>Resolves to completed timeout</p>
+</td>
+      </tr>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1290,7 +1282,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber182">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber267">source</a></span></span>
     </span>
   </h3>
 
@@ -1354,18 +1346,22 @@
     
     
     
-    <span data-ice="name">showDetail</span><span data-ice="signature">(feature: <span>*</span>, objectPattern1: {&quot;clientX&quot;: <span>*</span>, &quot;clientY&quot;: <span>*</span>})</span>
+    <span data-ice="name">showDetail</span><span data-ice="signature">(feature: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber140">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber220">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Shows a detail popup, called by user clicking map feature. This
+method uses ng-material&apos;s <code>$mdPanel</code> service to build a floating
+panel config, immediately show it, and manually clean up its scope
+listeners on close.</p>
+</div>
 
   
 
@@ -1379,23 +1375,48 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">feature</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The feature that was clicked</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">options</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"></td>
     </tr>
-<tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">objectPattern1</td>
-      <td data-ice="type">{&quot;clientX&quot;: <span>*</span>, &quot;clientY&quot;: <span>*</span>}</td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: {}</li></ul></td>
-      <td data-ice="description"></td>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" data-depth="1">options.clientX</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Horizontal position of user&apos;s click</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" data-depth="1">options.clientY</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Vertical position of user&apos;s click</p>
+</td>
     </tr>
 </tbody>
   </table>
 </div>
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tr>
+        <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>Resolves to panel reference</p>
+</td>
+      </tr>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1417,18 +1438,21 @@
     
     
     
-    <span data-ice="name">showToast</span><span data-ice="signature">(feature: <span>*</span>)</span>
+    <span data-ice="name">showToast</span><span data-ice="signature">(feature: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber121">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber178">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Shows a simple toast notification containing the name of the 
+future being hovered over. If there is already a toast active,
+it updates the name in the toast instead of making a new one.</p>
+</div>
 
   
 
@@ -1442,9 +1466,10 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">feature</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The feature being hovered over</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -1477,7 +1502,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber173">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber258">source</a></span></span>
     </span>
   </h3>
 

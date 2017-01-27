@@ -47,10 +47,9 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/detail/map-detail_controller.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">class MapDetailCtrl {
 	static get $inject() {
-		return [&apos;$sce&apos;, &apos;$state&apos;];
+		return [&apos;$sce&apos;];
 	}
-	constructor($sce, $state) {
-		this.$state = $state;
+	constructor($sce) {
   	if (this.feature.getProperty(&apos;linked&apos;)) {
   		this.building = this.feature.getProperty(&apos;building&apos;);
 
@@ -72,10 +71,6 @@
 			location: this.location.code,
 			building: this.building.code
 		});
-		// this.$state.go(&apos;building&apos;, {
-		// 	location: this.location.code,
-		// 	building: this.building.code
-		// });
 	}
 	close() {
 		this.mdPanelRef.close();
