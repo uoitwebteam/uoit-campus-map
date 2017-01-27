@@ -1,4 +1,4 @@
-import MapDetailCtrl from './detail/map-detail_controller.js'
+import MapDetailCtrl from './detail/map-detail_controller.js';
 
 class MapCtrl {
 	static get $inject() {
@@ -109,7 +109,10 @@ class MapCtrl {
 	    this.$scope.$watch( () => this.mapControls, (newVal) => {
 	    	this.clearMapData();
 	    	this.updateMapData(newVal);
-	    	this.currentLocation = newVal.location;
+	    	if (newVal.location && this.currentLocation !== newVal.location) {
+		    	console.log(this.currentLocation, newVal.location);
+		    	this.currentLocation = newVal.location;
+		    }
 	    });
 
     });
