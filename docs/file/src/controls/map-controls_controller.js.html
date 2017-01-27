@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/controls/map-controls_controller.js | UOIT Campus Map API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/wosevision/uoit-campus-map.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html">MapCtrl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-templates">templates</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-campusMap">campusMap</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">constants</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MAP_ICONS">MAP_ICONS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MAP_SETTINGS">MAP_SETTINGS</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">controls</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html">MapControlsCtrl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-campusMapControls">campusMapControls</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">detail</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html">MapDetailCtrl</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/controls/map-controls_controller.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * The `MapControlsCtrl` provides an interface between the map component
+ * and the map control filter dropdowns.
+ * 
+ * It is not responsible for much actual map logic, but instead for
+ * accepting user input and turning it into queries whose results
+ * are assigned back to the controller. The `MapCtrl` takes care of
+ * turning the returned values into map-usable data, whereas this controller
+ * simply makes it available.
+ *
+ * The controller is made up of:
+ * - constructor
+ * - 3 methods for loading query results (location, category, collection)
+ * - 3 methods for updating dropdown contents
+ * - utility methods for setting active collection and showing all collections
+ */
+class MapControlsCtrl {
+  static get $inject(){
+    return [&apos;$mapApi&apos;, &apos;$tourApi&apos;, &apos;$timeout&apos;, &apos;$window&apos;];
+  }
+
+  /**
+   * Initialize controller dependencies.
+   * 
+   * @param  {Object} $mapApi  Map $resource service
+   * @param  {Object} $tourApi Tour $resource service
+   * @param  {Object} $timeout Angular&apos;s setTimeout() wrapper
+   * @param  {Object} $window  Angular&apos;s window wrapper
+   */
+  constructor($mapApi, $tourApi, $timeout, $window) {
+    this.FeatureResource = $mapApi.feature;
+    this.CollectionResource = $mapApi.collection;
+    this.CategoryResource = $mapApi.category;
+    this.LocationResource = $tourApi.location;
+    this.$timeout = $timeout;
+    this.$window = $window;
+  }
+
+  /**
+   * Initializes the controls (show all map elements)
+   */
+  $onInit() {
+    // this.loadLocations().then(locations =&gt; {
+    //  this.location = locations[1];
+    //  this.updateLocation();
+    //  angular.element(this.$window).triggerHandler(&apos;resize&apos;);
+    // });
+    this.showAll();//.then(() =&gt; angular.element(this.$window).triggerHandler(&apos;resize&apos;));
+  }
+
+  /**
+   * Load location list from server.
+   * 
+   * @return {Promise} Resolves to list of locations
+   */
+  loadLocations() {
+    return this.LocationResource.query().$promise.then(locations =&gt; {
+      this.locations = locations;
+      return locations;
+    });
+  }
+
+  /**
+   * Load category list from server.
+   * 
+   * @return {Promise} Resolves to list of categories
+   */
+  loadCategories() {
+    return this.CategoryResource.query().$promise.then(categories =&gt; {
+      this.categories = categories;
+      return categories;
+    });
+  }
+
+  /**
+   * Load collection list from server using the `_id` of the currently
+   * selected category and location (extracted directly from the
+   * controller / `this`) to filter by.
+   * 
+   * @return {Promise} Resolves to list of collections
+   */
+  loadCollections() {
+    const { location: { _id: location }, category: { _id: category } } = this;
+    return this.CollectionResource.query({
+      filter: { location, category }
+    }).$promise.then(collections =&gt; {
+      this.collections = collections;
+      return collections;
+    });
+  }
+
+  /**
+   * After selecting a location, loads categories and sets category
+   * to first item in list; kicks off category update.
+   */
+  updateLocation() {
+    this.loadCategories().then(categories =&gt; {
+      this.category = categories[0];
+      this.updateCategory();
+    });
+  }
+
+  /**
+   * After selecting a category, loads collections and sets collection
+   * to first item in list; kicks off collection update.
+   */
+  updateCategory() {
+    this.loadCollections().then(collections =&gt; {
+      this.collection = collections[0];
+      this.updateCollection();
+    });
+  }
+
+  /**
+   * After selecting a collection, extracts all relevant filter
+   * properties from controller and uses `setCollection()` to
+   * send the data to the view.
+   */
+  updateCollection() {
+    const { location, category, collection } = this;
+    this.setCollection({
+      location,
+      category,
+      collection
+    });
+  }
+
+  /**
+   * Sends current data to view for rendering in selection dropdowns.
+   *
+   * In order for the map to properly render the selected collection, the
+   * `options.collection` param passed to this method must at least _look_
+   * like a valid `FeatureCollection` (i.e. it can be a &quot;true&quot; collection,
+   * or an object with a `type` property of `FeatureCollection` and a `features`
+   * property containing an array of `Feature` objects).
+   *
+   * @example
+   * // &quot;true&quot; collection
+   * const feature = this.CollectionResource.get(&apos;featureId&apos;);
+   * this.setCollection({ feature });
+   * 
+   * // mock collection
+   * const features = this.FeatureResource.query();
+   * this.setCollection({
+   *   collection: {
+   *     type: &apos;FeatureCollection&apos;,
+   *     features
+   *   }
+   * }, true);
+   * 
+   * @param {Object}  resources
+   * @param {Object}  resources.location    Currently selected location `$resource`
+   * @param {Object}  resources.category    Currently selected category `$resource`
+   * @param {Object}  resources.collection  Currently selected collection `$resource`
+   * @param {Boolean} [showAll=false]       Whether to show all features
+   */
+  setCollection({ location, category, collection }, showAll = false) {
+    this.$ngModel.$setViewValue({
+      location,
+      category,
+      collection,
+      showAll
+    });
+  }
+
+  /**
+   * Fetches a list of every feature available for display on the map; mocks up
+   * a &quot;fake&quot; `FeatureCollection` and uses `setCollection()` to render the
+   * selection to the component.
+   * 
+   * @return {Promise} Resolves to a list of the returned features
+   */
+  showAll() {
+    return this.FeatureResource.query({}).$promise.then(features =&gt; {
+      this.setCollection({
+        collection: {
+          type: &apos;FeatureCollection&apos;,
+          features
+        }
+      }, true);
+      return features;
+    });
+  }
+}
+
+export default MapControlsCtrl;</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.8)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

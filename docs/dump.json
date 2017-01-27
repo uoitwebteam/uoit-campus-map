@@ -1,0 +1,2276 @@
+[
+  {
+    "__docId__": 0,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/_templates.js",
+    "memberof": null,
+    "longname": "src/_templates.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "const templates = ['$templateCache', function($templateCache) {$templateCache.put('_map.html','<ng-map\\n  center=\"43.9443802,-78.8975857\"\\n  zoom=\"17\"\\n  styles=\"{{ $ctrl.MAP_SETTINGS.styles }}\"\\n  map-type-id=\"{{ $ctrl.MAP_SETTINGS.type }}\"\\n  disable-default-u-i=\"true\"\\n  tilt=\"45\"\\n  heading=\"0\"\\n  layout\\n  layout-fill>\\n  <custom-control id=\"map-controls\" position=\"TOP_LEFT\" index=\"1\">\\n\\t\\t<campus-map-controls ng-model=\"$ctrl.mapControls\"></campus-map-controls>\\n  </custom-control>\\n</ng-map>')\n$templateCache.put('controls/_map-controls.html','<md-whiteframe\\n  class=\"md-whiteframe-16dp map-controls\"\\n  layout=\"column\"\\n  layout-align=\"center center\"\\n  layout-fill>\\n  <div layout=\"row\">\\n    <md-input-container>\\n      <label>Location</label>\\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" ng-change=\"$ctrl.updateLocation()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\">\\n        <md-option ng-repeat=\"location in $ctrl.locations\" ng-value=\"location\" ng-disabled=\"$ctrl.location === location\">\\n          {{location.label}}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n    <md-input-container>\\n      <label>Feature category</label>\\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-change=\"$ctrl.updateCategory()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\">\\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"category\" ng-disabled=\"$ctrl.category === category\">\\n          {{ category.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n    <md-input-container>\\n      <label>Feature collection</label>\\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-change=\"$ctrl.updateCollection()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.category\">\\n        <md-option ng-repeat=\"collection in $ctrl.collections\" ng-value=\"collection\" ng-disabled=\"$ctrl.collection === collection\">\\n          {{ collection.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n  </div>\\n  <div layout=\"row\">\\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\\n    \\tShow all\\n    </md-button>\\n  </div>\\n</md-whiteframe>')\n$templateCache.put('detail/_map-detail.html','<md-whiteframe\\n  class=\"md-whiteframe-16dp map-detail\"\\n  layout=\"column\"\\n  layout-align=\"center center\">\\n  <md-toolbar>\\n    <div class=\"md-toolbar-tools\">\\n      <h2>\\n        <span>{{ ctrl.name }}</span>\\n      </h2>\\n      <span flex></span>\\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\\n        <span>&times;</span>\\n      </md-button>\\n    </div>\\n  </md-toolbar>\\n  <div layout=\"column\" layout-margin>\\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? \\'Hide\\' : \\'Show\\'}} details <span class=\"detail-arrow\" ng-class=\"{ \\'arrow-up\\' : ctrl.detailsShowing }\"></span></md-button>\\n  \\t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\\n  \\t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"ctrl.building\" ng-click=\"ctrl.goToBldg(ctrl.callback)\">\\n  \\t\\tTake a tour &raquo;\\n  \\t</md-button>\\n  </div>\\n</md-whiteframe>')}]; export default templates;"
+  },
+  {
+    "__docId__": 1,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "templates",
+    "memberof": "src/_templates.js",
+    "longname": "src/_templates.js~templates",
+    "access": null,
+    "export": true,
+    "importPath": "uoit-campus-map/src/_templates.js",
+    "importStyle": "templates",
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 2,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/constants/map-icons_constant.js",
+    "memberof": null,
+    "longname": "src/constants/map-icons_constant.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "const MAP_ICONS = {\n\tAED: {\n\t\tpath: 'M7.5,4A5.5,5.5 0 0,0 2,9.5C2,10 2.09,10.5 2.22,11H6.3L7.57,7.63C7.87,6.83 9.05,6.75 9.43,7.63L11.5,13L12.09,11.58C12.22,11.25 12.57,11 13,11H21.78C21.91,10.5 22,10 22,9.5A5.5,5.5 0 0,0 16.5,4C14.64,4 13,4.93 12,6.34C11,4.93 9.36,4 7.5,4V4M3,12.5A1,1 0 0,0 2,13.5A1,1 0 0,0 3,14.5H5.44L11,20C12,20.9 12,20.9 13,20L18.56,14.5H21A1,1 0 0,0 22,13.5A1,1 0 0,0 21,12.5H13.4L12.47,14.8C12.07,15.81 10.92,15.67 10.55,14.83L8.5,9.5L7.54,11.83C7.39,12.21 7.05,12.5 6.6,12.5H3Z',\n\t\tfillColor: '#c71566',\n\t\tfillOpacity: 1,\n    strokeOpacity: 0.5,\n    strokeWeight: 2,\n    strokeColor: 'white',\n    anchor: new google.maps.Point(12, 12),\n    size: new google.maps.Size(24, 24)\n\t},\n\tACCESS: {\n\t\tpath: 'M21,9H15V22H13V16H11V22H9V9H3V7H21M12,2A2,2 0 0,1 14,4A2,2 0 0,1 12,6C10.89,6 10,5.1 10,4C10,2.89 10.89,2 12,2Z',\n\t\tfillColor: '#0077CA',\n\t\tfillOpacity: 1,\n    strokeOpacity: 0.5,\n    strokeWeight: 2,\n    strokeColor: 'white',\n    anchor: new google.maps.Point(12, 12),\n    size: new google.maps.Size(24, 24)\n\t},\n\tFOOD: {\n\t\tpath: 'M3,3A1,1 0 0,0 2,4V8L2,9.5C2,11.19 3.03,12.63 4.5,13.22V19.5A1.5,1.5 0 0,0 6,21A1.5,1.5 0 0,0 7.5,19.5V13.22C8.97,12.63 10,11.19 10,9.5V8L10,4A1,1 0 0,0 9,3A1,1 0 0,0 8,4V8A0.5,0.5 0 0,1 7.5,8.5A0.5,0.5 0 0,1 7,8V4A1,1 0 0,0 6,3A1,1 0 0,0 5,4V8A0.5,0.5 0 0,1 4.5,8.5A0.5,0.5 0 0,1 4,8V4A1,1 0 0,0 3,3M19.88,3C19.75,3 19.62,3.09 19.5,3.16L16,5.25V9H12V11H13L14,21H20L21,11H22V9H18V6.34L20.5,4.84C21,4.56 21.13,4 20.84,3.5C20.63,3.14 20.26,2.95 19.88,3Z',\n\t\tfillColor: '#5F259F',\n\t\tfillOpacity: 0.8,\n    strokeOpacity: 0.5,\n    strokeWeight: 2,\n    strokeColor: 'white',\n    anchor: new google.maps.Point(12, 12),\n    size: new google.maps.Size(24, 24)\n\t},\n\tSERVICE: {\n\t\tpath: 'M18,16H6V15.1C6,13.1 10,12 12,12C14,12 18,13.1 18,15.1M12,5.3C13.5,5.3 14.7,6.5 14.7,8C14.7,9.5 13.5,10.7 12,10.7C10.5,10.7 9.3,9.5 9.3,8C9.3,6.5 10.5,5.3 12,5.3M19,2H5C3.89,2 3,2.89 3,4V18A2,2 0 0,0 5,20H9L12,23L15,20H19A2,2 0 0,0 21,18V4C21,2.89 20.1,2 19,2Z',\n\t\tfillColor: '#003c71',\n\t\tfillOpacity: 0.8,\n    strokeOpacity: 0.5,\n    strokeWeight: 2,\n    strokeColor: 'white',\n    anchor: new google.maps.Point(12, 12),\n    size: new google.maps.Size(24, 24)\n\t},\n\tOUTDOOR: {\n\t\tpath: 'M10,21V18H3L8,13H5L10,8H7L12,3L17,8H14L19,13H16L21,18H14V21H10Z',\n\t\tfillColor: '#1a875c',\n\t\tfillOpacity: 0.8,\n    strokeOpacity: 0.5,\n    strokeWeight: 2,\n    strokeColor: 'white',\n    anchor: new google.maps.Point(12, 12),\n    size: new google.maps.Size(24, 24)\n\t},\n\tPARKING: {\n\t\tpath: 'M13.2,11H10V7H13.2A2,2 0 0,1 15.2,9A2,2 0 0,1 13.2,11M13,3H6V21H10V15H13A6,6 0 0,0 19,9C19,5.68 16.31,3 13,3Z',\n\t\tfillColor: '#1a875c',\n\t\tfillOpacity: 0.8,\n    strokeOpacity: 0.5,\n    strokeWeight: 2,\n    strokeColor: 'white',\n    anchor: new google.maps.Point(12, 12),\n    size: new google.maps.Size(24, 24)\n\t},\n\tDEFAULT: {\n    path: 'M3.83,3.57A11.8,11.8,0,0,1,12.5,0a11.8,11.8,0,0,1,8.67,3.57,11.8,11.8,0,0,1,3.57,8.67,16.43,16.43,0,0,1-1.27,5.83,36,36,0,0,1-3.08,6.16q-1.81,2.88-3.57,5.38t-3,4L12.5,35l-1.31-1.52q-.82-.94-3-3.78a63.32,63.32,0,0,1-3.74-5.5,40,40,0,0,1-2.92-6A16.62,16.62,0,0,1,.26,12.24,11.8,11.8,0,0,1,3.83,3.57ZM9.42,15.32A4.2,4.2,0,0,0,12.5,16.6a4.35,4.35,0,0,0,4.35-4.35A4.35,4.35,0,0,0,12.5,7.89a4.35,4.35,0,0,0-4.35,4.35A4.2,4.2,0,0,0,9.42,15.32Z',\n    strokeColor: 'white',\n    strokeOpacity: 0.5,\n    strokeWeight: 2,\n    fillColor: '#003c71',\n    fillOpacity: 0.9,\n    rotation: 0,\n    scale: 1.0,\n    anchor: new google.maps.Point(12.5, 35),\n    size: new google.maps.Size(30, 40)\n  }\n}\n\nexport default MAP_ICONS;"
+  },
+  {
+    "__docId__": 3,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "MAP_ICONS",
+    "memberof": "src/constants/map-icons_constant.js",
+    "longname": "src/constants/map-icons_constant.js~MAP_ICONS",
+    "access": null,
+    "export": true,
+    "importPath": "uoit-campus-map/src/constants/map-icons_constant.js",
+    "importStyle": "MAP_ICONS",
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 4,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/constants/map-settings_constant.js",
+    "memberof": null,
+    "longname": "src/constants/map-settings_constant.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "const MAP_SETTINGS = {\n    type: 'ROADMAP',\n    styles: [\n    {\n      \"stylers\": [{\n        \"visibility\": \"on\"\n      }, {\n        \"saturation\": -100\n      }, {\n        \"gamma\": 0.54\n      }]\n    }, {\n      \"featureType\": \"landscape.natural\",\n      \"elementType\": \"geometry\",\n      \"stylers\": [{\n        \"visibility\": \"off\"\n      }]\n    }, {\n      \"featureType\": \"road\",\n      \"elementType\": \"labels.icon\",\n      \"stylers\": [{\n        \"visibility\": \"off\"\n      }]\n    }, {\n      \"featureType\": \"water\",\n      \"stylers\": [{\n        \"color\": \"#B0B0B0\"\n      }]\n    }, {\n      \"featureType\": \"poi\",\n      \"elementType\": \"labels.icon\",\n      \"stylers\": [{\n        \"visibility\": \"off\"\n      }]\n    }, {\n      \"featureType\": \"poi\",\n      \"elementType\": \"labels.text\",\n      \"stylers\": [{\n        \"visibility\": \"off\"\n      }]\n    }, {\n      \"featureType\": \"road\",\n      \"elementType\": \"geometry.fill\",\n      \"stylers\": [{\n        \"color\": \"#ffffff\"\n      }]\n    }, {\n      \"featureType\": \"road.local\",\n      \"elementType\": \"labels.text\",\n      \"stylers\": [{\n        \"visibility\": \"simplified\"\n      }]\n    }, {\n      \"featureType\": \"water\",\n      \"elementType\": \"labels.text.fill\",\n      \"stylers\": [{\n        \"color\": \"#ffffff\"\n      }]\n    }, {\n      \"featureType\": \"transit.line\",\n      \"elementType\": \"geometry\",\n      \"stylers\": [{\n        \"gamma\": 0.48\n      }]\n    }, {\n      \"featureType\": \"transit.station\",\n      \"elementType\": \"labels.icon\",\n      \"stylers\": [{\n        \"visibility\": \"off\"\n      }]\n    }, {\n      \"featureType\": \"road\",\n      \"elementType\": \"geometry.stroke\",\n      \"stylers\": [{\n        \"gamma\": 7.18\n      }]\n    }]\n    // [{\n    //   \"featureType\": \"landscape.natural\",\n    //   \"elementType\": \"geometry\",\n    //   \"stylers\": [{\n    //     \"visibility\": \"off\"\n    //   }]\n    // }, {\n    //   \"featureType\": \"poi.school\",\n    //   \"elementType\": \"geometry\",\n    //   \"stylers\": [{\n    //     \"color\": \"#ededed\"\n    //   }]\n    // }, {\n    //   \"featureType\": \"landscape.man_made\",\n    //   \"elementType\": \"geometry\",\n    //   \"stylers\": [{\n    //     \"color\": \"#0077ca\"\n    //   }]\n    // }],\n  }\n\n  export default MAP_SETTINGS;"
+  },
+  {
+    "__docId__": 5,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "MAP_SETTINGS",
+    "memberof": "src/constants/map-settings_constant.js",
+    "longname": "src/constants/map-settings_constant.js~MAP_SETTINGS",
+    "access": null,
+    "export": true,
+    "importPath": "uoit-campus-map/src/constants/map-settings_constant.js",
+    "importStyle": "MAP_SETTINGS",
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 6,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/controls/map-controls_component.js",
+    "memberof": null,
+    "longname": "src/controls/map-controls_component.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "const campusMapControls = {\n  require: {\n    $ngModel: 'ngModel'\n    // MapCtrl: '^map'\n  },\n  templateUrl: 'controls/_map-controls.html',\n  controller: 'MapControlsCtrl'\n}\n\nexport default campusMapControls;"
+  },
+  {
+    "__docId__": 7,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "campusMapControls",
+    "memberof": "src/controls/map-controls_component.js",
+    "longname": "src/controls/map-controls_component.js~campusMapControls",
+    "access": null,
+    "export": true,
+    "importPath": "uoit-campus-map/src/controls/map-controls_component.js",
+    "importStyle": "campusMapControls",
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 8,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/controls/map-controls_controller.js",
+    "memberof": null,
+    "longname": "src/controls/map-controls_controller.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 17,
+    "content": "/**\n * The `MapControlsCtrl` provides an interface between the map component\n * and the map control filter dropdowns.\n * \n * It is not responsible for much actual map logic, but instead for\n * accepting user input and turning it into queries whose results\n * are assigned back to the controller. The `MapCtrl` takes care of\n * turning the returned values into map-usable data, whereas this controller\n * simply makes it available.\n *\n * The controller is made up of:\n * - constructor\n * - 3 methods for loading query results (location, category, collection)\n * - 3 methods for updating dropdown contents\n * - utility methods for setting active collection and showing all collections\n */\nclass MapControlsCtrl {\n  static get $inject(){\n    return ['$mapApi', '$tourApi', '$timeout', '$window'];\n  }\n\n  /**\n   * Initialize controller dependencies.\n   * \n   * @param  {Object} $mapApi  Map $resource service\n   * @param  {Object} $tourApi Tour $resource service\n   * @param  {Object} $timeout Angular's setTimeout() wrapper\n   * @param  {Object} $window  Angular's window wrapper\n   */\n  constructor($mapApi, $tourApi, $timeout, $window) {\n    this.FeatureResource = $mapApi.feature;\n    this.CollectionResource = $mapApi.collection;\n    this.CategoryResource = $mapApi.category;\n    this.LocationResource = $tourApi.location;\n    this.$timeout = $timeout;\n    this.$window = $window;\n  }\n\n  /**\n   * Initializes the controls (show all map elements)\n   */\n  $onInit() {\n    // this.loadLocations().then(locations => {\n    //  this.location = locations[1];\n    //  this.updateLocation();\n    //  angular.element(this.$window).triggerHandler('resize');\n    // });\n    this.showAll();//.then(() => angular.element(this.$window).triggerHandler('resize'));\n  }\n\n  /**\n   * Load location list from server.\n   * \n   * @return {Promise} Resolves to list of locations\n   */\n  loadLocations() {\n    return this.LocationResource.query().$promise.then(locations => {\n      this.locations = locations;\n      return locations;\n    });\n  }\n\n  /**\n   * Load category list from server.\n   * \n   * @return {Promise} Resolves to list of categories\n   */\n  loadCategories() {\n    return this.CategoryResource.query().$promise.then(categories => {\n      this.categories = categories;\n      return categories;\n    });\n  }\n\n  /**\n   * Load collection list from server using the `_id` of the currently\n   * selected category and location (extracted directly from the\n   * controller / `this`) to filter by.\n   * \n   * @return {Promise} Resolves to list of collections\n   */\n  loadCollections() {\n    const { location: { _id: location }, category: { _id: category } } = this;\n    return this.CollectionResource.query({\n      filter: { location, category }\n    }).$promise.then(collections => {\n      this.collections = collections;\n      return collections;\n    });\n  }\n\n  /**\n   * After selecting a location, loads categories and sets category\n   * to first item in list; kicks off category update.\n   */\n  updateLocation() {\n    this.loadCategories().then(categories => {\n      this.category = categories[0];\n      this.updateCategory();\n    });\n  }\n\n  /**\n   * After selecting a category, loads collections and sets collection\n   * to first item in list; kicks off collection update.\n   */\n  updateCategory() {\n    this.loadCollections().then(collections => {\n      this.collection = collections[0];\n      this.updateCollection();\n    });\n  }\n\n  /**\n   * After selecting a collection, extracts all relevant filter\n   * properties from controller and uses `setCollection()` to\n   * send the data to the view.\n   */\n  updateCollection() {\n    const { location, category, collection } = this;\n    this.setCollection({\n      location,\n      category,\n      collection\n    });\n  }\n\n  /**\n   * Sends current data to view for rendering in selection dropdowns.\n   *\n   * In order for the map to properly render the selected collection, the\n   * `options.collection` param passed to this method must at least _look_\n   * like a valid `FeatureCollection` (i.e. it can be a \"true\" collection,\n   * or an object with a `type` property of `FeatureCollection` and a `features`\n   * property containing an array of `Feature` objects).\n   *\n   * @example\n   * // \"true\" collection\n   * const feature = this.CollectionResource.get('featureId');\n   * this.setCollection({ feature });\n   * \n   * // mock collection\n   * const features = this.FeatureResource.query();\n   * this.setCollection({\n   *   collection: {\n   *     type: 'FeatureCollection',\n   *     features\n   *   }\n   * }, true);\n   * \n   * @param {Object}  resources\n   * @param {Object}  resources.location    Currently selected location `$resource`\n   * @param {Object}  resources.category    Currently selected category `$resource`\n   * @param {Object}  resources.collection  Currently selected collection `$resource`\n   * @param {Boolean} [showAll=false]       Whether to show all features\n   */\n  setCollection({ location, category, collection }, showAll = false) {\n    this.$ngModel.$setViewValue({\n      location,\n      category,\n      collection,\n      showAll\n    });\n  }\n\n  /**\n   * Fetches a list of every feature available for display on the map; mocks up\n   * a \"fake\" `FeatureCollection` and uses `setCollection()` to render the\n   * selection to the component.\n   * \n   * @return {Promise} Resolves to a list of the returned features\n   */\n  showAll() {\n    return this.FeatureResource.query({}).$promise.then(features => {\n      this.setCollection({\n        collection: {\n          type: 'FeatureCollection',\n          features\n        }\n      }, true);\n      return features;\n    });\n  }\n}\n\nexport default MapControlsCtrl;"
+  },
+  {
+    "__docId__": 9,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "MapControlsCtrl",
+    "memberof": "src/controls/map-controls_controller.js",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "access": null,
+    "export": true,
+    "importPath": "uoit-campus-map/src/controls/map-controls_controller.js",
+    "importStyle": "MapControlsCtrl",
+    "description": "The `MapControlsCtrl` provides an interface between the map component\nand the map control filter dropdowns.\n\nIt is not responsible for much actual map logic, but instead for\naccepting user input and turning it into queries whose results\nare assigned back to the controller. The `MapCtrl` takes care of\nturning the returned values into map-usable data, whereas this controller\nsimply makes it available.\n\nThe controller is made up of:\n- constructor\n- 3 methods for loading query results (location, category, collection)\n- 3 methods for updating dropdown contents\n- utility methods for setting active collection and showing all collections",
+    "lineNumber": 17,
+    "interface": false
+  },
+  {
+    "__docId__": 10,
+    "kind": "get",
+    "static": true,
+    "variation": null,
+    "name": "$inject",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl.$inject",
+    "access": null,
+    "description": null,
+    "lineNumber": 18,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 11,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#constructor",
+    "access": null,
+    "description": "Initialize controller dependencies.",
+    "lineNumber": 30,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "$mapApi",
+        "description": "Map $resource service"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "$tourApi",
+        "description": "Tour $resource service"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "$timeout",
+        "description": "Angular's setTimeout() wrapper"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "$window",
+        "description": "Angular's window wrapper"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 12,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "FeatureResource",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#FeatureResource",
+    "access": null,
+    "description": null,
+    "lineNumber": 31,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 13,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "CollectionResource",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#CollectionResource",
+    "access": null,
+    "description": null,
+    "lineNumber": 32,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 14,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "CategoryResource",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#CategoryResource",
+    "access": null,
+    "description": null,
+    "lineNumber": 33,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 15,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "LocationResource",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#LocationResource",
+    "access": null,
+    "description": null,
+    "lineNumber": 34,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 16,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$timeout",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#$timeout",
+    "access": null,
+    "description": null,
+    "lineNumber": 35,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 17,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$window",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#$window",
+    "access": null,
+    "description": null,
+    "lineNumber": 36,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 18,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "$onInit",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#$onInit",
+    "access": null,
+    "description": "Initializes the controls (show all map elements)",
+    "lineNumber": 42,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 19,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "loadLocations",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#loadLocations",
+    "access": null,
+    "description": "Load location list from server.",
+    "lineNumber": 56,
+    "params": [],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": "Resolves to list of locations"
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 20,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "locations",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#locations",
+    "access": null,
+    "description": null,
+    "lineNumber": 58,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 21,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "loadCategories",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#loadCategories",
+    "access": null,
+    "description": "Load category list from server.",
+    "lineNumber": 68,
+    "params": [],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": "Resolves to list of categories"
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 22,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "categories",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#categories",
+    "access": null,
+    "description": null,
+    "lineNumber": 70,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 23,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "loadCollections",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#loadCollections",
+    "access": null,
+    "description": "Load collection list from server using the `_id` of the currently\nselected category and location (extracted directly from the\ncontroller / `this`) to filter by.",
+    "lineNumber": 82,
+    "params": [],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": "Resolves to list of collections"
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 24,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "collections",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#collections",
+    "access": null,
+    "description": null,
+    "lineNumber": 87,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 25,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "updateLocation",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#updateLocation",
+    "access": null,
+    "description": "After selecting a location, loads categories and sets category\nto first item in list; kicks off category update.",
+    "lineNumber": 96,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 26,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "category",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#category",
+    "access": null,
+    "description": null,
+    "lineNumber": 98,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 27,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "updateCategory",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#updateCategory",
+    "access": null,
+    "description": "After selecting a category, loads collections and sets collection\nto first item in list; kicks off collection update.",
+    "lineNumber": 107,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 28,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "collection",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#collection",
+    "access": null,
+    "description": null,
+    "lineNumber": 109,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 29,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "updateCollection",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#updateCollection",
+    "access": null,
+    "description": "After selecting a collection, extracts all relevant filter\nproperties from controller and uses `setCollection()` to\nsend the data to the view.",
+    "lineNumber": 119,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 30,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "setCollection",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#setCollection",
+    "access": null,
+    "description": "Sends current data to view for rendering in selection dropdowns.\n\nIn order for the map to properly render the selected collection, the\n`options.collection` param passed to this method must at least _look_\nlike a valid `FeatureCollection` (i.e. it can be a \"true\" collection,\nor an object with a `type` property of `FeatureCollection` and a `features`\nproperty containing an array of `Feature` objects).",
+    "examples": [
+      "// \"true\" collection\nconst feature = this.CollectionResource.get('featureId');\nthis.setCollection({ feature });\n\n// mock collection\nconst features = this.FeatureResource.query();\nthis.setCollection({\n  collection: {\n    type: 'FeatureCollection',\n    features\n  }\n}, true);"
+    ],
+    "lineNumber": 157,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "resources",
+        "description": ""
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "resources.location",
+        "description": "Currently selected location `$resource`"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "resources.category",
+        "description": "Currently selected category `$resource`"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "resources.collection",
+        "description": "Currently selected collection `$resource`"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
+        "name": "showAll",
+        "description": "Whether to show all features"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 31,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "showAll",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#showAll",
+    "access": null,
+    "description": "Fetches a list of every feature available for display on the map; mocks up\na \"fake\" `FeatureCollection` and uses `setCollection()` to render the\nselection to the component.",
+    "lineNumber": 173,
+    "params": [],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": "Resolves to a list of the returned features"
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 32,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/detail/map-detail_controller.js",
+    "memberof": null,
+    "longname": "src/detail/map-detail_controller.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "class MapDetailCtrl {\n\tstatic get $inject() {\n\t\treturn ['$sce', '$state'];\n\t}\n\tconstructor($sce, $state) {\n\t\tthis.$state = $state;\n  \tif (this.feature.getProperty('linked')) {\n  \t\tthis.building = this.feature.getProperty('building');\n\n  \t\tthis.name = this.building.name;\n  \t\tthis.description = $sce.trustAsHtml(this.building.desc);\n  \t} else {\n  \t\tthis.name = this.feature.getProperty('name');\n  \t\tthis.description = $sce.trustAsHtml(this.feature.getProperty('desc'));\n  \t}\n\t\tthis.detailsShowing = false;\n  }\n\tshowDetails() {\n\t\tthis.detailsShowing = !this.detailsShowing;\n\t}\n\tgoToBldg(callback) {\n\t\tthis.mdPanelRef.close();\n\t\tconst { location, building } = this;\n\t\tcallback({\n\t\t\tlocation: this.location.code,\n\t\t\tbuilding: this.building.code\n\t\t});\n\t\t// this.$state.go('building', {\n\t\t// \tlocation: this.location.code,\n\t\t// \tbuilding: this.building.code\n\t\t// });\n\t}\n\tclose() {\n\t\tthis.mdPanelRef.close();\n\t}\n}\n\nexport default MapDetailCtrl;"
+  },
+  {
+    "__docId__": 33,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "MapDetailCtrl",
+    "memberof": "src/detail/map-detail_controller.js",
+    "longname": "src/detail/map-detail_controller.js~MapDetailCtrl",
+    "access": null,
+    "export": true,
+    "importPath": "uoit-campus-map/src/detail/map-detail_controller.js",
+    "importStyle": "MapDetailCtrl",
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "interface": false
+  },
+  {
+    "__docId__": 34,
+    "kind": "get",
+    "static": true,
+    "variation": null,
+    "name": "$inject",
+    "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
+    "longname": "src/detail/map-detail_controller.js~MapDetailCtrl.$inject",
+    "access": null,
+    "description": null,
+    "lineNumber": 2,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 35,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
+    "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 5,
+    "undocument": true,
+    "params": [
+      {
+        "name": "$sce",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "$state",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 36,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$state",
+    "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
+    "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#$state",
+    "access": null,
+    "description": null,
+    "lineNumber": 6,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 37,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "building",
+    "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
+    "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#building",
+    "access": null,
+    "description": null,
+    "lineNumber": 8,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 38,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "name",
+    "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
+    "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#name",
+    "access": null,
+    "description": null,
+    "lineNumber": 10,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 39,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "description",
+    "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
+    "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#description",
+    "access": null,
+    "description": null,
+    "lineNumber": 11,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 40,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "name",
+    "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
+    "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#name",
+    "access": null,
+    "description": null,
+    "lineNumber": 13,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 41,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "description",
+    "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
+    "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#description",
+    "access": null,
+    "description": null,
+    "lineNumber": 14,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 42,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "detailsShowing",
+    "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
+    "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#detailsShowing",
+    "access": null,
+    "description": null,
+    "lineNumber": 16,
+    "undocument": true,
+    "type": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 43,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "showDetails",
+    "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
+    "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#showDetails",
+    "access": null,
+    "description": null,
+    "lineNumber": 18,
+    "undocument": true,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 44,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "detailsShowing",
+    "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
+    "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#detailsShowing",
+    "access": null,
+    "description": null,
+    "lineNumber": 19,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 45,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "goToBldg",
+    "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
+    "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#goToBldg",
+    "access": null,
+    "description": null,
+    "lineNumber": 21,
+    "undocument": true,
+    "params": [
+      {
+        "name": "callback",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 46,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "close",
+    "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
+    "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#close",
+    "access": null,
+    "description": null,
+    "lineNumber": 33,
+    "undocument": true,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 47,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/index.js",
+    "memberof": null,
+    "longname": "src/index.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import campusMap from './map_component'\nimport MapCtrl from './map_controller';\n\nimport campusMapControls from './controls/map-controls_component';\nimport MapControlsCtrl from './controls/map-controls_controller';\n\nimport MapDetailCtrl from './detail/map-detail_controller';\n\nimport MAP_SETTINGS from './constants/map-settings_constant';\nimport MAP_ICONS from './constants/map-icons_constant';\n\n// development only\n//\nimport templates from './_templates';\n//\n// ----------------\n\nexport default angular.module('campusMap', [])\n\t.run(templates)\n  .controller('MapCtrl', MapCtrl)\n  .controller('MapControlsCtrl', MapControlsCtrl)\n  .component('campusMap', campusMap)\n  .component('campusMapControls', campusMapControls)\n  .constant('MAP_SETTINGS', MAP_SETTINGS)\n  .constant('MAP_ICONS', MAP_ICONS);\n"
+  },
+  {
+    "__docId__": 48,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/map_component.js",
+    "memberof": null,
+    "longname": "src/map_component.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "const campusMap = {\n  // transclude: true,\n  bindings: {\n    onGotoBldg: '<',\n    markers: '<?'\n  },\n  templateUrl: '_map.html',\n  controller: 'MapCtrl'\n}\n\nexport default campusMap;"
+  },
+  {
+    "__docId__": 49,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "campusMap",
+    "memberof": "src/map_component.js",
+    "longname": "src/map_component.js~campusMap",
+    "access": null,
+    "export": true,
+    "importPath": "uoit-campus-map/src/map_component.js",
+    "importStyle": "campusMap",
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 50,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/map_controller.js",
+    "memberof": null,
+    "longname": "src/map_controller.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import MapDetailCtrl from './detail/map-detail_controller.js'\n\nclass MapCtrl {\n\tstatic get $inject() {\n\t\treturn [\n\t\t\t'$timeout', '$scope', // angular core\n\t\t\t'NgMap', // external deps\n\t\t\t'$mdToast', '$mdPanel', // md deps\n\t\t\t'MAP_SETTINGS', 'MAP_ICONS' // constants\n\t\t];\n\t}\n\tconstructor($timeout, $scope, NgMap, $mdToast, $mdPanel, MAP_SETTINGS, MAP_ICONS) {\n    \n    // init constants\n    this.MAP_SETTINGS = MAP_SETTINGS;\n    this.MAP_ICONS = MAP_ICONS;\n\n    // attach dependencies\n    this.$timeout = $timeout;\n    this.$scope = $scope;\n    this.$mdToast = $mdToast;\n    this.$mdPanel = $mdPanel;\n\n    // init helper vars\n    this._getMap = NgMap.getMap;\n    this._toast = $mdToast.simple();\n    this._toastCanceler = null;\n    this._toastActive = false;\n  }\n  $onInit() {\n  \t// unwrap promise supplied by ngMap\n    this._getMap().then(instance => {\n    \tthis._map = instance;\n    \t// force map to fill entire content (glitch?)\n      google.maps.event.trigger(instance, 'resize');\n\n      // set styles of ma\n      instance.data.setStyle(feature => {\n        var category = feature.getProperty('category');\n        switch(category) {\n        \tcase '581a2c57d9ff16e787aa1b20': // Services\n        \t\treturn { icon: this.MAP_ICONS.SERVICE }\n        \t\tbreak;\n        \tcase '581a2c5ed9ff16e787aa1b21': // Emergency services\n        \t\treturn { icon: this.MAP_ICONS.AED }\n        \t\tbreak;\n        \tcase '581a2c77d9ff16e787aa1b22': // Restaurants and food courts\n        \t\treturn { \n        \t\t\ticon: this.MAP_ICONS.FOOD,\n\t\t          fillColor: '#5F259F',\n\t\t          fillOpacity: 1,\n\t\t          strokeWeight: 3,\n\t\t          strokeColor: 'white',\n\t\t          strokeOpacity: 0.3\n\t\t        }\n        \t\tbreak;\n        \tcase '581a2c8ad9ff16e787aa1b24': // Parking\n        \t\treturn { \n        \t\t\ticon: this.MAP_ICONS.PARKING,\n\t\t          fillColor: '#53565A',\n\t\t          fillOpacity: 0.5,\n\t\t          strokeWeight: 3,\n\t\t          strokeColor: 'white',\n\t\t          strokeOpacity: 0.3\n\t\t        }\n        \t\tbreak;\n        \tcase '581a2c8fd9ff16e787aa1b25': // Parking\n        \t\treturn { \n        \t\t\ticon: this.MAP_ICONS.OUTDOOR,\n\t\t          fillColor: '#1a875c',\n\t\t          fillOpacity: 0.5,\n\t\t          strokeWeight: 3,\n\t\t          strokeColor: 'white',\n\t\t          strokeOpacity: 0.1\n\t\t        }\n        \t\tbreak;\n      \t\tdefault: // other\n\t\t        return {\n\t\t        \ticon: this.MAP_ICONS.DEFAULT,\n\t\t          fillColor: '#0077CA',\n\t\t          fillOpacity: 1,\n\t\t          strokeWeight: 3,\n\t\t          strokeColor: '#003C71',\n\t\t          strokeOpacity: 0.3\n\t\t        }\n        }\n      });\n\n      instance.data.addListener('mouseover', event => {\n        instance.data.overrideStyle(event.feature, {\n          fillColor: '#C71566',\n          fillOpacity: 0.7,\n          strokeWeight: 5,\n          strokeColor: 'white',\n          strokeOpacity: 0.7\n        });\n        this.showToast(event.feature);\n      });\n\n      instance.data.addListener('mouseout', event => {\n        instance.data.revertStyle();\n        this.hideToast();\n      });\n\n      instance.data.addListener('click', event => {\n        this.showDetail(event.feature, this.getOffsetFromEvent(event));\n      });\n\n\t    this.$scope.$watch( () => this.mapControls, (newVal) => {\n\t    \tthis.clearMapData();\n\t    \tthis.updateMapData(newVal);\n\t    \tthis.currentLocation = newVal.location; // ****!!!!!\n\t    });\n\n    });\n\t}\n\t$onDestroy() {\n\t\tgoogle.maps.event.clearInstanceListeners(this._map.data);\n\t\tconsole.log('map instance destroyed');\n\t}\n\tshowToast(feature) {\n\t\tlet featureName = feature.getProperty('name');\n\t\tif (!this._toastActive) {\n\t\t\tthis._toast.textContent(featureName).position('bottom left').hideDelay(0);\n\t\t\tthis.$mdToast.show(this._toast);\n\t\t\tthis._toastActive = true;\n\t\t} else {\n\t\t\tthis.$timeout.cancel(this._toastCanceler);\n\t\t\tthis.$timeout( () => {\n\t\t\t\tthis.$mdToast.updateTextContent(featureName);\n\t\t\t})\n\t\t}\n\t}\n\thideToast() {\n\t\tthis._toastCanceler = this.$timeout( () => {\n\t\t\tthis.$mdToast.hide(this._toast);\n\t\t\tthis._toastActive = false;\n\t  }, 3000);\n\t}\n\tshowDetail(feature, { clientX = 0, clientY = 0 } = {}) {\n\n\t  const position = this.$mdPanel.newPanelPosition()\n\t    .absolute()\n\t    .top(`${ clientY }px`)\n\t    .left(`${ clientX }px`);\n\n\t  const config = {\n\t    attachTo: angular.element(document.body),\n\t    controller: MapDetailCtrl,\n\t    controllerAs: 'ctrl',\n\t    templateUrl: 'detail/_map-detail.html',\n\t    hasBackdrop: true,\n\t    panelClass: 'demo-dialog-example',\n\t    locals: {\n\t    \tcallback: this.onGotoBldg(),\n\t    \tlocation: this.currentLocation,\n\t    \tfeature\n\t    },\n\t    trapFocus: true,\n\t    zIndex: 150,\n\t    clickOutsideToClose: true,\n\t    escapeToClose: true,\n\t    focusOnOpen: true,\n\t    position\n\t  };\n\t  this.$mdPanel.open(config);\n\t}\n\tclearMapData() {\n\t\tthis._map.data.forEach(feature => {\n\t\t\tthis._map.data.remove(feature);\n\t\t});\n\t}\n\tupdateMapData(newVal) {\n\t\tif (newVal && newVal.showAll) {\n      this._map.data.addGeoJson(newVal.collection);\n\t\t} else {\n  \t\tnewVal&&this._map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${newVal.collection._id}`, null, () => {\n\t\t\t  this.fitBounds(this._map);\n  \t\t});\n\t\t}\n\t}\n\tprocessBounds(geometry, callback, thisArg) {\n\t  if (geometry instanceof google.maps.LatLng) {\n\t    callback.call(thisArg, geometry);\n\t  } else if (geometry instanceof google.maps.Data.Point) {\n\t    callback.call(thisArg, geometry.get());\n\t  } else {\n\t    geometry.getArray().forEach(g => {\n\t      this.processBounds(g, callback, thisArg);\n\t    });\n\t  }\n\t}\n\tfitBounds() {\n\t  const bounds = new google.maps.LatLngBounds();\n\t  this._map.data.forEach(feature => {\n\t    this.processBounds(feature.getGeometry(), bounds.extend, bounds);\n\t  });\n\t  this._map.fitBounds(bounds);\n\t}\n\tgetOffsetFromEvent(event) {\n\t\tlet clientX, clientY;\n\t\tfor (const prop in event) {\n\t\t\tif (event[prop] && event[prop].clientX && event[prop].clientY) {\n\t\t\t\t({ clientX, clientY } = event[prop]);\n\t\t\t}\n\t\t}\n\t\treturn { clientX, clientY };\n\t}\n}\n\nexport default MapCtrl;"
+  },
+  {
+    "__docId__": 51,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "MapCtrl",
+    "memberof": "src/map_controller.js",
+    "longname": "src/map_controller.js~MapCtrl",
+    "access": null,
+    "export": true,
+    "importPath": "uoit-campus-map/src/map_controller.js",
+    "importStyle": "MapCtrl",
+    "description": null,
+    "lineNumber": 3,
+    "undocument": true,
+    "interface": false
+  },
+  {
+    "__docId__": 52,
+    "kind": "get",
+    "static": true,
+    "variation": null,
+    "name": "$inject",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl.$inject",
+    "access": null,
+    "description": null,
+    "lineNumber": 4,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 53,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 12,
+    "undocument": true,
+    "params": [
+      {
+        "name": "$timeout",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "$scope",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "NgMap",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "$mdToast",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "$mdPanel",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "MAP_SETTINGS",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "MAP_ICONS",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 54,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "MAP_SETTINGS",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#MAP_SETTINGS",
+    "access": null,
+    "description": null,
+    "lineNumber": 15,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 55,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "MAP_ICONS",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#MAP_ICONS",
+    "access": null,
+    "description": null,
+    "lineNumber": 16,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 56,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$timeout",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#$timeout",
+    "access": null,
+    "description": null,
+    "lineNumber": 19,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 57,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$scope",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#$scope",
+    "access": null,
+    "description": null,
+    "lineNumber": 20,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 58,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$mdToast",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#$mdToast",
+    "access": null,
+    "description": null,
+    "lineNumber": 21,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 59,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$mdPanel",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#$mdPanel",
+    "access": null,
+    "description": null,
+    "lineNumber": 22,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 60,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_getMap",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#_getMap",
+    "access": null,
+    "description": null,
+    "lineNumber": 25,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 61,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_toast",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#_toast",
+    "access": null,
+    "description": null,
+    "lineNumber": 26,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 62,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_toastCanceler",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#_toastCanceler",
+    "access": null,
+    "description": null,
+    "lineNumber": 27,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 63,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_toastActive",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#_toastActive",
+    "access": null,
+    "description": null,
+    "lineNumber": 28,
+    "undocument": true,
+    "type": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 64,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "$onInit",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#$onInit",
+    "access": null,
+    "description": null,
+    "lineNumber": 30,
+    "undocument": true,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 65,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_map",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#_map",
+    "access": null,
+    "description": null,
+    "lineNumber": 33,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 66,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "currentLocation",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#currentLocation",
+    "access": null,
+    "description": null,
+    "lineNumber": 112,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 67,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "$onDestroy",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#$onDestroy",
+    "access": null,
+    "description": null,
+    "lineNumber": 117,
+    "undocument": true,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 68,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "showToast",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#showToast",
+    "access": null,
+    "description": null,
+    "lineNumber": 121,
+    "undocument": true,
+    "params": [
+      {
+        "name": "feature",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 69,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_toastActive",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#_toastActive",
+    "access": null,
+    "description": null,
+    "lineNumber": 126,
+    "undocument": true,
+    "type": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 70,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "hideToast",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#hideToast",
+    "access": null,
+    "description": null,
+    "lineNumber": 134,
+    "undocument": true,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 71,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_toastCanceler",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#_toastCanceler",
+    "access": null,
+    "description": null,
+    "lineNumber": 135,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 72,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_toastActive",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#_toastActive",
+    "access": null,
+    "description": null,
+    "lineNumber": 137,
+    "undocument": true,
+    "type": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 73,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "showDetail",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#showDetail",
+    "access": null,
+    "description": null,
+    "lineNumber": 140,
+    "undocument": true,
+    "params": [
+      {
+        "name": "feature",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "objectPattern1",
+        "optional": true,
+        "types": [
+          "{\"clientX\": *, \"clientY\": *}"
+        ],
+        "defaultRaw": {},
+        "defaultValue": "{}"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 74,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "clearMapData",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#clearMapData",
+    "access": null,
+    "description": null,
+    "lineNumber": 168,
+    "undocument": true,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 75,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "updateMapData",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#updateMapData",
+    "access": null,
+    "description": null,
+    "lineNumber": 173,
+    "undocument": true,
+    "params": [
+      {
+        "name": "newVal",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 76,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "processBounds",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#processBounds",
+    "access": null,
+    "description": null,
+    "lineNumber": 182,
+    "undocument": true,
+    "params": [
+      {
+        "name": "geometry",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "callback",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "thisArg",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 77,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "fitBounds",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#fitBounds",
+    "access": null,
+    "description": null,
+    "lineNumber": 193,
+    "undocument": true,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 78,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getOffsetFromEvent",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#getOffsetFromEvent",
+    "access": null,
+    "description": null,
+    "lineNumber": 200,
+    "undocument": true,
+    "params": [
+      {
+        "name": "event",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 80,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Infinity",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Infinity",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 81,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "NaN",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~NaN",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 82,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "undefined",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~undefined",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 83,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "null",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~null",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 84,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Object",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 85,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~object",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 86,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Function",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 87,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~function",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 88,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Boolean",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 89,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~boolean",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 90,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Symbol",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Symbol",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 91,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Error",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Error",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 92,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "EvalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~EvalError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 93,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "InternalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~InternalError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 94,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "RangeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~RangeError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 95,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "ReferenceError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~ReferenceError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 96,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "SyntaxError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~SyntaxError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 97,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "TypeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~TypeError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 98,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "URIError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~URIError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 99,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Number",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 100,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~number",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 101,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Date",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Date",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 102,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "String",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~String",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 103,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "string",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~string",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 104,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "RegExp",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~RegExp",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 105,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 106,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int8Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 107,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 108,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint8ClampedArray",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8ClampedArray",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 109,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int16Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 110,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint16Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 111,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int32Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 112,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint32Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 113,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Float32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Float32Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 114,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Float64Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Float64Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 115,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Map",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Map",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 116,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Set",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Set",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 117,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "WeakMap",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakMap",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 118,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "WeakSet",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakSet",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 119,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "ArrayBuffer",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~ArrayBuffer",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 120,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "DataView",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~DataView",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 121,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "JSON",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~JSON",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 122,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Promise",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Promise",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 123,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Generator",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Generator",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 124,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "GeneratorFunction",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~GeneratorFunction",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 125,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Reflect",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Reflect",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 126,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Proxy",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Proxy",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 128,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "CanvasRenderingContext2D",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~CanvasRenderingContext2D",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 129,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "DocumentFragment",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~DocumentFragment",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 130,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Element",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Element",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 131,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Event",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Event",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 132,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Node",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Node",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 133,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "NodeList",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~NodeList",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 134,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "XMLHttpRequest",
+    "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~XMLHttpRequest",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 135,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "AudioContext",
+    "externalLink": "https://developer.mozilla.org/en/docs/Web/API/AudioContext",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~AudioContext",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  }
+]

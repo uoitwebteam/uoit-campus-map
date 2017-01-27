@@ -24,6 +24,10 @@ function cleanDist(done) {
   del([destinationFolder]).then(() => done());
 }
 
+function cleanDocs(done) {
+  del(['docs']).then(() => done());
+}
+
 function cleanTmp(done) {
   del(['tmp']).then(() => done());
 }
@@ -91,6 +95,24 @@ function build() {
     .pipe($.uglify())
     .pipe($.sourcemaps.write('./'))
     .pipe(gulp.dest(destinationFolder));
+}
+
+function docs() {
+	return gulp.src('./src')
+  	.pipe($.esdoc({
+  		destination: './docs',
+  		title: 'UOIT Campus Map',
+		  experimentalProposal: {
+		    classProperties: true,
+		    objectRestSpread: true,
+		    decorators: true,
+		    doExpressions: true,
+		    functionBind: true,
+		    asyncGenerators: true,
+		    exportExtensions: true,
+		    dynamicImport: true
+		  }
+  	}));
 }
 
 function _mocha() {
@@ -186,6 +208,9 @@ gulp.task('clean', cleanDist);
 // Remove our temporary files
 gulp.task('clean-tmp', cleanTmp);
 
+// Remove documentation files
+gulp.task('clean-docs', cleanDocs);
+
 // Lint our source code
 gulp.task('lint-src', lintSrc);
 
@@ -202,6 +227,9 @@ gulp.task('views', views);
 
 // Build two versions of the library
 gulp.task('build', ['views', 'lint', 'clean'], build);
+
+// Generate documentation
+gulp.task('docs', ['clean-docs'], docs);
 
 // Lint and run our tests
 gulp.task('test', ['lint'], test);

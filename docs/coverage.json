@@ -1,0 +1,103 @@
+{
+  "coverage": "18.64%",
+  "expectCount": 59,
+  "actualCount": 11,
+  "files": {
+    "src/map_controller.js": {
+      "expectCount": 20,
+      "actualCount": 0,
+      "undocumentLines": [
+        4,
+        22,
+        21,
+        117,
+        30,
+        20,
+        19,
+        16,
+        15,
+        3,
+        168,
+        12,
+        112,
+        193,
+        200,
+        134,
+        182,
+        140,
+        121,
+        173
+      ]
+    },
+    "src/detail/map-detail_controller.js": {
+      "expectCount": 11,
+      "actualCount": 0,
+      "undocumentLines": [
+        2,
+        6,
+        1,
+        8,
+        33,
+        5,
+        11,
+        16,
+        21,
+        10,
+        18
+      ]
+    },
+    "src/controls/map-controls_controller.js": {
+      "expectCount": 23,
+      "actualCount": 11,
+      "undocumentLines": [
+        18,
+        35,
+        36,
+        33,
+        32,
+        31,
+        34,
+        70,
+        98,
+        109,
+        87,
+        58
+      ]
+    },
+    "src/constants/map-icons_constant.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        1
+      ]
+    },
+    "src/constants/map-settings_constant.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        1
+      ]
+    },
+    "src/map_component.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        1
+      ]
+    },
+    "src/controls/map-controls_component.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        1
+      ]
+    },
+    "src/_templates.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        1
+      ]
+    }
+  }
+}

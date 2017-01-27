@@ -269,7 +269,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					}, function (newVal) {
 						_this.clearMapData();
 						_this.updateMapData(newVal);
-						_this.currentLocation = newVal.location;
+						_this.currentLocation = newVal.location; // ****!!!!!
 					});
 				});
 			}
@@ -505,143 +505,256 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	/**
+	 * The `MapControlsCtrl` provides an interface between the map component
+	 * and the map control filter dropdowns.
+	 * 
+	 * It is not responsible for much actual map logic, but instead for
+	 * accepting user input and turning it into queries whose results
+	 * are assigned back to the controller. The `MapCtrl` takes care of
+	 * turning the returned values into map-usable data, whereas this controller
+	 * simply makes it available.
+	 *
+	 * The controller is made up of:
+	 * - constructor
+	 * - 3 methods for loading query results (location, category, collection)
+	 * - 3 methods for updating dropdown contents
+	 * - utility methods for setting active collection and showing all collections
+	 */
 	var MapControlsCtrl = function () {
-		_createClass(MapControlsCtrl, null, [{
-			key: '$inject',
-			get: function get() {
-				return ['$mapApi', '$tourApi', '$timeout', '$window'];
-			}
-		}]);
+	  _createClass(MapControlsCtrl, null, [{
+	    key: '$inject',
+	    get: function get() {
+	      return ['$mapApi', '$tourApi', '$timeout', '$window'];
+	    }
 	
-		function MapControlsCtrl($mapApi, $tourApi, $timeout, $window) {
-			_classCallCheck(this, MapControlsCtrl);
+	    /**
+	     * Initialize controller dependencies.
+	     * 
+	     * @param  {Object} $mapApi  Map $resource service
+	     * @param  {Object} $tourApi Tour $resource service
+	     * @param  {Object} $timeout Angular's setTimeout() wrapper
+	     * @param  {Object} $window  Angular's window wrapper
+	     */
 	
-			this.FeatureResource = $mapApi.feature;
-			this.CollectionResource = $mapApi.collection;
-			this.CategoryResource = $mapApi.category;
-			this.LocationResource = $tourApi.location;
-			this.$timeout = $timeout;
-			this.$window = $window;
-		}
+	  }]);
 	
-		_createClass(MapControlsCtrl, [{
-			key: '$onInit',
-			value: function $onInit() {
-				// this.loadLocations().then(locations => {
-				// 	this.location = locations[1];
-				// 	this.updateLocation();
-				// 	angular.element(this.$window).triggerHandler('resize');
-				// });
-				this.showAll(); //.then(() => angular.element(this.$window).triggerHandler('resize'));
-			}
-		}, {
-			key: 'loadLocations',
-			value: function loadLocations() {
-				var _this = this;
+	  function MapControlsCtrl($mapApi, $tourApi, $timeout, $window) {
+	    _classCallCheck(this, MapControlsCtrl);
 	
-				return this.LocationResource.query().$promise.then(function (locations) {
-					_this.locations = locations;
-					return locations;
-				});
-			}
-		}, {
-			key: 'loadCategories',
-			value: function loadCategories() {
-				var _this2 = this;
+	    this.FeatureResource = $mapApi.feature;
+	    this.CollectionResource = $mapApi.collection;
+	    this.CategoryResource = $mapApi.category;
+	    this.LocationResource = $tourApi.location;
+	    this.$timeout = $timeout;
+	    this.$window = $window;
+	  }
 	
-				return this.CategoryResource.query().$promise.then(function (categories) {
-					_this2.categories = categories;
-					return categories;
-				});
-			}
-		}, {
-			key: 'loadCollections',
-			value: function loadCollections() {
-				var _this3 = this;
+	  /**
+	   * Initializes the controls (show all map elements)
+	   */
 	
-				var location = this.location._id,
-				    category = this.category._id;
 	
-				return this.CollectionResource.query({
-					filter: { location: location, category: category }
-				}).$promise.then(function (collections) {
-					_this3.collections = collections;
-					return collections;
-				});
-			}
-		}, {
-			key: 'updateLocation',
-			value: function updateLocation() {
-				var _this4 = this;
+	  _createClass(MapControlsCtrl, [{
+	    key: '$onInit',
+	    value: function $onInit() {
+	      // this.loadLocations().then(locations => {
+	      //  this.location = locations[1];
+	      //  this.updateLocation();
+	      //  angular.element(this.$window).triggerHandler('resize');
+	      // });
+	      this.showAll(); //.then(() => angular.element(this.$window).triggerHandler('resize'));
+	    }
 	
-				this.loadCategories().then(function (categories) {
-					_this4.category = categories[0];
-					_this4.updateCategory();
-				});
-			}
-		}, {
-			key: 'updateCategory',
-			value: function updateCategory() {
-				var _this5 = this;
+	    /**
+	     * Load location list from server.
+	     * 
+	     * @return {Promise} Resolves to list of locations
+	     */
 	
-				this.loadCollections().then(function (collections) {
-					_this5.collection = collections[0];
-					_this5.updateCollection();
-				});
-			}
-		}, {
-			key: 'updateCollection',
-			value: function updateCollection() {
-				var location = this.location,
-				    category = this.category,
-				    collection = this.collection;
+	  }, {
+	    key: 'loadLocations',
+	    value: function loadLocations() {
+	      var _this = this;
 	
-				this.setCollection({
-					location: location,
-					category: category,
-					collection: collection
-				});
-			}
-		}, {
-			key: 'setCollection',
-			value: function setCollection(_ref) {
-				var location = _ref.location,
-				    category = _ref.category,
-				    collection = _ref.collection;
-				var showAll = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	      return this.LocationResource.query().$promise.then(function (locations) {
+	        _this.locations = locations;
+	        return locations;
+	      });
+	    }
 	
-				this.$ngModel.$setViewValue({
-					location: location,
-					category: category,
-					collection: collection,
-					showAll: showAll
-				});
-			}
-		}, {
-			key: 'showAll',
-			value: function showAll() {
-				var _this6 = this;
+	    /**
+	     * Load category list from server.
+	     * 
+	     * @return {Promise} Resolves to list of categories
+	     */
 	
-				return this.FeatureResource.query({}).$promise.then(function (features) {
-					_this6.setCollection({
-						collection: {
-							type: 'FeatureCollection',
-							features: features
-						}
-					}, true);
-					return features;
-				});
-			}
-		}]);
+	  }, {
+	    key: 'loadCategories',
+	    value: function loadCategories() {
+	      var _this2 = this;
 	
-		return MapControlsCtrl;
+	      return this.CategoryResource.query().$promise.then(function (categories) {
+	        _this2.categories = categories;
+	        return categories;
+	      });
+	    }
+	
+	    /**
+	     * Load collection list from server using the `_id` of the currently
+	     * selected category and location (extracted directly from the
+	     * controller / `this`) to filter by.
+	     * 
+	     * @return {Promise} Resolves to list of collections
+	     */
+	
+	  }, {
+	    key: 'loadCollections',
+	    value: function loadCollections() {
+	      var _this3 = this;
+	
+	      var location = this.location._id,
+	          category = this.category._id;
+	
+	      return this.CollectionResource.query({
+	        filter: { location: location, category: category }
+	      }).$promise.then(function (collections) {
+	        _this3.collections = collections;
+	        return collections;
+	      });
+	    }
+	
+	    /**
+	     * After selecting a location, loads categories and sets category
+	     * to first item in list; kicks off category update.
+	     */
+	
+	  }, {
+	    key: 'updateLocation',
+	    value: function updateLocation() {
+	      var _this4 = this;
+	
+	      this.loadCategories().then(function (categories) {
+	        _this4.category = categories[0];
+	        _this4.updateCategory();
+	      });
+	    }
+	
+	    /**
+	     * After selecting a category, loads collections and sets collection
+	     * to first item in list; kicks off collection update.
+	     */
+	
+	  }, {
+	    key: 'updateCategory',
+	    value: function updateCategory() {
+	      var _this5 = this;
+	
+	      this.loadCollections().then(function (collections) {
+	        _this5.collection = collections[0];
+	        _this5.updateCollection();
+	      });
+	    }
+	
+	    /**
+	     * After selecting a collection, extracts all relevant filter
+	     * properties from controller and uses `setCollection()` to
+	     * send the data to the view.
+	     */
+	
+	  }, {
+	    key: 'updateCollection',
+	    value: function updateCollection() {
+	      var location = this.location,
+	          category = this.category,
+	          collection = this.collection;
+	
+	      this.setCollection({
+	        location: location,
+	        category: category,
+	        collection: collection
+	      });
+	    }
+	
+	    /**
+	     * Sends current data to view for rendering in selection dropdowns.
+	     *
+	     * In order for the map to properly render the selected collection, the
+	     * `options.collection` param passed to this method must at least _look_
+	     * like a valid `FeatureCollection` (i.e. it can be a "true" collection,
+	     * or an object with a `type` property of `FeatureCollection` and a `features`
+	     * property containing an array of `Feature` objects).
+	     *
+	     * @example
+	     * // "true" collection
+	     * const feature = this.CollectionResource.get('featureId');
+	     * this.setCollection({ feature });
+	     * 
+	     * // mock collection
+	     * const features = this.FeatureResource.query();
+	     * this.setCollection({
+	     *   collection: {
+	     *     type: 'FeatureCollection',
+	     *     features
+	     *   }
+	     * }, true);
+	     * 
+	     * @param {Object}  resources
+	     * @param {Object}  resources.location    Currently selected location `$resource`
+	     * @param {Object}  resources.category    Currently selected category `$resource`
+	     * @param {Object}  resources.collection  Currently selected collection `$resource`
+	     * @param {Boolean} [showAll=false]       Whether to show all features
+	     */
+	
+	  }, {
+	    key: 'setCollection',
+	    value: function setCollection(_ref) {
+	      var location = _ref.location,
+	          category = _ref.category,
+	          collection = _ref.collection;
+	      var showAll = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	
+	      this.$ngModel.$setViewValue({
+	        location: location,
+	        category: category,
+	        collection: collection,
+	        showAll: showAll
+	      });
+	    }
+	
+	    /**
+	     * Fetches a list of every feature available for display on the map; mocks up
+	     * a "fake" `FeatureCollection` and uses `setCollection()` to render the
+	     * selection to the component.
+	     * 
+	     * @return {Promise} Resolves to a list of the returned features
+	     */
+	
+	  }, {
+	    key: 'showAll',
+	    value: function showAll() {
+	      var _this6 = this;
+	
+	      return this.FeatureResource.query({}).$promise.then(function (features) {
+	        _this6.setCollection({
+	          collection: {
+	            type: 'FeatureCollection',
+	            features: features
+	          }
+	        }, true);
+	        return features;
+	      });
+	    }
+	  }]);
+	
+	  return MapControlsCtrl;
 	}();
 	
 	exports.default = MapControlsCtrl;
@@ -851,8 +964,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	var templates = ['$templateCache', function ($templateCache) {
 	  $templateCache.put('_map.html', '<ng-map\n  center="43.9443802,-78.8975857"\n  zoom="17"\n  styles="{{ $ctrl.MAP_SETTINGS.styles }}"\n  map-type-id="{{ $ctrl.MAP_SETTINGS.type }}"\n  disable-default-u-i="true"\n  tilt="45"\n  heading="0"\n  layout\n  layout-fill>\n  <custom-control id="map-controls" position="TOP_LEFT" index="1">\n\t\t<campus-map-controls ng-model="$ctrl.mapControls"></campus-map-controls>\n  </custom-control>\n</ng-map>');
-	  $templateCache.put('controls/_map-controls.html', '<md-whiteframe\n  class="md-whiteframe-16dp map-controls"\n  layout="column"\n  layout-align="center center"\n  layout-fill>\n  <div layout="row">\n    <md-input-container>\n      <label>Location</label>\n      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" ng-change="$ctrl.updateLocation()" ng-model-options="{trackBy: \'$value._id\'}">\n        <md-option ng-repeat="location in $ctrl.locations" ng-value="location" ng-disabled="$ctrl.location === location">\n          {{location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature category</label>\n      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()" ng-model-options="{trackBy: \'$value._id\'}">\n        <md-option ng-repeat="category in $ctrl.categories" ng-value="category" ng-disabled="$ctrl.category === category">\n          {{ category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature collection</label>\n      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.category">\n        <md-option ng-repeat="collection in $ctrl.collections" ng-value="collection" ng-disabled="$ctrl.collection === collection">\n          {{ collection.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n  </div>\n  <div layout="row">\n    <md-button class="md-primary" ng-click="$ctrl.showAll()">\n    \tShow all\n    </md-button>\n  </div>\n</md-whiteframe>');
 	  $templateCache.put('detail/_map-detail.html', '<md-whiteframe\n  class="md-whiteframe-16dp map-detail"\n  layout="column"\n  layout-align="center center">\n  <md-toolbar>\n    <div class="md-toolbar-tools">\n      <h2>\n        <span>{{ ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class="md-icon-button" aria-label="Close info" ng-click="ctrl.close()">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div layout="column" layout-margin>\n    <md-button ng-click="ctrl.showDetails()">{{ ctrl.detailsShowing ? \'Hide\' : \'Show\'}} details <span class="detail-arrow" ng-class="{ \'arrow-up\' : ctrl.detailsShowing }"></span></md-button>\n  \t<md-content layout-padding layout-margin class="details-text" ng-bind-html="ctrl.description" ng-show="ctrl.detailsShowing"></md-content>\n  \t<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="ctrl.building" ng-click="ctrl.goToBldg(ctrl.callback)">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>');
+	  $templateCache.put('controls/_map-controls.html', '<md-whiteframe\n  class="md-whiteframe-16dp map-controls"\n  layout="column"\n  layout-align="center center"\n  layout-fill>\n  <div layout="row">\n    <md-input-container>\n      <label>Location</label>\n      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" ng-change="$ctrl.updateLocation()" ng-model-options="{trackBy: \'$value._id\'}">\n        <md-option ng-repeat="location in $ctrl.locations" ng-value="location" ng-disabled="$ctrl.location === location">\n          {{location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature category</label>\n      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()" ng-model-options="{trackBy: \'$value._id\'}">\n        <md-option ng-repeat="category in $ctrl.categories" ng-value="category" ng-disabled="$ctrl.category === category">\n          {{ category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature collection</label>\n      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.category">\n        <md-option ng-repeat="collection in $ctrl.collections" ng-value="collection" ng-disabled="$ctrl.collection === collection">\n          {{ collection.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n  </div>\n  <div layout="row">\n    <md-button class="md-primary" ng-click="$ctrl.showAll()">\n    \tShow all\n    </md-button>\n  </div>\n</md-whiteframe>');
 	}];exports.default = templates;
 
 /***/ }

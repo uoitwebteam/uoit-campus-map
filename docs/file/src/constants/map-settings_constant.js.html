@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/constants/map-settings_constant.js | UOIT Campus Map API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/wosevision/uoit-campus-map.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html">MapCtrl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-templates">templates</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-campusMap">campusMap</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">constants</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MAP_ICONS">MAP_ICONS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MAP_SETTINGS">MAP_SETTINGS</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">controls</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html">MapControlsCtrl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-campusMapControls">campusMapControls</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">detail</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html">MapDetailCtrl</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/constants/map-settings_constant.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">const MAP_SETTINGS = {
+    type: &apos;ROADMAP&apos;,
+    styles: [
+    {
+      &quot;stylers&quot;: [{
+        &quot;visibility&quot;: &quot;on&quot;
+      }, {
+        &quot;saturation&quot;: -100
+      }, {
+        &quot;gamma&quot;: 0.54
+      }]
+    }, {
+      &quot;featureType&quot;: &quot;landscape.natural&quot;,
+      &quot;elementType&quot;: &quot;geometry&quot;,
+      &quot;stylers&quot;: [{
+        &quot;visibility&quot;: &quot;off&quot;
+      }]
+    }, {
+      &quot;featureType&quot;: &quot;road&quot;,
+      &quot;elementType&quot;: &quot;labels.icon&quot;,
+      &quot;stylers&quot;: [{
+        &quot;visibility&quot;: &quot;off&quot;
+      }]
+    }, {
+      &quot;featureType&quot;: &quot;water&quot;,
+      &quot;stylers&quot;: [{
+        &quot;color&quot;: &quot;#B0B0B0&quot;
+      }]
+    }, {
+      &quot;featureType&quot;: &quot;poi&quot;,
+      &quot;elementType&quot;: &quot;labels.icon&quot;,
+      &quot;stylers&quot;: [{
+        &quot;visibility&quot;: &quot;off&quot;
+      }]
+    }, {
+      &quot;featureType&quot;: &quot;poi&quot;,
+      &quot;elementType&quot;: &quot;labels.text&quot;,
+      &quot;stylers&quot;: [{
+        &quot;visibility&quot;: &quot;off&quot;
+      }]
+    }, {
+      &quot;featureType&quot;: &quot;road&quot;,
+      &quot;elementType&quot;: &quot;geometry.fill&quot;,
+      &quot;stylers&quot;: [{
+        &quot;color&quot;: &quot;#ffffff&quot;
+      }]
+    }, {
+      &quot;featureType&quot;: &quot;road.local&quot;,
+      &quot;elementType&quot;: &quot;labels.text&quot;,
+      &quot;stylers&quot;: [{
+        &quot;visibility&quot;: &quot;simplified&quot;
+      }]
+    }, {
+      &quot;featureType&quot;: &quot;water&quot;,
+      &quot;elementType&quot;: &quot;labels.text.fill&quot;,
+      &quot;stylers&quot;: [{
+        &quot;color&quot;: &quot;#ffffff&quot;
+      }]
+    }, {
+      &quot;featureType&quot;: &quot;transit.line&quot;,
+      &quot;elementType&quot;: &quot;geometry&quot;,
+      &quot;stylers&quot;: [{
+        &quot;gamma&quot;: 0.48
+      }]
+    }, {
+      &quot;featureType&quot;: &quot;transit.station&quot;,
+      &quot;elementType&quot;: &quot;labels.icon&quot;,
+      &quot;stylers&quot;: [{
+        &quot;visibility&quot;: &quot;off&quot;
+      }]
+    }, {
+      &quot;featureType&quot;: &quot;road&quot;,
+      &quot;elementType&quot;: &quot;geometry.stroke&quot;,
+      &quot;stylers&quot;: [{
+        &quot;gamma&quot;: 7.18
+      }]
+    }]
+    // [{
+    //   &quot;featureType&quot;: &quot;landscape.natural&quot;,
+    //   &quot;elementType&quot;: &quot;geometry&quot;,
+    //   &quot;stylers&quot;: [{
+    //     &quot;visibility&quot;: &quot;off&quot;
+    //   }]
+    // }, {
+    //   &quot;featureType&quot;: &quot;poi.school&quot;,
+    //   &quot;elementType&quot;: &quot;geometry&quot;,
+    //   &quot;stylers&quot;: [{
+    //     &quot;color&quot;: &quot;#ededed&quot;
+    //   }]
+    // }, {
+    //   &quot;featureType&quot;: &quot;landscape.man_made&quot;,
+    //   &quot;elementType&quot;: &quot;geometry&quot;,
+    //   &quot;stylers&quot;: [{
+    //     &quot;color&quot;: &quot;#0077ca&quot;
+    //   }]
+    // }],
+  }
+
+  export default MAP_SETTINGS;</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.8)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

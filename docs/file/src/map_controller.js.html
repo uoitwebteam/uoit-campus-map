@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/map_controller.js | UOIT Campus Map API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/wosevision/uoit-campus-map.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html">MapCtrl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-templates">templates</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-campusMap">campusMap</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">constants</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MAP_ICONS">MAP_ICONS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MAP_SETTINGS">MAP_SETTINGS</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">controls</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html">MapControlsCtrl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-campusMapControls">campusMapControls</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">detail</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html">MapDetailCtrl</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/map_controller.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import MapDetailCtrl from &apos;./detail/map-detail_controller.js&apos;
+
+class MapCtrl {
+	static get $inject() {
+		return [
+			&apos;$timeout&apos;, &apos;$scope&apos;, // angular core
+			&apos;NgMap&apos;, // external deps
+			&apos;$mdToast&apos;, &apos;$mdPanel&apos;, // md deps
+			&apos;MAP_SETTINGS&apos;, &apos;MAP_ICONS&apos; // constants
+		];
+	}
+	constructor($timeout, $scope, NgMap, $mdToast, $mdPanel, MAP_SETTINGS, MAP_ICONS) {
+    
+    // init constants
+    this.MAP_SETTINGS = MAP_SETTINGS;
+    this.MAP_ICONS = MAP_ICONS;
+
+    // attach dependencies
+    this.$timeout = $timeout;
+    this.$scope = $scope;
+    this.$mdToast = $mdToast;
+    this.$mdPanel = $mdPanel;
+
+    // init helper vars
+    this._getMap = NgMap.getMap;
+    this._toast = $mdToast.simple();
+    this._toastCanceler = null;
+    this._toastActive = false;
+  }
+  $onInit() {
+  	// unwrap promise supplied by ngMap
+    this._getMap().then(instance =&gt; {
+    	this._map = instance;
+    	// force map to fill entire content (glitch?)
+      google.maps.event.trigger(instance, &apos;resize&apos;);
+
+      // set styles of ma
+      instance.data.setStyle(feature =&gt; {
+        var category = feature.getProperty(&apos;category&apos;);
+        switch(category) {
+        	case &apos;581a2c57d9ff16e787aa1b20&apos;: // Services
+        		return { icon: this.MAP_ICONS.SERVICE }
+        		break;
+        	case &apos;581a2c5ed9ff16e787aa1b21&apos;: // Emergency services
+        		return { icon: this.MAP_ICONS.AED }
+        		break;
+        	case &apos;581a2c77d9ff16e787aa1b22&apos;: // Restaurants and food courts
+        		return { 
+        			icon: this.MAP_ICONS.FOOD,
+		          fillColor: &apos;#5F259F&apos;,
+		          fillOpacity: 1,
+		          strokeWeight: 3,
+		          strokeColor: &apos;white&apos;,
+		          strokeOpacity: 0.3
+		        }
+        		break;
+        	case &apos;581a2c8ad9ff16e787aa1b24&apos;: // Parking
+        		return { 
+        			icon: this.MAP_ICONS.PARKING,
+		          fillColor: &apos;#53565A&apos;,
+		          fillOpacity: 0.5,
+		          strokeWeight: 3,
+		          strokeColor: &apos;white&apos;,
+		          strokeOpacity: 0.3
+		        }
+        		break;
+        	case &apos;581a2c8fd9ff16e787aa1b25&apos;: // Parking
+        		return { 
+        			icon: this.MAP_ICONS.OUTDOOR,
+		          fillColor: &apos;#1a875c&apos;,
+		          fillOpacity: 0.5,
+		          strokeWeight: 3,
+		          strokeColor: &apos;white&apos;,
+		          strokeOpacity: 0.1
+		        }
+        		break;
+      		default: // other
+		        return {
+		        	icon: this.MAP_ICONS.DEFAULT,
+		          fillColor: &apos;#0077CA&apos;,
+		          fillOpacity: 1,
+		          strokeWeight: 3,
+		          strokeColor: &apos;#003C71&apos;,
+		          strokeOpacity: 0.3
+		        }
+        }
+      });
+
+      instance.data.addListener(&apos;mouseover&apos;, event =&gt; {
+        instance.data.overrideStyle(event.feature, {
+          fillColor: &apos;#C71566&apos;,
+          fillOpacity: 0.7,
+          strokeWeight: 5,
+          strokeColor: &apos;white&apos;,
+          strokeOpacity: 0.7
+        });
+        this.showToast(event.feature);
+      });
+
+      instance.data.addListener(&apos;mouseout&apos;, event =&gt; {
+        instance.data.revertStyle();
+        this.hideToast();
+      });
+
+      instance.data.addListener(&apos;click&apos;, event =&gt; {
+        this.showDetail(event.feature, this.getOffsetFromEvent(event));
+      });
+
+	    this.$scope.$watch( () =&gt; this.mapControls, (newVal) =&gt; {
+	    	this.clearMapData();
+	    	this.updateMapData(newVal);
+	    	this.currentLocation = newVal.location; // ****!!!!!
+	    });
+
+    });
+	}
+	$onDestroy() {
+		google.maps.event.clearInstanceListeners(this._map.data);
+		console.log(&apos;map instance destroyed&apos;);
+	}
+	showToast(feature) {
+		let featureName = feature.getProperty(&apos;name&apos;);
+		if (!this._toastActive) {
+			this._toast.textContent(featureName).position(&apos;bottom left&apos;).hideDelay(0);
+			this.$mdToast.show(this._toast);
+			this._toastActive = true;
+		} else {
+			this.$timeout.cancel(this._toastCanceler);
+			this.$timeout( () =&gt; {
+				this.$mdToast.updateTextContent(featureName);
+			})
+		}
+	}
+	hideToast() {
+		this._toastCanceler = this.$timeout( () =&gt; {
+			this.$mdToast.hide(this._toast);
+			this._toastActive = false;
+	  }, 3000);
+	}
+	showDetail(feature, { clientX = 0, clientY = 0 } = {}) {
+
+	  const position = this.$mdPanel.newPanelPosition()
+	    .absolute()
+	    .top(`${ clientY }px`)
+	    .left(`${ clientX }px`);
+
+	  const config = {
+	    attachTo: angular.element(document.body),
+	    controller: MapDetailCtrl,
+	    controllerAs: &apos;ctrl&apos;,
+	    templateUrl: &apos;detail/_map-detail.html&apos;,
+	    hasBackdrop: true,
+	    panelClass: &apos;demo-dialog-example&apos;,
+	    locals: {
+	    	callback: this.onGotoBldg(),
+	    	location: this.currentLocation,
+	    	feature
+	    },
+	    trapFocus: true,
+	    zIndex: 150,
+	    clickOutsideToClose: true,
+	    escapeToClose: true,
+	    focusOnOpen: true,
+	    position
+	  };
+	  this.$mdPanel.open(config);
+	}
+	clearMapData() {
+		this._map.data.forEach(feature =&gt; {
+			this._map.data.remove(feature);
+		});
+	}
+	updateMapData(newVal) {
+		if (newVal &amp;&amp; newVal.showAll) {
+      this._map.data.addGeoJson(newVal.collection);
+		} else {
+  		newVal&amp;&amp;this._map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${newVal.collection._id}`, null, () =&gt; {
+			  this.fitBounds(this._map);
+  		});
+		}
+	}
+	processBounds(geometry, callback, thisArg) {
+	  if (geometry instanceof google.maps.LatLng) {
+	    callback.call(thisArg, geometry);
+	  } else if (geometry instanceof google.maps.Data.Point) {
+	    callback.call(thisArg, geometry.get());
+	  } else {
+	    geometry.getArray().forEach(g =&gt; {
+	      this.processBounds(g, callback, thisArg);
+	    });
+	  }
+	}
+	fitBounds() {
+	  const bounds = new google.maps.LatLngBounds();
+	  this._map.data.forEach(feature =&gt; {
+	    this.processBounds(feature.getGeometry(), bounds.extend, bounds);
+	  });
+	  this._map.fitBounds(bounds);
+	}
+	getOffsetFromEvent(event) {
+		let clientX, clientY;
+		for (const prop in event) {
+			if (event[prop] &amp;&amp; event[prop].clientX &amp;&amp; event[prop].clientY) {
+				({ clientX, clientY } = event[prop]);
+			}
+		}
+		return { clientX, clientY };
+	}
+}
+
+export default MapCtrl;</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.8)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

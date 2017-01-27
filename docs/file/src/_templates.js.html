@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/_templates.js | UOIT Campus Map API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/wosevision/uoit-campus-map.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html">MapCtrl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-templates">templates</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-campusMap">campusMap</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">constants</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MAP_ICONS">MAP_ICONS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MAP_SETTINGS">MAP_SETTINGS</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">controls</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html">MapControlsCtrl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-campusMapControls">campusMapControls</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">detail</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html">MapDetailCtrl</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/_templates.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">const templates = [&apos;$templateCache&apos;, function($templateCache) {$templateCache.put(&apos;_map.html&apos;,&apos;&lt;ng-map\n  center=&quot;43.9443802,-78.8975857&quot;\n  zoom=&quot;17&quot;\n  styles=&quot;{{ $ctrl.MAP_SETTINGS.styles }}&quot;\n  map-type-id=&quot;{{ $ctrl.MAP_SETTINGS.type }}&quot;\n  disable-default-u-i=&quot;true&quot;\n  tilt=&quot;45&quot;\n  heading=&quot;0&quot;\n  layout\n  layout-fill&gt;\n  &lt;custom-control id=&quot;map-controls&quot; position=&quot;TOP_LEFT&quot; index=&quot;1&quot;&gt;\n\t\t&lt;campus-map-controls ng-model=&quot;$ctrl.mapControls&quot;&gt;&lt;/campus-map-controls&gt;\n  &lt;/custom-control&gt;\n&lt;/ng-map&gt;&apos;)
+$templateCache.put(&apos;controls/_map-controls.html&apos;,&apos;&lt;md-whiteframe\n  class=&quot;md-whiteframe-16dp map-controls&quot;\n  layout=&quot;column&quot;\n  layout-align=&quot;center center&quot;\n  layout-fill&gt;\n  &lt;div layout=&quot;row&quot;&gt;\n    &lt;md-input-container&gt;\n      &lt;label&gt;Location&lt;/label&gt;\n      &lt;md-select ng-model=&quot;$ctrl.location&quot; md-on-open=&quot;$ctrl.loadLocations()&quot; ng-change=&quot;$ctrl.updateLocation()&quot; ng-model-options=&quot;{trackBy: \&apos;$value._id\&apos;}&quot;&gt;\n        &lt;md-option ng-repeat=&quot;location in $ctrl.locations&quot; ng-value=&quot;location&quot; ng-disabled=&quot;$ctrl.location === location&quot;&gt;\n          {{location.label}}\n        &lt;/md-option&gt;\n      &lt;/md-select&gt;\n    &lt;/md-input-container&gt;\n    &lt;md-input-container&gt;\n      &lt;label&gt;Feature category&lt;/label&gt;\n      &lt;md-select ng-model=&quot;$ctrl.category&quot; md-on-open=&quot;$ctrl.loadCategories()&quot; ng-change=&quot;$ctrl.updateCategory()&quot; ng-model-options=&quot;{trackBy: \&apos;$value._id\&apos;}&quot;&gt;\n        &lt;md-option ng-repeat=&quot;category in $ctrl.categories&quot; ng-value=&quot;category&quot; ng-disabled=&quot;$ctrl.category === category&quot;&gt;\n          {{ category.name }}\n        &lt;/md-option&gt;\n      &lt;/md-select&gt;\n    &lt;/md-input-container&gt;\n    &lt;md-input-container&gt;\n      &lt;label&gt;Feature collection&lt;/label&gt;\n      &lt;md-select ng-model=&quot;$ctrl.collection&quot; md-on-open=&quot;$ctrl.loadCollections()&quot; ng-change=&quot;$ctrl.updateCollection()&quot; ng-model-options=&quot;{trackBy: \&apos;$value._id\&apos;}&quot; ng-disabled=&quot;!$ctrl.category&quot;&gt;\n        &lt;md-option ng-repeat=&quot;collection in $ctrl.collections&quot; ng-value=&quot;collection&quot; ng-disabled=&quot;$ctrl.collection === collection&quot;&gt;\n          {{ collection.name }}\n        &lt;/md-option&gt;\n      &lt;/md-select&gt;\n    &lt;/md-input-container&gt;\n  &lt;/div&gt;\n  &lt;div layout=&quot;row&quot;&gt;\n    &lt;md-button class=&quot;md-primary&quot; ng-click=&quot;$ctrl.showAll()&quot;&gt;\n    \tShow all\n    &lt;/md-button&gt;\n  &lt;/div&gt;\n&lt;/md-whiteframe&gt;&apos;)
+$templateCache.put(&apos;detail/_map-detail.html&apos;,&apos;&lt;md-whiteframe\n  class=&quot;md-whiteframe-16dp map-detail&quot;\n  layout=&quot;column&quot;\n  layout-align=&quot;center center&quot;&gt;\n  &lt;md-toolbar&gt;\n    &lt;div class=&quot;md-toolbar-tools&quot;&gt;\n      &lt;h2&gt;\n        &lt;span&gt;{{ ctrl.name }}&lt;/span&gt;\n      &lt;/h2&gt;\n      &lt;span flex&gt;&lt;/span&gt;\n      &lt;md-button class=&quot;md-icon-button&quot; aria-label=&quot;Close info&quot; ng-click=&quot;ctrl.close()&quot;&gt;\n        &lt;span&gt;&amp;times;&lt;/span&gt;\n      &lt;/md-button&gt;\n    &lt;/div&gt;\n  &lt;/md-toolbar&gt;\n  &lt;div layout=&quot;column&quot; layout-margin&gt;\n    &lt;md-button ng-click=&quot;ctrl.showDetails()&quot;&gt;{{ ctrl.detailsShowing ? \&apos;Hide\&apos; : \&apos;Show\&apos;}} details &lt;span class=&quot;detail-arrow&quot; ng-class=&quot;{ \&apos;arrow-up\&apos; : ctrl.detailsShowing }&quot;&gt;&lt;/span&gt;&lt;/md-button&gt;\n  \t&lt;md-content layout-padding layout-margin class=&quot;details-text&quot; ng-bind-html=&quot;ctrl.description&quot; ng-show=&quot;ctrl.detailsShowing&quot;&gt;&lt;/md-content&gt;\n  \t&lt;md-button layout-padding class=&quot;md-raised md-primary&quot; aria-label=&quot;Tour this building&quot; ng-if=&quot;ctrl.building&quot; ng-click=&quot;ctrl.goToBldg(ctrl.callback)&quot;&gt;\n  \t\tTake a tour &amp;raquo;\n  \t&lt;/md-button&gt;\n  &lt;/div&gt;\n&lt;/md-whiteframe&gt;&apos;)}]; export default templates;</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.8)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
