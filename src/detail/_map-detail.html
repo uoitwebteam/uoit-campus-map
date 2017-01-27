@@ -1,11 +1,11 @@
 <md-whiteframe
-  class="md-whiteframe-16dp map-detail"
+  class="md-whiteframe-16dp"
   layout="column"
   layout-align="center center">
   <md-toolbar>
     <div class="md-toolbar-tools">
       <h2>
-        <span>{{ ctrl.name }}</span>
+        <span>{{ ::ctrl.name }}</span>
       </h2>
       <span flex></span>
       <md-button class="md-icon-button" aria-label="Close info" ng-click="ctrl.close()">
@@ -15,8 +15,8 @@
   </md-toolbar>
   <div layout="column" layout-margin>
     <md-button ng-click="ctrl.showDetails()">{{ ctrl.detailsShowing ? 'Hide' : 'Show'}} details <span class="detail-arrow" ng-class="{ 'arrow-up' : ctrl.detailsShowing }"></span></md-button>
-  	<md-content layout-padding layout-margin class="details-text" ng-bind-html="ctrl.description" ng-show="ctrl.detailsShowing"></md-content>
-  	<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="ctrl.building" ng-click="ctrl.goToBldg(ctrl.callback)">
+  	<md-content layout-padding layout-margin class="details-text" ng-bind-html="::ctrl.description" ng-show="ctrl.detailsShowing"></md-content>
+  	<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="::ctrl.building" ng-click="ctrl.goToBldg(ctrl.callback)">
   		Take a tour &raquo;
   	</md-button>
   </div>
