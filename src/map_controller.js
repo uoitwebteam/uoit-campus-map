@@ -115,11 +115,13 @@ class MapCtrl {
       });
 
 	    this.$scope.$watch( () => this.mapControls, (newVal) => {
-	    	this.clearMapData();
-	    	this.updateMapData(newVal);
-	    	if (newVal.location && this.currentLocation !== newVal.location) {
-		    	this.currentLocation = newVal.location;
-		    }
+	    	if (newVal) {
+		    	this.clearMapData();
+		    	this.updateMapData(newVal);
+		    	if (newVal.location && this.currentLocation !== newVal.location) {
+			    	this.currentLocation = newVal.location;
+			    }
+	    	}
 	    });
 
     });

@@ -275,10 +275,12 @@ return /******/ (function(modules) { // webpackBootstrap
 					_this.$scope.$watch(function () {
 						return _this.mapControls;
 					}, function (newVal) {
-						_this.clearMapData();
-						_this.updateMapData(newVal);
-						if (newVal.location && _this.currentLocation !== newVal.location) {
-							_this.currentLocation = newVal.location;
+						if (newVal) {
+							_this.clearMapData();
+							_this.updateMapData(newVal);
+							if (newVal.location && _this.currentLocation !== newVal.location) {
+								_this.currentLocation = newVal.location;
+							}
 						}
 					});
 				});
