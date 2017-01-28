@@ -486,6 +486,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/controls/map-controls_controller.js~mapcontrolsctrl#location",
+    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-member-location",
+    "src/controls/map-controls_controller.js~MapControlsCtrl#location",
+    "member"
+  ],
+  [
     "src/controls/map-controls_controller.js~mapcontrolsctrl#locations",
     "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-member-locations",
     "src/controls/map-controls_controller.js~MapControlsCtrl#locations",
@@ -648,15 +654,15 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/map_controller.js~mapctrl#getoffsetfromevent",
-    "class/src/map_controller.js~MapCtrl.html#instance-method-getOffsetFromEvent",
-    "src/map_controller.js~MapCtrl#getOffsetFromEvent",
-    "method"
-  ],
-  [
     "src/map_controller.js~mapctrl#hidetoast",
     "class/src/map_controller.js~MapCtrl.html#instance-method-hideToast",
     "src/map_controller.js~MapCtrl#hideToast",
+    "method"
+  ],
+  [
+    "src/map_controller.js~mapctrl#isolatemouseevent",
+    "class/src/map_controller.js~MapCtrl.html#instance-method-isolateMouseEvent",
+    "src/map_controller.js~MapCtrl#isolateMouseEvent",
     "method"
   ],
   [

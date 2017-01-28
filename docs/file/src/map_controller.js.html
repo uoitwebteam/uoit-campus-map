@@ -118,20 +118,20 @@ class MapCtrl {
     		Best not used whenever possible.
     	 */
       // angular.element(this._$window).triggerHandler(&apos;resize&apos;);
-      // google.maps.event.trigger(instance, &apos;resize&apos;);
+      google.maps.event.trigger(instance, &apos;resize&apos;);
 
       instance.data.setStyle(feature =&gt; {
         var category = feature.getProperty(&apos;category&apos;);
         switch(category) {
         	case &apos;581a2c57d9ff16e787aa1b20&apos;: // Services
-        		return { icon: this.MAP_ICONS.SERVICE }
+        		return { icon: this._MAP_ICONS.SERVICE }
         		break;
         	case &apos;581a2c5ed9ff16e787aa1b21&apos;: // Emergency services
-        		return { icon: this.MAP_ICONS.AED }
+        		return { icon: this._MAP_ICONS.AED }
         		break;
         	case &apos;581a2c77d9ff16e787aa1b22&apos;: // Restaurants and food courts
         		return { 
-        			icon: this.MAP_ICONS.FOOD,
+        			icon: this._MAP_ICONS.FOOD,
 		          fillColor: &apos;#5F259F&apos;,
 		          fillOpacity: 1,
 		          strokeWeight: 3,
@@ -141,7 +141,7 @@ class MapCtrl {
         		break;
         	case &apos;581a2c8ad9ff16e787aa1b24&apos;: // Parking
         		return { 
-        			icon: this.MAP_ICONS.PARKING,
+        			icon: this._MAP_ICONS.PARKING,
 		          fillColor: &apos;#53565A&apos;,
 		          fillOpacity: 0.5,
 		          strokeWeight: 3,
@@ -151,7 +151,7 @@ class MapCtrl {
         		break;
         	case &apos;581a2c8fd9ff16e787aa1b25&apos;: // Parking
         		return { 
-        			icon: this.MAP_ICONS.OUTDOOR,
+        			icon: this._MAP_ICONS.OUTDOOR,
 		          fillColor: &apos;#1a875c&apos;,
 		          fillOpacity: 0.5,
 		          strokeWeight: 3,
@@ -161,7 +161,7 @@ class MapCtrl {
         		break;
       		default: // other
 		        return {
-		        	icon: this.MAP_ICONS.DEFAULT,
+		        	icon: this._MAP_ICONS.DEFAULT,
 		          fillColor: &apos;#0077CA&apos;,
 		          fillOpacity: 1,
 		          strokeWeight: 3,
@@ -188,7 +188,7 @@ class MapCtrl {
       });
 
       instance.data.addListener(&apos;click&apos;, event =&gt; {
-        this.showDetail(event.feature, this.getOffsetFromEvent(event));
+        this.showDetail(event.feature, this.isolateMouseEvent(event));
       });
 
 	    this._$scope.$watch( () =&gt; this.mapControls, (newVal) =&gt; {
@@ -264,13 +264,18 @@ class MapCtrl {
 	 * @param  {Number} options.clientY Vertical position of user&apos;s click
 	 * @return {Promise}                Resolves to panel reference
 	 */
-	showDetail(feature, { clientX = 0, clientY = 0 } = {}) {
+	showDetail(feature, { clientX: left, clientY: top }) {
 
 		let panelRef;
 	  const position = this._$mdPanel.newPanelPosition()
-	    .absolute()
-	    .top(`${ clientY }px`)
-	    .left(`${ clientX }px`);
+	    // .absolute().center()
+	    .top(`${ top }px`)
+	    .left(`${ left }px`);
+
+	  const animation = this._$mdPanel.newPanelAnimation()
+      .openFrom({ top, left })
+      .closeTo({ top, left })
+			.withAnimation(this._$mdPanel.animation.SCALE);
 
 	  return this._$mdPanel.open({
 	    attachTo: angular.element(document.body),
@@ -290,18 +295,31 @@ class MapCtrl {
 	    escapeToClose: true,
 	    focusOnOpen: true,
 	    onDomRemoved() {
-	    	panelRef.config.scope.$destroy();
+	    	panelRef.destroy();
 	    },
+	    animation,
 	    position
 	  }).then(panel =&gt; {
 	  	panelRef = panel;
 	  });
 	}
+	/**
+	 * Removes all features from the map by looping over feature
+	 * data objects and calling their `map.remove()` on them.
+	 */
 	clearMapData() {
 		this.map.data.forEach(feature =&gt; {
 			this.map.data.remove(feature);
 		});
 	}
+	/**
+	 * Handler method for map data `$watch`; watches incoming geoJSON
+	 * data for changes and adds it to the map if detected. If the
+	 * new data has a `showAll` property (and it is true), all features
+	 * all loaded and the map bounds are recalculated.
+	 * 
+	 * @param  {Object} newVal New map data
+	 */
 	updateMapData(newVal) {
 		if (newVal &amp;&amp; newVal.showAll) {
       this.map.data.addGeoJson(newVal.collection);
@@ -311,6 +329,13 @@ class MapCtrl {
   		});
 		}
 	}
+	/**
+	 * Direct port of Google Maps `processBounds` example function
+	 * for recalculation of map boundaries based on map data.
+	 * @param  {Object}   geometry LatLng geometry object
+	 * @param  {Function} callback Recursion callback
+	 * @param  {*}   			thisArg  Context for `this`
+	 */
 	processBounds(geometry, callback, thisArg) {
 	  if (geometry instanceof google.maps.LatLng) {
 	    callback.call(thisArg, geometry);
@@ -322,6 +347,9 @@ class MapCtrl {
 	    });
 	  }
 	}
+	/**
+	 * Resizes map view to fit recalculated bounds.
+	 */
 	fitBounds() {
 	  const bounds = new google.maps.LatLngBounds();
 	  this.map.data.forEach(feature =&gt; {
@@ -329,14 +357,21 @@ class MapCtrl {
 	  });
 	  this.map.fitBounds(bounds);
 	}
-	getOffsetFromEvent(event) {
-		let clientX, clientY;
-		for (const prop in event) {
-			if (event[prop] &amp;&amp; event[prop].clientX &amp;&amp; event[prop].clientY) {
-				({ clientX, clientY } = event[prop]);
+	/**
+	 * Since Google Map events store private properties under names
+	 * that change periodically, it is necessary to manually evaluate
+	 * which property is the `MouseEvent` by loop-and-compare. This
+	 * method returns a `MouseEvent` from a Map event.
+	 * @param  {Event} mapEvent Google map event
+	 * @return {Event}          MouseEvent
+	 */
+	isolateMouseEvent(mapEvent) {
+		for (const prop in mapEvent) {
+			if (mapEvent[prop] &amp;&amp; mapEvent[prop] instanceof MouseEvent) {
+				console.log(mapEvent[prop]);
+				return mapEvent[prop];
 			}
 		}
-		return { clientX, clientY };
 	}
 }
 

@@ -225,7 +225,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    	Best not used whenever possible.
 	     */
 					// angular.element(this._$window).triggerHandler('resize');
-					// google.maps.event.trigger(instance, 'resize');
+					google.maps.event.trigger(instance, 'resize');
 	
 					instance.data.setStyle(function (feature) {
 						var category = feature.getProperty('category');
@@ -301,7 +301,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 	
 					instance.data.addListener('click', function (event) {
-						_this.showDetail(event.feature, _this.getOffsetFromEvent(event));
+						_this.showDetail(event.feature, _this.isolateMouseEvent(event));
 					});
 	
 					_this._$scope.$watch(function () {
@@ -394,15 +394,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 		}, {
 			key: 'showDetail',
-			value: function showDetail(feature) {
-				var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-				    _ref$clientX = _ref.clientX,
-				    clientX = _ref$clientX === undefined ? 0 : _ref$clientX,
-				    _ref$clientY = _ref.clientY,
-				    clientY = _ref$clientY === undefined ? 0 : _ref$clientY;
+			value: function showDetail(feature, _ref) {
+				var left = _ref.clientX,
+				    top = _ref.clientY;
+	
 	
 				var panelRef = void 0;
-				var position = this._$mdPanel.newPanelPosition().absolute().top(clientY + 'px').left(clientX + 'px');
+				var position = this._$mdPanel.newPanelPosition()
+				// .absolute().center()
+				.top(top + 'px').left(left + 'px');
+	
+				var animation = this._$mdPanel.newPanelAnimation().openFrom({ top: top, left: left }).closeTo({ top: top, left: left }).withAnimation(this._$mdPanel.animation.SCALE);
 	
 				return this._$mdPanel.open({
 					attachTo: angular.element(document.body),
@@ -422,14 +424,20 @@ return /******/ (function(modules) { // webpackBootstrap
 					escapeToClose: true,
 					focusOnOpen: true,
 					onDomRemoved: function onDomRemoved() {
-						panelRef.config.scope.$destroy();
+						panelRef.destroy();
 					},
 	
+					animation: animation,
 					position: position
 				}).then(function (panel) {
 					panelRef = panel;
 				});
 			}
+			/**
+	   * Removes all features from the map by looping over feature
+	   * data objects and calling their `map.remove()` on them.
+	   */
+	
 		}, {
 			key: 'clearMapData',
 			value: function clearMapData() {
@@ -439,6 +447,15 @@ return /******/ (function(modules) { // webpackBootstrap
 					_this4.map.data.remove(feature);
 				});
 			}
+			/**
+	   * Handler method for map data `$watch`; watches incoming geoJSON
+	   * data for changes and adds it to the map if detected. If the
+	   * new data has a `showAll` property (and it is true), all features
+	   * all loaded and the map bounds are recalculated.
+	   * 
+	   * @param  {Object} newVal New map data
+	   */
+	
 		}, {
 			key: 'updateMapData',
 			value: function updateMapData(newVal) {
@@ -452,6 +469,14 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 				}
 			}
+			/**
+	   * Direct port of Google Maps `processBounds` example function
+	   * for recalculation of map boundaries based on map data.
+	   * @param  {Object}   geometry LatLng geometry object
+	   * @param  {Function} callback Recursion callback
+	   * @param  {*}   			thisArg  Context for `this`
+	   */
+	
 		}, {
 			key: 'processBounds',
 			value: function processBounds(geometry, callback, thisArg) {
@@ -467,6 +492,10 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 				}
 			}
+			/**
+	   * Resizes map view to fit recalculated bounds.
+	   */
+	
 		}, {
 			key: 'fitBounds',
 			value: function fitBounds() {
@@ -478,19 +507,24 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 				this.map.fitBounds(bounds);
 			}
+			/**
+	   * Since Google Map events store private properties under names
+	   * that change periodically, it is necessary to manually evaluate
+	   * which property is the `MouseEvent` by loop-and-compare. This
+	   * method returns a `MouseEvent` from a Map event.
+	   * @param  {Event} mapEvent Google map event
+	   * @return {Event}          MouseEvent
+	   */
+	
 		}, {
-			key: 'getOffsetFromEvent',
-			value: function getOffsetFromEvent(event) {
-				var clientX = void 0,
-				    clientY = void 0;
-				for (var prop in event) {
-					if (event[prop] && event[prop].clientX && event[prop].clientY) {
-						var _event$prop = event[prop];
-						clientX = _event$prop.clientX;
-						clientY = _event$prop.clientY;
+			key: 'isolateMouseEvent',
+			value: function isolateMouseEvent(mapEvent) {
+				for (var prop in mapEvent) {
+					if (mapEvent[prop] && mapEvent[prop] instanceof MouseEvent) {
+						console.log(mapEvent[prop]);
+						return mapEvent[prop];
 					}
 				}
-				return { clientX: clientX, clientY: clientY };
 			}
 		}]);
 	
@@ -649,12 +683,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(MapControlsCtrl, [{
 	    key: '$onInit',
 	    value: function $onInit() {
-	      // this.loadLocations().then(locations => {
-	      //  this.location = locations[1];
-	      //  this.updateLocation();
-	      //  angular.element(this.$window).triggerHandler('resize');
-	      // });
-	      this.showAll(); //.then(() => angular.element(this.$window).triggerHandler('resize'));
+	      var _this = this;
+	
+	      this.loadLocations().then(function (locations) {
+	        _this.location = locations[1];
+	        _this.showAll();
+	        // angular.element(this.$window).triggerHandler('resize');
+	      });
 	    }
 	
 	    /**
@@ -666,10 +701,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'loadLocations',
 	    value: function loadLocations() {
-	      var _this = this;
+	      var _this2 = this;
 	
 	      return this.LocationResource.query().$promise.then(function (locations) {
-	        _this.locations = locations;
+	        _this2.locations = locations;
 	        return locations;
 	      });
 	    }
@@ -683,10 +718,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'loadCategories',
 	    value: function loadCategories() {
-	      var _this2 = this;
+	      var _this3 = this;
 	
 	      return this.CategoryResource.query().$promise.then(function (categories) {
-	        _this2.categories = categories;
+	        _this3.categories = categories;
 	        return categories;
 	      });
 	    }
@@ -702,7 +737,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'loadCollections',
 	    value: function loadCollections() {
-	      var _this3 = this;
+	      var _this4 = this;
 	
 	      var location = this.location._id,
 	          category = this.category._id;
@@ -710,7 +745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this.CollectionResource.query({
 	        filter: { location: location, category: category }
 	      }).$promise.then(function (collections) {
-	        _this3.collections = collections;
+	        _this4.collections = collections;
 	        return collections;
 	      });
 	    }
@@ -723,11 +758,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'updateLocation',
 	    value: function updateLocation() {
-	      var _this4 = this;
+	      var _this5 = this;
 	
 	      this.loadCategories().then(function (categories) {
-	        _this4.category = categories[0];
-	        _this4.updateCategory();
+	        _this5.category = categories[0];
+	        _this5.updateCategory();
 	      });
 	    }
 	
@@ -739,11 +774,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'updateCategory',
 	    value: function updateCategory() {
-	      var _this5 = this;
+	      var _this6 = this;
 	
 	      this.loadCollections().then(function (collections) {
-	        _this5.collection = collections[0];
-	        _this5.updateCollection();
+	        _this6.collection = collections[0];
+	        _this6.updateCollection();
 	      });
 	    }
 	
@@ -824,10 +859,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'showAll',
 	    value: function showAll() {
-	      var _this6 = this;
+	      var _this7 = this;
 	
 	      return this.FeatureResource.query({}).$promise.then(function (features) {
-	        _this6.setCollection({
+	        _this7.setCollection({
 	          collection: {
 	            type: 'FeatureCollection',
 	            features: features
@@ -1048,8 +1083,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	var templates = ['$templateCache', function ($templateCache) {
 	  $templateCache.put('_map.html', '<ng-map\n  center="43.9443802,-78.8975857"\n  zoom="17"\n  styles="{{ ::$ctrl._MAP_SETTINGS.styles }}"\n  map-type-id="{{ ::$ctrl._MAP_SETTINGS.type }}"\n  disable-default-u-i="true"\n  tilt="45"\n  heading="0"\n  layout\n  layout-fill>\n  <custom-control id="map-controls" position="TOP_LEFT" index="1">\n\t\t<campus-map-controls ng-model="$ctrl.mapControls"></campus-map-controls>\n  </custom-control>\n</ng-map>');
-	  $templateCache.put('detail/_map-detail.html', '<md-whiteframe\n  class="md-whiteframe-16dp"\n  layout="column"\n  layout-align="center center">\n  <md-toolbar>\n    <div class="md-toolbar-tools">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class="md-icon-button" aria-label="Close info" ng-click="ctrl.close()">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div layout="column" layout-margin>\n    <md-button ng-click="ctrl.showDetails()">{{ ctrl.detailsShowing ? \'Hide\' : \'Show\'}} details <span class="detail-arrow" ng-class="{ \'arrow-up\' : ctrl.detailsShowing }"></span></md-button>\n  \t<md-content layout-padding layout-margin class="details-text" ng-bind-html="::ctrl.description" ng-show="ctrl.detailsShowing"></md-content>\n  \t<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="::ctrl.building" ng-click="ctrl.goToBldg(ctrl.callback)">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>');
 	  $templateCache.put('controls/_map-controls.html', '<md-whiteframe\n  class="md-whiteframe-16dp map-controls"\n  layout="column"\n  layout-align="center center"\n  layout-fill>\n  <div layout="row">\n    <md-input-container>\n      <label>Location</label>\n      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" ng-change="$ctrl.updateLocation()" ng-model-options="{trackBy: \'$value._id\'}">\n        <md-option ng-repeat="location in ::$ctrl.locations" ng-value="::location" ng-disabled="$ctrl.location === location">\n          {{ ::location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature category</label>\n      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.location">\n        <md-option ng-repeat="category in $ctrl.categories" ng-value="::category" ng-disabled="$ctrl.category === category">\n          {{ ::category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature collection</label>\n      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.category">\n        <md-option ng-repeat="collection in $ctrl.collections" ng-value="::collection" ng-disabled="$ctrl.collection === collection">\n          {{ ::collection.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n  </div>\n  <div layout="row">\n    <md-button class="md-primary" ng-click="$ctrl.showAll()">\n    \tShow all\n      <md-tooltip md-direction="bottom">\n        Turn on visibility for all available map features\n      </md-tooltip>\n    </md-button>\n  </div>\n</md-whiteframe>');
+	  $templateCache.put('detail/_map-detail.html', '<md-whiteframe\n  class="md-whiteframe-16dp"\n  layout="column"\n  layout-align="center center">\n  <md-toolbar>\n    <div class="md-toolbar-tools">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class="md-icon-button" aria-label="Close info" ng-click="ctrl.close()">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div layout="column" layout-margin>\n    <md-button ng-click="ctrl.showDetails()">{{ ctrl.detailsShowing ? \'Hide\' : \'Show\'}} details <span class="detail-arrow" ng-class="{ \'arrow-up\' : ctrl.detailsShowing }"></span></md-button>\n  \t<md-content layout-padding layout-margin class="details-text" ng-bind-html="::ctrl.description" ng-show="ctrl.detailsShowing"></md-content>\n  \t<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="::ctrl.building" ng-click="ctrl.goToBldg(ctrl.callback)">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>');
 	}];exports.default = templates;
 
 /***/ }

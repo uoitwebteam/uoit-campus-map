@@ -152,11 +152,11 @@
                           },
                           {
                             "type": "Literal",
-                            "value": "<ng-map\n  center=\"43.9443802,-78.8975857\"\n  zoom=\"17\"\n  styles=\"{{ ::$ctrl.MAP_SETTINGS.styles }}\"\n  map-type-id=\"{{ ::$ctrl.MAP_SETTINGS.type }}\"\n  disable-default-u-i=\"true\"\n  tilt=\"45\"\n  heading=\"0\"\n  layout\n  layout-fill>\n  <custom-control id=\"map-controls\" position=\"TOP_LEFT\" index=\"1\">\n\t\t<campus-map-controls ng-model=\"$ctrl.mapControls\"></campus-map-controls>\n  </custom-control>\n</ng-map>",
-                            "raw": "'<ng-map\\n  center=\"43.9443802,-78.8975857\"\\n  zoom=\"17\"\\n  styles=\"{{ ::$ctrl.MAP_SETTINGS.styles }}\"\\n  map-type-id=\"{{ ::$ctrl.MAP_SETTINGS.type }}\"\\n  disable-default-u-i=\"true\"\\n  tilt=\"45\"\\n  heading=\"0\"\\n  layout\\n  layout-fill>\\n  <custom-control id=\"map-controls\" position=\"TOP_LEFT\" index=\"1\">\\n\\t\\t<campus-map-controls ng-model=\"$ctrl.mapControls\"></campus-map-controls>\\n  </custom-control>\\n</ng-map>'",
+                            "value": "<ng-map\n  center=\"43.9443802,-78.8975857\"\n  zoom=\"17\"\n  styles=\"{{ ::$ctrl._MAP_SETTINGS.styles }}\"\n  map-type-id=\"{{ ::$ctrl._MAP_SETTINGS.type }}\"\n  disable-default-u-i=\"true\"\n  tilt=\"45\"\n  heading=\"0\"\n  layout\n  layout-fill>\n  <custom-control id=\"map-controls\" position=\"TOP_LEFT\" index=\"1\">\n\t\t<campus-map-controls ng-model=\"$ctrl.mapControls\"></campus-map-controls>\n  </custom-control>\n</ng-map>",
+                            "raw": "'<ng-map\\n  center=\"43.9443802,-78.8975857\"\\n  zoom=\"17\"\\n  styles=\"{{ ::$ctrl._MAP_SETTINGS.styles }}\"\\n  map-type-id=\"{{ ::$ctrl._MAP_SETTINGS.type }}\"\\n  disable-default-u-i=\"true\"\\n  tilt=\"45\"\\n  heading=\"0\"\\n  layout\\n  layout-fill>\\n  <custom-control id=\"map-controls\" position=\"TOP_LEFT\" index=\"1\">\\n\\t\\t<campus-map-controls ng-model=\"$ctrl.mapControls\"></campus-map-controls>\\n  </custom-control>\\n</ng-map>'",
                             "range": [
                               94,
-                              508
+                              510
                             ],
                             "loc": {
                               "start": {
@@ -165,14 +165,14 @@
                               },
                               "end": {
                                 "line": 1,
-                                "column": 508
+                                "column": 510
                               }
                             }
                           }
                         ],
                         "range": [
                           63,
-                          509
+                          511
                         ],
                         "loc": {
                           "start": {
@@ -181,13 +181,13 @@
                           },
                           "end": {
                             "line": 1,
-                            "column": 509
+                            "column": 511
                           }
                         }
                       },
                       "range": [
                         63,
-                        510
+                        512
                       ],
                       "loc": {
                         "start": {
@@ -211,8 +211,8 @@
                             "type": "Identifier",
                             "name": "$templateCache",
                             "range": [
-                              510,
-                              524
+                              512,
+                              526
                             ],
                             "loc": {
                               "start": {
@@ -229,8 +229,8 @@
                             "type": "Identifier",
                             "name": "put",
                             "range": [
-                              525,
-                              528
+                              527,
+                              530
                             ],
                             "loc": {
                               "start": {
@@ -244,8 +244,8 @@
                             }
                           },
                           "range": [
-                            510,
-                            528
+                            512,
+                            530
                           ],
                           "loc": {
                             "start": {
@@ -264,8 +264,8 @@
                             "value": "controls/_map-controls.html",
                             "raw": "'controls/_map-controls.html'",
                             "range": [
-                              529,
-                              558
+                              531,
+                              560
                             ],
                             "loc": {
                               "start": {
@@ -283,8 +283,8 @@
                             "value": "<md-whiteframe\n  class=\"md-whiteframe-16dp map-controls\"\n  layout=\"column\"\n  layout-align=\"center center\"\n  layout-fill>\n  <div layout=\"row\">\n    <md-input-container>\n      <label>Location</label>\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" ng-change=\"$ctrl.updateLocation()\" ng-model-options=\"{trackBy: '$value._id'}\">\n        <md-option ng-repeat=\"location in ::$ctrl.locations\" ng-value=\"::location\" ng-disabled=\"$ctrl.location === location\">\n          {{ ::location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature category</label>\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-change=\"$ctrl.updateCategory()\" ng-model-options=\"{trackBy: '$value._id'}\" ng-disabled=\"!$ctrl.location\">\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"::category\" ng-disabled=\"$ctrl.category === category\">\n          {{ ::category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature collection</label>\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-change=\"$ctrl.updateCollection()\" ng-model-options=\"{trackBy: '$value._id'}\" ng-disabled=\"!$ctrl.category\">\n        <md-option ng-repeat=\"collection in $ctrl.collections\" ng-value=\"::collection\" ng-disabled=\"$ctrl.collection === collection\">\n          {{ ::collection.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n  </div>\n  <div layout=\"row\">\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\n    \tShow all\n      <md-tooltip md-direction=\"bottom\">\n        Turn on visibility for all available map features\n      </md-tooltip>\n    </md-button>\n  </div>\n</md-whiteframe>",
                             "raw": "'<md-whiteframe\\n  class=\"md-whiteframe-16dp map-controls\"\\n  layout=\"column\"\\n  layout-align=\"center center\"\\n  layout-fill>\\n  <div layout=\"row\">\\n    <md-input-container>\\n      <label>Location</label>\\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" ng-change=\"$ctrl.updateLocation()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\">\\n        <md-option ng-repeat=\"location in ::$ctrl.locations\" ng-value=\"::location\" ng-disabled=\"$ctrl.location === location\">\\n          {{ ::location.label}}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n    <md-input-container>\\n      <label>Feature category</label>\\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-change=\"$ctrl.updateCategory()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.location\">\\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"::category\" ng-disabled=\"$ctrl.category === category\">\\n          {{ ::category.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n    <md-input-container>\\n      <label>Feature collection</label>\\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-change=\"$ctrl.updateCollection()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.category\">\\n        <md-option ng-repeat=\"collection in $ctrl.collections\" ng-value=\"::collection\" ng-disabled=\"$ctrl.collection === collection\">\\n          {{ ::collection.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n  </div>\\n  <div layout=\"row\">\\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\\n    \\tShow all\\n      <md-tooltip md-direction=\"bottom\">\\n        Turn on visibility for all available map features\\n      </md-tooltip>\\n    </md-button>\\n  </div>\\n</md-whiteframe>'",
                             "range": [
-                              559,
-                              2418
+                              561,
+                              2420
                             ],
                             "loc": {
                               "start": {
@@ -299,8 +299,8 @@
                           }
                         ],
                         "range": [
-                          510,
-                          2419
+                          512,
+                          2421
                         ],
                         "loc": {
                           "start": {
@@ -314,8 +314,8 @@
                         }
                       },
                       "range": [
-                        510,
-                        2420
+                        512,
+                        2422
                       ],
                       "loc": {
                         "start": {
@@ -339,8 +339,8 @@
                             "type": "Identifier",
                             "name": "$templateCache",
                             "range": [
-                              2420,
-                              2434
+                              2422,
+                              2436
                             ],
                             "loc": {
                               "start": {
@@ -357,8 +357,8 @@
                             "type": "Identifier",
                             "name": "put",
                             "range": [
-                              2435,
-                              2438
+                              2437,
+                              2440
                             ],
                             "loc": {
                               "start": {
@@ -372,8 +372,8 @@
                             }
                           },
                           "range": [
-                            2420,
-                            2438
+                            2422,
+                            2440
                           ],
                           "loc": {
                             "start": {
@@ -392,8 +392,8 @@
                             "value": "detail/_map-detail.html",
                             "raw": "'detail/_map-detail.html'",
                             "range": [
-                              2439,
-                              2464
+                              2441,
+                              2466
                             ],
                             "loc": {
                               "start": {
@@ -411,8 +411,8 @@
                             "value": "<md-whiteframe\n  class=\"md-whiteframe-16dp\"\n  layout=\"column\"\n  layout-align=\"center center\">\n  <md-toolbar>\n    <div class=\"md-toolbar-tools\">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div layout=\"column\" layout-margin>\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? 'Hide' : 'Show'}} details <span class=\"detail-arrow\" ng-class=\"{ 'arrow-up' : ctrl.detailsShowing }\"></span></md-button>\n  \t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\n  \t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.goToBldg(ctrl.callback)\">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>",
                             "raw": "'<md-whiteframe\\n  class=\"md-whiteframe-16dp\"\\n  layout=\"column\"\\n  layout-align=\"center center\">\\n  <md-toolbar>\\n    <div class=\"md-toolbar-tools\">\\n      <h2>\\n        <span>{{ ::ctrl.name }}</span>\\n      </h2>\\n      <span flex></span>\\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\\n        <span>&times;</span>\\n      </md-button>\\n    </div>\\n  </md-toolbar>\\n  <div layout=\"column\" layout-margin>\\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? \\'Hide\\' : \\'Show\\'}} details <span class=\"detail-arrow\" ng-class=\"{ \\'arrow-up\\' : ctrl.detailsShowing }\"></span></md-button>\\n  \\t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\\n  \\t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.goToBldg(ctrl.callback)\">\\n  \\t\\tTake a tour &raquo;\\n  \\t</md-button>\\n  </div>\\n</md-whiteframe>'",
                             "range": [
-                              2465,
-                              3487
+                              2467,
+                              3489
                             ],
                             "loc": {
                               "start": {
@@ -427,8 +427,8 @@
                           }
                         ],
                         "range": [
-                          2420,
-                          3488
+                          2422,
+                          3490
                         ],
                         "loc": {
                           "start": {
@@ -442,8 +442,8 @@
                         }
                       },
                       "range": [
-                        2420,
-                        3488
+                        2422,
+                        3490
                       ],
                       "loc": {
                         "start": {
@@ -459,7 +459,7 @@
                   ],
                   "range": [
                     62,
-                    3489
+                    3491
                   ],
                   "loc": {
                     "start": {
@@ -476,7 +476,7 @@
                 "expression": false,
                 "range": [
                   37,
-                  3489
+                  3491
                 ],
                 "loc": {
                   "start": {
@@ -492,7 +492,7 @@
             ],
             "range": [
               18,
-              3490
+              3492
             ],
             "loc": {
               "start": {
@@ -507,7 +507,7 @@
           },
           "range": [
             6,
-            3490
+            3492
           ],
           "loc": {
             "start": {
@@ -524,7 +524,7 @@
       "kind": "const",
       "range": [
         0,
-        3491
+        3493
       ],
       "loc": {
         "start": {
@@ -546,8 +546,8 @@
         "type": "Identifier",
         "name": "templates",
         "range": [
-          3507,
-          3516
+          3509,
+          3518
         ],
         "loc": {
           "start": {
@@ -561,8 +561,8 @@
         }
       },
       "range": [
-        3492,
-        3517
+        3494,
+        3519
       ],
       "loc": {
         "start": {
@@ -731,11 +731,11 @@
                             },
                             {
                               "type": "Literal",
-                              "value": "<ng-map\n  center=\"43.9443802,-78.8975857\"\n  zoom=\"17\"\n  styles=\"{{ ::$ctrl.MAP_SETTINGS.styles }}\"\n  map-type-id=\"{{ ::$ctrl.MAP_SETTINGS.type }}\"\n  disable-default-u-i=\"true\"\n  tilt=\"45\"\n  heading=\"0\"\n  layout\n  layout-fill>\n  <custom-control id=\"map-controls\" position=\"TOP_LEFT\" index=\"1\">\n\t\t<campus-map-controls ng-model=\"$ctrl.mapControls\"></campus-map-controls>\n  </custom-control>\n</ng-map>",
-                              "raw": "'<ng-map\\n  center=\"43.9443802,-78.8975857\"\\n  zoom=\"17\"\\n  styles=\"{{ ::$ctrl.MAP_SETTINGS.styles }}\"\\n  map-type-id=\"{{ ::$ctrl.MAP_SETTINGS.type }}\"\\n  disable-default-u-i=\"true\"\\n  tilt=\"45\"\\n  heading=\"0\"\\n  layout\\n  layout-fill>\\n  <custom-control id=\"map-controls\" position=\"TOP_LEFT\" index=\"1\">\\n\\t\\t<campus-map-controls ng-model=\"$ctrl.mapControls\"></campus-map-controls>\\n  </custom-control>\\n</ng-map>'",
+                              "value": "<ng-map\n  center=\"43.9443802,-78.8975857\"\n  zoom=\"17\"\n  styles=\"{{ ::$ctrl._MAP_SETTINGS.styles }}\"\n  map-type-id=\"{{ ::$ctrl._MAP_SETTINGS.type }}\"\n  disable-default-u-i=\"true\"\n  tilt=\"45\"\n  heading=\"0\"\n  layout\n  layout-fill>\n  <custom-control id=\"map-controls\" position=\"TOP_LEFT\" index=\"1\">\n\t\t<campus-map-controls ng-model=\"$ctrl.mapControls\"></campus-map-controls>\n  </custom-control>\n</ng-map>",
+                              "raw": "'<ng-map\\n  center=\"43.9443802,-78.8975857\"\\n  zoom=\"17\"\\n  styles=\"{{ ::$ctrl._MAP_SETTINGS.styles }}\"\\n  map-type-id=\"{{ ::$ctrl._MAP_SETTINGS.type }}\"\\n  disable-default-u-i=\"true\"\\n  tilt=\"45\"\\n  heading=\"0\"\\n  layout\\n  layout-fill>\\n  <custom-control id=\"map-controls\" position=\"TOP_LEFT\" index=\"1\">\\n\\t\\t<campus-map-controls ng-model=\"$ctrl.mapControls\"></campus-map-controls>\\n  </custom-control>\\n</ng-map>'",
                               "range": [
                                 94,
-                                508
+                                510
                               ],
                               "loc": {
                                 "start": {
@@ -744,14 +744,14 @@
                                 },
                                 "end": {
                                   "line": 1,
-                                  "column": 508
+                                  "column": 510
                                 }
                               }
                             }
                           ],
                           "range": [
                             63,
-                            509
+                            511
                           ],
                           "loc": {
                             "start": {
@@ -760,13 +760,13 @@
                             },
                             "end": {
                               "line": 1,
-                              "column": 509
+                              "column": 511
                             }
                           }
                         },
                         "range": [
                           63,
-                          510
+                          512
                         ],
                         "loc": {
                           "start": {
@@ -790,8 +790,8 @@
                               "type": "Identifier",
                               "name": "$templateCache",
                               "range": [
-                                510,
-                                524
+                                512,
+                                526
                               ],
                               "loc": {
                                 "start": {
@@ -808,8 +808,8 @@
                               "type": "Identifier",
                               "name": "put",
                               "range": [
-                                525,
-                                528
+                                527,
+                                530
                               ],
                               "loc": {
                                 "start": {
@@ -823,8 +823,8 @@
                               }
                             },
                             "range": [
-                              510,
-                              528
+                              512,
+                              530
                             ],
                             "loc": {
                               "start": {
@@ -843,8 +843,8 @@
                               "value": "controls/_map-controls.html",
                               "raw": "'controls/_map-controls.html'",
                               "range": [
-                                529,
-                                558
+                                531,
+                                560
                               ],
                               "loc": {
                                 "start": {
@@ -862,8 +862,8 @@
                               "value": "<md-whiteframe\n  class=\"md-whiteframe-16dp map-controls\"\n  layout=\"column\"\n  layout-align=\"center center\"\n  layout-fill>\n  <div layout=\"row\">\n    <md-input-container>\n      <label>Location</label>\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" ng-change=\"$ctrl.updateLocation()\" ng-model-options=\"{trackBy: '$value._id'}\">\n        <md-option ng-repeat=\"location in ::$ctrl.locations\" ng-value=\"::location\" ng-disabled=\"$ctrl.location === location\">\n          {{ ::location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature category</label>\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-change=\"$ctrl.updateCategory()\" ng-model-options=\"{trackBy: '$value._id'}\" ng-disabled=\"!$ctrl.location\">\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"::category\" ng-disabled=\"$ctrl.category === category\">\n          {{ ::category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature collection</label>\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-change=\"$ctrl.updateCollection()\" ng-model-options=\"{trackBy: '$value._id'}\" ng-disabled=\"!$ctrl.category\">\n        <md-option ng-repeat=\"collection in $ctrl.collections\" ng-value=\"::collection\" ng-disabled=\"$ctrl.collection === collection\">\n          {{ ::collection.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n  </div>\n  <div layout=\"row\">\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\n    \tShow all\n      <md-tooltip md-direction=\"bottom\">\n        Turn on visibility for all available map features\n      </md-tooltip>\n    </md-button>\n  </div>\n</md-whiteframe>",
                               "raw": "'<md-whiteframe\\n  class=\"md-whiteframe-16dp map-controls\"\\n  layout=\"column\"\\n  layout-align=\"center center\"\\n  layout-fill>\\n  <div layout=\"row\">\\n    <md-input-container>\\n      <label>Location</label>\\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" ng-change=\"$ctrl.updateLocation()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\">\\n        <md-option ng-repeat=\"location in ::$ctrl.locations\" ng-value=\"::location\" ng-disabled=\"$ctrl.location === location\">\\n          {{ ::location.label}}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n    <md-input-container>\\n      <label>Feature category</label>\\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-change=\"$ctrl.updateCategory()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.location\">\\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"::category\" ng-disabled=\"$ctrl.category === category\">\\n          {{ ::category.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n    <md-input-container>\\n      <label>Feature collection</label>\\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-change=\"$ctrl.updateCollection()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.category\">\\n        <md-option ng-repeat=\"collection in $ctrl.collections\" ng-value=\"::collection\" ng-disabled=\"$ctrl.collection === collection\">\\n          {{ ::collection.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n  </div>\\n  <div layout=\"row\">\\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\\n    \\tShow all\\n      <md-tooltip md-direction=\"bottom\">\\n        Turn on visibility for all available map features\\n      </md-tooltip>\\n    </md-button>\\n  </div>\\n</md-whiteframe>'",
                               "range": [
-                                559,
-                                2418
+                                561,
+                                2420
                               ],
                               "loc": {
                                 "start": {
@@ -878,8 +878,8 @@
                             }
                           ],
                           "range": [
-                            510,
-                            2419
+                            512,
+                            2421
                           ],
                           "loc": {
                             "start": {
@@ -893,8 +893,8 @@
                           }
                         },
                         "range": [
-                          510,
-                          2420
+                          512,
+                          2422
                         ],
                         "loc": {
                           "start": {
@@ -918,8 +918,8 @@
                               "type": "Identifier",
                               "name": "$templateCache",
                               "range": [
-                                2420,
-                                2434
+                                2422,
+                                2436
                               ],
                               "loc": {
                                 "start": {
@@ -936,8 +936,8 @@
                               "type": "Identifier",
                               "name": "put",
                               "range": [
-                                2435,
-                                2438
+                                2437,
+                                2440
                               ],
                               "loc": {
                                 "start": {
@@ -951,8 +951,8 @@
                               }
                             },
                             "range": [
-                              2420,
-                              2438
+                              2422,
+                              2440
                             ],
                             "loc": {
                               "start": {
@@ -971,8 +971,8 @@
                               "value": "detail/_map-detail.html",
                               "raw": "'detail/_map-detail.html'",
                               "range": [
-                                2439,
-                                2464
+                                2441,
+                                2466
                               ],
                               "loc": {
                                 "start": {
@@ -990,8 +990,8 @@
                               "value": "<md-whiteframe\n  class=\"md-whiteframe-16dp\"\n  layout=\"column\"\n  layout-align=\"center center\">\n  <md-toolbar>\n    <div class=\"md-toolbar-tools\">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div layout=\"column\" layout-margin>\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? 'Hide' : 'Show'}} details <span class=\"detail-arrow\" ng-class=\"{ 'arrow-up' : ctrl.detailsShowing }\"></span></md-button>\n  \t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\n  \t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.goToBldg(ctrl.callback)\">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>",
                               "raw": "'<md-whiteframe\\n  class=\"md-whiteframe-16dp\"\\n  layout=\"column\"\\n  layout-align=\"center center\">\\n  <md-toolbar>\\n    <div class=\"md-toolbar-tools\">\\n      <h2>\\n        <span>{{ ::ctrl.name }}</span>\\n      </h2>\\n      <span flex></span>\\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\\n        <span>&times;</span>\\n      </md-button>\\n    </div>\\n  </md-toolbar>\\n  <div layout=\"column\" layout-margin>\\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? \\'Hide\\' : \\'Show\\'}} details <span class=\"detail-arrow\" ng-class=\"{ \\'arrow-up\\' : ctrl.detailsShowing }\"></span></md-button>\\n  \\t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\\n  \\t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.goToBldg(ctrl.callback)\">\\n  \\t\\tTake a tour &raquo;\\n  \\t</md-button>\\n  </div>\\n</md-whiteframe>'",
                               "range": [
-                                2465,
-                                3487
+                                2467,
+                                3489
                               ],
                               "loc": {
                                 "start": {
@@ -1006,8 +1006,8 @@
                             }
                           ],
                           "range": [
-                            2420,
-                            3488
+                            2422,
+                            3490
                           ],
                           "loc": {
                             "start": {
@@ -1021,8 +1021,8 @@
                           }
                         },
                         "range": [
-                          2420,
-                          3488
+                          2422,
+                          3490
                         ],
                         "loc": {
                           "start": {
@@ -1038,7 +1038,7 @@
                     ],
                     "range": [
                       62,
-                      3489
+                      3491
                     ],
                     "loc": {
                       "start": {
@@ -1055,7 +1055,7 @@
                   "expression": false,
                   "range": [
                     37,
-                    3489
+                    3491
                   ],
                   "loc": {
                     "start": {
@@ -1071,7 +1071,7 @@
               ],
               "range": [
                 18,
-                3490
+                3492
               ],
               "loc": {
                 "start": {
@@ -1086,7 +1086,7 @@
             },
             "range": [
               6,
-              3490
+              3492
             ],
             "loc": {
               "start": {
@@ -1103,7 +1103,7 @@
         "kind": "const",
         "range": [
           0,
-          3491
+          3493
         ],
         "loc": {
           "start": {
@@ -1119,8 +1119,8 @@
         "trailingComments": []
       },
       "range": [
-        3492,
-        3517
+        3494,
+        3519
       ],
       "loc": {
         "start": {
@@ -1137,7 +1137,7 @@
   "sourceType": "module",
   "range": [
     0,
-    3517
+    3519
   ],
   "loc": {
     "start": {

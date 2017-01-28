@@ -1,7 +1,7 @@
 {
-  "coverage": "40%",
-  "expectCount": 55,
-  "actualCount": 22,
+  "coverage": "48.21%",
+  "expectCount": 56,
+  "actualCount": 27,
   "files": {
     "src/detail/map-detail_controller.js": {
       "expectCount": 10,
@@ -19,8 +19,17 @@
         17
       ]
     },
+    "src/map_controller.js": {
+      "expectCount": 19,
+      "actualCount": 16,
+      "undocumentLines": [
+        9,
+        65,
+        152
+      ]
+    },
     "src/controls/map-controls_controller.js": {
-      "expectCount": 21,
+      "expectCount": 22,
       "actualCount": 11,
       "undocumentLines": [
         18,
@@ -28,25 +37,12 @@
         31,
         30,
         33,
-        67,
-        95,
-        106,
-        84,
-        55
-      ]
-    },
-    "src/map_controller.js": {
-      "expectCount": 19,
-      "actualCount": 11,
-      "undocumentLines": [
-        9,
-        65,
-        253,
-        152,
-        278,
-        285,
-        267,
-        258
+        66,
+        94,
+        105,
+        83,
+        41,
+        54
       ]
     },
     "src/constants/map-icons_constant.js": {

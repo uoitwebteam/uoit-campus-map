@@ -386,7 +386,9 @@ the Google Maps API.</p>
       <div>
         
         
-        
+        <div data-ice="description"><p>Removes all features from the map by looping over feature
+data objects and calling their <code>map.remove()</code> on them.</p>
+</div>
       </div>
     </td>
     <td>
@@ -411,32 +413,8 @@ the Google Maps API.</p>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-method-getOffsetFromEvent">getOffsetFromEvent</a></span></span><span data-ice="signature">(event: <span>*</span>): <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
+        <div data-ice="description"><p>Resizes map view to fit recalculated bounds.</p>
+</div>
       </div>
     </td>
     <td>
@@ -482,13 +460,43 @@ a way to cancel the 3 seconds (<code>toastCanceler</code>).</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-method-processBounds">processBounds</a></span></span><span data-ice="signature">(geometry: <span>*</span>, callback: <span>*</span>, thisArg: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-method-isolateMouseEvent">isolateMouseEvent</a></span></span><span data-ice="signature">(mapEvent: <span><a href="https://developer.mozilla.org/en-US/docs/Web/API/Event">Event</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/API/Event">Event</a></span></span>
         </p>
       </div>
       <div>
         
         
+        <div data-ice="description"><p>Since Google Map events store private properties under names
+that change periodically, it is necessary to manually evaluate
+which property is the <code>MouseEvent</code> by loop-and-compare.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-method-processBounds">processBounds</a></span></span><span data-ice="signature">(geometry: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, callback: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>, thisArg: <span>*</span>)</span>
+        </p>
+      </div>
+      <div>
         
+        
+        <div data-ice="description"><p>Direct port of Google Maps <code>processBounds</code> example function
+for recalculation of map boundaries based on map data.</p>
+</div>
       </div>
     </td>
     <td>
@@ -560,13 +568,15 @@ future being hovered over.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-method-updateMapData">updateMapData</a></span></span><span data-ice="signature">(newVal: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html#instance-method-updateMapData">updateMapData</a></span></span><span data-ice="signature">(newVal: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Handler method for map data <code>$watch</code>; watches incoming geoJSON
+data for changes and adds it to the map if detected.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1080,14 +1090,16 @@ memory leaks if left attached).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber253">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber263">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Removes all features from the map by looping over feature
+data objects and calling their <code>map.remove()</code> on them.</p>
+</div>
 
   
 
@@ -1120,14 +1132,15 @@ memory leaks if left attached).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber278">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber306">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Resizes map view to fit recalculated bounds.</p>
+</div>
 
   
 
@@ -1135,72 +1148,6 @@ memory leaks if left attached).</p>
 </div>
 
   
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-getOffsetFromEvent">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">getOffsetFromEvent</span><span data-ice="signature">(event: <span>*</span>): <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber285">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Params:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">event</td>
-      <td data-ice="type"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tr>
-        <td class="return-type" data-ice="returnType"><span>*</span></td>
-        
-      </tr>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
 
   
 
@@ -1272,24 +1219,98 @@ another isn&apos;t needed within those seconds.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-processBounds">
+  <h3 data-ice="anchor" id="instance-method-isolateMouseEvent">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">processBounds</span><span data-ice="signature">(geometry: <span>*</span>, callback: <span>*</span>, thisArg: <span>*</span>)</span>
+    <span data-ice="name">isolateMouseEvent</span><span data-ice="signature">(mapEvent: <span><a href="https://developer.mozilla.org/en-US/docs/Web/API/Event">Event</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/API/Event">Event</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber267">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber321">source</a></span></span>
     </span>
   </h3>
 
   
   
   
+  <div data-ice="description"><p>Since Google Map events store private properties under names
+that change periodically, it is necessary to manually evaluate
+which property is the <code>MouseEvent</code> by loop-and-compare. This
+method returns a <code>MouseEvent</code> from a Map event.</p>
+</div>
+
   
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">mapEvent</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/API/Event">Event</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Google map event</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tr>
+        <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/API/Event">Event</a></span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>MouseEvent</p>
+</td>
+      </tr>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-processBounds">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">processBounds</span><span data-ice="signature">(geometry: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, callback: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>, thisArg: <span>*</span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber292">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Direct port of Google Maps <code>processBounds</code> example function
+for recalculation of map boundaries based on map data.</p>
+</div>
 
   
 
@@ -1303,21 +1324,24 @@ another isn&apos;t needed within those seconds.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">geometry</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>LatLng geometry object</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">callback</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Recursion callback</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">thisArg</td>
       <td data-ice="type"><span>*</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Context for <code>this</code></p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -1498,18 +1522,22 @@ it updates the name in the toast instead of making a new one.</p>
     
     
     
-    <span data-ice="name">updateMapData</span><span data-ice="signature">(newVal: <span>*</span>)</span>
+    <span data-ice="name">updateMapData</span><span data-ice="signature">(newVal: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber258">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/map_controller.js.html#lineNumber276">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Handler method for map data <code>$watch</code>; watches incoming geoJSON
+data for changes and adds it to the map if detected. If the
+new data has a <code>showAll</code> property (and it is true), all features
+all loaded and the map bounds are recalculated.</p>
+</div>
 
   
 
@@ -1523,9 +1551,10 @@ it updates the name in the toast instead of making a new one.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">newVal</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>New map data</p>
+</td>
     </tr>
 </tbody>
   </table>

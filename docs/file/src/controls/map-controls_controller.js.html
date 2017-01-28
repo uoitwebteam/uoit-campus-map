@@ -84,12 +84,11 @@ class MapControlsCtrl {
    * Initializes the controls (show all map elements)
    */
   $onInit() {
-    // this.loadLocations().then(locations =&gt; {
-    //  this.location = locations[1];
-    //  this.updateLocation();
-    //  angular.element(this.$window).triggerHandler(&apos;resize&apos;);
-    // });
-    this.showAll();//.then(() =&gt; angular.element(this.$window).triggerHandler(&apos;resize&apos;));
+    this.loadLocations().then(locations =&gt; {
+			this.location = locations[1];
+			this.showAll();
+			// angular.element(this.$window).triggerHandler(&apos;resize&apos;);
+    });
   }
 
   /**
