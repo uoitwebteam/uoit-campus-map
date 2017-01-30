@@ -146,16 +146,21 @@ class MapCtrl {
 
 	    this._$scope.$watch( () => this.mapControls, (newVal) => {
 	    	if (newVal) {
-		    	this.clearMapData();
-		    	this.updateMapData(newVal);
-		    	if (newVal.location && this.currentLocation !== newVal.location) {
-			    	this.currentLocation = newVal.location;
+					console.log('map component detected internal changes:', newVal);
+			  	this.clearMapData().then(() => this.updateMapData(newVal));
+		    	if (newVal.location && this.location !== newVal.location) {
+			    	this.location = newVal.location;
 			    }
 	    	}
 	    });
 
     });
 	}
+
+	// $onChanges({ collection: { currentValue: collection} }) {
+	// 	console.log('map component detected external changes:', collection);
+ //  	this.clearMapData().then(() => this.updateMapData({ collection }));
+	// }
 
 	/**
 	 * Clean up event listeners that the controller has attached via
@@ -166,6 +171,94 @@ class MapCtrl {
 	 */
 	$onDestroy() {
 		google.maps.event.clearInstanceListeners(this.map.data);
+	}
+
+	/**
+	 * Handler method for map data `$watch`; watches incoming geoJSON
+	 * data for changes and adds it to the map if detected. If the
+	 * new data has a `showAll` property (and it is true), all features
+	 * all loaded and the map bounds are recalculated.
+	 * 
+	 * @param  {Object} newVal New incoming map data
+	 */
+	updateMapData(newVal) {
+		console.log('updating map data...', newVal);
+		return this.getMap().then(map => {
+			if (newVal && newVal.showAll) {
+	      map.data.addGeoJson(newVal.collection);
+				console.log('map data updated (show all)!');
+			} else {
+	  		newVal.collection&&map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${newVal.collection._id}`, null, () => {
+				  this.fitBounds(map);
+					console.log('map data updated!');
+	  		});
+			}
+		});
+	}
+	
+	/**
+	 * Removes all features from the map by looping over feature
+	 * data objects and calling their `map.remove()` on them.
+	 */
+	clearMapData() {
+		console.log('clearing map data...');
+		return this.getMap().then(map => {
+			map.data.forEach(feature => {
+				map.data.remove(feature);
+			});
+			console.log('map data cleared!');
+		});
+	}
+
+	/**
+	 * Shows a detail popup, called by user clicking map feature. This
+	 * method uses ng-material's `$mdPanel` service to build a floating
+	 * panel config, immediately show it, and manually clean up its scope
+	 * listeners on close.
+	 * @param  {Object} feature         The feature that was clicked
+	 * @param  {Object} options
+	 * @param  {Number} options.clientX Horizontal position of user's click
+	 * @param  {Number} options.clientY Vertical position of user's click
+	 * @return {Promise}                Resolves to panel reference
+	 */
+	showDetail(feature, { clientX: left, clientY: top }) {
+
+		let panelRef;
+	  const position = this._$mdPanel.newPanelPosition()
+	    .absolute().center();
+	    // .top(`${ top }px`)
+	    // .left(`${ left }px`);
+
+	  const animation = this._$mdPanel.newPanelAnimation()
+      .openFrom({ top, left })
+      .closeTo({ top, left })
+			.withAnimation(this._$mdPanel.animation.SCALE);
+
+	  return this._$mdPanel.open({
+	    attachTo: angular.element(document.body),
+	    controller: MapDetailCtrl,
+	    controllerAs: 'ctrl',
+	    templateUrl: 'detail/_map-detail.html',
+	    hasBackdrop: true,
+	    panelClass: 'map-detail',
+	    locals: {
+	    	callback: this.onGotoBldg(),
+	    	location: this.location,
+	    	feature
+	    },
+	    trapFocus: true,
+	    zIndex: 150,
+	    clickOutsideToClose: true,
+	    escapeToClose: true,
+	    focusOnOpen: true,
+	    onDomRemoved() {
+	    	panelRef.destroy();
+	    },
+	    animation,
+	    position
+	  }).then(panel => {
+	  	panelRef = panel;
+	  });
 	}
 
 	/**
@@ -206,82 +299,6 @@ class MapCtrl {
 	  }, 3000);
 	}
 
-	/**
-	 * Shows a detail popup, called by user clicking map feature. This
-	 * method uses ng-material's `$mdPanel` service to build a floating
-	 * panel config, immediately show it, and manually clean up its scope
-	 * listeners on close.
-	 * @param  {Object} feature         The feature that was clicked
-	 * @param  {Object} options
-	 * @param  {Number} options.clientX Horizontal position of user's click
-	 * @param  {Number} options.clientY Vertical position of user's click
-	 * @return {Promise}                Resolves to panel reference
-	 */
-	showDetail(feature, { clientX: left, clientY: top }) {
-
-		let panelRef;
-	  const position = this._$mdPanel.newPanelPosition()
-	    // .absolute().center()
-	    .top(`${ top }px`)
-	    .left(`${ left }px`);
-
-	  const animation = this._$mdPanel.newPanelAnimation()
-      .openFrom({ top, left })
-      .closeTo({ top, left })
-			.withAnimation(this._$mdPanel.animation.SCALE);
-
-	  return this._$mdPanel.open({
-	    attachTo: angular.element(document.body),
-	    controller: MapDetailCtrl,
-	    controllerAs: 'ctrl',
-	    templateUrl: 'detail/_map-detail.html',
-	    hasBackdrop: true,
-	    panelClass: 'map-detail',
-	    locals: {
-	    	callback: this.onGotoBldg(),
-	    	location: this.currentLocation,
-	    	feature
-	    },
-	    trapFocus: true,
-	    zIndex: 150,
-	    clickOutsideToClose: true,
-	    escapeToClose: true,
-	    focusOnOpen: true,
-	    onDomRemoved() {
-	    	panelRef.destroy();
-	    },
-	    animation,
-	    position
-	  }).then(panel => {
-	  	panelRef = panel;
-	  });
-	}
-	/**
-	 * Removes all features from the map by looping over feature
-	 * data objects and calling their `map.remove()` on them.
-	 */
-	clearMapData() {
-		this.map.data.forEach(feature => {
-			this.map.data.remove(feature);
-		});
-	}
-	/**
-	 * Handler method for map data `$watch`; watches incoming geoJSON
-	 * data for changes and adds it to the map if detected. If the
-	 * new data has a `showAll` property (and it is true), all features
-	 * all loaded and the map bounds are recalculated.
-	 * 
-	 * @param  {Object} newVal New map data
-	 */
-	updateMapData(newVal) {
-		if (newVal && newVal.showAll) {
-      this.map.data.addGeoJson(newVal.collection);
-		} else {
-  		newVal.collection&&this.map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${newVal.collection._id}`, null, () => {
-			  this.fitBounds(this.map);
-  		});
-		}
-	}
 	/**
 	 * Direct port of Google Maps `processBounds` example function
 	 * for recalculation of map boundaries based on map data.

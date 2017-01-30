@@ -24,6 +24,7 @@ class MapDetailCtrl {
 	static get $inject() {
 		return ['$sce'];
 	}
+
 	/**
 	 * Initializes the controller's dependencies and extracts relevant information
 	 * from data passed in via the `locals` property (when `$mdPanel` initializes
@@ -44,6 +45,7 @@ class MapDetailCtrl {
   		this.name = this.feature.getProperty('name');
   		this.description = $sce.trustAsHtml(this.feature.getProperty('desc'));
   	}
+
   	/**
   	 * Property to control the visibility of the description details inside
   	 * the dialog.
@@ -51,6 +53,7 @@ class MapDetailCtrl {
   	 */
 		this.detailsShowing = false;
   }
+
   /**
    * Toggles the value of `detailsShowing` to hide and show the description.
    * @return {Boolean} The visibility of the description _after_ method is run
@@ -58,6 +61,7 @@ class MapDetailCtrl {
 	showDetails() {
 		this.detailsShowing = !this.detailsShowing;
 	}
+
 	/**
 	 * Closes the dialog, and on completion, extracts the `code` property
 	 * from the controller's `location` and `building` (assuming they exist)
@@ -87,6 +91,12 @@ class MapDetailCtrl {
 			});
 		});
 	}
+	
+	/**
+	 * Closes the dialog using the panel reference stored on
+	 * the controller automatically by the `$mdPanel` service.
+	 * @return {Promise} Resolves to the status of the panel close
+	 */
 	close() {
 		return this.mdPanelRef.close();
 	}
