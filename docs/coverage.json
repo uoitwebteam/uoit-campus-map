@@ -1,22 +1,17 @@
 {
-  "coverage": "48.21%",
+  "coverage": "57.14%",
   "expectCount": 56,
-  "actualCount": 27,
+  "actualCount": 32,
   "files": {
     "src/detail/map-detail_controller.js": {
       "expectCount": 10,
-      "actualCount": 0,
+      "actualCount": 5,
       "undocumentLines": [
-        2,
-        1,
-        7,
-        28,
-        5,
-        10,
-        15,
-        20,
-        9,
-        17
+        24,
+        39,
+        90,
+        42,
+        41
       ]
     },
     "src/map_controller.js": {

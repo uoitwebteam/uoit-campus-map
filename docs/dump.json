@@ -10,7 +10,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "const templates = ['$templateCache', function($templateCache) {$templateCache.put('_map.html','<ng-map\\n  center=\"43.9443802,-78.8975857\"\\n  zoom=\"17\"\\n  styles=\"{{ ::$ctrl._MAP_SETTINGS.styles }}\"\\n  map-type-id=\"{{ ::$ctrl._MAP_SETTINGS.type }}\"\\n  disable-default-u-i=\"true\"\\n  tilt=\"45\"\\n  heading=\"0\"\\n  layout\\n  layout-fill>\\n  <custom-control id=\"map-controls\" position=\"TOP_LEFT\" index=\"1\">\\n\\t\\t<campus-map-controls ng-model=\"$ctrl.mapControls\"></campus-map-controls>\\n  </custom-control>\\n</ng-map>')\n$templateCache.put('controls/_map-controls.html','<md-whiteframe\\n  class=\"md-whiteframe-16dp map-controls\"\\n  layout=\"column\"\\n  layout-align=\"center center\"\\n  layout-fill>\\n  <div layout=\"row\">\\n    <md-input-container>\\n      <label>Location</label>\\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" ng-change=\"$ctrl.updateLocation()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\">\\n        <md-option ng-repeat=\"location in ::$ctrl.locations\" ng-value=\"::location\" ng-disabled=\"$ctrl.location === location\">\\n          {{ ::location.label}}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n    <md-input-container>\\n      <label>Feature category</label>\\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-change=\"$ctrl.updateCategory()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.location\">\\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"::category\" ng-disabled=\"$ctrl.category === category\">\\n          {{ ::category.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n    <md-input-container>\\n      <label>Feature collection</label>\\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-change=\"$ctrl.updateCollection()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.category\">\\n        <md-option ng-repeat=\"collection in $ctrl.collections\" ng-value=\"::collection\" ng-disabled=\"$ctrl.collection === collection\">\\n          {{ ::collection.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n  </div>\\n  <div layout=\"row\">\\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\\n    \\tShow all\\n      <md-tooltip md-direction=\"bottom\">\\n        Turn on visibility for all available map features\\n      </md-tooltip>\\n    </md-button>\\n  </div>\\n</md-whiteframe>')\n$templateCache.put('detail/_map-detail.html','<md-whiteframe\\n  class=\"md-whiteframe-16dp\"\\n  layout=\"column\"\\n  layout-align=\"center center\">\\n  <md-toolbar>\\n    <div class=\"md-toolbar-tools\">\\n      <h2>\\n        <span>{{ ::ctrl.name }}</span>\\n      </h2>\\n      <span flex></span>\\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\\n        <span>&times;</span>\\n      </md-button>\\n    </div>\\n  </md-toolbar>\\n  <div layout=\"column\" layout-margin>\\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? \\'Hide\\' : \\'Show\\'}} details <span class=\"detail-arrow\" ng-class=\"{ \\'arrow-up\\' : ctrl.detailsShowing }\"></span></md-button>\\n  \\t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\\n  \\t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.goToBldg(ctrl.callback)\">\\n  \\t\\tTake a tour &raquo;\\n  \\t</md-button>\\n  </div>\\n</md-whiteframe>')}]; export default templates;"
+    "content": "const templates = ['$templateCache', function($templateCache) {$templateCache.put('_map.html','<ng-map\\n  center=\"43.9443802,-78.8975857\"\\n  zoom=\"17\"\\n  styles=\"{{ ::$ctrl._MAP_SETTINGS.styles }}\"\\n  map-type-id=\"{{ ::$ctrl._MAP_SETTINGS.type }}\"\\n  disable-default-u-i=\"true\"\\n  tilt=\"45\"\\n  heading=\"0\"\\n  layout\\n  layout-fill>\\n  <custom-control id=\"map-controls\" position=\"TOP_LEFT\" index=\"1\">\\n\\t\\t<campus-map-controls ng-model=\"$ctrl.mapControls\"></campus-map-controls>\\n  </custom-control>\\n</ng-map>')\n$templateCache.put('controls/_map-controls.html','<md-whiteframe\\n  class=\"md-whiteframe-16dp map-controls\"\\n  layout=\"column\"\\n  layout-align=\"center center\"\\n  layout-fill>\\n  <div layout=\"row\">\\n    <md-input-container>\\n      <label>Location</label>\\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" ng-change=\"$ctrl.updateLocation()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\">\\n        <md-option ng-repeat=\"location in ::$ctrl.locations\" ng-value=\"::location\" ng-disabled=\"$ctrl.location === location\">\\n          {{ ::location.label}}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n    <md-input-container>\\n      <label>Feature category</label>\\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-change=\"$ctrl.updateCategory()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.location\">\\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"::category\" ng-disabled=\"$ctrl.category === category\">\\n          {{ ::category.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n    <md-input-container>\\n      <label>Feature collection</label>\\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-change=\"$ctrl.updateCollection()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.category\">\\n        <md-option ng-repeat=\"collection in $ctrl.collections\" ng-value=\"::collection\" ng-disabled=\"$ctrl.collection === collection\">\\n          {{ ::collection.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n  </div>\\n  <div layout=\"row\">\\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\\n    \\tShow all\\n      <md-tooltip md-direction=\"bottom\">\\n        Turn on visibility for all available map features\\n      </md-tooltip>\\n    </md-button>\\n  </div>\\n</md-whiteframe>')\n$templateCache.put('detail/_map-detail.html','<md-whiteframe\\n  class=\"md-whiteframe-16dp\"\\n  layout=\"column\"\\n  layout-align=\"center center\">\\n  <md-toolbar>\\n    <div class=\"md-toolbar-tools\">\\n      <h2>\\n        <span>{{ ::ctrl.name }}</span>\\n      </h2>\\n      <span flex></span>\\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\\n        <span>&times;</span>\\n      </md-button>\\n    </div>\\n  </md-toolbar>\\n  <div layout=\"column\" layout-margin>\\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? \\'Hide\\' : \\'Show\\'}} details <span class=\"detail-arrow\" ng-class=\"{ \\'arrow-up\\' : ctrl.detailsShowing }\"></span></md-button>\\n  \\t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\\n  \\t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg(ctrl.callback)\">\\n  \\t\\tTake a tour &raquo;\\n  \\t</md-button>\\n  </div>\\n</md-whiteframe>')}]; export default templates;"
   },
   {
     "__docId__": 1,
@@ -632,8 +632,8 @@
     "longname": "src/detail/map-detail_controller.js",
     "access": null,
     "description": null,
-    "lineNumber": 1,
-    "content": "class MapDetailCtrl {\n\tstatic get $inject() {\n\t\treturn ['$sce'];\n\t}\n\tconstructor($sce) {\n  \tif (this.feature.getProperty('linked')) {\n  \t\tthis.building = this.feature.getProperty('building');\n\n  \t\tthis.name = this.building.name;\n  \t\tthis.description = $sce.trustAsHtml(this.building.desc);\n  \t} else {\n  \t\tthis.name = this.feature.getProperty('name');\n  \t\tthis.description = $sce.trustAsHtml(this.feature.getProperty('desc'));\n  \t}\n\t\tthis.detailsShowing = false;\n  }\n\tshowDetails() {\n\t\tthis.detailsShowing = !this.detailsShowing;\n\t}\n\tgoToBldg(callback) {\n\t\tthis.mdPanelRef.close();\n\t\tconst { location, building } = this;\n\t\tcallback({\n\t\t\tlocation: this.location.code,\n\t\t\tbuilding: this.building.code\n\t\t});\n\t}\n\tclose() {\n\t\tthis.mdPanelRef.close();\n\t}\n}\n\nexport default MapDetailCtrl;"
+    "lineNumber": 23,
+    "content": "/**\n * The `MapDetailCtrl` is a small controller with few responsibilties –\n * it is only instantiated by ng-material's `$mdPanel` service as a means\n * to provide data from a clicked feature to a dialog window that will\n * display the data; it also contains transition methods for viewing\n * tour items (e.g. from the dialog's _\"Take a tour\"_ button).\n *\n * Since feature descriptions can contain HTML, the `$sce` service is used\n * to parse and sanitize the descriptions for rendering. The dialog has access\n * to:\n * - the feature that the user clicked, which can include information about...\n *   - the feature itself (`feature`), which supplies its own `name` and `desc`\n *   property, **or...**\n *   - a linked tour element (`building`), which the feature inherits those\n *   properties from instead\n * - the current campus location (`location`), which will either be north or downtown.\n *\n * The `onGoToBldg()` method simply executes a callback after closing the dialog,\n * passing it the `code` property of the controller's `location` and `building` –\n * this allows the context of the action to come from outside the component (i.e.\n * the codes can be used to transition states in the application.)\n */\nclass MapDetailCtrl {\n\tstatic get $inject() {\n\t\treturn ['$sce'];\n\t}\n\t/**\n\t * Initializes the controller's dependencies and extracts relevant information\n\t * from data passed in via the `locals` property (when `$mdPanel` initializes\n\t * the dialog).\n\t *\n\t * If the feature's `linked` property is true, the data is extracted from\n\t * the building. If not, it is extracted directly from the feature.\n\t * \n\t * @param  {Object} $sce Angular's strict contextual escape service\n\t */\n\tconstructor($sce) {\n  \tif (this.feature.getProperty('linked')) {\n  \t\tthis.building = this.feature.getProperty('building');\n\n  \t\tthis.name = this.building.name;\n  \t\tthis.description = $sce.trustAsHtml(this.building.desc);\n  \t} else {\n  \t\tthis.name = this.feature.getProperty('name');\n  \t\tthis.description = $sce.trustAsHtml(this.feature.getProperty('desc'));\n  \t}\n  \t/**\n  \t * Property to control the visibility of the description details inside\n  \t * the dialog.\n  \t * @type {Boolean}\n  \t */\n\t\tthis.detailsShowing = false;\n  }\n  /**\n   * Toggles the value of `detailsShowing` to hide and show the description.\n   * @return {Boolean} The visibility of the description _after_ method is run\n   */\n\tshowDetails() {\n\t\tthis.detailsShowing = !this.detailsShowing;\n\t}\n\t/**\n\t * Closes the dialog, and on completion, extracts the `code` property\n\t * from the controller's `location` and `building` (assuming they exist)\n\t * and runs a callback with these as the parameters.\n\t *\n\t * This can, for instance, be used to make a state transition from within\n\t * the application (as in the example below). The callback passed to this\n\t * method is the same as the one passed into the main map component.\n\t * \n\t * @example\n\t * // from app controller\n\t * const onGotoBldg = ({ location, building }) => {\n\t *   $state.go('building', { location, building });\n\t * };\n\t * // from HTML (map component)\n\t * <campus-map on-goto-bldg=\"$ctrl.onGotoBldg()\"></campus-map>\n\t * \n\t * @param  {Function} callback The function to be run\n\t * @return {Promise}           Status of dialog close\n\t */\n\tgotoBldg(callback) {\n\t\tconst { location, building } = this;\n\t\treturn this.close().then(() => {\n\t\t\tcallback({\n\t\t\t\tlocation: location.code,\n\t\t\t\tbuilding: building.code\n\t\t\t});\n\t\t});\n\t}\n\tclose() {\n\t\treturn this.mdPanelRef.close();\n\t}\n}\n\nexport default MapDetailCtrl;"
   },
   {
     "__docId__": 32,
@@ -647,9 +647,8 @@
     "export": true,
     "importPath": "uoit-campus-map/src/detail/map-detail_controller.js",
     "importStyle": "MapDetailCtrl",
-    "description": null,
-    "lineNumber": 1,
-    "undocument": true,
+    "description": "The `MapDetailCtrl` is a small controller with few responsibilties –\nit is only instantiated by ng-material's `$mdPanel` service as a means\nto provide data from a clicked feature to a dialog window that will\ndisplay the data; it also contains transition methods for viewing\ntour items (e.g. from the dialog's _\"Take a tour\"_ button).\n\nSince feature descriptions can contain HTML, the `$sce` service is used\nto parse and sanitize the descriptions for rendering. The dialog has access\nto:\n- the feature that the user clicked, which can include information about...\n  - the feature itself (`feature`), which supplies its own `name` and `desc`\n  property, **or...**\n  - a linked tour element (`building`), which the feature inherits those\n  properties from instead\n- the current campus location (`location`), which will either be north or downtown.\n\nThe `onGoToBldg()` method simply executes a callback after closing the dialog,\npassing it the `code` property of the controller's `location` and `building` –\nthis allows the context of the action to come from outside the component (i.e.\nthe codes can be used to transition states in the application.)",
+    "lineNumber": 23,
     "interface": false
   },
   {
@@ -662,7 +661,7 @@
     "longname": "src/detail/map-detail_controller.js~MapDetailCtrl.$inject",
     "access": null,
     "description": null,
-    "lineNumber": 2,
+    "lineNumber": 24,
     "undocument": true,
     "type": {
       "types": [
@@ -680,15 +679,18 @@
     "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
     "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#constructor",
     "access": null,
-    "description": null,
-    "lineNumber": 5,
-    "undocument": true,
+    "description": "Initializes the controller's dependencies and extracts relevant information\nfrom data passed in via the `locals` property (when `$mdPanel` initializes\nthe dialog).\n\nIf the feature's `linked` property is true, the data is extracted from\nthe building. If not, it is extracted directly from the feature.",
+    "lineNumber": 37,
     "params": [
       {
-        "name": "$sce",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "$sce",
+        "description": "Angular's strict contextual escape service"
       }
     ],
     "generator": false
@@ -703,7 +705,7 @@
     "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#building",
     "access": null,
     "description": null,
-    "lineNumber": 7,
+    "lineNumber": 39,
     "undocument": true,
     "type": {
       "types": [
@@ -721,7 +723,7 @@
     "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#name",
     "access": null,
     "description": null,
-    "lineNumber": 9,
+    "lineNumber": 41,
     "undocument": true,
     "type": {
       "types": [
@@ -739,7 +741,7 @@
     "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#description",
     "access": null,
     "description": null,
-    "lineNumber": 10,
+    "lineNumber": 42,
     "undocument": true,
     "type": {
       "types": [
@@ -757,7 +759,7 @@
     "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#name",
     "access": null,
     "description": null,
-    "lineNumber": 12,
+    "lineNumber": 44,
     "undocument": true,
     "type": {
       "types": [
@@ -775,7 +777,7 @@
     "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#description",
     "access": null,
     "description": null,
-    "lineNumber": 13,
+    "lineNumber": 45,
     "undocument": true,
     "type": {
       "types": [
@@ -792,13 +794,15 @@
     "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
     "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#detailsShowing",
     "access": null,
-    "description": null,
-    "lineNumber": 15,
-    "undocument": true,
+    "description": "Property to control the visibility of the description details inside\nthe dialog.",
+    "lineNumber": 52,
     "type": {
+      "nullable": null,
       "types": [
-        "boolean"
-      ]
+        "Boolean"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -810,10 +814,17 @@
     "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
     "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#showDetails",
     "access": null,
-    "description": null,
-    "lineNumber": 17,
-    "undocument": true,
+    "description": "Toggles the value of `detailsShowing` to hide and show the description.",
+    "lineNumber": 58,
     "params": [],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Boolean"
+      ],
+      "spread": false,
+      "description": "The visibility of the description _after_ method is run"
+    },
     "generator": false
   },
   {
@@ -826,7 +837,7 @@
     "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#detailsShowing",
     "access": null,
     "description": null,
-    "lineNumber": 18,
+    "lineNumber": 59,
     "undocument": true,
     "type": {
       "types": [
@@ -839,21 +850,35 @@
     "kind": "method",
     "static": false,
     "variation": null,
-    "name": "goToBldg",
+    "name": "gotoBldg",
     "memberof": "src/detail/map-detail_controller.js~MapDetailCtrl",
-    "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#goToBldg",
+    "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#gotoBldg",
     "access": null,
-    "description": null,
-    "lineNumber": 20,
-    "undocument": true,
+    "description": "Closes the dialog, and on completion, extracts the `code` property\nfrom the controller's `location` and `building` (assuming they exist)\nand runs a callback with these as the parameters.\n\nThis can, for instance, be used to make a state transition from within\nthe application (as in the example below). The callback passed to this\nmethod is the same as the one passed into the main map component.",
+    "examples": [
+      "// from app controller\nconst onGotoBldg = ({ location, building }) => {\n  $state.go('building', { location, building });\n};\n// from HTML (map component)\n<campus-map on-goto-bldg=\"$ctrl.onGotoBldg()\"></campus-map>"
+    ],
+    "lineNumber": 81,
     "params": [
       {
-        "name": "callback",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "Function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "callback",
+        "description": "The function to be run"
       }
     ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": "Status of dialog close"
+    },
     "generator": false
   },
   {
@@ -866,9 +891,14 @@
     "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#close",
     "access": null,
     "description": null,
-    "lineNumber": 28,
+    "lineNumber": 90,
     "undocument": true,
     "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
     "generator": false
   },
   {

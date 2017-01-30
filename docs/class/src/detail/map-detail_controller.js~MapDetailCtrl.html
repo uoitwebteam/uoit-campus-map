@@ -45,13 +45,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import MapDetailCtrl from &apos;<span><a href="file/src/detail/map-detail_controller.js.html#lineNumber1">uoit-campus-map/src/detail/map-detail_controller.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import MapDetailCtrl from &apos;<span><a href="file/src/detail/map-detail_controller.js.html#lineNumber23">uoit-campus-map/src/detail/map-detail_controller.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/detail/map-detail_controller.js.html#lineNumber1">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/detail/map-detail_controller.js.html#lineNumber23">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -71,7 +71,29 @@
 
   
   
-  
+  <div class="description" data-ice="description"><p>The <code>MapDetailCtrl</code> is a small controller with few responsibilties &#x2013;
+it is only instantiated by ng-material&apos;s <code>$mdPanel</code> service as a means
+to provide data from a clicked feature to a dialog window that will
+display the data; it also contains transition methods for viewing
+tour items (e.g. from the dialog&apos;s <em>&quot;Take a tour&quot;</em> button).</p>
+<p>Since feature descriptions can contain HTML, the <code>$sce</code> service is used
+to parse and sanitize the descriptions for rendering. The dialog has access
+to:</p>
+<ul>
+<li>the feature that the user clicked, which can include information about...<ul>
+<li>the feature itself (<code>feature</code>), which supplies its own <code>name</code> and <code>desc</code>
+property, <strong>or...</strong></li>
+<li>a linked tour element (<code>building</code>), which the feature inherits those
+properties from instead</li>
+</ul>
+</li>
+<li>the current campus location (<code>location</code>), which will either be north or downtown.</li>
+</ul>
+<p>The <code>onGoToBldg()</code> method simply executes a callback after closing the dialog,
+passing it the <code>code</code> property of the controller&apos;s <code>location</code> and <code>building</code> &#x2013;
+this allows the context of the action to come from outside the component (i.e.
+the codes can be used to transition states in the application.)</p>
+</div>
 
   
 
@@ -130,13 +152,18 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">($sce: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">($sce: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Initializes the controller&apos;s dependencies and extracts relevant information
+from data passed in via the <code>locals</code> property (when <code>$mdPanel</code> initializes
+the dialog).</p>
+<p>If the feature&apos;s <code>linked</code> property is true, the data is extracted from
+the building.</p>
+</div>
       </div>
     </td>
     <td>
@@ -212,13 +239,15 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html#instance-member-detailsShowing">detailsShowing</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+           <span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html#instance-member-detailsShowing">detailsShowing</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Property to control the visibility of the description details inside
+the dialog.</p>
+</div>
       </div>
     </td>
     <td>
@@ -269,7 +298,7 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html#instance-method-close">close</a></span></span><span data-ice="signature">()</span>
+           <span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html#instance-method-close">close</a></span></span><span data-ice="signature">(): <span>*</span></span>
         </p>
       </div>
       <div>
@@ -294,13 +323,19 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html#instance-method-goToBldg">goToBldg</a></span></span><span data-ice="signature">(callback: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html#instance-method-gotoBldg">gotoBldg</a></span></span><span data-ice="signature">(callback: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Closes the dialog, and on completion, extracts the <code>code</code> property
+from the controller&apos;s <code>location</code> and <code>building</code> (assuming they exist)
+and runs a callback with these as the parameters.</p>
+<p>This can, for instance, be used to make a state transition from within
+the application (as in the example below). The callback passed to this
+method is the same as the one passed into the main map component.</p>
+</div>
       </div>
     </td>
     <td>
@@ -319,13 +354,14 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html#instance-method-showDetails">showDetails</a></span></span><span data-ice="signature">()</span>
+           <span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html#instance-method-showDetails">showDetails</a></span></span><span data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Toggles the value of <code>detailsShowing</code> to hide and show the description.</p>
+</div>
       </div>
     </td>
     <td>
@@ -352,7 +388,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber2">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber24">source</a></span></span>
     </span>
   </h3>
 
@@ -392,18 +428,23 @@
     
     
     
-    <span data-ice="name">constructor</span><span data-ice="signature">($sce: <span>*</span>)</span>
+    <span data-ice="name">constructor</span><span data-ice="signature">($sce: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber5">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber37">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Initializes the controller&apos;s dependencies and extracts relevant information
+from data passed in via the <code>locals</code> property (when <code>$mdPanel</code> initializes
+the dialog).</p>
+<p>If the feature&apos;s <code>linked</code> property is true, the data is extracted from
+the building. If not, it is extracted directly from the feature.</p>
+</div>
 
   
 
@@ -417,9 +458,10 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">$sce</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Angular&apos;s strict contextual escape service</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -455,7 +497,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber7">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber39">source</a></span></span>
     </span>
   </h3>
 
@@ -495,7 +537,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber10">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber42">source</a></span></span>
     </span>
   </h3>
 
@@ -531,18 +573,20 @@
     
     
     
-    <span data-ice="name">detailsShowing</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    <span data-ice="name">detailsShowing</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber15">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber52">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Property to control the visibility of the description details inside
+the dialog.</p>
+</div>
 
   
 
@@ -575,7 +619,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber9">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber41">source</a></span></span>
     </span>
   </h3>
 
@@ -614,11 +658,11 @@
     
     
     
-    <span data-ice="name">close</span><span data-ice="signature">()</span>
+    <span data-ice="name">close</span><span data-ice="signature">(): <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber28">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber90">source</a></span></span>
     </span>
   </h3>
 
@@ -632,7 +676,17 @@
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tr>
+        <td class="return-type" data-ice="returnType"><span>*</span></td>
+        
+      </tr>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -648,24 +702,30 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-goToBldg">
+  <h3 data-ice="anchor" id="instance-method-gotoBldg">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">goToBldg</span><span data-ice="signature">(callback: <span>*</span>)</span>
+    <span data-ice="name">gotoBldg</span><span data-ice="signature">(callback: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber20">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber81">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Closes the dialog, and on completion, extracts the <code>code</code> property
+from the controller&apos;s <code>location</code> and <code>building</code> (assuming they exist)
+and runs a callback with these as the parameters.</p>
+<p>This can, for instance, be used to make a state transition from within
+the application (as in the example below). The callback passed to this
+method is the same as the one passed into the main map component.</p>
+</div>
 
   
 
@@ -679,16 +739,28 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">callback</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The function to be run</p>
+</td>
     </tr>
 </tbody>
   </table>
 </div>
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tr>
+        <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>Status of dialog close</p>
+</td>
+      </tr>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -696,7 +768,19 @@
 
   
 
-  
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">// from app controller
+const onGotoBldg = ({ location, building }) =&gt; {
+  $state.go(&apos;building&apos;, { location, building });
+};
+// from HTML (map component)
+&lt;campus-map on-goto-bldg=&quot;$ctrl.onGotoBldg()&quot;&gt;&lt;/campus-map&gt;</code></pre>
+    </div>
+</div>
 
   
 
@@ -710,25 +794,37 @@
     
     
     
-    <span data-ice="name">showDetails</span><span data-ice="signature">()</span>
+    <span data-ice="name">showDetails</span><span data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber17">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/detail/map-detail_controller.js.html#lineNumber58">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Toggles the value of <code>detailsShowing</code> to hide and show the description.</p>
+</div>
 
   
 
   <div data-ice="properties">
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tr>
+        <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>The visibility of the description <em>after</em> method is run</p>
+</td>
+      </tr>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 

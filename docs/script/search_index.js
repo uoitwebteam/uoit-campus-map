@@ -571,8 +571,8 @@ window.esdocSearchIndex = [
   ],
   [
     "src/detail/map-detail_controller.js~mapdetailctrl#gotobldg",
-    "class/src/detail/map-detail_controller.js~MapDetailCtrl.html#instance-method-goToBldg",
-    "src/detail/map-detail_controller.js~MapDetailCtrl#goToBldg",
+    "class/src/detail/map-detail_controller.js~MapDetailCtrl.html#instance-method-gotoBldg",
+    "src/detail/map-detail_controller.js~MapDetailCtrl#gotoBldg",
     "method"
   ],
   [

@@ -45,10 +45,42 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/detail/map-detail_controller.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">class MapDetailCtrl {
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * The `MapDetailCtrl` is a small controller with few responsibilties &#x2013;
+ * it is only instantiated by ng-material&apos;s `$mdPanel` service as a means
+ * to provide data from a clicked feature to a dialog window that will
+ * display the data; it also contains transition methods for viewing
+ * tour items (e.g. from the dialog&apos;s _&quot;Take a tour&quot;_ button).
+ *
+ * Since feature descriptions can contain HTML, the `$sce` service is used
+ * to parse and sanitize the descriptions for rendering. The dialog has access
+ * to:
+ * - the feature that the user clicked, which can include information about...
+ *   - the feature itself (`feature`), which supplies its own `name` and `desc`
+ *   property, **or...**
+ *   - a linked tour element (`building`), which the feature inherits those
+ *   properties from instead
+ * - the current campus location (`location`), which will either be north or downtown.
+ *
+ * The `onGoToBldg()` method simply executes a callback after closing the dialog,
+ * passing it the `code` property of the controller&apos;s `location` and `building` &#x2013;
+ * this allows the context of the action to come from outside the component (i.e.
+ * the codes can be used to transition states in the application.)
+ */
+class MapDetailCtrl {
 	static get $inject() {
 		return [&apos;$sce&apos;];
 	}
+	/**
+	 * Initializes the controller&apos;s dependencies and extracts relevant information
+	 * from data passed in via the `locals` property (when `$mdPanel` initializes
+	 * the dialog).
+	 *
+	 * If the feature&apos;s `linked` property is true, the data is extracted from
+	 * the building. If not, it is extracted directly from the feature.
+	 * 
+	 * @param  {Object} $sce Angular&apos;s strict contextual escape service
+	 */
 	constructor($sce) {
   	if (this.feature.getProperty(&apos;linked&apos;)) {
   		this.building = this.feature.getProperty(&apos;building&apos;);
@@ -59,21 +91,51 @@
   		this.name = this.feature.getProperty(&apos;name&apos;);
   		this.description = $sce.trustAsHtml(this.feature.getProperty(&apos;desc&apos;));
   	}
+  	/**
+  	 * Property to control the visibility of the description details inside
+  	 * the dialog.
+  	 * @type {Boolean}
+  	 */
 		this.detailsShowing = false;
   }
+  /**
+   * Toggles the value of `detailsShowing` to hide and show the description.
+   * @return {Boolean} The visibility of the description _after_ method is run
+   */
 	showDetails() {
 		this.detailsShowing = !this.detailsShowing;
 	}
-	goToBldg(callback) {
-		this.mdPanelRef.close();
+	/**
+	 * Closes the dialog, and on completion, extracts the `code` property
+	 * from the controller&apos;s `location` and `building` (assuming they exist)
+	 * and runs a callback with these as the parameters.
+	 *
+	 * This can, for instance, be used to make a state transition from within
+	 * the application (as in the example below). The callback passed to this
+	 * method is the same as the one passed into the main map component.
+	 * 
+	 * @example
+	 * // from app controller
+	 * const onGotoBldg = ({ location, building }) =&gt; {
+	 *   $state.go(&apos;building&apos;, { location, building });
+	 * };
+	 * // from HTML (map component)
+	 * &lt;campus-map on-goto-bldg=&quot;$ctrl.onGotoBldg()&quot;&gt;&lt;/campus-map&gt;
+	 * 
+	 * @param  {Function} callback The function to be run
+	 * @return {Promise}           Status of dialog close
+	 */
+	gotoBldg(callback) {
 		const { location, building } = this;
-		callback({
-			location: this.location.code,
-			building: this.building.code
+		return this.close().then(() =&gt; {
+			callback({
+				location: location.code,
+				building: building.code
+			});
 		});
 	}
 	close() {
-		this.mdPanelRef.close();
+		return this.mdPanelRef.close();
 	}
 }
 
