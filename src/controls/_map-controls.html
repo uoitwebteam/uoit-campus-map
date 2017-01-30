@@ -14,7 +14,7 @@
     </md-input-container>
     <md-input-container>
       <label>Feature category</label>
-      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()" ng-model-options="{trackBy: '$value._id'}" ng-disabled="!$ctrl.location">
+      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()" ng-model-options="{trackBy: '$value._id'}" ng-disabled="!$ctrl.location" multiple>
         <md-option ng-repeat="category in $ctrl.categories" ng-value="::category" ng-disabled="$ctrl.category === category">
           {{ ::category.name }}
         </md-option>
@@ -23,9 +23,11 @@
     <md-input-container>
       <label>Feature collection</label>
       <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()" ng-model-options="{trackBy: '$value._id'}" ng-disabled="!$ctrl.category">
-        <md-option ng-repeat="collection in $ctrl.collections" ng-value="::collection" ng-disabled="$ctrl.collection === collection">
-          {{ ::collection.name }}
-        </md-option>
+        <md-optgroup ng-repeat="group in $ctrl.category" label="{{ ::group.name }}">
+	        <md-option ng-repeat="collection in $ctrl.collections | filter: { category: group._id }" ng-value="::collection" ng-disabled="$ctrl.collection === collection">
+	          {{ ::collection.name }}
+	        </md-option>
+        </md-optgroup>
       </md-select>
     </md-input-container>
   </div>

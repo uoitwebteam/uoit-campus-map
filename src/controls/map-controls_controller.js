@@ -39,6 +39,7 @@ class MapControlsCtrl {
   $onInit() {
     this.loadLocations().then(locations => {
 			this.location = locations[1];
+			// this.updateLocation();
 			this.showAll();
 			// angular.element(this.$window).triggerHandler('resize');
     });
@@ -72,13 +73,19 @@ class MapControlsCtrl {
    * Load collection list from server using the `_id` of the currently
    * selected category and location (extracted directly from the
    * controller / `this`) to filter by.
+   *
+   * @todo Update this doc to describe array of categories
    * 
    * @return {Promise} Resolves to list of collections
    */
   loadCollections() {
-    const { location: { _id: location }, category: { _id: category } } = this;
     return this.CollectionResource.query({
-      filter: { location, category }
+      filter: {
+      	location:this.location._id,
+      	category: {
+      		$in: [...this.category.map(category => category._id)]
+      	}
+      }
     }).$promise.then(collections => {
       this.collections = collections;
       return collections;
@@ -167,6 +174,7 @@ class MapControlsCtrl {
    * @return {Promise} Resolves to a list of the returned features
    */
   showAll() {
+  	console.log('show all activated!');
     return this.FeatureResource.query({}).$promise.then(features => {
       this.setCollection({
       	location: this.location,
