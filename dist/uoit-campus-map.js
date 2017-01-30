@@ -547,12 +547,45 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	/**
+	 * The `MapDetailCtrl` is a small controller with few responsibilties –
+	 * it is only instantiated by ng-material's `$mdPanel` service as a means
+	 * to provide data from a clicked feature to a dialog window that will
+	 * display the data; it also contains transition methods for viewing
+	 * tour items (e.g. from the dialog's _"Take a tour"_ button).
+	 *
+	 * Since feature descriptions can contain HTML, the `$sce` service is used
+	 * to parse and sanitize the descriptions for rendering. The dialog has access
+	 * to:
+	 * - the feature that the user clicked, which can include information about...
+	 *   - the feature itself (`feature`), which supplies its own `name` and `desc`
+	 *   property, **or...**
+	 *   - a linked tour element (`building`), which the feature inherits those
+	 *   properties from instead
+	 * - the current campus location (`location`), which will either be north or downtown.
+	 *
+	 * The `onGoToBldg()` method simply executes a callback after closing the dialog,
+	 * passing it the `code` property of the controller's `location` and `building` –
+	 * this allows the context of the action to come from outside the component (i.e.
+	 * the codes can be used to transition states in the application.)
+	 */
 	var MapDetailCtrl = function () {
 		_createClass(MapDetailCtrl, null, [{
 			key: '$inject',
 			get: function get() {
 				return ['$sce'];
 			}
+			/**
+	   * Initializes the controller's dependencies and extracts relevant information
+	   * from data passed in via the `locals` property (when `$mdPanel` initializes
+	   * the dialog).
+	   *
+	   * If the feature's `linked` property is true, the data is extracted from
+	   * the building. If not, it is extracted directly from the feature.
+	   * 
+	   * @param  {Object} $sce Angular's strict contextual escape service
+	   */
+	
 		}]);
 	
 		function MapDetailCtrl($sce) {
@@ -567,30 +600,62 @@ return /******/ (function(modules) { // webpackBootstrap
 				this.name = this.feature.getProperty('name');
 				this.description = $sce.trustAsHtml(this.feature.getProperty('desc'));
 			}
+			/**
+	   * Property to control the visibility of the description details inside
+	   * the dialog.
+	   * @type {Boolean}
+	   */
 			this.detailsShowing = false;
 		}
+		/**
+	  * Toggles the value of `detailsShowing` to hide and show the description.
+	  * @return {Boolean} The visibility of the description _after_ method is run
+	  */
+	
 	
 		_createClass(MapDetailCtrl, [{
 			key: 'showDetails',
 			value: function showDetails() {
 				this.detailsShowing = !this.detailsShowing;
 			}
+			/**
+	   * Closes the dialog, and on completion, extracts the `code` property
+	   * from the controller's `location` and `building` (assuming they exist)
+	   * and runs a callback with these as the parameters.
+	   *
+	   * This can, for instance, be used to make a state transition from within
+	   * the application (as in the example below). The callback passed to this
+	   * method is the same as the one passed into the main map component.
+	   * 
+	   * @example
+	   * // from app controller
+	   * const onGotoBldg = ({ location, building }) => {
+	   *   $state.go('building', { location, building });
+	   * };
+	   * // from HTML (map component)
+	   * <campus-map on-goto-bldg="$ctrl.onGotoBldg()"></campus-map>
+	   * 
+	   * @param  {Function} callback The function to be run
+	   * @return {Promise}           Status of dialog close
+	   */
+	
 		}, {
-			key: 'goToBldg',
-			value: function goToBldg(callback) {
-				this.mdPanelRef.close();
+			key: 'gotoBldg',
+			value: function gotoBldg(callback) {
 				var location = this.location,
 				    building = this.building;
 	
-				callback({
-					location: this.location.code,
-					building: this.building.code
+				return this.close().then(function () {
+					callback({
+						location: location.code,
+						building: building.code
+					});
 				});
 			}
 		}, {
 			key: 'close',
 			value: function close() {
-				this.mdPanelRef.close();
+				return this.mdPanelRef.close();
 			}
 		}]);
 	
@@ -863,6 +928,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      return this.FeatureResource.query({}).$promise.then(function (features) {
 	        _this7.setCollection({
+	          location: _this7.location,
 	          collection: {
 	            type: 'FeatureCollection',
 	            features: features
@@ -1084,7 +1150,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var templates = ['$templateCache', function ($templateCache) {
 	  $templateCache.put('_map.html', '<ng-map\n  center="43.9443802,-78.8975857"\n  zoom="17"\n  styles="{{ ::$ctrl._MAP_SETTINGS.styles }}"\n  map-type-id="{{ ::$ctrl._MAP_SETTINGS.type }}"\n  disable-default-u-i="true"\n  tilt="45"\n  heading="0"\n  layout\n  layout-fill>\n  <custom-control id="map-controls" position="TOP_LEFT" index="1">\n\t\t<campus-map-controls ng-model="$ctrl.mapControls"></campus-map-controls>\n  </custom-control>\n</ng-map>');
 	  $templateCache.put('controls/_map-controls.html', '<md-whiteframe\n  class="md-whiteframe-16dp map-controls"\n  layout="column"\n  layout-align="center center"\n  layout-fill>\n  <div layout="row">\n    <md-input-container>\n      <label>Location</label>\n      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" ng-change="$ctrl.updateLocation()" ng-model-options="{trackBy: \'$value._id\'}">\n        <md-option ng-repeat="location in ::$ctrl.locations" ng-value="::location" ng-disabled="$ctrl.location === location">\n          {{ ::location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature category</label>\n      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.location">\n        <md-option ng-repeat="category in $ctrl.categories" ng-value="::category" ng-disabled="$ctrl.category === category">\n          {{ ::category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature collection</label>\n      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.category">\n        <md-option ng-repeat="collection in $ctrl.collections" ng-value="::collection" ng-disabled="$ctrl.collection === collection">\n          {{ ::collection.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n  </div>\n  <div layout="row">\n    <md-button class="md-primary" ng-click="$ctrl.showAll()">\n    \tShow all\n      <md-tooltip md-direction="bottom">\n        Turn on visibility for all available map features\n      </md-tooltip>\n    </md-button>\n  </div>\n</md-whiteframe>');
-	  $templateCache.put('detail/_map-detail.html', '<md-whiteframe\n  class="md-whiteframe-16dp"\n  layout="column"\n  layout-align="center center">\n  <md-toolbar>\n    <div class="md-toolbar-tools">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class="md-icon-button" aria-label="Close info" ng-click="ctrl.close()">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div layout="column" layout-margin>\n    <md-button ng-click="ctrl.showDetails()">{{ ctrl.detailsShowing ? \'Hide\' : \'Show\'}} details <span class="detail-arrow" ng-class="{ \'arrow-up\' : ctrl.detailsShowing }"></span></md-button>\n  \t<md-content layout-padding layout-margin class="details-text" ng-bind-html="::ctrl.description" ng-show="ctrl.detailsShowing"></md-content>\n  \t<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="::ctrl.building" ng-click="ctrl.goToBldg(ctrl.callback)">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>');
+	  $templateCache.put('detail/_map-detail.html', '<md-whiteframe\n  class="md-whiteframe-16dp"\n  layout="column"\n  layout-align="center center">\n  <md-toolbar>\n    <div class="md-toolbar-tools">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class="md-icon-button" aria-label="Close info" ng-click="ctrl.close()">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div layout="column" layout-margin>\n    <md-button ng-click="ctrl.showDetails()">{{ ctrl.detailsShowing ? \'Hide\' : \'Show\'}} details <span class="detail-arrow" ng-class="{ \'arrow-up\' : ctrl.detailsShowing }"></span></md-button>\n  \t<md-content layout-padding layout-margin class="details-text" ng-bind-html="::ctrl.description" ng-show="ctrl.detailsShowing"></md-content>\n  \t<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="::ctrl.building" ng-click="ctrl.gotoBldg(ctrl.callback)">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>');
 	}];exports.default = templates;
 
 /***/ }

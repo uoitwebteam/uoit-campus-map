@@ -58,8 +58,6 @@ class MapDetailCtrl {
 	showDetails() {
 		this.detailsShowing = !this.detailsShowing;
 	}
-	goToBldg(callback) {
-		this.mdPanelRef.close();
 	/**
 	 * Closes the dialog, and on completion, extracts the `code` property
 	 * from the controller's `location` and `building` (assuming they exist)
@@ -80,14 +78,17 @@ class MapDetailCtrl {
 	 * @param  {Function} callback The function to be run
 	 * @return {Promise}           Status of dialog close
 	 */
+	gotoBldg(callback) {
 		const { location, building } = this;
-		callback({
-			location: this.location.code,
-			building: this.building.code
+		return this.close().then(() => {
+			callback({
+				location: location.code,
+				building: building.code
+			});
 		});
 	}
 	close() {
-		this.mdPanelRef.close();
+		return this.mdPanelRef.close();
 	}
 }
 

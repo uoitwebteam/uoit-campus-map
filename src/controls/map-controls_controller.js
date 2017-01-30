@@ -169,6 +169,7 @@ class MapControlsCtrl {
   showAll() {
     return this.FeatureResource.query({}).$promise.then(features => {
       this.setCollection({
+      	location: this.location,
         collection: {
           type: 'FeatureCollection',
           features

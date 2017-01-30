@@ -16,7 +16,7 @@
   <div layout="column" layout-margin>
     <md-button ng-click="ctrl.showDetails()">{{ ctrl.detailsShowing ? 'Hide' : 'Show'}} details <span class="detail-arrow" ng-class="{ 'arrow-up' : ctrl.detailsShowing }"></span></md-button>
   	<md-content layout-padding layout-margin class="details-text" ng-bind-html="::ctrl.description" ng-show="ctrl.detailsShowing"></md-content>
-  	<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="::ctrl.building" ng-click="ctrl.goToBldg(ctrl.callback)">
+  	<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="::ctrl.building" ng-click="ctrl.gotoBldg(ctrl.callback)">
   		Take a tour &raquo;
   	</md-button>
   </div>
