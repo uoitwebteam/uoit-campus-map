@@ -39,8 +39,8 @@ class MapControlsCtrl {
   $onInit() {
     this.loadLocations().then(locations => {
 			this.location = locations[1];
-			// this.updateLocation();
-			this.showAll();
+			this.updateLocation();
+			// this.showAll();
 			// angular.element(this.$window).triggerHandler('resize');
     });
   }
@@ -66,6 +66,28 @@ class MapControlsCtrl {
     return this.CategoryResource.query().$promise.then(categories => {
       this.categories = categories;
       return categories;
+    });
+  }
+
+  /**
+   * Load feature list from server using the `_id`s of the currently
+   * selected categories to filter by.
+   *
+   * @todo Update this doc to describe array of categories
+   * 
+   * @return {Promise} Resolves to list of collections
+   */
+  loadFeatures() {
+    return this.FeatureResource.query({
+      filter: {
+      	'properties.category': {
+      		$in: [...this.category.map(category => category._id)]
+      	}
+      }
+    }).$promise.then(features => {
+      this.features = features;
+      console.log('FEATURES:', features)
+      return features;
     });
   }
 
@@ -98,7 +120,7 @@ class MapControlsCtrl {
    */
   updateLocation() {
     this.loadCategories().then(categories => {
-      this.category = categories[0];
+      this.category = [...categories];
       this.updateCategory();
     });
   }
@@ -108,9 +130,24 @@ class MapControlsCtrl {
    * to first item in list; kicks off collection update.
    */
   updateCategory() {
-    this.loadCollections().then(collections => {
-      this.collection = collections[0];
-      this.updateCollection();
+    this.loadFeatures()
+    	.then(() => this.updateFeatures())
+    	.then(() => this.loadCollections())
+    	.then(collections => {
+	      this.collection = [...collections];
+    //   this.updateCollection();
+	    });
+  }
+
+  updateFeatures() {
+  	const { location, category, features } = this;
+    this.setCollection({
+    	location,
+    	category,
+      collection: {
+        type: 'FeatureCollection',
+        features
+      }
     });
   }
 
