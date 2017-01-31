@@ -468,6 +468,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/controls/map-controls_controller.js~mapcontrolsctrl#features",
+    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-member-features",
+    "src/controls/map-controls_controller.js~MapControlsCtrl#features",
+    "member"
+  ],
+  [
     "src/controls/map-controls_controller.js~mapcontrolsctrl#loadcategories",
     "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-loadCategories",
     "src/controls/map-controls_controller.js~MapControlsCtrl#loadCategories",
@@ -477,6 +483,12 @@ window.esdocSearchIndex = [
     "src/controls/map-controls_controller.js~mapcontrolsctrl#loadcollections",
     "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-loadCollections",
     "src/controls/map-controls_controller.js~MapControlsCtrl#loadCollections",
+    "method"
+  ],
+  [
+    "src/controls/map-controls_controller.js~mapcontrolsctrl#loadfeatures",
+    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-loadFeatures",
+    "src/controls/map-controls_controller.js~MapControlsCtrl#loadFeatures",
     "method"
   ],
   [
@@ -519,6 +531,12 @@ window.esdocSearchIndex = [
     "src/controls/map-controls_controller.js~mapcontrolsctrl#updatecollection",
     "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-updateCollection",
     "src/controls/map-controls_controller.js~MapControlsCtrl#updateCollection",
+    "method"
+  ],
+  [
+    "src/controls/map-controls_controller.js~mapcontrolsctrl#updatefeatures",
+    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-updateFeatures",
+    "src/controls/map-controls_controller.js~MapControlsCtrl#updateFeatures",
     "method"
   ],
   [
@@ -636,12 +654,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/map_controller.js~mapctrl#currentlocation",
-    "class/src/map_controller.js~MapCtrl.html#instance-member-currentLocation",
-    "src/map_controller.js~MapCtrl#currentLocation",
-    "member"
-  ],
-  [
     "src/map_controller.js~mapctrl#fitbounds",
     "class/src/map_controller.js~MapCtrl.html#instance-method-fitBounds",
     "src/map_controller.js~MapCtrl#fitBounds",
@@ -664,6 +676,12 @@ window.esdocSearchIndex = [
     "class/src/map_controller.js~MapCtrl.html#instance-method-isolateMouseEvent",
     "src/map_controller.js~MapCtrl#isolateMouseEvent",
     "method"
+  ],
+  [
+    "src/map_controller.js~mapctrl#location",
+    "class/src/map_controller.js~MapCtrl.html#instance-member-location",
+    "src/map_controller.js~MapCtrl#location",
+    "member"
   ],
   [
     "src/map_controller.js~mapctrl#map",

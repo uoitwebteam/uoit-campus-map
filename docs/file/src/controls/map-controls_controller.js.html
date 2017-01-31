@@ -86,7 +86,8 @@ class MapControlsCtrl {
   $onInit() {
     this.loadLocations().then(locations =&gt; {
 			this.location = locations[1];
-			this.showAll();
+			this.updateLocation();
+			// this.showAll();
 			// angular.element(this.$window).triggerHandler(&apos;resize&apos;);
     });
   }
@@ -116,16 +117,44 @@ class MapControlsCtrl {
   }
 
   /**
+   * Load feature list from server using the `_id`s of the currently
+   * selected categories to filter by.
+   *
+   * @todo Update this doc to describe array of categories
+   * 
+   * @return {Promise} Resolves to list of collections
+   */
+  loadFeatures() {
+    return this.FeatureResource.query({
+      filter: {
+      	&apos;properties.category&apos;: {
+      		$in: [...this.category.map(category =&gt; category._id)]
+      	}
+      }
+    }).$promise.then(features =&gt; {
+      this.features = features;
+      console.log(&apos;FEATURES:&apos;, features)
+      return features;
+    });
+  }
+
+  /**
    * Load collection list from server using the `_id` of the currently
    * selected category and location (extracted directly from the
    * controller / `this`) to filter by.
+   *
+   * @todo Update this doc to describe array of categories
    * 
    * @return {Promise} Resolves to list of collections
    */
   loadCollections() {
-    const { location: { _id: location }, category: { _id: category } } = this;
     return this.CollectionResource.query({
-      filter: { location, category }
+      filter: {
+      	location:this.location._id,
+      	category: {
+      		$in: [...this.category.map(category =&gt; category._id)]
+      	}
+      }
     }).$promise.then(collections =&gt; {
       this.collections = collections;
       return collections;
@@ -138,7 +167,7 @@ class MapControlsCtrl {
    */
   updateLocation() {
     this.loadCategories().then(categories =&gt; {
-      this.category = categories[0];
+      this.category = [...categories];
       this.updateCategory();
     });
   }
@@ -148,9 +177,24 @@ class MapControlsCtrl {
    * to first item in list; kicks off collection update.
    */
   updateCategory() {
-    this.loadCollections().then(collections =&gt; {
-      this.collection = collections[0];
-      this.updateCollection();
+    this.loadFeatures()
+    	.then(() =&gt; this.updateFeatures())
+    	.then(() =&gt; this.loadCollections())
+    	.then(collections =&gt; {
+	      this.collection = [...collections];
+    //   this.updateCollection();
+	    });
+  }
+
+  updateFeatures() {
+  	const { location, category, features } = this;
+    this.setCollection({
+    	location,
+    	category,
+      collection: {
+        type: &apos;FeatureCollection&apos;,
+        features
+      }
     });
   }
 
@@ -214,8 +258,10 @@ class MapControlsCtrl {
    * @return {Promise} Resolves to a list of the returned features
    */
   showAll() {
+  	console.log(&apos;show all activated!&apos;);
     return this.FeatureResource.query({}).$promise.then(features =&gt; {
       this.setCollection({
+      	location: this.location,
         collection: {
           type: &apos;FeatureCollection&apos;,
           features

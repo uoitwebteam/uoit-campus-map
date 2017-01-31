@@ -115,7 +115,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // transclude: true,
 	  bindings: {
 	    onGotoBldg: '<',
-	    markers: '<?'
+	    collection: '<?'
+	    // location: '<?',
+	    // building: '<?',
+	    // feature: '<?'
 	  },
 	  templateUrl: '_map.html',
 	  controller: 'MapCtrl'
@@ -308,15 +311,22 @@ return /******/ (function(modules) { // webpackBootstrap
 						return _this.mapControls;
 					}, function (newVal) {
 						if (newVal) {
-							_this.clearMapData();
-							_this.updateMapData(newVal);
-							if (newVal.location && _this.currentLocation !== newVal.location) {
-								_this.currentLocation = newVal.location;
+							console.log('map component detected internal changes:', newVal);
+							_this.clearMapData().then(function () {
+								return _this.updateMapData(newVal);
+							});
+							if (newVal.location && _this.location !== newVal.location) {
+								_this.location = newVal.location;
 							}
 						}
 					});
 				});
 			}
+	
+			// $onChanges({ collection: { currentValue: collection} }) {
+			// 	console.log('map component detected external changes:', collection);
+			//  	this.clearMapData().then(() => this.updateMapData({ collection }));
+			// }
 	
 			/**
 	   * Clean up event listeners that the controller has attached via
@@ -333,51 +343,65 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 	
 			/**
-	   * Shows a simple toast notification containing the name of the 
-	   * future being hovered over. If there is already a toast active,
-	   * it updates the name in the toast instead of making a new one.
+	   * Handler method for map data `$watch`; watches incoming geoJSON
+	   * data for changes and adds it to the map if detected. If the
+	   * new data has a `showAll` property (and it is true), all features
+	   * all loaded and the map bounds are recalculated.
 	   * 
-	   * @param  {Object} feature The feature being hovered over
+	   * @param  {Object} newVal New incoming map data
 	   */
 	
 		}, {
-			key: 'showToast',
-			value: function showToast(feature) {
+			key: 'updateMapData',
+			value: function updateMapData(newVal) {
 				var _this2 = this;
 	
-				var featureName = feature.getProperty('name');
-				if (!this.toastActive) {
-					this.toast.textContent(featureName).position('bottom left').hideDelay(0);
-					this._$mdToast.show(this.toast);
-					this.toastActive = true;
-				} else {
-					this._$timeout.cancel(this.toastCanceler);
-					this._$timeout(function () {
-						_this2._$mdToast.updateTextContent(featureName);
-					});
-				}
+				console.log('updating map data...', newVal);
+				return this.clearMapData().then(function (map) {
+					if (newVal.collection) {
+						if (angular.isArray(newVal.collection)) {
+							angular.forEach(newVal.collection, function (collection, index) {
+								_this2._$scope.$applyAsync(function () {
+									return map.data.loadGeoJson('http://localhost:3000/api/v1/feature-collections/' + collection._id, null, function () {
+										index === newVal.collection.length - 1 && _this2.fitBounds(map);
+										console.log('map data updated!');
+									});
+								});
+							});
+						} else {
+							map.data.addGeoJson(newVal.collection);
+						}
+						console.log('map data updated!');
+					}
+					// } else {
+					// 	this._$scope.$applyAsync(() => {
+					// 		angular.forEach(newVal.collection, (collection, index) => {
+					// 			map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${collection._id}`, null, () => {
+					// 			  (index === newVal.collection.length - 1) && this.fitBounds(map);
+					// 				console.log('map data updated!');
+					//   		});
+					// 		});
+					// 	});
+					// }
+				});
 			}
 	
 			/**
-	   * Hides the toast notification after 3 seconds, but provides
-	   * a way to cancel the 3 seconds (`toastCanceler`).
-	   *
-	   * It is meant to be called on mouseout, so that the toast will
-	   * remain on screen for a few seconds, and only disappear if
-	   * another isn't needed within those seconds.
-	   * 
-	   * @return {Promise} Resolves to completed timeout
+	   * Removes all features from the map by looping over feature
+	   * data objects and calling their `map.remove()` on them.
 	   */
 	
 		}, {
-			key: 'hideToast',
-			value: function hideToast() {
-				var _this3 = this;
-	
-				return this._$timeout(function () {
-					_this3._$mdToast.hide(_this3.toast);
-					_this3.toastActive = false;
-				}, 3000);
+			key: 'clearMapData',
+			value: function clearMapData() {
+				console.log('clearing map data...');
+				return this.getMap().then(function (map) {
+					map.data.forEach(function (feature) {
+						map.data.remove(feature);
+					});
+					console.log('map data cleared!');
+					return map;
+				});
 			}
 	
 			/**
@@ -400,9 +424,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 				var panelRef = void 0;
-				var position = this._$mdPanel.newPanelPosition()
-				// .absolute().center()
-				.top(top + 'px').left(left + 'px');
+				var position = this._$mdPanel.newPanelPosition().absolute().center();
+				// .top(`${ top }px`)
+				// .left(`${ left }px`);
 	
 				var animation = this._$mdPanel.newPanelAnimation().openFrom({ top: top, left: left }).closeTo({ top: top, left: left }).withAnimation(this._$mdPanel.animation.SCALE);
 	
@@ -415,7 +439,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					panelClass: 'map-detail',
 					locals: {
 						callback: this.onGotoBldg(),
-						location: this.currentLocation,
+						location: this.location,
 						feature: feature
 					},
 					trapFocus: true,
@@ -433,42 +457,55 @@ return /******/ (function(modules) { // webpackBootstrap
 					panelRef = panel;
 				});
 			}
-			/**
-	   * Removes all features from the map by looping over feature
-	   * data objects and calling their `map.remove()` on them.
-	   */
 	
-		}, {
-			key: 'clearMapData',
-			value: function clearMapData() {
-				var _this4 = this;
-	
-				this.map.data.forEach(function (feature) {
-					_this4.map.data.remove(feature);
-				});
-			}
 			/**
-	   * Handler method for map data `$watch`; watches incoming geoJSON
-	   * data for changes and adds it to the map if detected. If the
-	   * new data has a `showAll` property (and it is true), all features
-	   * all loaded and the map bounds are recalculated.
+	   * Shows a simple toast notification containing the name of the 
+	   * future being hovered over. If there is already a toast active,
+	   * it updates the name in the toast instead of making a new one.
 	   * 
-	   * @param  {Object} newVal New map data
+	   * @param  {Object} feature The feature being hovered over
 	   */
 	
 		}, {
-			key: 'updateMapData',
-			value: function updateMapData(newVal) {
-				var _this5 = this;
+			key: 'showToast',
+			value: function showToast(feature) {
+				var _this3 = this;
 	
-				if (newVal && newVal.showAll) {
-					this.map.data.addGeoJson(newVal.collection);
+				var featureName = feature.getProperty('name');
+				if (!this.toastActive) {
+					this.toast.textContent(featureName).position('bottom left').hideDelay(0);
+					this._$mdToast.show(this.toast);
+					this.toastActive = true;
 				} else {
-					newVal.collection && this.map.data.loadGeoJson('http://localhost:3000/api/v1/feature-collections/' + newVal.collection._id, null, function () {
-						_this5.fitBounds(_this5.map);
+					this._$timeout.cancel(this.toastCanceler);
+					this._$timeout(function () {
+						_this3._$mdToast.updateTextContent(featureName);
 					});
 				}
 			}
+	
+			/**
+	   * Hides the toast notification after 3 seconds, but provides
+	   * a way to cancel the 3 seconds (`toastCanceler`).
+	   *
+	   * It is meant to be called on mouseout, so that the toast will
+	   * remain on screen for a few seconds, and only disappear if
+	   * another isn't needed within those seconds.
+	   * 
+	   * @return {Promise} Resolves to completed timeout
+	   */
+	
+		}, {
+			key: 'hideToast',
+			value: function hideToast() {
+				var _this4 = this;
+	
+				return this._$timeout(function () {
+					_this4._$mdToast.hide(_this4.toast);
+					_this4.toastActive = false;
+				}, 3000);
+			}
+	
 			/**
 	   * Direct port of Google Maps `processBounds` example function
 	   * for recalculation of map boundaries based on map data.
@@ -480,7 +517,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'processBounds',
 			value: function processBounds(geometry, callback, thisArg) {
-				var _this6 = this;
+				var _this5 = this;
 	
 				if (geometry instanceof google.maps.LatLng) {
 					callback.call(thisArg, geometry);
@@ -488,7 +525,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					callback.call(thisArg, geometry.get());
 				} else {
 					geometry.getArray().forEach(function (g) {
-						_this6.processBounds(g, callback, thisArg);
+						_this5.processBounds(g, callback, thisArg);
 					});
 				}
 			}
@@ -499,11 +536,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'fitBounds',
 			value: function fitBounds() {
-				var _this7 = this;
+				var _this6 = this;
 	
 				var bounds = new google.maps.LatLngBounds();
 				this.map.data.forEach(function (feature) {
-					_this7.processBounds(feature.getGeometry(), bounds.extend, bounds);
+					_this6.processBounds(feature.getGeometry(), bounds.extend, bounds);
 				});
 				this.map.fitBounds(bounds);
 			}
@@ -575,6 +612,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			get: function get() {
 				return ['$sce'];
 			}
+	
 			/**
 	   * Initializes the controller's dependencies and extracts relevant information
 	   * from data passed in via the `locals` property (when `$mdPanel` initializes
@@ -600,6 +638,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				this.name = this.feature.getProperty('name');
 				this.description = $sce.trustAsHtml(this.feature.getProperty('desc'));
 			}
+	
 			/**
 	   * Property to control the visibility of the description details inside
 	   * the dialog.
@@ -607,6 +646,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 			this.detailsShowing = false;
 		}
+	
 		/**
 	  * Toggles the value of `detailsShowing` to hide and show the description.
 	  * @return {Boolean} The visibility of the description _after_ method is run
@@ -618,6 +658,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function showDetails() {
 				this.detailsShowing = !this.detailsShowing;
 			}
+	
 			/**
 	   * Closes the dialog, and on completion, extracts the `code` property
 	   * from the controller's `location` and `building` (assuming they exist)
@@ -652,6 +693,13 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 				});
 			}
+	
+			/**
+	   * Closes the dialog using the panel reference stored on
+	   * the controller automatically by the `$mdPanel` service.
+	   * @return {Promise} Resolves to the status of the panel close
+	   */
+	
 		}, {
 			key: 'close',
 			value: function close() {
@@ -695,6 +743,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -752,7 +802,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      this.loadLocations().then(function (locations) {
 	        _this.location = locations[1];
-	        _this.showAll();
+	        _this.updateLocation();
+	        // this.showAll();
 	        // angular.element(this.$window).triggerHandler('resize');
 	      });
 	    }
@@ -792,9 +843,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    /**
+	     * Load feature list from server using the `_id`s of the currently
+	     * selected categories to filter by.
+	     *
+	     * @todo Update this doc to describe array of categories
+	     * 
+	     * @return {Promise} Resolves to list of collections
+	     */
+	
+	  }, {
+	    key: 'loadFeatures',
+	    value: function loadFeatures() {
+	      var _this4 = this;
+	
+	      return this.FeatureResource.query({
+	        filter: {
+	          'properties.category': {
+	            $in: [].concat(_toConsumableArray(this.category.map(function (category) {
+	              return category._id;
+	            })))
+	          }
+	        }
+	      }).$promise.then(function (features) {
+	        _this4.features = features;
+	        console.log('FEATURES:', features);
+	        return features;
+	      });
+	    }
+	
+	    /**
 	     * Load collection list from server using the `_id` of the currently
 	     * selected category and location (extracted directly from the
 	     * controller / `this`) to filter by.
+	     *
+	     * @todo Update this doc to describe array of categories
 	     * 
 	     * @return {Promise} Resolves to list of collections
 	     */
@@ -802,15 +884,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'loadCollections',
 	    value: function loadCollections() {
-	      var _this4 = this;
-	
-	      var location = this.location._id,
-	          category = this.category._id;
+	      var _this5 = this;
 	
 	      return this.CollectionResource.query({
-	        filter: { location: location, category: category }
+	        filter: {
+	          location: this.location._id,
+	          category: {
+	            $in: [].concat(_toConsumableArray(this.category.map(function (category) {
+	              return category._id;
+	            })))
+	          }
+	        }
 	      }).$promise.then(function (collections) {
-	        _this4.collections = collections;
+	        _this5.collections = collections;
 	        return collections;
 	      });
 	    }
@@ -823,11 +909,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'updateLocation',
 	    value: function updateLocation() {
-	      var _this5 = this;
+	      var _this6 = this;
 	
 	      this.loadCategories().then(function (categories) {
-	        _this5.category = categories[0];
-	        _this5.updateCategory();
+	        _this6.category = [].concat(_toConsumableArray(categories));
+	        _this6.updateCategory();
 	      });
 	    }
 	
@@ -839,11 +925,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'updateCategory',
 	    value: function updateCategory() {
-	      var _this6 = this;
+	      var _this7 = this;
 	
-	      this.loadCollections().then(function (collections) {
-	        _this6.collection = collections[0];
-	        _this6.updateCollection();
+	      this.loadFeatures().then(function () {
+	        return _this7.updateFeatures();
+	      }).then(function () {
+	        return _this7.loadCollections();
+	      }).then(function (collections) {
+	        _this7.collection = [].concat(_toConsumableArray(collections));
+	        //   this.updateCollection();
+	      });
+	    }
+	  }, {
+	    key: 'updateFeatures',
+	    value: function updateFeatures() {
+	      var location = this.location,
+	          category = this.category,
+	          features = this.features;
+	
+	      this.setCollection({
+	        location: location,
+	        category: category,
+	        collection: {
+	          type: 'FeatureCollection',
+	          features: features
+	        }
 	      });
 	    }
 	
@@ -924,11 +1030,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'showAll',
 	    value: function showAll() {
-	      var _this7 = this;
+	      var _this8 = this;
 	
+	      console.log('show all activated!');
 	      return this.FeatureResource.query({}).$promise.then(function (features) {
-	        _this7.setCollection({
-	          location: _this7.location,
+	        _this8.setCollection({
+	          location: _this8.location,
 	          collection: {
 	            type: 'FeatureCollection',
 	            features: features
@@ -1149,8 +1256,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	var templates = ['$templateCache', function ($templateCache) {
 	  $templateCache.put('_map.html', '<ng-map\n  center="43.9443802,-78.8975857"\n  zoom="17"\n  styles="{{ ::$ctrl._MAP_SETTINGS.styles }}"\n  map-type-id="{{ ::$ctrl._MAP_SETTINGS.type }}"\n  disable-default-u-i="true"\n  tilt="45"\n  heading="0"\n  layout\n  layout-fill>\n  <custom-control id="map-controls" position="TOP_LEFT" index="1">\n\t\t<campus-map-controls ng-model="$ctrl.mapControls"></campus-map-controls>\n  </custom-control>\n</ng-map>');
-	  $templateCache.put('controls/_map-controls.html', '<md-whiteframe\n  class="md-whiteframe-16dp map-controls"\n  layout="column"\n  layout-align="center center"\n  layout-fill>\n  <div layout="row">\n    <md-input-container>\n      <label>Location</label>\n      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" ng-change="$ctrl.updateLocation()" ng-model-options="{trackBy: \'$value._id\'}">\n        <md-option ng-repeat="location in ::$ctrl.locations" ng-value="::location" ng-disabled="$ctrl.location === location">\n          {{ ::location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature category</label>\n      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.location">\n        <md-option ng-repeat="category in $ctrl.categories" ng-value="::category" ng-disabled="$ctrl.category === category">\n          {{ ::category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature collection</label>\n      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.category">\n        <md-option ng-repeat="collection in $ctrl.collections" ng-value="::collection" ng-disabled="$ctrl.collection === collection">\n          {{ ::collection.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n  </div>\n  <div layout="row">\n    <md-button class="md-primary" ng-click="$ctrl.showAll()">\n    \tShow all\n      <md-tooltip md-direction="bottom">\n        Turn on visibility for all available map features\n      </md-tooltip>\n    </md-button>\n  </div>\n</md-whiteframe>');
-	  $templateCache.put('detail/_map-detail.html', '<md-whiteframe\n  class="md-whiteframe-16dp"\n  layout="column"\n  layout-align="center center">\n  <md-toolbar>\n    <div class="md-toolbar-tools">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class="md-icon-button" aria-label="Close info" ng-click="ctrl.close()">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div layout="column" layout-margin>\n    <md-button ng-click="ctrl.showDetails()">{{ ctrl.detailsShowing ? \'Hide\' : \'Show\'}} details <span class="detail-arrow" ng-class="{ \'arrow-up\' : ctrl.detailsShowing }"></span></md-button>\n  \t<md-content layout-padding layout-margin class="details-text" ng-bind-html="::ctrl.description" ng-show="ctrl.detailsShowing"></md-content>\n  \t<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="::ctrl.building" ng-click="ctrl.gotoBldg(ctrl.callback)">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>');
+	  $templateCache.put('detail/_map-detail.html', '<md-whiteframe\n  class="md-whiteframe-16dp"\n  layout="column">\n  <md-toolbar>\n    <div class="md-toolbar-tools">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class="md-icon-button" aria-label="Close info" ng-click="ctrl.close()">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div\n  \tlayout="column"\n  \tlayout-margin\n  \tlayout-align="center center">\n    <md-button ng-click="ctrl.showDetails()">{{ ctrl.detailsShowing ? \'Hide\' : \'Show\'}} details <span class="detail-arrow" ng-class="{ \'arrow-up\' : ctrl.detailsShowing }"></span></md-button>\n  \t<md-content layout-padding layout-margin class="details-text" ng-bind-html="::ctrl.description" ng-show="ctrl.detailsShowing"></md-content>\n  \t<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="::ctrl.building" ng-click="ctrl.gotoBldg(ctrl.callback)">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>');
+	  $templateCache.put('controls/_map-controls.html', '<md-whiteframe\n  class="md-whiteframe-16dp map-controls"\n  layout="column"\n  layout-align="center center"\n  layout-fill>\n  <div layout="row">\n\n    <md-input-container flex>\n      <label>Location</label>\n      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" ng-change="$ctrl.updateLocation()" ng-model-options="{trackBy: \'$value._id\'}">\n        <md-option ng-repeat="location in ::$ctrl.locations" ng-value="::location" ng-disabled="$ctrl.location === location">\n          {{ ::location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n\n    <md-input-container flex>\n      <label>Feature category</label>\n      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.location" multiple>\n        <md-option ng-repeat="category in $ctrl.categories" ng-value="::category" ng-disabled="$ctrl.category === category">\n          {{ ::category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n\n    <md-input-container flex>\n      <label>Feature collection</label>\n      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.category" multiple>\n        <md-optgroup ng-repeat="group in $ctrl.category" label="{{ ::group.name }}">\n\t        <md-option ng-repeat="collection in $ctrl.collections | filter: { category: group._id }" ng-value="::collection" ng-disabled="$ctrl.collection === collection">\n\t          {{ ::collection.name }}\n\t        </md-option>\n        </md-optgroup>\n      </md-select>\n    </md-input-container>\n\n  </div>\n  <div layout="row">\n\n    <md-button class="md-primary" ng-click="$ctrl.showAll()">\n    \tShow all\n      <md-tooltip md-direction="bottom">\n        Turn on visibility for all available map features\n      </md-tooltip>\n    </md-button>\n    \n  </div>\n</md-whiteframe>');
 	}];exports.default = templates;
 
 /***/ }

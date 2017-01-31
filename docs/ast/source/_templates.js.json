@@ -280,11 +280,11 @@
                           },
                           {
                             "type": "Literal",
-                            "value": "<md-whiteframe\n  class=\"md-whiteframe-16dp map-controls\"\n  layout=\"column\"\n  layout-align=\"center center\"\n  layout-fill>\n  <div layout=\"row\">\n    <md-input-container>\n      <label>Location</label>\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" ng-change=\"$ctrl.updateLocation()\" ng-model-options=\"{trackBy: '$value._id'}\">\n        <md-option ng-repeat=\"location in ::$ctrl.locations\" ng-value=\"::location\" ng-disabled=\"$ctrl.location === location\">\n          {{ ::location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature category</label>\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-change=\"$ctrl.updateCategory()\" ng-model-options=\"{trackBy: '$value._id'}\" ng-disabled=\"!$ctrl.location\">\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"::category\" ng-disabled=\"$ctrl.category === category\">\n          {{ ::category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature collection</label>\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-change=\"$ctrl.updateCollection()\" ng-model-options=\"{trackBy: '$value._id'}\" ng-disabled=\"!$ctrl.category\">\n        <md-option ng-repeat=\"collection in $ctrl.collections\" ng-value=\"::collection\" ng-disabled=\"$ctrl.collection === collection\">\n          {{ ::collection.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n  </div>\n  <div layout=\"row\">\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\n    \tShow all\n      <md-tooltip md-direction=\"bottom\">\n        Turn on visibility for all available map features\n      </md-tooltip>\n    </md-button>\n  </div>\n</md-whiteframe>",
-                            "raw": "'<md-whiteframe\\n  class=\"md-whiteframe-16dp map-controls\"\\n  layout=\"column\"\\n  layout-align=\"center center\"\\n  layout-fill>\\n  <div layout=\"row\">\\n    <md-input-container>\\n      <label>Location</label>\\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" ng-change=\"$ctrl.updateLocation()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\">\\n        <md-option ng-repeat=\"location in ::$ctrl.locations\" ng-value=\"::location\" ng-disabled=\"$ctrl.location === location\">\\n          {{ ::location.label}}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n    <md-input-container>\\n      <label>Feature category</label>\\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-change=\"$ctrl.updateCategory()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.location\">\\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"::category\" ng-disabled=\"$ctrl.category === category\">\\n          {{ ::category.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n    <md-input-container>\\n      <label>Feature collection</label>\\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-change=\"$ctrl.updateCollection()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.category\">\\n        <md-option ng-repeat=\"collection in $ctrl.collections\" ng-value=\"::collection\" ng-disabled=\"$ctrl.collection === collection\">\\n          {{ ::collection.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n  </div>\\n  <div layout=\"row\">\\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\\n    \\tShow all\\n      <md-tooltip md-direction=\"bottom\">\\n        Turn on visibility for all available map features\\n      </md-tooltip>\\n    </md-button>\\n  </div>\\n</md-whiteframe>'",
+                            "value": "<md-whiteframe\n  class=\"md-whiteframe-16dp map-controls\"\n  layout=\"column\"\n  layout-align=\"center center\"\n  layout-fill>\n  <div layout=\"row\">\n\n    <md-input-container flex>\n      <label>Location</label>\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" ng-change=\"$ctrl.updateLocation()\" ng-model-options=\"{trackBy: '$value._id'}\">\n        <md-option ng-repeat=\"location in ::$ctrl.locations\" ng-value=\"::location\" ng-disabled=\"$ctrl.location === location\">\n          {{ ::location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n\n    <md-input-container flex>\n      <label>Feature category</label>\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-change=\"$ctrl.updateCategory()\" ng-model-options=\"{trackBy: '$value._id'}\" ng-disabled=\"!$ctrl.location\" multiple>\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"::category\" ng-disabled=\"$ctrl.category === category\">\n          {{ ::category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n\n    <md-input-container flex>\n      <label>Feature collection</label>\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-change=\"$ctrl.updateCollection()\" ng-model-options=\"{trackBy: '$value._id'}\" ng-disabled=\"!$ctrl.category\" multiple>\n        <md-optgroup ng-repeat=\"group in $ctrl.category\" label=\"{{ ::group.name }}\">\n\t        <md-option ng-repeat=\"collection in $ctrl.collections | filter: { category: group._id }\" ng-value=\"::collection\" ng-disabled=\"$ctrl.collection === collection\">\n\t          {{ ::collection.name }}\n\t        </md-option>\n        </md-optgroup>\n      </md-select>\n    </md-input-container>\n\n  </div>\n  <div layout=\"row\">\n\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\n    \tShow all\n      <md-tooltip md-direction=\"bottom\">\n        Turn on visibility for all available map features\n      </md-tooltip>\n    </md-button>\n    \n  </div>\n</md-whiteframe>",
+                            "raw": "'<md-whiteframe\\n  class=\"md-whiteframe-16dp map-controls\"\\n  layout=\"column\"\\n  layout-align=\"center center\"\\n  layout-fill>\\n  <div layout=\"row\">\\n\\n    <md-input-container flex>\\n      <label>Location</label>\\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" ng-change=\"$ctrl.updateLocation()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\">\\n        <md-option ng-repeat=\"location in ::$ctrl.locations\" ng-value=\"::location\" ng-disabled=\"$ctrl.location === location\">\\n          {{ ::location.label}}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n\\n    <md-input-container flex>\\n      <label>Feature category</label>\\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-change=\"$ctrl.updateCategory()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.location\" multiple>\\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"::category\" ng-disabled=\"$ctrl.category === category\">\\n          {{ ::category.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n\\n    <md-input-container flex>\\n      <label>Feature collection</label>\\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-change=\"$ctrl.updateCollection()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.category\" multiple>\\n        <md-optgroup ng-repeat=\"group in $ctrl.category\" label=\"{{ ::group.name }}\">\\n\\t        <md-option ng-repeat=\"collection in $ctrl.collections | filter: { category: group._id }\" ng-value=\"::collection\" ng-disabled=\"$ctrl.collection === collection\">\\n\\t          {{ ::collection.name }}\\n\\t        </md-option>\\n        </md-optgroup>\\n      </md-select>\\n    </md-input-container>\\n\\n  </div>\\n  <div layout=\"row\">\\n\\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\\n    \\tShow all\\n      <md-tooltip md-direction=\"bottom\">\\n        Turn on visibility for all available map features\\n      </md-tooltip>\\n    </md-button>\\n    \\n  </div>\\n</md-whiteframe>'",
                             "range": [
                               561,
-                              2420
+                              2619
                             ],
                             "loc": {
                               "start": {
@@ -293,14 +293,14 @@
                               },
                               "end": {
                                 "line": 2,
-                                "column": 1908
+                                "column": 2107
                               }
                             }
                           }
                         ],
                         "range": [
                           512,
-                          2421
+                          2620
                         ],
                         "loc": {
                           "start": {
@@ -309,13 +309,13 @@
                           },
                           "end": {
                             "line": 2,
-                            "column": 1909
+                            "column": 2108
                           }
                         }
                       },
                       "range": [
                         512,
-                        2422
+                        2621
                       ],
                       "loc": {
                         "start": {
@@ -339,8 +339,8 @@
                             "type": "Identifier",
                             "name": "$templateCache",
                             "range": [
-                              2422,
-                              2436
+                              2621,
+                              2635
                             ],
                             "loc": {
                               "start": {
@@ -357,8 +357,8 @@
                             "type": "Identifier",
                             "name": "put",
                             "range": [
-                              2437,
-                              2440
+                              2636,
+                              2639
                             ],
                             "loc": {
                               "start": {
@@ -372,8 +372,8 @@
                             }
                           },
                           "range": [
-                            2422,
-                            2440
+                            2621,
+                            2639
                           ],
                           "loc": {
                             "start": {
@@ -392,8 +392,8 @@
                             "value": "detail/_map-detail.html",
                             "raw": "'detail/_map-detail.html'",
                             "range": [
-                              2441,
-                              2466
+                              2640,
+                              2665
                             ],
                             "loc": {
                               "start": {
@@ -408,11 +408,11 @@
                           },
                           {
                             "type": "Literal",
-                            "value": "<md-whiteframe\n  class=\"md-whiteframe-16dp\"\n  layout=\"column\"\n  layout-align=\"center center\">\n  <md-toolbar>\n    <div class=\"md-toolbar-tools\">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div layout=\"column\" layout-margin>\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? 'Hide' : 'Show'}} details <span class=\"detail-arrow\" ng-class=\"{ 'arrow-up' : ctrl.detailsShowing }\"></span></md-button>\n  \t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\n  \t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg(ctrl.callback)\">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>",
-                            "raw": "'<md-whiteframe\\n  class=\"md-whiteframe-16dp\"\\n  layout=\"column\"\\n  layout-align=\"center center\">\\n  <md-toolbar>\\n    <div class=\"md-toolbar-tools\">\\n      <h2>\\n        <span>{{ ::ctrl.name }}</span>\\n      </h2>\\n      <span flex></span>\\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\\n        <span>&times;</span>\\n      </md-button>\\n    </div>\\n  </md-toolbar>\\n  <div layout=\"column\" layout-margin>\\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? \\'Hide\\' : \\'Show\\'}} details <span class=\"detail-arrow\" ng-class=\"{ \\'arrow-up\\' : ctrl.detailsShowing }\"></span></md-button>\\n  \\t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\\n  \\t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg(ctrl.callback)\">\\n  \\t\\tTake a tour &raquo;\\n  \\t</md-button>\\n  </div>\\n</md-whiteframe>'",
+                            "value": "<md-whiteframe\n  class=\"md-whiteframe-16dp\"\n  layout=\"column\">\n  <md-toolbar>\n    <div class=\"md-toolbar-tools\">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div\n  \tlayout=\"column\"\n  \tlayout-margin\n  \tlayout-align=\"center center\">\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? 'Hide' : 'Show'}} details <span class=\"detail-arrow\" ng-class=\"{ 'arrow-up' : ctrl.detailsShowing }\"></span></md-button>\n  \t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\n  \t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg(ctrl.callback)\">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>",
+                            "raw": "'<md-whiteframe\\n  class=\"md-whiteframe-16dp\"\\n  layout=\"column\">\\n  <md-toolbar>\\n    <div class=\"md-toolbar-tools\">\\n      <h2>\\n        <span>{{ ::ctrl.name }}</span>\\n      </h2>\\n      <span flex></span>\\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\\n        <span>&times;</span>\\n      </md-button>\\n    </div>\\n  </md-toolbar>\\n  <div\\n  \\tlayout=\"column\"\\n  \\tlayout-margin\\n  \\tlayout-align=\"center center\">\\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? \\'Hide\\' : \\'Show\\'}} details <span class=\"detail-arrow\" ng-class=\"{ \\'arrow-up\\' : ctrl.detailsShowing }\"></span></md-button>\\n  \\t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\\n  \\t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg(ctrl.callback)\">\\n  \\t\\tTake a tour &raquo;\\n  \\t</md-button>\\n  </div>\\n</md-whiteframe>'",
                             "range": [
-                              2467,
-                              3489
+                              2666,
+                              3700
                             ],
                             "loc": {
                               "start": {
@@ -421,14 +421,14 @@
                               },
                               "end": {
                                 "line": 3,
-                                "column": 1067
+                                "column": 1079
                               }
                             }
                           }
                         ],
                         "range": [
-                          2422,
-                          3490
+                          2621,
+                          3701
                         ],
                         "loc": {
                           "start": {
@@ -437,13 +437,13 @@
                           },
                           "end": {
                             "line": 3,
-                            "column": 1068
+                            "column": 1080
                           }
                         }
                       },
                       "range": [
-                        2422,
-                        3490
+                        2621,
+                        3701
                       ],
                       "loc": {
                         "start": {
@@ -452,14 +452,14 @@
                         },
                         "end": {
                           "line": 3,
-                          "column": 1068
+                          "column": 1080
                         }
                       }
                     }
                   ],
                   "range": [
                     62,
-                    3491
+                    3702
                   ],
                   "loc": {
                     "start": {
@@ -468,7 +468,7 @@
                     },
                     "end": {
                       "line": 3,
-                      "column": 1069
+                      "column": 1081
                     }
                   }
                 },
@@ -476,7 +476,7 @@
                 "expression": false,
                 "range": [
                   37,
-                  3491
+                  3702
                 ],
                 "loc": {
                   "start": {
@@ -485,14 +485,14 @@
                   },
                   "end": {
                     "line": 3,
-                    "column": 1069
+                    "column": 1081
                   }
                 }
               }
             ],
             "range": [
               18,
-              3492
+              3703
             ],
             "loc": {
               "start": {
@@ -501,13 +501,13 @@
               },
               "end": {
                 "line": 3,
-                "column": 1070
+                "column": 1082
               }
             }
           },
           "range": [
             6,
-            3492
+            3703
           ],
           "loc": {
             "start": {
@@ -516,7 +516,7 @@
             },
             "end": {
               "line": 3,
-              "column": 1070
+              "column": 1082
             }
           }
         }
@@ -524,7 +524,7 @@
       "kind": "const",
       "range": [
         0,
-        3493
+        3704
       ],
       "loc": {
         "start": {
@@ -533,7 +533,7 @@
         },
         "end": {
           "line": 3,
-          "column": 1071
+          "column": 1083
         }
       },
       "name": "_",
@@ -546,32 +546,32 @@
         "type": "Identifier",
         "name": "templates",
         "range": [
-          3509,
-          3518
+          3720,
+          3729
         ],
         "loc": {
           "start": {
             "line": 3,
-            "column": 1087
+            "column": 1099
           },
           "end": {
             "line": 3,
-            "column": 1096
+            "column": 1108
           }
         }
       },
       "range": [
-        3494,
-        3519
+        3705,
+        3730
       ],
       "loc": {
         "start": {
           "line": 3,
-          "column": 1072
+          "column": 1084
         },
         "end": {
           "line": 3,
-          "column": 1097
+          "column": 1109
         }
       },
       "name": "_",
@@ -859,11 +859,11 @@
                             },
                             {
                               "type": "Literal",
-                              "value": "<md-whiteframe\n  class=\"md-whiteframe-16dp map-controls\"\n  layout=\"column\"\n  layout-align=\"center center\"\n  layout-fill>\n  <div layout=\"row\">\n    <md-input-container>\n      <label>Location</label>\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" ng-change=\"$ctrl.updateLocation()\" ng-model-options=\"{trackBy: '$value._id'}\">\n        <md-option ng-repeat=\"location in ::$ctrl.locations\" ng-value=\"::location\" ng-disabled=\"$ctrl.location === location\">\n          {{ ::location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature category</label>\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-change=\"$ctrl.updateCategory()\" ng-model-options=\"{trackBy: '$value._id'}\" ng-disabled=\"!$ctrl.location\">\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"::category\" ng-disabled=\"$ctrl.category === category\">\n          {{ ::category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n    <md-input-container>\n      <label>Feature collection</label>\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-change=\"$ctrl.updateCollection()\" ng-model-options=\"{trackBy: '$value._id'}\" ng-disabled=\"!$ctrl.category\">\n        <md-option ng-repeat=\"collection in $ctrl.collections\" ng-value=\"::collection\" ng-disabled=\"$ctrl.collection === collection\">\n          {{ ::collection.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n  </div>\n  <div layout=\"row\">\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\n    \tShow all\n      <md-tooltip md-direction=\"bottom\">\n        Turn on visibility for all available map features\n      </md-tooltip>\n    </md-button>\n  </div>\n</md-whiteframe>",
-                              "raw": "'<md-whiteframe\\n  class=\"md-whiteframe-16dp map-controls\"\\n  layout=\"column\"\\n  layout-align=\"center center\"\\n  layout-fill>\\n  <div layout=\"row\">\\n    <md-input-container>\\n      <label>Location</label>\\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" ng-change=\"$ctrl.updateLocation()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\">\\n        <md-option ng-repeat=\"location in ::$ctrl.locations\" ng-value=\"::location\" ng-disabled=\"$ctrl.location === location\">\\n          {{ ::location.label}}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n    <md-input-container>\\n      <label>Feature category</label>\\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-change=\"$ctrl.updateCategory()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.location\">\\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"::category\" ng-disabled=\"$ctrl.category === category\">\\n          {{ ::category.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n    <md-input-container>\\n      <label>Feature collection</label>\\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-change=\"$ctrl.updateCollection()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.category\">\\n        <md-option ng-repeat=\"collection in $ctrl.collections\" ng-value=\"::collection\" ng-disabled=\"$ctrl.collection === collection\">\\n          {{ ::collection.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n  </div>\\n  <div layout=\"row\">\\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\\n    \\tShow all\\n      <md-tooltip md-direction=\"bottom\">\\n        Turn on visibility for all available map features\\n      </md-tooltip>\\n    </md-button>\\n  </div>\\n</md-whiteframe>'",
+                              "value": "<md-whiteframe\n  class=\"md-whiteframe-16dp map-controls\"\n  layout=\"column\"\n  layout-align=\"center center\"\n  layout-fill>\n  <div layout=\"row\">\n\n    <md-input-container flex>\n      <label>Location</label>\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" ng-change=\"$ctrl.updateLocation()\" ng-model-options=\"{trackBy: '$value._id'}\">\n        <md-option ng-repeat=\"location in ::$ctrl.locations\" ng-value=\"::location\" ng-disabled=\"$ctrl.location === location\">\n          {{ ::location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n\n    <md-input-container flex>\n      <label>Feature category</label>\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-change=\"$ctrl.updateCategory()\" ng-model-options=\"{trackBy: '$value._id'}\" ng-disabled=\"!$ctrl.location\" multiple>\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"::category\" ng-disabled=\"$ctrl.category === category\">\n          {{ ::category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n\n    <md-input-container flex>\n      <label>Feature collection</label>\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-change=\"$ctrl.updateCollection()\" ng-model-options=\"{trackBy: '$value._id'}\" ng-disabled=\"!$ctrl.category\" multiple>\n        <md-optgroup ng-repeat=\"group in $ctrl.category\" label=\"{{ ::group.name }}\">\n\t        <md-option ng-repeat=\"collection in $ctrl.collections | filter: { category: group._id }\" ng-value=\"::collection\" ng-disabled=\"$ctrl.collection === collection\">\n\t          {{ ::collection.name }}\n\t        </md-option>\n        </md-optgroup>\n      </md-select>\n    </md-input-container>\n\n  </div>\n  <div layout=\"row\">\n\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\n    \tShow all\n      <md-tooltip md-direction=\"bottom\">\n        Turn on visibility for all available map features\n      </md-tooltip>\n    </md-button>\n    \n  </div>\n</md-whiteframe>",
+                              "raw": "'<md-whiteframe\\n  class=\"md-whiteframe-16dp map-controls\"\\n  layout=\"column\"\\n  layout-align=\"center center\"\\n  layout-fill>\\n  <div layout=\"row\">\\n\\n    <md-input-container flex>\\n      <label>Location</label>\\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" ng-change=\"$ctrl.updateLocation()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\">\\n        <md-option ng-repeat=\"location in ::$ctrl.locations\" ng-value=\"::location\" ng-disabled=\"$ctrl.location === location\">\\n          {{ ::location.label}}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n\\n    <md-input-container flex>\\n      <label>Feature category</label>\\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-change=\"$ctrl.updateCategory()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.location\" multiple>\\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"::category\" ng-disabled=\"$ctrl.category === category\">\\n          {{ ::category.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n\\n    <md-input-container flex>\\n      <label>Feature collection</label>\\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-change=\"$ctrl.updateCollection()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.category\" multiple>\\n        <md-optgroup ng-repeat=\"group in $ctrl.category\" label=\"{{ ::group.name }}\">\\n\\t        <md-option ng-repeat=\"collection in $ctrl.collections | filter: { category: group._id }\" ng-value=\"::collection\" ng-disabled=\"$ctrl.collection === collection\">\\n\\t          {{ ::collection.name }}\\n\\t        </md-option>\\n        </md-optgroup>\\n      </md-select>\\n    </md-input-container>\\n\\n  </div>\\n  <div layout=\"row\">\\n\\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\\n    \\tShow all\\n      <md-tooltip md-direction=\"bottom\">\\n        Turn on visibility for all available map features\\n      </md-tooltip>\\n    </md-button>\\n    \\n  </div>\\n</md-whiteframe>'",
                               "range": [
                                 561,
-                                2420
+                                2619
                               ],
                               "loc": {
                                 "start": {
@@ -872,14 +872,14 @@
                                 },
                                 "end": {
                                   "line": 2,
-                                  "column": 1908
+                                  "column": 2107
                                 }
                               }
                             }
                           ],
                           "range": [
                             512,
-                            2421
+                            2620
                           ],
                           "loc": {
                             "start": {
@@ -888,13 +888,13 @@
                             },
                             "end": {
                               "line": 2,
-                              "column": 1909
+                              "column": 2108
                             }
                           }
                         },
                         "range": [
                           512,
-                          2422
+                          2621
                         ],
                         "loc": {
                           "start": {
@@ -918,8 +918,8 @@
                               "type": "Identifier",
                               "name": "$templateCache",
                               "range": [
-                                2422,
-                                2436
+                                2621,
+                                2635
                               ],
                               "loc": {
                                 "start": {
@@ -936,8 +936,8 @@
                               "type": "Identifier",
                               "name": "put",
                               "range": [
-                                2437,
-                                2440
+                                2636,
+                                2639
                               ],
                               "loc": {
                                 "start": {
@@ -951,8 +951,8 @@
                               }
                             },
                             "range": [
-                              2422,
-                              2440
+                              2621,
+                              2639
                             ],
                             "loc": {
                               "start": {
@@ -971,8 +971,8 @@
                               "value": "detail/_map-detail.html",
                               "raw": "'detail/_map-detail.html'",
                               "range": [
-                                2441,
-                                2466
+                                2640,
+                                2665
                               ],
                               "loc": {
                                 "start": {
@@ -987,11 +987,11 @@
                             },
                             {
                               "type": "Literal",
-                              "value": "<md-whiteframe\n  class=\"md-whiteframe-16dp\"\n  layout=\"column\"\n  layout-align=\"center center\">\n  <md-toolbar>\n    <div class=\"md-toolbar-tools\">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div layout=\"column\" layout-margin>\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? 'Hide' : 'Show'}} details <span class=\"detail-arrow\" ng-class=\"{ 'arrow-up' : ctrl.detailsShowing }\"></span></md-button>\n  \t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\n  \t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg(ctrl.callback)\">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>",
-                              "raw": "'<md-whiteframe\\n  class=\"md-whiteframe-16dp\"\\n  layout=\"column\"\\n  layout-align=\"center center\">\\n  <md-toolbar>\\n    <div class=\"md-toolbar-tools\">\\n      <h2>\\n        <span>{{ ::ctrl.name }}</span>\\n      </h2>\\n      <span flex></span>\\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\\n        <span>&times;</span>\\n      </md-button>\\n    </div>\\n  </md-toolbar>\\n  <div layout=\"column\" layout-margin>\\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? \\'Hide\\' : \\'Show\\'}} details <span class=\"detail-arrow\" ng-class=\"{ \\'arrow-up\\' : ctrl.detailsShowing }\"></span></md-button>\\n  \\t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\\n  \\t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg(ctrl.callback)\">\\n  \\t\\tTake a tour &raquo;\\n  \\t</md-button>\\n  </div>\\n</md-whiteframe>'",
+                              "value": "<md-whiteframe\n  class=\"md-whiteframe-16dp\"\n  layout=\"column\">\n  <md-toolbar>\n    <div class=\"md-toolbar-tools\">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div\n  \tlayout=\"column\"\n  \tlayout-margin\n  \tlayout-align=\"center center\">\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? 'Hide' : 'Show'}} details <span class=\"detail-arrow\" ng-class=\"{ 'arrow-up' : ctrl.detailsShowing }\"></span></md-button>\n  \t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\n  \t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg(ctrl.callback)\">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>",
+                              "raw": "'<md-whiteframe\\n  class=\"md-whiteframe-16dp\"\\n  layout=\"column\">\\n  <md-toolbar>\\n    <div class=\"md-toolbar-tools\">\\n      <h2>\\n        <span>{{ ::ctrl.name }}</span>\\n      </h2>\\n      <span flex></span>\\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\\n        <span>&times;</span>\\n      </md-button>\\n    </div>\\n  </md-toolbar>\\n  <div\\n  \\tlayout=\"column\"\\n  \\tlayout-margin\\n  \\tlayout-align=\"center center\">\\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? \\'Hide\\' : \\'Show\\'}} details <span class=\"detail-arrow\" ng-class=\"{ \\'arrow-up\\' : ctrl.detailsShowing }\"></span></md-button>\\n  \\t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\\n  \\t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg(ctrl.callback)\">\\n  \\t\\tTake a tour &raquo;\\n  \\t</md-button>\\n  </div>\\n</md-whiteframe>'",
                               "range": [
-                                2467,
-                                3489
+                                2666,
+                                3700
                               ],
                               "loc": {
                                 "start": {
@@ -1000,14 +1000,14 @@
                                 },
                                 "end": {
                                   "line": 3,
-                                  "column": 1067
+                                  "column": 1079
                                 }
                               }
                             }
                           ],
                           "range": [
-                            2422,
-                            3490
+                            2621,
+                            3701
                           ],
                           "loc": {
                             "start": {
@@ -1016,13 +1016,13 @@
                             },
                             "end": {
                               "line": 3,
-                              "column": 1068
+                              "column": 1080
                             }
                           }
                         },
                         "range": [
-                          2422,
-                          3490
+                          2621,
+                          3701
                         ],
                         "loc": {
                           "start": {
@@ -1031,14 +1031,14 @@
                           },
                           "end": {
                             "line": 3,
-                            "column": 1068
+                            "column": 1080
                           }
                         }
                       }
                     ],
                     "range": [
                       62,
-                      3491
+                      3702
                     ],
                     "loc": {
                       "start": {
@@ -1047,7 +1047,7 @@
                       },
                       "end": {
                         "line": 3,
-                        "column": 1069
+                        "column": 1081
                       }
                     }
                   },
@@ -1055,7 +1055,7 @@
                   "expression": false,
                   "range": [
                     37,
-                    3491
+                    3702
                   ],
                   "loc": {
                     "start": {
@@ -1064,14 +1064,14 @@
                     },
                     "end": {
                       "line": 3,
-                      "column": 1069
+                      "column": 1081
                     }
                   }
                 }
               ],
               "range": [
                 18,
-                3492
+                3703
               ],
               "loc": {
                 "start": {
@@ -1080,13 +1080,13 @@
                 },
                 "end": {
                   "line": 3,
-                  "column": 1070
+                  "column": 1082
                 }
               }
             },
             "range": [
               6,
-              3492
+              3703
             ],
             "loc": {
               "start": {
@@ -1095,7 +1095,7 @@
               },
               "end": {
                 "line": 3,
-                "column": 1070
+                "column": 1082
               }
             }
           }
@@ -1103,7 +1103,7 @@
         "kind": "const",
         "range": [
           0,
-          3493
+          3704
         ],
         "loc": {
           "start": {
@@ -1112,24 +1112,24 @@
           },
           "end": {
             "line": 3,
-            "column": 1071
+            "column": 1083
           }
         },
         "leadingComments": [],
         "trailingComments": []
       },
       "range": [
-        3494,
-        3519
+        3705,
+        3730
       ],
       "loc": {
         "start": {
           "line": 3,
-          "column": 1072
+          "column": 1084
         },
         "end": {
           "line": 3,
-          "column": 1097
+          "column": 1109
         }
       }
     }
@@ -1137,7 +1137,7 @@
   "sourceType": "module",
   "range": [
     0,
-    3519
+    3730
   ],
   "loc": {
     "start": {
@@ -1146,7 +1146,7 @@
     },
     "end": {
       "line": 3,
-      "column": 1097
+      "column": 1109
     }
   },
   "comments": []

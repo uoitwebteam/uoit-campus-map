@@ -193,16 +193,21 @@ class MapCtrl {
 
 	    this._$scope.$watch( () =&gt; this.mapControls, (newVal) =&gt; {
 	    	if (newVal) {
-		    	this.clearMapData();
-		    	this.updateMapData(newVal);
-		    	if (newVal.location &amp;&amp; this.currentLocation !== newVal.location) {
-			    	this.currentLocation = newVal.location;
+					console.log(&apos;map component detected internal changes:&apos;, newVal);
+			  	this.clearMapData().then(() =&gt; this.updateMapData(newVal));
+		    	if (newVal.location &amp;&amp; this.location !== newVal.location) {
+			    	this.location = newVal.location;
 			    }
 	    	}
 	    });
 
     });
 	}
+
+	// $onChanges({ collection: { currentValue: collection} }) {
+	// 	console.log(&apos;map component detected external changes:&apos;, collection);
+ //  	this.clearMapData().then(() =&gt; this.updateMapData({ collection }));
+	// }
 
 	/**
 	 * Clean up event listeners that the controller has attached via
@@ -213,6 +218,109 @@ class MapCtrl {
 	 */
 	$onDestroy() {
 		google.maps.event.clearInstanceListeners(this.map.data);
+	}
+
+	/**
+	 * Handler method for map data `$watch`; watches incoming geoJSON
+	 * data for changes and adds it to the map if detected. If the
+	 * new data has a `showAll` property (and it is true), all features
+	 * all loaded and the map bounds are recalculated.
+	 * 
+	 * @param  {Object} newVal New incoming map data
+	 */
+	updateMapData(newVal) {
+		console.log(&apos;updating map data...&apos;, newVal);
+		return this.clearMapData().then(map =&gt; {
+			if (newVal.collection) {
+				if (angular.isArray(newVal.collection)) {
+					angular.forEach(newVal.collection, (collection, index) =&gt; {
+						this._$scope.$applyAsync(() =&gt; map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${collection._id}`, null, () =&gt; {
+						  (index === newVal.collection.length - 1) &amp;&amp; this.fitBounds(map);
+							console.log(&apos;map data updated!&apos;);
+			  		}));
+					});
+				} else {
+		      map.data.addGeoJson(newVal.collection);
+				}
+				console.log(&apos;map data updated!&apos;);
+			}
+			// } else {
+			// 	this._$scope.$applyAsync(() =&gt; {
+			// 		angular.forEach(newVal.collection, (collection, index) =&gt; {
+			// 			map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${collection._id}`, null, () =&gt; {
+			// 			  (index === newVal.collection.length - 1) &amp;&amp; this.fitBounds(map);
+			// 				console.log(&apos;map data updated!&apos;);
+			//   		});
+			// 		});
+			// 	});
+			// }
+		});
+	}
+	
+	/**
+	 * Removes all features from the map by looping over feature
+	 * data objects and calling their `map.remove()` on them.
+	 */
+	clearMapData() {
+		console.log(&apos;clearing map data...&apos;);
+		return this.getMap().then(map =&gt; {
+			map.data.forEach(feature =&gt; {
+				map.data.remove(feature);
+			});
+			console.log(&apos;map data cleared!&apos;);
+			return map;
+		});
+	}
+
+	/**
+	 * Shows a detail popup, called by user clicking map feature. This
+	 * method uses ng-material&apos;s `$mdPanel` service to build a floating
+	 * panel config, immediately show it, and manually clean up its scope
+	 * listeners on close.
+	 * @param  {Object} feature         The feature that was clicked
+	 * @param  {Object} options
+	 * @param  {Number} options.clientX Horizontal position of user&apos;s click
+	 * @param  {Number} options.clientY Vertical position of user&apos;s click
+	 * @return {Promise}                Resolves to panel reference
+	 */
+	showDetail(feature, { clientX: left, clientY: top }) {
+
+		let panelRef;
+	  const position = this._$mdPanel.newPanelPosition()
+	    .absolute().center();
+	    // .top(`${ top }px`)
+	    // .left(`${ left }px`);
+
+	  const animation = this._$mdPanel.newPanelAnimation()
+      .openFrom({ top, left })
+      .closeTo({ top, left })
+			.withAnimation(this._$mdPanel.animation.SCALE);
+
+	  return this._$mdPanel.open({
+	    attachTo: angular.element(document.body),
+	    controller: MapDetailCtrl,
+	    controllerAs: &apos;ctrl&apos;,
+	    templateUrl: &apos;detail/_map-detail.html&apos;,
+	    hasBackdrop: true,
+	    panelClass: &apos;map-detail&apos;,
+	    locals: {
+	    	callback: this.onGotoBldg(),
+	    	location: this.location,
+	    	feature
+	    },
+	    trapFocus: true,
+	    zIndex: 150,
+	    clickOutsideToClose: true,
+	    escapeToClose: true,
+	    focusOnOpen: true,
+	    onDomRemoved() {
+	    	panelRef.destroy();
+	    },
+	    animation,
+	    position
+	  }).then(panel =&gt; {
+	  	panelRef = panel;
+	  });
 	}
 
 	/**
@@ -253,82 +361,6 @@ class MapCtrl {
 	  }, 3000);
 	}
 
-	/**
-	 * Shows a detail popup, called by user clicking map feature. This
-	 * method uses ng-material&apos;s `$mdPanel` service to build a floating
-	 * panel config, immediately show it, and manually clean up its scope
-	 * listeners on close.
-	 * @param  {Object} feature         The feature that was clicked
-	 * @param  {Object} options
-	 * @param  {Number} options.clientX Horizontal position of user&apos;s click
-	 * @param  {Number} options.clientY Vertical position of user&apos;s click
-	 * @return {Promise}                Resolves to panel reference
-	 */
-	showDetail(feature, { clientX: left, clientY: top }) {
-
-		let panelRef;
-	  const position = this._$mdPanel.newPanelPosition()
-	    // .absolute().center()
-	    .top(`${ top }px`)
-	    .left(`${ left }px`);
-
-	  const animation = this._$mdPanel.newPanelAnimation()
-      .openFrom({ top, left })
-      .closeTo({ top, left })
-			.withAnimation(this._$mdPanel.animation.SCALE);
-
-	  return this._$mdPanel.open({
-	    attachTo: angular.element(document.body),
-	    controller: MapDetailCtrl,
-	    controllerAs: &apos;ctrl&apos;,
-	    templateUrl: &apos;detail/_map-detail.html&apos;,
-	    hasBackdrop: true,
-	    panelClass: &apos;map-detail&apos;,
-	    locals: {
-	    	callback: this.onGotoBldg(),
-	    	location: this.currentLocation,
-	    	feature
-	    },
-	    trapFocus: true,
-	    zIndex: 150,
-	    clickOutsideToClose: true,
-	    escapeToClose: true,
-	    focusOnOpen: true,
-	    onDomRemoved() {
-	    	panelRef.destroy();
-	    },
-	    animation,
-	    position
-	  }).then(panel =&gt; {
-	  	panelRef = panel;
-	  });
-	}
-	/**
-	 * Removes all features from the map by looping over feature
-	 * data objects and calling their `map.remove()` on them.
-	 */
-	clearMapData() {
-		this.map.data.forEach(feature =&gt; {
-			this.map.data.remove(feature);
-		});
-	}
-	/**
-	 * Handler method for map data `$watch`; watches incoming geoJSON
-	 * data for changes and adds it to the map if detected. If the
-	 * new data has a `showAll` property (and it is true), all features
-	 * all loaded and the map bounds are recalculated.
-	 * 
-	 * @param  {Object} newVal New map data
-	 */
-	updateMapData(newVal) {
-		if (newVal &amp;&amp; newVal.showAll) {
-      this.map.data.addGeoJson(newVal.collection);
-		} else {
-  		newVal.collection&amp;&amp;this.map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${newVal.collection._id}`, null, () =&gt; {
-			  this.fitBounds(this.map);
-  		});
-		}
-	}
 	/**
 	 * Direct port of Google Maps `processBounds` example function
 	 * for recalculation of map boundaries based on map data.
