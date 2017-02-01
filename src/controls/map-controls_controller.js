@@ -31,6 +31,10 @@ class MapControlsCtrl {
     this.CollectionResource = $mapApi.collection;
     this.CategoryResource = $mapApi.category;
     this.LocationResource = $tourApi.location;
+
+    this.location = [];
+    this.category = [];
+    this.collection = [];
   }
 
   /**
@@ -58,6 +62,17 @@ class MapControlsCtrl {
   }
 
   /**
+   * After selecting a location, loads categories and sets category
+   * to first item in list; kicks off category update.
+   */
+  updateLocation() {
+    this.loadCategories().then(categories => {
+      this.category = [...categories];
+      this.updateCategory();
+    });
+  }
+
+  /**
    * Load category list from server.
    * 
    * @return {Promise} Resolves to list of categories
@@ -67,6 +82,20 @@ class MapControlsCtrl {
       this.categories = categories;
       return categories;
     });
+  }
+
+  /**
+   * After selecting a category, loads collections and sets collection
+   * to first item in list; kicks off collection update.
+   */
+  updateCategory() {
+    this.loadFeatures()
+    	.then(() => this.updateFeatures())
+    	.then(() => this.loadCollections())
+    	.then(collections => {
+	      this.collection = [...collections];
+    //   this.updateCollection();
+	    });
   }
 
   /**
@@ -88,6 +117,18 @@ class MapControlsCtrl {
       this.features = features;
       console.log('FEATURES:', features)
       return features;
+    });
+  }
+
+  updateFeatures() {
+  	const { location, category, features } = this;
+    this.setMapData({
+    	location,
+    	category,
+      collection: {
+        type: 'FeatureCollection',
+        features
+      }
     });
   }
 
@@ -115,54 +156,17 @@ class MapControlsCtrl {
   }
 
   /**
-   * After selecting a location, loads categories and sets category
-   * to first item in list; kicks off category update.
-   */
-  updateLocation() {
-    this.loadCategories().then(categories => {
-      this.category = [...categories];
-      this.updateCategory();
-    });
-  }
-
-  /**
-   * After selecting a category, loads collections and sets collection
-   * to first item in list; kicks off collection update.
-   */
-  updateCategory() {
-    this.loadFeatures()
-    	.then(() => this.updateFeatures())
-    	.then(() => this.loadCollections())
-    	.then(collections => {
-	      this.collection = [...collections];
-    //   this.updateCollection();
-	    });
-  }
-
-  updateFeatures() {
-  	const { location, category, features } = this;
-    this.setCollection({
-    	location,
-    	category,
-      collection: {
-        type: 'FeatureCollection',
-        features
-      }
-    });
-  }
-
-  /**
    * After selecting a collection, extracts all relevant filter
-   * properties from controller and uses `setCollection()` to
+   * properties from controller and uses `setMapData()` to
    * send the data to the view.
    */
   updateCollection() {
     const { location, category, collection } = this;
-    this.setCollection({
+    this.setMapData({
       location,
       category,
       collection
-    });
+    }, true);
   }
 
   /**
@@ -177,11 +181,11 @@ class MapControlsCtrl {
    * @example
    * // "true" collection
    * const feature = this.CollectionResource.get('featureId');
-   * this.setCollection({ feature });
+   * this.setMapData({ feature });
    * 
    * // mock collection
    * const features = this.FeatureResource.query();
-   * this.setCollection({
+   * this.setMapData({
    *   collection: {
    *     type: 'FeatureCollection',
    *     features
@@ -194,34 +198,51 @@ class MapControlsCtrl {
    * @param {Object}  resources.collection  Currently selected collection `$resource`
    * @param {Boolean} [showAll=false]       Whether to show all features
    */
-  setCollection({ location, category, collection }, showAll = false) {
+  setMapData({ location, category, collection }, isCollection = false) {
     this.$ngModel.$setViewValue({
       location,
       category,
       collection,
-      showAll
+      isCollection
     });
   }
 
-  /**
-   * Fetches a list of every feature available for display on the map; mocks up
-   * a "fake" `FeatureCollection` and uses `setCollection()` to render the
-   * selection to the component.
-   * 
-   * @return {Promise} Resolves to a list of the returned features
-   */
-  showAll() {
-  	console.log('show all activated!');
-    return this.FeatureResource.query({}).$promise.then(features => {
-      this.setCollection({
-      	location: this.location,
-        collection: {
-          type: 'FeatureCollection',
-          features
-        }
-      }, true);
-      return features;
-    });
+  // toggle(item, list) {
+  //   const idx = list.indexOf(item);
+  //   if (idx > -1) {
+  //     list.splice(idx, 1);
+  //   } else {
+  //     list.push(item);
+  //   }
+  // }
+
+  // exists(item, list) {
+  //   return list.indexOf(item) > -1;
+  // }
+
+  isIndeterminate(selected, items) {
+    return (this[selected] && this[items]) && (this[selected].length !== 0 &&
+        this[selected].length !== items.length);
+  }
+
+  isChecked(selected, items) {
+    return (this[selected] && this[items]) && (this[selected].length === this[items].length);
+  }
+
+  toggleAll(selected, items) {
+    if (this[selected].length === this[items].length) {
+    	console.log('deselected all');
+      this[selected] = [];
+    } else if (this[selected].length >= 0) {
+    	console.log('selected all');
+      this[selected] = [...this[items]];
+    }
+    const { location, category, collection } = this;
+    this.setMapData({
+      location,
+      category,
+      collection
+    }, true);
   }
 }
 

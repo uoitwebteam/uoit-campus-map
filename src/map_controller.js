@@ -184,12 +184,11 @@ class MapCtrl {
 	updateMapData(newVal) {
 		console.log('updating map data...', newVal);
 		return this.clearMapData().then(map => {
-			if (newVal.collection) {
-				if (angular.isArray(newVal.collection)) {
+			if (newVal.collection && newVal.category.length) {
+				if (newVal.isCollection) {
 					angular.forEach(newVal.collection, (collection, index) => {
 						this._$scope.$applyAsync(() => map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${collection._id}`, null, () => {
 						  (index === newVal.collection.length - 1) && this.fitBounds(map);
-							console.log('map data updated!');
 			  		}));
 					});
 				} else {
@@ -197,16 +196,6 @@ class MapCtrl {
 				}
 				console.log('map data updated!');
 			}
-			// } else {
-			// 	this._$scope.$applyAsync(() => {
-			// 		angular.forEach(newVal.collection, (collection, index) => {
-			// 			map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${collection._id}`, null, () => {
-			// 			  (index === newVal.collection.length - 1) && this.fitBounds(map);
-			// 				console.log('map data updated!');
-			//   		});
-			// 		});
-			// 	});
-			// }
 		});
 	}
 	

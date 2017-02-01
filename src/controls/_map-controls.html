@@ -17,6 +17,14 @@
     <md-input-container flex>
       <label>Feature category</label>
       <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()" ng-model-options="{trackBy: '$value._id'}" ng-disabled="!$ctrl.location" multiple>
+        <md-select-header layout-padding>
+          <md-checkbox aria-label="Select All"
+                       ng-checked="$ctrl.isChecked('category', 'categories')"
+                       md-indeterminate="$ctrl.isIndeterminate('category', 'categories')"
+                       ng-click="$ctrl.toggleAll('category', 'categories')">
+            <span ng-if="isChecked('category', 'categories')">Un-</span>Select All
+          </md-checkbox>
+        </md-select-header>
         <md-option ng-repeat="category in $ctrl.categories" ng-value="::category" ng-disabled="$ctrl.category === category">
           {{ ::category.name }}
         </md-option>
@@ -43,6 +51,6 @@
         Turn on visibility for all available map features
       </md-tooltip>
     </md-button>
-    
+
   </div>
 </md-whiteframe>
