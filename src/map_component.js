@@ -1,10 +1,16 @@
 const campusMap = {
   // transclude: true,
   bindings: {
-    onGotoBldg: '<',
-    markers: '<?'
+    onGotoBldg: '<?',
+    mapData: '<?'
+    // location: '<?',
+    // building: '<?',
+    // feature: '<?'
   },
   templateUrl: '_map.html',
+  transclude:  {
+    controls: 'campusMapControls'
+  },
   controller: 'MapCtrl'
 }
 

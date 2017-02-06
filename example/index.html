@@ -35,9 +35,7 @@
 		.map-detail {
 			max-width: 400px;
 		}
-/* 		.map-detail md-content {
-			width: 100%;
-		} */
+
 		.details-text {
 			font-size: 14px;
 			max-height: 300px;
@@ -74,9 +72,7 @@
 		  margin-right: 0.5rem;
 		  margin-bottom: 0;
 		}
-/* 		.map-detail md-list {
-			padding: 0;
-		} */
+
 		.map-controls:hover, .map-detail:hover {
 		  background-color: rgba(255, 255, 255, 0.9);
 		}
@@ -88,11 +84,13 @@
 </head>
 <body ng-app="app" ng-cloak layout="column" ng-controller="mainCtrl as $ctrl">
 
-  <campus-map 
+  <campus-map
+  	map-data="$ctrl.mapData"
   	on-goto-bldg="$ctrl.onGotoBldg"
   	layout
   	layout-fill
   	flex>
+  	<campus-map-controls ng-model="$ctrl.mapData"></campus-map-controls>
   </campus-map>
 
   <!-- Google Maps -->
@@ -139,6 +137,15 @@
 	    			alert(JSON.stringify(data));
 	    		}
     		}
+    		this.collection = {
+			    "_id": "5810ef6a3054425c7cc4770e",
+			    "updatedAt": "2016-11-02T21:02:01.095Z",
+			    "createdAt": "2016-10-26T18:01:14.558Z",
+			    "name": "ACE",
+			    "location": "57ead427e481ce773d1544f5",
+			    "category": "581a2c45d9ff16e787aa1b1f",
+			    "type": "FeatureCollection"
+			  };
     	});
   </script>
   

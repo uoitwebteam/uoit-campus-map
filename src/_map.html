@@ -8,7 +8,7 @@
   heading="0"
   layout
   layout-fill>
-  <custom-control id="map-controls" position="TOP_LEFT" index="1">
-		<campus-map-controls ng-model="$ctrl.mapControls"></campus-map-controls>
+  <custom-control id="map-controls" position="TOP_LEFT" index="1" ng-transclude="controls">
+		<!-- <campus-map-controls ng-model="$ctrl.mapControls"></campus-map-controls> -->
   </custom-control>
 </ng-map>

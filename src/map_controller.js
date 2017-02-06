@@ -144,23 +144,33 @@ class MapCtrl {
         this.showDetail(event.feature, this.isolateMouseEvent(event));
       });
 
-	    this._$scope.$watch( () => this.mapControls, (newVal) => {
-	    	if (newVal) {
-					console.log('map component detected internal changes:', newVal);
-			  	this.clearMapData().then(() => this.updateMapData(newVal));
-		    	if (newVal.location && this.location !== newVal.location) {
-			    	this.location = newVal.location;
-			    }
-	    	}
-	    });
+	    // this._$scope.$watch( () => this.mapData, (newVal) => {
+	    // 	if (newVal) {
+					// console.log('map component detected internal changes:', newVal);
+			  // 	this.clearMapData().then(() => this.updateMapData(newVal));
+		   //  	if (newVal.location && this.location !== newVal.location) {
+			  //   	this.location = newVal.location;
+			  //   }
+	    // 	}
+	    // });
 
     });
 	}
 
-	// $onChanges({ collection: { currentValue: collection} }) {
-	// 	console.log('map component detected external changes:', collection);
- //  	this.clearMapData().then(() => this.updateMapData({ collection }));
-	// }
+	$onChanges({ mapData }) {
+		if (mapData.isFirstChange()) return;
+		const	{
+			currentValue: { location, category, collection }
+		} = mapData;
+		console.log('map component detected external changes:', { location, category, collection });
+  	this.clearMapData()
+  		.then(() => this.updateMapData({
+  			location, category, collection
+  		}));
+  	if (location && this.location !== location) {
+    	this.location = location;
+    }
+	}
 
 	/**
 	 * Clean up event listeners that the controller has attached via

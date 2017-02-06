@@ -114,13 +114,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	var campusMap = {
 	  // transclude: true,
 	  bindings: {
-	    onGotoBldg: '<',
-	    collection: '<?'
+	    onGotoBldg: '<?',
+	    mapData: '<?'
 	    // location: '<?',
 	    // building: '<?',
 	    // feature: '<?'
 	  },
 	  templateUrl: '_map.html',
+	  transclude: {
+	    controls: 'campusMapControls'
+	  },
 	  controller: 'MapCtrl'
 	};
 	
@@ -307,26 +310,40 @@ return /******/ (function(modules) { // webpackBootstrap
 						_this.showDetail(event.feature, _this.isolateMouseEvent(event));
 					});
 	
-					_this._$scope.$watch(function () {
-						return _this.mapControls;
-					}, function (newVal) {
-						if (newVal) {
-							console.log('map component detected internal changes:', newVal);
-							_this.clearMapData().then(function () {
-								return _this.updateMapData(newVal);
-							});
-							if (newVal.location && _this.location !== newVal.location) {
-								_this.location = newVal.location;
-							}
-						}
-					});
+					// this._$scope.$watch( () => this.mapData, (newVal) => {
+					// 	if (newVal) {
+					// console.log('map component detected internal changes:', newVal);
+					// 	this.clearMapData().then(() => this.updateMapData(newVal));
+					//  	if (newVal.location && this.location !== newVal.location) {
+					//   	this.location = newVal.location;
+					//   }
+					// 	}
+					// });
 				});
 			}
+		}, {
+			key: '$onChanges',
+			value: function $onChanges(_ref) {
+				var _this2 = this;
 	
-			// $onChanges({ collection: { currentValue: collection} }) {
-			// 	console.log('map component detected external changes:', collection);
-			//  	this.clearMapData().then(() => this.updateMapData({ collection }));
-			// }
+				var mapData = _ref.mapData;
+	
+				if (mapData.isFirstChange()) return;
+				var _mapData$currentValue = mapData.currentValue,
+				    location = _mapData$currentValue.location,
+				    category = _mapData$currentValue.category,
+				    collection = _mapData$currentValue.collection;
+	
+				console.log('map component detected external changes:', { location: location, category: category, collection: collection });
+				this.clearMapData().then(function () {
+					return _this2.updateMapData({
+						location: location, category: category, collection: collection
+					});
+				});
+				if (location && this.location !== location) {
+					this.location = location;
+				}
+			}
 	
 			/**
 	   * Clean up event listeners that the controller has attached via
@@ -354,17 +371,16 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'updateMapData',
 			value: function updateMapData(newVal) {
-				var _this2 = this;
+				var _this3 = this;
 	
 				console.log('updating map data...', newVal);
 				return this.clearMapData().then(function (map) {
-					if (newVal.collection) {
-						if (angular.isArray(newVal.collection)) {
+					if (newVal.collection && newVal.category.length) {
+						if (newVal.isCollection) {
 							angular.forEach(newVal.collection, function (collection, index) {
-								_this2._$scope.$applyAsync(function () {
+								_this3._$scope.$applyAsync(function () {
 									return map.data.loadGeoJson('http://localhost:3000/api/v1/feature-collections/' + collection._id, null, function () {
-										index === newVal.collection.length - 1 && _this2.fitBounds(map);
-										console.log('map data updated!');
+										index === newVal.collection.length - 1 && _this3.fitBounds(map);
 									});
 								});
 							});
@@ -373,16 +389,6 @@ return /******/ (function(modules) { // webpackBootstrap
 						}
 						console.log('map data updated!');
 					}
-					// } else {
-					// 	this._$scope.$applyAsync(() => {
-					// 		angular.forEach(newVal.collection, (collection, index) => {
-					// 			map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${collection._id}`, null, () => {
-					// 			  (index === newVal.collection.length - 1) && this.fitBounds(map);
-					// 				console.log('map data updated!');
-					//   		});
-					// 		});
-					// 	});
-					// }
 				});
 			}
 	
@@ -418,9 +424,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 		}, {
 			key: 'showDetail',
-			value: function showDetail(feature, _ref) {
-				var left = _ref.clientX,
-				    top = _ref.clientY;
+			value: function showDetail(feature, _ref2) {
+				var left = _ref2.clientX,
+				    top = _ref2.clientY;
 	
 	
 				var panelRef = void 0;
@@ -469,7 +475,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'showToast',
 			value: function showToast(feature) {
-				var _this3 = this;
+				var _this4 = this;
 	
 				var featureName = feature.getProperty('name');
 				if (!this.toastActive) {
@@ -479,7 +485,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				} else {
 					this._$timeout.cancel(this.toastCanceler);
 					this._$timeout(function () {
-						_this3._$mdToast.updateTextContent(featureName);
+						_this4._$mdToast.updateTextContent(featureName);
 					});
 				}
 			}
@@ -498,11 +504,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'hideToast',
 			value: function hideToast() {
-				var _this4 = this;
+				var _this5 = this;
 	
 				return this._$timeout(function () {
-					_this4._$mdToast.hide(_this4.toast);
-					_this4.toastActive = false;
+					_this5._$mdToast.hide(_this5.toast);
+					_this5.toastActive = false;
 				}, 3000);
 			}
 	
@@ -517,7 +523,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'processBounds',
 			value: function processBounds(geometry, callback, thisArg) {
-				var _this5 = this;
+				var _this6 = this;
 	
 				if (geometry instanceof google.maps.LatLng) {
 					callback.call(thisArg, geometry);
@@ -525,7 +531,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					callback.call(thisArg, geometry.get());
 				} else {
 					geometry.getArray().forEach(function (g) {
-						_this5.processBounds(g, callback, thisArg);
+						_this6.processBounds(g, callback, thisArg);
 					});
 				}
 			}
@@ -536,11 +542,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'fitBounds',
 			value: function fitBounds() {
-				var _this6 = this;
+				var _this7 = this;
 	
 				var bounds = new google.maps.LatLngBounds();
 				this.map.data.forEach(function (feature) {
-					_this6.processBounds(feature.getGeometry(), bounds.extend, bounds);
+					_this7.processBounds(feature.getGeometry(), bounds.extend, bounds);
 				});
 				this.map.fitBounds(bounds);
 			}
@@ -788,6 +794,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.CollectionResource = $mapApi.collection;
 	    this.CategoryResource = $mapApi.category;
 	    this.LocationResource = $tourApi.location;
+	
+	    this.location = [];
+	    this.category = [];
+	    this.collection = [];
 	  }
 	
 	  /**
@@ -826,6 +836,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    /**
+	     * After selecting a location, loads categories and sets category
+	     * to first item in list; kicks off category update.
+	     */
+	
+	  }, {
+	    key: 'updateLocation',
+	    value: function updateLocation() {
+	      var _this3 = this;
+	
+	      this.loadCategories().then(function (categories) {
+	        _this3.category = [].concat(_toConsumableArray(categories));
+	        _this3.updateCategory();
+	      });
+	    }
+	
+	    /**
 	     * Load category list from server.
 	     * 
 	     * @return {Promise} Resolves to list of categories
@@ -834,11 +860,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'loadCategories',
 	    value: function loadCategories() {
-	      var _this3 = this;
+	      var _this4 = this;
 	
 	      return this.CategoryResource.query().$promise.then(function (categories) {
-	        _this3.categories = categories;
+	        _this4.categories = categories;
 	        return categories;
+	      });
+	    }
+	
+	    /**
+	     * After selecting a category, loads collections and sets collection
+	     * to first item in list; kicks off collection update.
+	     */
+	
+	  }, {
+	    key: 'updateCategory',
+	    value: function updateCategory() {
+	      var _this5 = this;
+	
+	      this.loadFeatures().then(function () {
+	        return _this5.updateFeatures();
+	      }).then(function () {
+	        return _this5.loadCollections();
+	      }).then(function (collections) {
+	        _this5.collection = [].concat(_toConsumableArray(collections));
+	        //   this.updateCollection();
 	      });
 	    }
 	
@@ -854,7 +900,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'loadFeatures',
 	    value: function loadFeatures() {
-	      var _this4 = this;
+	      var _this6 = this;
 	
 	      return this.FeatureResource.query({
 	        filter: {
@@ -865,9 +911,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	        }
 	      }).$promise.then(function (features) {
-	        _this4.features = features;
+	        _this6.features = features;
 	        console.log('FEATURES:', features);
 	        return features;
+	      });
+	    }
+	  }, {
+	    key: 'updateFeatures',
+	    value: function updateFeatures() {
+	      var location = this.location,
+	          category = this.category,
+	          features = this.features;
+	
+	      this.setMapData({
+	        location: location,
+	        category: category,
+	        collection: {
+	          type: 'FeatureCollection',
+	          features: features
+	        }
 	      });
 	    }
 	
@@ -884,7 +946,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'loadCollections',
 	    value: function loadCollections() {
-	      var _this5 = this;
+	      var _this7 = this;
 	
 	      return this.CollectionResource.query({
 	        filter: {
@@ -896,66 +958,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	        }
 	      }).$promise.then(function (collections) {
-	        _this5.collections = collections;
+	        _this7.collections = collections;
 	        return collections;
 	      });
 	    }
 	
 	    /**
-	     * After selecting a location, loads categories and sets category
-	     * to first item in list; kicks off category update.
-	     */
-	
-	  }, {
-	    key: 'updateLocation',
-	    value: function updateLocation() {
-	      var _this6 = this;
-	
-	      this.loadCategories().then(function (categories) {
-	        _this6.category = [].concat(_toConsumableArray(categories));
-	        _this6.updateCategory();
-	      });
-	    }
-	
-	    /**
-	     * After selecting a category, loads collections and sets collection
-	     * to first item in list; kicks off collection update.
-	     */
-	
-	  }, {
-	    key: 'updateCategory',
-	    value: function updateCategory() {
-	      var _this7 = this;
-	
-	      this.loadFeatures().then(function () {
-	        return _this7.updateFeatures();
-	      }).then(function () {
-	        return _this7.loadCollections();
-	      }).then(function (collections) {
-	        _this7.collection = [].concat(_toConsumableArray(collections));
-	        //   this.updateCollection();
-	      });
-	    }
-	  }, {
-	    key: 'updateFeatures',
-	    value: function updateFeatures() {
-	      var location = this.location,
-	          category = this.category,
-	          features = this.features;
-	
-	      this.setCollection({
-	        location: location,
-	        category: category,
-	        collection: {
-	          type: 'FeatureCollection',
-	          features: features
-	        }
-	      });
-	    }
-	
-	    /**
 	     * After selecting a collection, extracts all relevant filter
-	     * properties from controller and uses `setCollection()` to
+	     * properties from controller and uses `setMapData()` to
 	     * send the data to the view.
 	     */
 	
@@ -966,11 +976,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	          category = this.category,
 	          collection = this.collection;
 	
-	      this.setCollection({
+	      this.setMapData({
 	        location: location,
 	        category: category,
 	        collection: collection
-	      });
+	      }, true);
 	    }
 	
 	    /**
@@ -985,11 +995,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @example
 	     * // "true" collection
 	     * const feature = this.CollectionResource.get('featureId');
-	     * this.setCollection({ feature });
+	     * this.setMapData({ feature });
 	     * 
 	     * // mock collection
 	     * const features = this.FeatureResource.query();
-	     * this.setCollection({
+	     * this.setMapData({
 	     *   collection: {
 	     *     type: 'FeatureCollection',
 	     *     features
@@ -1004,45 +1014,63 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	
 	  }, {
-	    key: 'setCollection',
-	    value: function setCollection(_ref) {
+	    key: 'setMapData',
+	    value: function setMapData(_ref) {
 	      var location = _ref.location,
 	          category = _ref.category,
 	          collection = _ref.collection;
-	      var showAll = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	      var isCollection = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 	
 	      this.$ngModel.$setViewValue({
 	        location: location,
 	        category: category,
 	        collection: collection,
-	        showAll: showAll
+	        isCollection: isCollection
 	      });
 	    }
 	
-	    /**
-	     * Fetches a list of every feature available for display on the map; mocks up
-	     * a "fake" `FeatureCollection` and uses `setCollection()` to render the
-	     * selection to the component.
-	     * 
-	     * @return {Promise} Resolves to a list of the returned features
-	     */
+	    // toggle(item, list) {
+	    //   const idx = list.indexOf(item);
+	    //   if (idx > -1) {
+	    //     list.splice(idx, 1);
+	    //   } else {
+	    //     list.push(item);
+	    //   }
+	    // }
+	
+	    // exists(item, list) {
+	    //   return list.indexOf(item) > -1;
+	    // }
 	
 	  }, {
-	    key: 'showAll',
-	    value: function showAll() {
-	      var _this8 = this;
+	    key: 'isIndeterminate',
+	    value: function isIndeterminate(selected, items) {
+	      return this[selected] && this[items] && this[selected].length !== 0 && this[selected].length !== items.length;
+	    }
+	  }, {
+	    key: 'isChecked',
+	    value: function isChecked(selected, items) {
+	      return this[selected] && this[items] && this[selected].length === this[items].length;
+	    }
+	  }, {
+	    key: 'toggleAll',
+	    value: function toggleAll(selected, items) {
+	      if (this[selected].length === this[items].length) {
+	        console.log('deselected all');
+	        this[selected] = [];
+	      } else if (this[selected].length >= 0) {
+	        console.log('selected all');
+	        this[selected] = [].concat(_toConsumableArray(this[items]));
+	      }
+	      var location = this.location,
+	          category = this.category,
+	          collection = this.collection;
 	
-	      console.log('show all activated!');
-	      return this.FeatureResource.query({}).$promise.then(function (features) {
-	        _this8.setCollection({
-	          location: _this8.location,
-	          collection: {
-	            type: 'FeatureCollection',
-	            features: features
-	          }
-	        }, true);
-	        return features;
-	      });
+	      this.setMapData({
+	        location: location,
+	        category: category,
+	        collection: collection
+	      }, true);
 	    }
 	  }]);
 	
@@ -1255,9 +1283,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	var templates = ['$templateCache', function ($templateCache) {
-	  $templateCache.put('_map.html', '<ng-map\n  center="43.9443802,-78.8975857"\n  zoom="17"\n  styles="{{ ::$ctrl._MAP_SETTINGS.styles }}"\n  map-type-id="{{ ::$ctrl._MAP_SETTINGS.type }}"\n  disable-default-u-i="true"\n  tilt="45"\n  heading="0"\n  layout\n  layout-fill>\n  <custom-control id="map-controls" position="TOP_LEFT" index="1">\n\t\t<campus-map-controls ng-model="$ctrl.mapControls"></campus-map-controls>\n  </custom-control>\n</ng-map>');
+	  $templateCache.put('_map.html', '<ng-map\n  center="43.9443802,-78.8975857"\n  zoom="17"\n  styles="{{ ::$ctrl._MAP_SETTINGS.styles }}"\n  map-type-id="{{ ::$ctrl._MAP_SETTINGS.type }}"\n  disable-default-u-i="true"\n  tilt="45"\n  heading="0"\n  layout\n  layout-fill>\n  <custom-control id="map-controls" position="TOP_LEFT" index="1" ng-transclude="controls">\n\t\t<!-- <campus-map-controls ng-model="$ctrl.mapControls"></campus-map-controls> -->\n  </custom-control>\n</ng-map>');
+	  $templateCache.put('controls/_map-controls.html', '<md-whiteframe\n  class="md-whiteframe-16dp map-controls"\n  layout="column"\n  layout-align="center center"\n  layout-fill>\n  <div layout="row">\n\n    <md-input-container flex>\n      <label>Location</label>\n      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" ng-change="$ctrl.updateLocation()" ng-model-options="{trackBy: \'$value._id\'}">\n        <md-option ng-repeat="location in ::$ctrl.locations" ng-value="::location" ng-disabled="$ctrl.location === location">\n          {{ ::location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n\n    <md-input-container flex>\n      <label>Feature category</label>\n      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.location" multiple>\n        <md-select-header layout-padding>\n          <md-checkbox aria-label="Select All"\n                       ng-checked="$ctrl.isChecked(\'category\', \'categories\')"\n                       md-indeterminate="$ctrl.isIndeterminate(\'category\', \'categories\')"\n                       ng-click="$ctrl.toggleAll(\'category\', \'categories\')">\n            <span ng-if="isChecked(\'category\', \'categories\')">Un-</span>Select All\n          </md-checkbox>\n        </md-select-header>\n        <md-option ng-repeat="category in $ctrl.categories" ng-value="::category" ng-disabled="$ctrl.category === category">\n          {{ ::category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n\n    <md-input-container flex>\n      <label>Feature collection</label>\n      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.category" multiple>\n        <md-optgroup ng-repeat="group in $ctrl.category" label="{{ ::group.name }}">\n\t        <md-option ng-repeat="collection in $ctrl.collections | filter: { category: group._id }" ng-value="::collection" ng-disabled="$ctrl.collection === collection">\n\t          {{ ::collection.name }}\n\t        </md-option>\n        </md-optgroup>\n      </md-select>\n    </md-input-container>\n\n  </div>\n  <div layout="row">\n\n    <md-button class="md-primary" ng-click="$ctrl.showAll()">\n    \tShow all\n      <md-tooltip md-direction="bottom">\n        Turn on visibility for all available map features\n      </md-tooltip>\n    </md-button>\n\n  </div>\n</md-whiteframe>');
 	  $templateCache.put('detail/_map-detail.html', '<md-whiteframe\n  class="md-whiteframe-16dp"\n  layout="column">\n  <md-toolbar>\n    <div class="md-toolbar-tools">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class="md-icon-button" aria-label="Close info" ng-click="ctrl.close()">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div\n  \tlayout="column"\n  \tlayout-margin\n  \tlayout-align="center center">\n    <md-button ng-click="ctrl.showDetails()">{{ ctrl.detailsShowing ? \'Hide\' : \'Show\'}} details <span class="detail-arrow" ng-class="{ \'arrow-up\' : ctrl.detailsShowing }"></span></md-button>\n  \t<md-content layout-padding layout-margin class="details-text" ng-bind-html="::ctrl.description" ng-show="ctrl.detailsShowing"></md-content>\n  \t<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="::ctrl.building" ng-click="ctrl.gotoBldg(ctrl.callback)">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>');
-	  $templateCache.put('controls/_map-controls.html', '<md-whiteframe\n  class="md-whiteframe-16dp map-controls"\n  layout="column"\n  layout-align="center center"\n  layout-fill>\n  <div layout="row">\n\n    <md-input-container flex>\n      <label>Location</label>\n      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" ng-change="$ctrl.updateLocation()" ng-model-options="{trackBy: \'$value._id\'}">\n        <md-option ng-repeat="location in ::$ctrl.locations" ng-value="::location" ng-disabled="$ctrl.location === location">\n          {{ ::location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n\n    <md-input-container flex>\n      <label>Feature category</label>\n      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.location" multiple>\n        <md-option ng-repeat="category in $ctrl.categories" ng-value="::category" ng-disabled="$ctrl.category === category">\n          {{ ::category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n\n    <md-input-container flex>\n      <label>Feature collection</label>\n      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.category" multiple>\n        <md-optgroup ng-repeat="group in $ctrl.category" label="{{ ::group.name }}">\n\t        <md-option ng-repeat="collection in $ctrl.collections | filter: { category: group._id }" ng-value="::collection" ng-disabled="$ctrl.collection === collection">\n\t          {{ ::collection.name }}\n\t        </md-option>\n        </md-optgroup>\n      </md-select>\n    </md-input-container>\n\n  </div>\n  <div layout="row">\n\n    <md-button class="md-primary" ng-click="$ctrl.showAll()">\n    \tShow all\n      <md-tooltip md-direction="bottom">\n        Turn on visibility for all available map features\n      </md-tooltip>\n    </md-button>\n    \n  </div>\n</md-whiteframe>');
 	}];exports.default = templates;
 
 /***/ }
