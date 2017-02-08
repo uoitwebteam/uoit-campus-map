@@ -92,8 +92,8 @@ the server calls with.</p>
 
   
 
-  <div data-ice="todo"><h4>TODO:</h4><ul><li><span>__Determine if $watch by string reference is more performant
-than $watchCollection on parts array__</span></li></ul></div>
+  <div data-ice="todo"><h4>TODO:</h4><ul><li><span>Determine if $watch by string reference is more performant
+than $watchCollection on parts array (fn that calls setViewValue)</span></li></ul></div>
 </div>
 
 <div data-ice="staticMemberSummary"><h2>Static Member Summary</h2><table class="summary" data-ice="summary">
@@ -264,7 +264,154 @@ than $watchCollection on parts array__</span></li></ul></div>
       <div>
         
         
+        <div data-ice="description"><p>Initializes and attaches the controller&apos;s behaviours &#x2013; this includes:</p>
+<ul>
+<li>setting a <code>$watchCollection</code> on the scope that...<ul>
+<li>watches the returned value of <code>getViewValue()</code></li>
+<li>responds to changes in the watch by calling <code>setViewValue()</code></li>
+</ul>
+</li>
+<li>pushing <code>parseViewValue</code> onto ng-model&apos;s <code>$parsers</code></li>
+<li>pushing <code>formatModelValue</code> onto ng-model&apos;s <code>$formatters</code></li>
+</ul>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-method-formatModelValue">formatModelValue</a></span></span><span data-ice="signature">(modelValue: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+        </p>
+      </div>
+      <div>
         
+        
+        <div data-ice="description"><p>The <code>formatModelValue</code> function is pushed onto the <code>$formatters</code> of
+the <code>NgModelController</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-method-getViewValue">getViewValue</a></span></span><span data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Gets the <code>$viewValue</code> of each child input from the controller&apos;s
+<code>parts</code> collection and returns them in a newly-mapped array
+for efficient <code>$watchCollection</code>ing.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-method-parseViewValue">parseViewValue</a></span></span><span data-ice="signature">(viewValue: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The <code>parseViewValue</code> function is pushed onto the <code>$parsers</code> of
+the <code>NgModelController</code>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-method-removeNulls">removeNulls</a></span></span><span data-ice="signature">(array: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Removes null and undefined values from a given array.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-method-setViewValue">setViewValue</a></span></span><span data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the <code>$viewValue</code> of this directive&apos;s ng-model based on
+the <code>$watch</code> results of <code>getViewValue()</code>. Since the value needs
+to be bound by reference, the original <code>parts</code> collection is used
+instead of the <code>$watch</code>&apos;s copy value.</p>
+</div>
       </div>
     </td>
     <td>
@@ -523,14 +670,362 @@ than $watchCollection on parts array__</span></li></ul></div>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber30">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber38">source</a></span></span>
     </span>
   </h3>
 
   
   
   
+  <div data-ice="description"><p>Initializes and attaches the controller&apos;s behaviours &#x2013; this includes:</p>
+<ul>
+<li>setting a <code>$watchCollection</code> on the scope that...<ul>
+<li>watches the returned value of <code>getViewValue()</code></li>
+<li>responds to changes in the watch by calling <code>setViewValue()</code></li>
+</ul>
+</li>
+<li>pushing <code>parseViewValue</code> onto ng-model&apos;s <code>$parsers</code></li>
+<li>pushing <code>formatModelValue</code> onto ng-model&apos;s <code>$formatters</code></li>
+</ul>
+</div>
+
   
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-formatModelValue">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">formatModelValue</span><span data-ice="signature">(modelValue: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber114">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The <code>formatModelValue</code> function is pushed onto the <code>$formatters</code> of
+the <code>NgModelController</code>. It is responsible for delegating incoming
+scope values (set by user) to their respective input elements&apos; scopes.
+The function needs to:</p>
+<ul>
+<li>determine which scope models are available to set</li>
+<li>disregard incoming values with no matching input element by building an
+array of models with a matching value<ul>
+<li><code>[{ modelName: &apos;$ctrl.modelName&apos;, modelValue: &apos;...&apos; }, {...}]</code></li>
+</ul>
+</li>
+<li>for each available model with a matching value:<ul>
+<li>use Angular&apos;s <code>$parse</code> service to generate a getter/setter for the
+model&apos;s scope reference</li>
+<li>use the provided setter to set the scope reference, therefore updating
+the child input elements</li>
+</ul>
+</li>
+</ul>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">modelValue</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Map of values by name to set on child scopes</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-getViewValue">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">getViewValue</span><span data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber62">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Gets the <code>$viewValue</code> of each child input from the controller&apos;s
+<code>parts</code> collection and returns them in a newly-mapped array
+for efficient <code>$watchCollection</code>ing.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tr>
+        <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>Array of $viewValues</p>
+</td>
+      </tr>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-parseViewValue">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">parseViewValue</span><span data-ice="signature">(viewValue: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber141">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The <code>parseViewValue</code> function is pushed onto the <code>$parsers</code> of
+the <code>NgModelController</code>. It is responsible for determining how many values
+are being set on the view. If the view has...</p>
+<ul>
+<li><strong>no values</strong>, return an empty object</li>
+<li><strong>one value</strong>, return that value</li>
+<li><strong>more than one value</strong>, return them wrapped in <code>{ $and: [...] }</code></li>
+</ul>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">viewValue</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Incoming data from setViewValue</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tr>
+        <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>Final filter formatted for view</p>
+</td>
+      </tr>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-removeNulls">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">removeNulls</span><span data-ice="signature">(array: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber163">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Removes null and undefined values from a given array.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">array</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The array to remove nulls from</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tr>
+        <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>A null-free array</p>
+</td>
+      </tr>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">// turns these...
+[0, &apos;&apos;, false, null, null]
+[null, null]
+
+// ..into these:
+[0, &apos;&apos;, false]
+[]</code></pre>
+    </div>
+</div>
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-setViewValue">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    <span data-ice="name">setViewValue</span><span data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber82">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the <code>$viewValue</code> of this directive&apos;s ng-model based on
+the <code>$watch</code> results of <code>getViewValue()</code>. Since the value needs
+to be bound by reference, the original <code>parts</code> collection is used
+instead of the <code>$watch</code>&apos;s copy value.</p>
+<p>If the value is an array, it is wrapped in a MongoDB <code>{ $in: {...} }</code>
+and assigned to a property keyed by the input&apos;s <code>name</code> attribute; if
+it is a primitive it is assigned without wrapping.</p>
+<p>Before <code>setViewValue()</code> is called to fire off the parser pipeline,
+the final value is run through <code>removeNulls()</code> to cleanse it of
+<code>null</code> and <code>undefined</code> values.</p>
+</div>
 
   
 

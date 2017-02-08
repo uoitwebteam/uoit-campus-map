@@ -684,10 +684,40 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/filter/filter-builder_controller.js~filterbuilderctrl#formatmodelvalue",
+    "class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-method-formatModelValue",
+    "src/filter/filter-builder_controller.js~FilterBuilderCtrl#formatModelValue",
+    "method"
+  ],
+  [
+    "src/filter/filter-builder_controller.js~filterbuilderctrl#getviewvalue",
+    "class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-method-getViewValue",
+    "src/filter/filter-builder_controller.js~FilterBuilderCtrl#getViewValue",
+    "method"
+  ],
+  [
+    "src/filter/filter-builder_controller.js~filterbuilderctrl#parseviewvalue",
+    "class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-method-parseViewValue",
+    "src/filter/filter-builder_controller.js~FilterBuilderCtrl#parseViewValue",
+    "method"
+  ],
+  [
     "src/filter/filter-builder_controller.js~filterbuilderctrl#parts",
     "class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-member-parts",
     "src/filter/filter-builder_controller.js~FilterBuilderCtrl#parts",
     "member"
+  ],
+  [
+    "src/filter/filter-builder_controller.js~filterbuilderctrl#removenulls",
+    "class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-method-removeNulls",
+    "src/filter/filter-builder_controller.js~FilterBuilderCtrl#removeNulls",
+    "method"
+  ],
+  [
+    "src/filter/filter-builder_controller.js~filterbuilderctrl#setviewvalue",
+    "class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-method-setViewValue",
+    "src/filter/filter-builder_controller.js~FilterBuilderCtrl#setViewValue",
+    "method"
   ],
   [
     "src/filter/filter-builder_controller.js~filterbuilderctrl.$inject",

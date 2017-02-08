@@ -65,8 +65,8 @@
  * the server calls with.
  * 
  * @todo
- * __Determine if $watch by string reference is more performant
- * than $watchCollection on parts array__
+ * Determine if $watch by string reference is more performant
+ * than $watchCollection on parts array (fn that calls setViewValue)
  */
 class FilterBuilderCtrl {
   static get $inject() {
@@ -77,67 +77,19 @@ class FilterBuilderCtrl {
     this.$parse = $parse;
     this.parts = {};
   }
+  /**
+   * Initializes and attaches the controller&apos;s behaviours &#x2013; this includes:
+   * - setting a `$watchCollection` on the scope that...
+   *   - watches the returned value of `getViewValue()`
+   *   - responds to changes in the watch by calling `setViewValue()`
+   * - pushing `parseViewValue` onto ng-model&apos;s `$parsers`
+   * - pushing `formatModelValue` onto ng-model&apos;s `$formatters`
+   */
   $onInit() {
-    /**
-     * @memberof FilterBuilderCtrl
-     * Removes null and undefined values from a given array.
-     * 
-     * @example
-     * // turns these...
-     * [&apos;&apos;, 0, false, null, null]
-     * [null, null]
-     * 
-     * // ..into these:
-     * [&apos;&apos;, 0, false]
-     * []
-     * 
-     * @param  {Array} array The array to remove nulls from
-     * @return {Array}       A null-free array
-     */
-    const removeNulls = array =&gt; array.filter(v =&gt; v == null);
-    /**
-     * @memberof FilterBuilderCtrl
-     * Gets the `$viewValue` of each child input from the controller&apos;s
-     * `parts` collection and returns them in a newly-mapped array
-     * for efficient `$watchCollection`ing.
-     * 
-     * @return {Array} Array of $viewValues
-     */
-    const getViewValue = () =&gt; Object.keys(this.parts).map(key =&gt; {
-      return this.parts[key].$viewValue;
-    });
-
-    /**
-     * @memberof FilterBuilderCtrl
-     * Sets the `$viewValue` of this directive&apos;s ng-model based on
-     * the `$watch` results of `getViewValue()`. Since the value needs
-     * to be bound by reference, the original `parts` collection is used
-     * instead of the `$watch`&apos;s copy value.
-     *
-     * If the value is an array, it is wrapped in a MongoDB `{ $in: {...} }`
-     * and assigned to a property keyed by the input&apos;s `name` attribute; if
-     * it is a primitive it is assigned without wrapping.
-     *
-     * Before `setViewValue()` is called to fire off the parser pipeline,
-     * the final value is run through `removeNulls()` to cleanse it of
-     * `null` and `undefined` values.
-     */
-    const setViewValue = () =&gt; {
-      const newViewValue = Object.keys(this.parts).map(key =&gt; {
-        const { $name: name, $viewValue: viewValue } = this.parts[key];
-
-        return (viewValue &amp;&amp; isArray(viewValue)) ?
-          viewValue.length ? 
-            { [name]: { $in: viewValue } } :
-            null :
-          viewValue ?
-            { [name]: viewValue } :
-            null;
-      });
-
-      this.$ngModel.$setViewValue(removeNulls(newViewValue));
-    }
-    this.$scope.$watchCollection(getViewValue, setViewValue);
+    this.$scope.$watchCollection(
+      () =&gt; this.getViewValue(),
+      () =&gt; this.setViewValue()
+    );
     // this.$scope.$watch(
     //  () =&gt; Object.keys(this.parts).map(key =&gt; {
     //    const { $viewValue } = this.parts[key];
@@ -145,63 +97,121 @@ class FilterBuilderCtrl {
     //  }).join(&apos;&apos;),
     //  setViewValue
     // );
-    
-    /**
-     * @memberof FilterBuilderCtrl
-     * The `builderParser` is pushed onto the model&apos;s `$parsers` pipeline;
-     * it is responsible for determining how many values are being set on
-     * the view. If the view has...
-     * - _no values_, return an empty object
-     * - _one value_, return that value
-     * - _more than one value_, return them wrapped in `{ $and: [...] }`
-     * 
-     * @param  {Array} viewValue Incoming data from setViewValue
-     * @return {Object}          Final filter formatted for view
-     */
-    const builderParser = viewValue =&gt; {
-      console.log(&apos;builder parser (view &#xBB; model)&apos;, viewValue)
-      if (!viewValue.length) return {};
-      if (viewValue.length === 1) return viewValue[0];
-      if (viewValue.length &gt; 1) return { $and: viewValue };
+    // 
+    this.$ngModel.$parsers.push(viewValue =&gt; this.parseViewValue(viewValue));
+    this.$ngModel.$formatters.push(modelValue =&gt; this.formatModelValue(modelValue));
+  }
+
+  /**
+   * Gets the `$viewValue` of each child input from the controller&apos;s
+   * `parts` collection and returns them in a newly-mapped array
+   * for efficient `$watchCollection`ing.
+   * 
+   * @return {Array} Array of $viewValues
+   */
+  getViewValue() {
+    return Object.keys(this.parts).map(key =&gt; {
+      return this.parts[key].$viewValue;
+    });
+  }
+
+  /**
+   * Sets the `$viewValue` of this directive&apos;s ng-model based on
+   * the `$watch` results of `getViewValue()`. Since the value needs
+   * to be bound by reference, the original `parts` collection is used
+   * instead of the `$watch`&apos;s copy value.
+   *
+   * If the value is an array, it is wrapped in a MongoDB `{ $in: {...} }`
+   * and assigned to a property keyed by the input&apos;s `name` attribute; if
+   * it is a primitive it is assigned without wrapping.
+   *
+   * Before `setViewValue()` is called to fire off the parser pipeline,
+   * the final value is run through `removeNulls()` to cleanse it of
+   * `null` and `undefined` values.
+   */
+  setViewValue() {
+    const newViewValue = Object.keys(this.parts).map(key =&gt; {
+      const { $name: name, $viewValue: viewValue } = this.parts[key];
+
+      return (viewValue &amp;&amp; isArray(viewValue)) ?
+        viewValue.length ? 
+          { [name]: { $in: viewValue } } :
+          null :
+        viewValue ?
+          { [name]: viewValue } :
+          null;
+    });
+    this.$ngModel.$setViewValue(this.removeNulls(newViewValue));
+  }
+
+  /**
+   * The `formatModelValue` function is pushed onto the `$formatters` of
+   * the `NgModelController`. It is responsible for delegating incoming
+   * scope values (set by user) to their respective input elements&apos; scopes.
+   * The function needs to:
+   * - determine which scope models are available to set
+   * - disregard incoming values with no matching input element by building an
+   * array of models with a matching value
+   *   - `[{ modelName: &apos;$ctrl.modelName&apos;, modelValue: &apos;...&apos; }, {...}]`
+   * - for each available model with a matching value:
+   *   - use Angular&apos;s `$parse` service to generate a getter/setter for the
+   *   model&apos;s scope reference
+   *   - use the provided setter to set the scope reference, therefore updating
+   *   the child input elements
+   * 
+   * @param  {Object} modelValue Map of values by name to set on child scopes
+   */
+  formatModelValue(modelValue) {
+    if (modelValue) {
+      const modelsToSet = Object.keys(this.parts).map(key =&gt; {
+        return modelValue[this.parts[key].$name] &amp;&amp; {
+          modelName: key,
+          modelValue: modelValue[this.parts[key].$name] }; 
+      });
+      modelsToSet.forEach(newModel =&gt; {
+        const getModel = this.$parse(newModel.modelName),
+              setModel = getModel.assign;
+        setModel(this.$scope, newModel.modelValue)
+      });
+      console.log(`formatter set input to`, modelsToSet);
     }
-    this.$ngModel.$parsers.push(builderParser);
-    
-    /**
-     * @memberof FilterBuilderCtrl
-     * The `filterFormatter` is pushed onto the model&apos;s `$formatters` pipeline;
-     * it is responsible for delegating incoming scope values (set by user)
-     * to their respective input elements&apos; scopes.
-     *
-     * The function needs to:
-     * - determine which scope models are available to set
-     * - disregard incoming values with no matching input element by building an
-     * array of models with a matching value
-     *   - `[{ modelName: &apos;$ctrl.modelName&apos;, modelValue: &apos;...&apos; }, {...}]`
-     * - for each available model with a matching value:
-     *   - use Angular&apos;s `$parse` service to generate a getter/setter for the
-     *   model&apos;s scope reference
-     *   - use the provided setter to set the scope reference, therefore updating
-     *   the child input elements
-     * 
-     * @param  {Object} modelValue Map of values by name to set on child scopes
-     */
-    const filterFormatter = modelValue =&gt; {
-      if (modelValue) {
-        const modelsToSet = Object.keys(this.parts).map(key =&gt; {
-          return modelValue[this.parts[key].$name] &amp;&amp; {
-            modelName: key,
-            modelValue: modelValue[this.parts[key].$name] }; 
-        });
-        modelsToSet.forEach(newModel =&gt; {
-          const getModel = this.$parse(newModel.modelName),
-                setModel = getModel.assign;
-          setModel(this.$scope, newModel.modelValue)
-        });
-        console.log(`formatter set input to`, modelsToSet);
-      }
-    }
-    
-    this.$ngModel.$formatters.push(filterFormatter);
+  }
+
+  /**
+   * The `parseViewValue` function is pushed onto the `$parsers` of
+   * the `NgModelController`. It is responsible for determining how many values
+   * are being set on the view. If the view has...
+   * - **no values**, return an empty object
+   * - **one value**, return that value
+   * - **more than one value**, return them wrapped in `{ $and: [...] }`
+   * 
+   * @param  {Array} viewValue Incoming data from setViewValue
+   * @return {Object}          Final filter formatted for view
+   */
+  parseViewValue(viewValue) {
+    console.log(&apos;builder parser (view &#xBB; model)&apos;, viewValue)
+    if (!viewValue.length) return {};
+    if (viewValue.length === 1) return viewValue[0];
+    if (viewValue.length &gt; 1) return { $and: viewValue };
+  }
+
+  /**
+   * Removes null and undefined values from a given array.
+   * 
+   * @example
+   * // turns these...
+   * [0, &apos;&apos;, false, null, null]
+   * [null, null]
+   * 
+   * // ..into these:
+   * [0, &apos;&apos;, false]
+   * []
+   * 
+   * @param  {Array} array The array to remove nulls from
+   * @return {Array}       A null-free array
+   */
+  removeNulls(array) {
+    return array.filter(v =&gt; v != null);
   }
 }
 
