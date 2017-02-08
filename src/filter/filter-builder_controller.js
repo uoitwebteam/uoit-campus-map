@@ -123,7 +123,7 @@ class FilterBuilderCtrl {
               setModel = getModel.assign;
         setModel(this.$scope, newModel.modelValue)
       });
-      console.log(`formatter set input to`, modelsToSet);
+      // console.log(`formatter set input to`, modelsToSet);
     }
   }
 
@@ -144,7 +144,7 @@ class FilterBuilderCtrl {
    * @return {Object}          Final filter formatted for view
    */
   parseViewValue(viewValue) {
-    console.log('builder parser (view » model)', viewValue)
+    // console.log('builder parser (view » model)', viewValue);
     if (!viewValue.length) return {};
     if (viewValue.length === 1) return viewValue[0];
     if (viewValue.length > 1) return { $and: viewValue };

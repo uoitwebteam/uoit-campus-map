@@ -32,16 +32,16 @@
     </md-input-container>
 
       <md-chips layout="column">
-        <md-chip ng-repeat="category in $ctrl.getFiltered($ctrl.category, $ctrl.categories) track by $index">
+        <md-chip ng-repeat="category in $ctrl.getItemsInListByProp($ctrl.category, $ctrl.categories, '_id') track by $index">
         	{{ category.name }}
-				  <button class="md-chip-remove" ng-click="$ctrl.removeFromFiltered(category._id, $ctrl.category)">&times;</button>
+				  <button class="md-chip-remove" ng-click="$ctrl.removeItemFromList(category._id, $ctrl.category)">&times;</button>
         </md-chip>
 			</md-chips>
 
     <md-input-container flex layout="column">
       <label>Feature collection</label>
-      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-model-options="{trackBy: '$value._id'}" ng-disabled="!$ctrl.category" multiple filter-input name="group">
-        <md-optgroup ng-repeat="group in $ctrl.category" label="{{ ::group.name }}">
+      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-disabled="!$ctrl.category" multiple filter-input name="group">
+        <md-optgroup ng-repeat="group in $ctrl.getItemsInListByProp($ctrl.category, $ctrl.categories, '_id')" label="{{ ::group.name }}">
 	        <md-option ng-repeat="collection in $ctrl.collections | filter: { category: group._id }" ng-value="::collection._id" ng-disabled="$ctrl.collection === collection">
 	          {{ ::collection.name }}
 	        </md-option>
@@ -58,6 +58,6 @@
         Turn on visibility for all available map features
       </md-tooltip>
     </md-button>
-		<!-- {{ $ctrl.filter | json }} -->
+		{{ $ctrl.filter | json }}
   </div>
 </md-whiteframe>

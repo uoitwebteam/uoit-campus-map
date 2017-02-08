@@ -163,10 +163,9 @@ class MapCtrl {
 			currentValue: { location, category, collection }
 		} = mapData;
 		console.log('map component detected external changes:', { location, category, collection });
-  	this.clearMapData()
-  		.then(() => this.updateMapData({
-  			location, category, collection
-  		}));
+		this.updateMapData({
+			location, category, collection
+		});
   	if (location && this.location !== location) {
     	this.location = location;
     }

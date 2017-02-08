@@ -38,27 +38,42 @@ class MapControlsCtrl {
   }
 
   /**
-   * Initializes the controls (show all map elements)
+   * Initialize the controls (show all map elements)
    */
   $onInit() {
     this.loadLocations().then(locations => {
-			this.location = locations[1]._id;
-			this.updateLocation();
-			// this.showAll();
-			// angular.element(this.$window).triggerHandler('resize');
+      this.location = locations[1]._id;
+      this.updateLocation();
+      // this.showAll();
+      // angular.element(this.$window).triggerHandler('resize');
     });
   }
 
-  getFiltered(filter, list) {
+  /**
+   * Filter an array for matches in another array by a property;
+   * return the matched items.
+   * 
+   * @param  {Array}  items Items to match with
+   * @param  {Array}  list  List to match from
+   * @param  {String} prop  Property to match against
+   * @return {Array}        List of filtered items
+   */
+  getItemsInListByProp(items, list, prop) {
     return list && [...list].filter(item => {
-      return [...filter].indexOf(item._id || item.id) !== -1;
+      return [...items].indexOf(item[prop] || item[prop]) !== -1;
     });
   }
 
-  removeFromFiltered(item, list) {
-  	const index = [...list].indexOf(item);
-  	console.log(item, list, index);
-  	(index > -1) && list.splice(index, 1);
+  /**
+   * Find a specific array item and remove it from the array.
+   * 
+   * @param  {*}     item The item to remove
+   * @param  {Array} list The list to remove from
+   */
+  removeItemFromList(item, list) {
+    const index = [...list].indexOf(item);
+    console.log(item, list, index);
+    (index > -1) && list.splice(index, 1);
   }
 
   /**
@@ -97,17 +112,17 @@ class MapControlsCtrl {
   }
 
   /**
-   * After selecting a category, loads collections and sets collection
-   * to first item in list; kicks off collection update.
+   * After selecting a category, load collections and set collection
+   * to first item in list; kick off collection update.
    */
   updateCategory() {
     this.loadFeatures()
-    	.then(() => this.updateFeatures())
-    	.then(() => this.loadCollections())
-    	.then(collections => {
-	      this.collection = [...collections.map(collection => collection._id)];
+      .then(() => this.updateFeatures())
+      .then(() => this.loadCollections())
+      .then(collections => {
+        this.collection = [...collections.map(collection => collection._id)];
     //   this.updateCollection();
-	    });
+      });
   }
 
   /**
@@ -121,9 +136,9 @@ class MapControlsCtrl {
   loadFeatures() {
     return this.FeatureResource.query({
       filter: {
-      	'properties.category': {
-      		$in: [...this.category]
-      	}
+        'properties.category': {
+          $in: [...this.category]
+        }
       }
     }).$promise.then(features => {
       this.features = features;
@@ -133,10 +148,10 @@ class MapControlsCtrl {
   }
 
   updateFeatures() {
-  	const { location, category, features } = this;
+    const { location, category, features } = this;
     this.setMapData({
-    	location,
-    	category,
+      location,
+      category,
       collection: {
         type: 'FeatureCollection',
         features
@@ -156,10 +171,10 @@ class MapControlsCtrl {
   loadCollections() {
     return this.CollectionResource.query({
       filter: {
-      	location: this.location,
-      	category: {
-      		$in: [...this.category]
-      	}
+        location: this.location,
+        category: {
+          $in: [...this.category]
+        }
       }
     }).$promise.then(collections => {
       this.collections = collections;
@@ -243,10 +258,10 @@ class MapControlsCtrl {
 
   toggleAll(selected, items) {
     if (this[selected].length === this[items].length) {
-    	console.log('deselected all');
+      console.log('deselected all');
       this[selected] = [];
     } else if (this[selected].length >= 0) {
-    	console.log('selected all');
+      console.log('selected all');
       this[selected] = [...this[items]];
     }
     const { location, category, collection } = this;
