@@ -1,3 +1,5 @@
+import MapCtrl from './map_controller.js'
+
 const campusMap = {
   // transclude: true,
   bindings: {
@@ -11,7 +13,7 @@ const campusMap = {
   transclude:  {
     controls: 'campusMapControls'
   },
-  controller: 'MapCtrl'
+  controller: MapCtrl
 }
 
 export default campusMap;
