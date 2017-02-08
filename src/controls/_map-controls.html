@@ -1,49 +1,56 @@
 <md-whiteframe
   class="md-whiteframe-16dp map-controls"
-  layout="column"
-  layout-align="center center"
+  layout="row"
+  layout-align="space-between center"
   layout-fill>
-  <div layout="row">
-
-    <md-input-container flex>
+  <filter-builder ng-model="$ctrl.filter"
+  layout="row">
+    <md-input-container flex layout="column">
       <label>Location</label>
-      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" ng-change="$ctrl.updateLocation()" ng-model-options="{trackBy: '$value._id'}">
-        <md-option ng-repeat="location in ::$ctrl.locations" ng-value="::location" ng-disabled="$ctrl.location === location">
+      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" filter-input name="location">
+        <md-option ng-repeat="location in ::$ctrl.locations" ng-value="::location._id" ng-disabled="$ctrl.location === location">
           {{ ::location.label}}
         </md-option>
       </md-select>
     </md-input-container>
 
-    <md-input-container flex>
+    <md-input-container flex layout="column">
       <label>Feature category</label>
-      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()" ng-model-options="{trackBy: '$value._id'}" ng-disabled="!$ctrl.location" multiple>
-        <md-select-header layout-padding>
+      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-disabled="!$ctrl.location" multiple filter-input name="category">
+<!--         <md-select-header layout-padding>
           <md-checkbox aria-label="Select All"
                        ng-checked="$ctrl.isChecked('category', 'categories')"
                        md-indeterminate="$ctrl.isIndeterminate('category', 'categories')"
                        ng-click="$ctrl.toggleAll('category', 'categories')">
             <span ng-if="isChecked('category', 'categories')">Un-</span>Select All
           </md-checkbox>
-        </md-select-header>
-        <md-option ng-repeat="category in $ctrl.categories" ng-value="::category" ng-disabled="$ctrl.category === category">
+        </md-select-header> -->
+        <md-option ng-repeat="category in $ctrl.categories" ng-value="::category._id" ng-disabled="$ctrl.category === category">
           {{ ::category.name }}
         </md-option>
       </md-select>
     </md-input-container>
 
-    <md-input-container flex>
+      <md-chips layout="column">
+        <md-chip ng-repeat="category in $ctrl.getFiltered($ctrl.category, $ctrl.categories) track by $index">
+        	{{ category.name }}
+				  <button class="md-chip-remove" ng-click="$ctrl.removeFromFiltered(category._id, $ctrl.category)">&times;</button>
+        </md-chip>
+			</md-chips>
+
+    <md-input-container flex layout="column">
       <label>Feature collection</label>
-      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()" ng-model-options="{trackBy: '$value._id'}" ng-disabled="!$ctrl.category" multiple>
+      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-model-options="{trackBy: '$value._id'}" ng-disabled="!$ctrl.category" multiple filter-input name="group">
         <md-optgroup ng-repeat="group in $ctrl.category" label="{{ ::group.name }}">
-	        <md-option ng-repeat="collection in $ctrl.collections | filter: { category: group._id }" ng-value="::collection" ng-disabled="$ctrl.collection === collection">
+	        <md-option ng-repeat="collection in $ctrl.collections | filter: { category: group._id }" ng-value="::collection._id" ng-disabled="$ctrl.collection === collection">
 	          {{ ::collection.name }}
 	        </md-option>
         </md-optgroup>
       </md-select>
     </md-input-container>
 
-  </div>
-  <div layout="row">
+  </filter-builder>
+  <div layout="column">
 
     <md-button class="md-primary" ng-click="$ctrl.showAll()">
     	Show all
@@ -51,6 +58,6 @@
         Turn on visibility for all available map features
       </md-tooltip>
     </md-button>
-
+		<!-- {{ $ctrl.filter | json }} -->
   </div>
 </md-whiteframe>

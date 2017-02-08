@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/map_component.js | UOIT Campus Map API Document</title>
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/filter/filter-input_directive.js | UOIT Campus Map API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -47,26 +47,23 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/map_component.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import MapCtrl from &apos;./map_controller.js&apos;
-
-const campusMap = {
-  // transclude: true,
-  bindings: {
-    onGotoBldg: &apos;&lt;?&apos;,
-    mapData: &apos;&lt;?&apos;
-    // location: &apos;&lt;?&apos;,
-    // building: &apos;&lt;?&apos;,
-    // feature: &apos;&lt;?&apos;
-  },
-  templateUrl: &apos;_map.html&apos;,
-  transclude:  {
-    controls: &apos;campusMapControls&apos;
-  },
-  controller: MapCtrl
+<div class="content" data-ice="content"><h1 data-ice="title">src/filter/filter-input_directive.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">function filterInput() {
+	return {
+		restrict: &apos;A&apos;,
+		require: {
+			NgModelCtrl: &apos;ngModel&apos;,
+			FilterBuilderCtrl: &apos;^filterBuilder&apos;
+		},
+		link: function FilterInputLink(scope, el, attrs, ctrl) {
+			if (!attrs.name) throw new Error(&apos;A filter control is missing its \&apos;name\&apos; attribute!&apos;);
+			const { NgModelCtrl, FilterBuilderCtrl } = ctrl;
+			FilterBuilderCtrl.parts[attrs.ngModel] = NgModelCtrl;
+		}
+	};
 }
 
-export default campusMap;</code></pre>
+export default filterInput;</code></pre>
 
 </div>
 

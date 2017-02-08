@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/filter/filter-builder_controller.js | UOIT Campus Map API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/wosevision/uoit-campus-map.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/map_controller.js~MapCtrl.html">MapCtrl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-templates">templates</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-campusMap">campusMap</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">constants</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MAP_ICONS">MAP_ICONS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-MAP_SETTINGS">MAP_SETTINGS</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">controls</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html">MapControlsCtrl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-campusMapControls">campusMapControls</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">detail</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html">MapDetailCtrl</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">filter</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html">FilterBuilderCtrl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterBuilder">filterBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterInput">filterInput</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/filter/filter-builder_controller.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import isArray from &quot;lodash.isarray&quot;;
+
+/**
+ * The FilterBuilderCtrl class provides a controller for the
+ * `&lt;filter-builder&gt;` directive; it contains logic for extracting
+ * and combining the `ng-model` of any number of arbitrary
+ * transcluded inputs inside it.
+ *
+ * The values of its transcluded inputs are converted to a unified
+ * query filter object (MongoDB/Mongoose-style in this case).
+ *
+ * Unlike the `&lt;filter-controls&gt;` component, this directive does not
+ * make any server calls or deal otherwise with with the actual map
+ * data &#x2013; it is purely responsible for providing the filter to make
+ * the server calls with.
+ * 
+ * @todo
+ * __Determine if $watch by string reference is more performant
+ * than $watchCollection on parts array__
+ */
+class FilterBuilderCtrl {
+  static get $inject() {
+    return [&apos;$scope&apos;, &apos;$parse&apos;];
+  }
+  constructor($scope, $parse) {
+    this.$scope = $scope;
+    this.$parse = $parse;
+    this.parts = {};
+  }
+  $onInit() {
+    /**
+     * @memberof FilterBuilderCtrl
+     * Removes null and undefined values from a given array.
+     * 
+     * @example
+     * // turns these...
+     * [&apos;&apos;, 0, false, null, null]
+     * [null, null]
+     * 
+     * // ..into these:
+     * [&apos;&apos;, 0, false]
+     * []
+     * 
+     * @param  {Array} array The array to remove nulls from
+     * @return {Array}       A null-free array
+     */
+    const removeNulls = array =&gt; array.filter(v =&gt; v == null);
+    /**
+     * @memberof FilterBuilderCtrl
+     * Gets the `$viewValue` of each child input from the controller&apos;s
+     * `parts` collection and returns them in a newly-mapped array
+     * for efficient `$watchCollection`ing.
+     * 
+     * @return {Array} Array of $viewValues
+     */
+    const getViewValue = () =&gt; Object.keys(this.parts).map(key =&gt; {
+      return this.parts[key].$viewValue;
+    });
+
+    /**
+     * @memberof FilterBuilderCtrl
+     * Sets the `$viewValue` of this directive&apos;s ng-model based on
+     * the `$watch` results of `getViewValue()`. Since the value needs
+     * to be bound by reference, the original `parts` collection is used
+     * instead of the `$watch`&apos;s copy value.
+     *
+     * If the value is an array, it is wrapped in a MongoDB `{ $in: {...} }`
+     * and assigned to a property keyed by the input&apos;s `name` attribute; if
+     * it is a primitive it is assigned without wrapping.
+     *
+     * Before `setViewValue()` is called to fire off the parser pipeline,
+     * the final value is run through `removeNulls()` to cleanse it of
+     * `null` and `undefined` values.
+     */
+    const setViewValue = () =&gt; {
+      const newViewValue = Object.keys(this.parts).map(key =&gt; {
+        const { $name: name, $viewValue: viewValue } = this.parts[key];
+
+        return (viewValue &amp;&amp; isArray(viewValue)) ?
+          viewValue.length ? 
+            { [name]: { $in: viewValue } } :
+            null :
+          viewValue ?
+            { [name]: viewValue } :
+            null;
+      });
+
+      this.$ngModel.$setViewValue(removeNulls(newViewValue));
+    }
+    this.$scope.$watchCollection(getViewValue, setViewValue);
+    // this.$scope.$watch(
+    //  () =&gt; Object.keys(this.parts).map(key =&gt; {
+    //    const { $viewValue } = this.parts[key];
+    //    return _.isArray($viewValue) ? $viewValue.join(&apos;&apos;) : $viewValue;
+    //  }).join(&apos;&apos;),
+    //  setViewValue
+    // );
+    
+    /**
+     * @memberof FilterBuilderCtrl
+     * The `builderParser` is pushed onto the model&apos;s `$parsers` pipeline;
+     * it is responsible for determining how many values are being set on
+     * the view. If the view has...
+     * - _no values_, return an empty object
+     * - _one value_, return that value
+     * - _more than one value_, return them wrapped in `{ $and: [...] }`
+     * 
+     * @param  {Array} viewValue Incoming data from setViewValue
+     * @return {Object}          Final filter formatted for view
+     */
+    const builderParser = viewValue =&gt; {
+      console.log(&apos;builder parser (view &#xBB; model)&apos;, viewValue)
+      if (!viewValue.length) return {};
+      if (viewValue.length === 1) return viewValue[0];
+      if (viewValue.length &gt; 1) return { $and: viewValue };
+    }
+    this.$ngModel.$parsers.push(builderParser);
+    
+    /**
+     * @memberof FilterBuilderCtrl
+     * The `filterFormatter` is pushed onto the model&apos;s `$formatters` pipeline;
+     * it is responsible for delegating incoming scope values (set by user)
+     * to their respective input elements&apos; scopes.
+     *
+     * The function needs to:
+     * - determine which scope models are available to set
+     * - disregard incoming values with no matching input element by building an
+     * array of models with a matching value
+     *   - `[{ modelName: &apos;$ctrl.modelName&apos;, modelValue: &apos;...&apos; }, {...}]`
+     * - for each available model with a matching value:
+     *   - use Angular&apos;s `$parse` service to generate a getter/setter for the
+     *   model&apos;s scope reference
+     *   - use the provided setter to set the scope reference, therefore updating
+     *   the child input elements
+     * 
+     * @param  {Object} modelValue Map of values by name to set on child scopes
+     */
+    const filterFormatter = modelValue =&gt; {
+      if (modelValue) {
+        const modelsToSet = Object.keys(this.parts).map(key =&gt; {
+          return modelValue[this.parts[key].$name] &amp;&amp; {
+            modelName: key,
+            modelValue: modelValue[this.parts[key].$name] }; 
+        });
+        modelsToSet.forEach(newModel =&gt; {
+          const getModel = this.$parse(newModel.modelName),
+                setModel = getModel.assign;
+          setModel(this.$scope, newModel.modelValue)
+        });
+        console.log(`formatter set input to`, modelsToSet);
+      }
+    }
+    
+    this.$ngModel.$formatters.push(filterFormatter);
+  }
+}
+
+export default FilterBuilderCtrl;</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.8)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

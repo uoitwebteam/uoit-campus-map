@@ -40,6 +40,9 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">controls</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html">MapControlsCtrl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-campusMapControls">campusMapControls</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">detail</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html">MapDetailCtrl</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">filter</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html">FilterBuilderCtrl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterBuilder">filterBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterInput">filterInput</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -191,23 +194,33 @@ class MapCtrl {
         this.showDetail(event.feature, this.isolateMouseEvent(event));
       });
 
-	    this._$scope.$watch( () =&gt; this.mapControls, (newVal) =&gt; {
-	    	if (newVal) {
-					console.log(&apos;map component detected internal changes:&apos;, newVal);
-			  	this.clearMapData().then(() =&gt; this.updateMapData(newVal));
-		    	if (newVal.location &amp;&amp; this.location !== newVal.location) {
-			    	this.location = newVal.location;
-			    }
-	    	}
-	    });
+	    // this._$scope.$watch( () =&gt; this.mapData, (newVal) =&gt; {
+	    // 	if (newVal) {
+					// console.log(&apos;map component detected internal changes:&apos;, newVal);
+			  // 	this.clearMapData().then(() =&gt; this.updateMapData(newVal));
+		   //  	if (newVal.location &amp;&amp; this.location !== newVal.location) {
+			  //   	this.location = newVal.location;
+			  //   }
+	    // 	}
+	    // });
 
     });
 	}
 
-	// $onChanges({ collection: { currentValue: collection} }) {
-	// 	console.log(&apos;map component detected external changes:&apos;, collection);
- //  	this.clearMapData().then(() =&gt; this.updateMapData({ collection }));
-	// }
+	$onChanges({ mapData }) {
+		if (mapData.isFirstChange()) return;
+		const	{
+			currentValue: { location, category, collection }
+		} = mapData;
+		console.log(&apos;map component detected external changes:&apos;, { location, category, collection });
+  	this.clearMapData()
+  		.then(() =&gt; this.updateMapData({
+  			location, category, collection
+  		}));
+  	if (location &amp;&amp; this.location !== location) {
+    	this.location = location;
+    }
+	}
 
 	/**
 	 * Clean up event listeners that the controller has attached via
@@ -231,12 +244,11 @@ class MapCtrl {
 	updateMapData(newVal) {
 		console.log(&apos;updating map data...&apos;, newVal);
 		return this.clearMapData().then(map =&gt; {
-			if (newVal.collection) {
-				if (angular.isArray(newVal.collection)) {
+			if (newVal.collection &amp;&amp; newVal.category.length) {
+				if (newVal.isCollection) {
 					angular.forEach(newVal.collection, (collection, index) =&gt; {
 						this._$scope.$applyAsync(() =&gt; map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${collection._id}`, null, () =&gt; {
 						  (index === newVal.collection.length - 1) &amp;&amp; this.fitBounds(map);
-							console.log(&apos;map data updated!&apos;);
 			  		}));
 					});
 				} else {
@@ -244,16 +256,6 @@ class MapCtrl {
 				}
 				console.log(&apos;map data updated!&apos;);
 			}
-			// } else {
-			// 	this._$scope.$applyAsync(() =&gt; {
-			// 		angular.forEach(newVal.collection, (collection, index) =&gt; {
-			// 			map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${collection._id}`, null, () =&gt; {
-			// 			  (index === newVal.collection.length - 1) &amp;&amp; this.fitBounds(map);
-			// 				console.log(&apos;map data updated!&apos;);
-			//   		});
-			// 		});
-			// 	});
-			// }
 		});
 	}
 	

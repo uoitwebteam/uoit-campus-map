@@ -1,5 +1,11 @@
 window.esdocSearchIndex = [
   [
+    "uoit-campus-map/src/filter/filter-builder_controller.js~filterbuilderctrl",
+    "class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html",
+    "<span>FilterBuilderCtrl</span> <span class=\"search-result-import-path\">uoit-campus-map/src/filter/filter-builder_controller.js</span>",
+    "class"
+  ],
+  [
     "uoit-campus-map/src/constants/map-icons_constant.js~map_icons",
     "variable/index.html#static-variable-MAP_ICONS",
     "<span>MAP_ICONS</span> <span class=\"search-result-import-path\">uoit-campus-map/src/constants/map-icons_constant.js</span>",
@@ -40,6 +46,18 @@ window.esdocSearchIndex = [
     "variable/index.html#static-variable-campusMapControls",
     "<span>campusMapControls</span> <span class=\"search-result-import-path\">uoit-campus-map/src/controls/map-controls_component.js</span>",
     "variable"
+  ],
+  [
+    "uoit-campus-map/src/filter/filter-builder_directive.js~filterbuilder",
+    "function/index.html#static-function-filterBuilder",
+    "<span>filterBuilder</span> <span class=\"search-result-import-path\">uoit-campus-map/src/filter/filter-builder_directive.js</span>",
+    "function"
+  ],
+  [
+    "uoit-campus-map/src/filter/filter-input_directive.js~filterinput",
+    "function/index.html#static-function-filterInput",
+    "<span>filterInput</span> <span class=\"search-result-import-path\">uoit-campus-map/src/filter/filter-input_directive.js</span>",
+    "function"
   ],
   [
     "uoit-campus-map/src/_templates.js~templates",
@@ -474,6 +492,24 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/controls/map-controls_controller.js~mapcontrolsctrl#getfiltered",
+    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-getFiltered",
+    "src/controls/map-controls_controller.js~MapControlsCtrl#getFiltered",
+    "method"
+  ],
+  [
+    "src/controls/map-controls_controller.js~mapcontrolsctrl#ischecked",
+    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-isChecked",
+    "src/controls/map-controls_controller.js~MapControlsCtrl#isChecked",
+    "method"
+  ],
+  [
+    "src/controls/map-controls_controller.js~mapcontrolsctrl#isindeterminate",
+    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-isIndeterminate",
+    "src/controls/map-controls_controller.js~MapControlsCtrl#isIndeterminate",
+    "method"
+  ],
+  [
     "src/controls/map-controls_controller.js~mapcontrolsctrl#loadcategories",
     "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-loadCategories",
     "src/controls/map-controls_controller.js~MapControlsCtrl#loadCategories",
@@ -510,15 +546,21 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/controls/map-controls_controller.js~mapcontrolsctrl#setcollection",
-    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-setCollection",
-    "src/controls/map-controls_controller.js~MapControlsCtrl#setCollection",
+    "src/controls/map-controls_controller.js~mapcontrolsctrl#removefromfiltered",
+    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-removeFromFiltered",
+    "src/controls/map-controls_controller.js~MapControlsCtrl#removeFromFiltered",
     "method"
   ],
   [
-    "src/controls/map-controls_controller.js~mapcontrolsctrl#showall",
-    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-showAll",
-    "src/controls/map-controls_controller.js~MapControlsCtrl#showAll",
+    "src/controls/map-controls_controller.js~mapcontrolsctrl#setmapdata",
+    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-setMapData",
+    "src/controls/map-controls_controller.js~MapControlsCtrl#setMapData",
+    "method"
+  ],
+  [
+    "src/controls/map-controls_controller.js~mapcontrolsctrl#toggleall",
+    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-toggleAll",
+    "src/controls/map-controls_controller.js~MapControlsCtrl#toggleAll",
     "method"
   ],
   [
@@ -612,6 +654,60 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/filter/filter-builder_controller.js",
+    "file/src/filter/filter-builder_controller.js.html",
+    "src/filter/filter-builder_controller.js",
+    "file"
+  ],
+  [
+    "src/filter/filter-builder_controller.js~filterbuilderctrl#$oninit",
+    "class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-method-$onInit",
+    "src/filter/filter-builder_controller.js~FilterBuilderCtrl#$onInit",
+    "method"
+  ],
+  [
+    "src/filter/filter-builder_controller.js~filterbuilderctrl#$parse",
+    "class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-member-$parse",
+    "src/filter/filter-builder_controller.js~FilterBuilderCtrl#$parse",
+    "member"
+  ],
+  [
+    "src/filter/filter-builder_controller.js~filterbuilderctrl#$scope",
+    "class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-member-$scope",
+    "src/filter/filter-builder_controller.js~FilterBuilderCtrl#$scope",
+    "member"
+  ],
+  [
+    "src/filter/filter-builder_controller.js~filterbuilderctrl#constructor",
+    "class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-constructor-constructor",
+    "src/filter/filter-builder_controller.js~FilterBuilderCtrl#constructor",
+    "method"
+  ],
+  [
+    "src/filter/filter-builder_controller.js~filterbuilderctrl#parts",
+    "class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-member-parts",
+    "src/filter/filter-builder_controller.js~FilterBuilderCtrl#parts",
+    "member"
+  ],
+  [
+    "src/filter/filter-builder_controller.js~filterbuilderctrl.$inject",
+    "class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#static-get-$inject",
+    "src/filter/filter-builder_controller.js~FilterBuilderCtrl.$inject",
+    "member"
+  ],
+  [
+    "src/filter/filter-builder_directive.js",
+    "file/src/filter/filter-builder_directive.js.html",
+    "src/filter/filter-builder_directive.js",
+    "file"
+  ],
+  [
+    "src/filter/filter-input_directive.js",
+    "file/src/filter/filter-input_directive.js.html",
+    "src/filter/filter-input_directive.js",
+    "file"
+  ],
+  [
     "src/index.js",
     "file/src/index.js.html",
     "src/index.js",
@@ -628,6 +724,12 @@ window.esdocSearchIndex = [
     "file/src/map_controller.js.html",
     "src/map_controller.js",
     "file"
+  ],
+  [
+    "src/map_controller.js~mapctrl#$onchanges",
+    "class/src/map_controller.js~MapCtrl.html#instance-method-$onChanges",
+    "src/map_controller.js~MapCtrl#$onChanges",
+    "method"
   ],
   [
     "src/map_controller.js~mapctrl#$ondestroy",

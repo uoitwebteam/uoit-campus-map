@@ -10,7 +10,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "const templates = ['$templateCache', function($templateCache) {$templateCache.put('_map.html','<ng-map\\n  center=\"43.9443802,-78.8975857\"\\n  zoom=\"17\"\\n  styles=\"{{ ::$ctrl._MAP_SETTINGS.styles }}\"\\n  map-type-id=\"{{ ::$ctrl._MAP_SETTINGS.type }}\"\\n  disable-default-u-i=\"true\"\\n  tilt=\"45\"\\n  heading=\"0\"\\n  layout\\n  layout-fill>\\n  <custom-control id=\"map-controls\" position=\"TOP_LEFT\" index=\"1\">\\n\\t\\t<campus-map-controls ng-model=\"$ctrl.mapControls\"></campus-map-controls>\\n  </custom-control>\\n</ng-map>')\n$templateCache.put('controls/_map-controls.html','<md-whiteframe\\n  class=\"md-whiteframe-16dp map-controls\"\\n  layout=\"column\"\\n  layout-align=\"center center\"\\n  layout-fill>\\n  <div layout=\"row\">\\n\\n    <md-input-container flex>\\n      <label>Location</label>\\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" ng-change=\"$ctrl.updateLocation()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\">\\n        <md-option ng-repeat=\"location in ::$ctrl.locations\" ng-value=\"::location\" ng-disabled=\"$ctrl.location === location\">\\n          {{ ::location.label}}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n\\n    <md-input-container flex>\\n      <label>Feature category</label>\\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-change=\"$ctrl.updateCategory()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.location\" multiple>\\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"::category\" ng-disabled=\"$ctrl.category === category\">\\n          {{ ::category.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n\\n    <md-input-container flex>\\n      <label>Feature collection</label>\\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-change=\"$ctrl.updateCollection()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.category\" multiple>\\n        <md-optgroup ng-repeat=\"group in $ctrl.category\" label=\"{{ ::group.name }}\">\\n\\t        <md-option ng-repeat=\"collection in $ctrl.collections | filter: { category: group._id }\" ng-value=\"::collection\" ng-disabled=\"$ctrl.collection === collection\">\\n\\t          {{ ::collection.name }}\\n\\t        </md-option>\\n        </md-optgroup>\\n      </md-select>\\n    </md-input-container>\\n\\n  </div>\\n  <div layout=\"row\">\\n\\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\\n    \\tShow all\\n      <md-tooltip md-direction=\"bottom\">\\n        Turn on visibility for all available map features\\n      </md-tooltip>\\n    </md-button>\\n    \\n  </div>\\n</md-whiteframe>')\n$templateCache.put('detail/_map-detail.html','<md-whiteframe\\n  class=\"md-whiteframe-16dp\"\\n  layout=\"column\">\\n  <md-toolbar>\\n    <div class=\"md-toolbar-tools\">\\n      <h2>\\n        <span>{{ ::ctrl.name }}</span>\\n      </h2>\\n      <span flex></span>\\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\\n        <span>&times;</span>\\n      </md-button>\\n    </div>\\n  </md-toolbar>\\n  <div\\n  \\tlayout=\"column\"\\n  \\tlayout-margin\\n  \\tlayout-align=\"center center\">\\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? \\'Hide\\' : \\'Show\\'}} details <span class=\"detail-arrow\" ng-class=\"{ \\'arrow-up\\' : ctrl.detailsShowing }\"></span></md-button>\\n  \\t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\\n  \\t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg(ctrl.callback)\">\\n  \\t\\tTake a tour &raquo;\\n  \\t</md-button>\\n  </div>\\n</md-whiteframe>')}]; export default templates;"
+    "content": "const templates = ['$templateCache', function($templateCache) {$templateCache.put('_map.html','<ng-map\\n  center=\"43.9443802,-78.8975857\"\\n  zoom=\"17\"\\n  styles=\"{{ ::$ctrl._MAP_SETTINGS.styles }}\"\\n  map-type-id=\"{{ ::$ctrl._MAP_SETTINGS.type }}\"\\n  disable-default-u-i=\"true\"\\n  tilt=\"45\"\\n  heading=\"0\"\\n  layout\\n  layout-fill>\\n  <custom-control id=\"map-controls\" position=\"TOP_LEFT\" index=\"1\" ng-transclude=\"controls\">\\n\\t\\t<!-- <campus-map-controls ng-model=\"$ctrl.mapControls\"></campus-map-controls> -->\\n  </custom-control>\\n</ng-map>')\n$templateCache.put('controls/_map-controls.html','<md-whiteframe\\n  class=\"md-whiteframe-16dp map-controls\"\\n  layout=\"row\"\\n  layout-align=\"space-between center\"\\n  layout-fill>\\n  <filter-builder ng-model=\"$ctrl.filter\"\\n  layout=\"row\">\\n    <md-input-container flex layout=\"column\">\\n      <label>Location</label>\\n      <md-select ng-model=\"$ctrl.location\" md-on-open=\"$ctrl.loadLocations()\" filter-input name=\"location\">\\n        <md-option ng-repeat=\"location in ::$ctrl.locations\" ng-value=\"::location._id\" ng-disabled=\"$ctrl.location === location\">\\n          {{ ::location.label}}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n\\n    <md-input-container flex layout=\"column\">\\n      <label>Feature category</label>\\n      <md-select ng-model=\"$ctrl.category\" md-on-open=\"$ctrl.loadCategories()\" ng-disabled=\"!$ctrl.location\" multiple filter-input name=\"category\">\\n<!--         <md-select-header layout-padding>\\n          <md-checkbox aria-label=\"Select All\"\\n                       ng-checked=\"$ctrl.isChecked(\\'category\\', \\'categories\\')\"\\n                       md-indeterminate=\"$ctrl.isIndeterminate(\\'category\\', \\'categories\\')\"\\n                       ng-click=\"$ctrl.toggleAll(\\'category\\', \\'categories\\')\">\\n            <span ng-if=\"isChecked(\\'category\\', \\'categories\\')\">Un-</span>Select All\\n          </md-checkbox>\\n        </md-select-header> -->\\n        <md-option ng-repeat=\"category in $ctrl.categories\" ng-value=\"::category._id\" ng-disabled=\"$ctrl.category === category\">\\n          {{ ::category.name }}\\n        </md-option>\\n      </md-select>\\n    </md-input-container>\\n\\n      <md-chips layout=\"column\">\\n        <md-chip ng-repeat=\"category in $ctrl.getFiltered($ctrl.category, $ctrl.categories) track by $index\">\\n        \\t{{ category.name }}\\n\\t\\t\\t\\t  <button class=\"md-chip-remove\" ng-click=\"$ctrl.removeFromFiltered(category._id, $ctrl.category)\">&times;</button>\\n        </md-chip>\\n\\t\\t\\t</md-chips>\\n\\n    <md-input-container flex layout=\"column\">\\n      <label>Feature collection</label>\\n      <md-select ng-model=\"$ctrl.collection\" md-on-open=\"$ctrl.loadCollections()\" ng-model-options=\"{trackBy: \\'$value._id\\'}\" ng-disabled=\"!$ctrl.category\" multiple filter-input name=\"group\">\\n        <md-optgroup ng-repeat=\"group in $ctrl.category\" label=\"{{ ::group.name }}\">\\n\\t        <md-option ng-repeat=\"collection in $ctrl.collections | filter: { category: group._id }\" ng-value=\"::collection._id\" ng-disabled=\"$ctrl.collection === collection\">\\n\\t          {{ ::collection.name }}\\n\\t        </md-option>\\n        </md-optgroup>\\n      </md-select>\\n    </md-input-container>\\n\\n  </filter-builder>\\n  <div layout=\"column\">\\n\\n    <md-button class=\"md-primary\" ng-click=\"$ctrl.showAll()\">\\n    \\tShow all\\n      <md-tooltip md-direction=\"bottom\">\\n        Turn on visibility for all available map features\\n      </md-tooltip>\\n    </md-button>\\n\\t\\t<!-- {{ $ctrl.filter | json }} -->\\n  </div>\\n</md-whiteframe>')\n$templateCache.put('detail/_map-detail.html','<md-whiteframe\\n  class=\"md-whiteframe-16dp\"\\n  layout=\"column\">\\n  <md-toolbar>\\n    <div class=\"md-toolbar-tools\">\\n      <h2>\\n        <span>{{ ::ctrl.name }}</span>\\n      </h2>\\n      <span flex></span>\\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\\n        <span>&times;</span>\\n      </md-button>\\n    </div>\\n  </md-toolbar>\\n  <div\\n  \\tlayout=\"column\"\\n  \\tlayout-margin\\n  \\tlayout-align=\"center center\">\\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? \\'Hide\\' : \\'Show\\'}} details <span class=\"detail-arrow\" ng-class=\"{ \\'arrow-up\\' : ctrl.detailsShowing }\"></span></md-button>\\n  \\t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\\n  \\t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg(ctrl.callback)\">\\n  \\t\\tTake a tour &raquo;\\n  \\t</md-button>\\n  </div>\\n</md-whiteframe>')}]; export default templates;"
   },
   {
     "__docId__": 1,
@@ -112,7 +112,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "const campusMapControls = {\n  require: {\n    $ngModel: 'ngModel'\n    // MapCtrl: '^map'\n  },\n  templateUrl: 'controls/_map-controls.html',\n  controller: 'MapControlsCtrl'\n}\n\nexport default campusMapControls;"
+    "content": "import MapControlsCtrl from './map-controls_controller.js'\n\nconst campusMapControls = {\n  require: {\n    $ngModel: 'ngModel'\n    // MapCtrl: '^map'\n  },\n  templateUrl: 'controls/_map-controls.html',\n  controller: MapControlsCtrl\n}\n\nexport default campusMapControls;"
   },
   {
     "__docId__": 7,
@@ -127,7 +127,7 @@
     "importPath": "uoit-campus-map/src/controls/map-controls_component.js",
     "importStyle": "campusMapControls",
     "description": null,
-    "lineNumber": 1,
+    "lineNumber": 3,
     "undocument": true,
     "type": {
       "types": [
@@ -146,7 +146,7 @@
     "access": null,
     "description": null,
     "lineNumber": 17,
-    "content": "/**\n * The `MapControlsCtrl` provides an interface between the map component\n * and the map control filter dropdowns.\n * \n * It is not responsible for much actual map logic, but instead for\n * accepting user input and turning it into queries whose results\n * are assigned back to the controller. The `MapCtrl` takes care of\n * turning the returned values into map-usable data, whereas this controller\n * simply makes it available.\n *\n * The controller is made up of:\n * - constructor\n * - 3 methods for loading query results (location, category, collection)\n * - 3 methods for updating dropdown contents\n * - utility methods for setting active collection and showing all collections\n */\nclass MapControlsCtrl {\n  static get $inject(){\n    return ['$mapApi', '$tourApi'];\n  }\n\n  /**\n   * Initialize controller dependencies.\n   * \n   * @param  {Object} $mapApi  Map $resource service\n   * @param  {Object} $tourApi Tour $resource service\n   * @param  {Object} $window  Angular's window wrapper\n   */\n  constructor($mapApi, $tourApi) {\n    this.FeatureResource = $mapApi.feature;\n    this.CollectionResource = $mapApi.collection;\n    this.CategoryResource = $mapApi.category;\n    this.LocationResource = $tourApi.location;\n  }\n\n  /**\n   * Initializes the controls (show all map elements)\n   */\n  $onInit() {\n    this.loadLocations().then(locations => {\n\t\t\tthis.location = locations[1];\n\t\t\tthis.updateLocation();\n\t\t\t// this.showAll();\n\t\t\t// angular.element(this.$window).triggerHandler('resize');\n    });\n  }\n\n  /**\n   * Load location list from server.\n   * \n   * @return {Promise} Resolves to list of locations\n   */\n  loadLocations() {\n    return this.LocationResource.query().$promise.then(locations => {\n      this.locations = locations;\n      return locations;\n    });\n  }\n\n  /**\n   * Load category list from server.\n   * \n   * @return {Promise} Resolves to list of categories\n   */\n  loadCategories() {\n    return this.CategoryResource.query().$promise.then(categories => {\n      this.categories = categories;\n      return categories;\n    });\n  }\n\n  /**\n   * Load feature list from server using the `_id`s of the currently\n   * selected categories to filter by.\n   *\n   * @todo Update this doc to describe array of categories\n   * \n   * @return {Promise} Resolves to list of collections\n   */\n  loadFeatures() {\n    return this.FeatureResource.query({\n      filter: {\n      \t'properties.category': {\n      \t\t$in: [...this.category.map(category => category._id)]\n      \t}\n      }\n    }).$promise.then(features => {\n      this.features = features;\n      console.log('FEATURES:', features)\n      return features;\n    });\n  }\n\n  /**\n   * Load collection list from server using the `_id` of the currently\n   * selected category and location (extracted directly from the\n   * controller / `this`) to filter by.\n   *\n   * @todo Update this doc to describe array of categories\n   * \n   * @return {Promise} Resolves to list of collections\n   */\n  loadCollections() {\n    return this.CollectionResource.query({\n      filter: {\n      \tlocation:this.location._id,\n      \tcategory: {\n      \t\t$in: [...this.category.map(category => category._id)]\n      \t}\n      }\n    }).$promise.then(collections => {\n      this.collections = collections;\n      return collections;\n    });\n  }\n\n  /**\n   * After selecting a location, loads categories and sets category\n   * to first item in list; kicks off category update.\n   */\n  updateLocation() {\n    this.loadCategories().then(categories => {\n      this.category = [...categories];\n      this.updateCategory();\n    });\n  }\n\n  /**\n   * After selecting a category, loads collections and sets collection\n   * to first item in list; kicks off collection update.\n   */\n  updateCategory() {\n    this.loadFeatures()\n    \t.then(() => this.updateFeatures())\n    \t.then(() => this.loadCollections())\n    \t.then(collections => {\n\t      this.collection = [...collections];\n    //   this.updateCollection();\n\t    });\n  }\n\n  updateFeatures() {\n  \tconst { location, category, features } = this;\n    this.setCollection({\n    \tlocation,\n    \tcategory,\n      collection: {\n        type: 'FeatureCollection',\n        features\n      }\n    });\n  }\n\n  /**\n   * After selecting a collection, extracts all relevant filter\n   * properties from controller and uses `setCollection()` to\n   * send the data to the view.\n   */\n  updateCollection() {\n    const { location, category, collection } = this;\n    this.setCollection({\n      location,\n      category,\n      collection\n    });\n  }\n\n  /**\n   * Sends current data to view for rendering in selection dropdowns.\n   *\n   * In order for the map to properly render the selected collection, the\n   * `options.collection` param passed to this method must at least _look_\n   * like a valid `FeatureCollection` (i.e. it can be a \"true\" collection,\n   * or an object with a `type` property of `FeatureCollection` and a `features`\n   * property containing an array of `Feature` objects).\n   *\n   * @example\n   * // \"true\" collection\n   * const feature = this.CollectionResource.get('featureId');\n   * this.setCollection({ feature });\n   * \n   * // mock collection\n   * const features = this.FeatureResource.query();\n   * this.setCollection({\n   *   collection: {\n   *     type: 'FeatureCollection',\n   *     features\n   *   }\n   * }, true);\n   * \n   * @param {Object}  resources\n   * @param {Object}  resources.location    Currently selected location `$resource`\n   * @param {Object}  resources.category    Currently selected category `$resource`\n   * @param {Object}  resources.collection  Currently selected collection `$resource`\n   * @param {Boolean} [showAll=false]       Whether to show all features\n   */\n  setCollection({ location, category, collection }, showAll = false) {\n    this.$ngModel.$setViewValue({\n      location,\n      category,\n      collection,\n      showAll\n    });\n  }\n\n  /**\n   * Fetches a list of every feature available for display on the map; mocks up\n   * a \"fake\" `FeatureCollection` and uses `setCollection()` to render the\n   * selection to the component.\n   * \n   * @return {Promise} Resolves to a list of the returned features\n   */\n  showAll() {\n  \tconsole.log('show all activated!');\n    return this.FeatureResource.query({}).$promise.then(features => {\n      this.setCollection({\n      \tlocation: this.location,\n        collection: {\n          type: 'FeatureCollection',\n          features\n        }\n      }, true);\n      return features;\n    });\n  }\n}\n\nexport default MapControlsCtrl;"
+    "content": "/**\n * The `MapControlsCtrl` provides an interface between the map component\n * and the map control filter dropdowns.\n * \n * It is not responsible for much actual map logic, but instead for\n * accepting user input and turning it into queries whose results\n * are assigned back to the controller. The `MapCtrl` takes care of\n * turning the returned values into map-usable data, whereas this controller\n * simply makes it available.\n *\n * The controller is made up of:\n * - constructor\n * - 3 methods for loading query results (location, category, collection)\n * - 3 methods for updating dropdown contents\n * - utility methods for setting active collection and showing all collections\n */\nclass MapControlsCtrl {\n  static get $inject(){\n    return ['$mapApi', '$tourApi'];\n  }\n\n  /**\n   * Initialize controller dependencies.\n   * \n   * @param  {Object} $mapApi  Map $resource service\n   * @param  {Object} $tourApi Tour $resource service\n   * @param  {Object} $window  Angular's window wrapper\n   */\n  constructor($mapApi, $tourApi) {\n    this.FeatureResource = $mapApi.feature;\n    this.CollectionResource = $mapApi.collection;\n    this.CategoryResource = $mapApi.category;\n    this.LocationResource = $tourApi.location;\n\n    this.location = [];\n    this.category = [];\n    this.collection = [];\n  }\n\n  /**\n   * Initializes the controls (show all map elements)\n   */\n  $onInit() {\n    this.loadLocations().then(locations => {\n\t\t\tthis.location = locations[1]._id;\n\t\t\tthis.updateLocation();\n\t\t\t// this.showAll();\n\t\t\t// angular.element(this.$window).triggerHandler('resize');\n    });\n  }\n\n  getFiltered(filter, list) {\n    return list && [...list].filter(item => {\n      return [...filter].indexOf(item._id || item.id) !== -1;\n    });\n  }\n\n  removeFromFiltered(item, list) {\n  \tconst index = [...list].indexOf(item);\n  \tconsole.log(item, list, index);\n  \t(index > -1) && list.splice(index, 1);\n  }\n\n  /**\n   * Load location list from server.\n   * \n   * @return {Promise} Resolves to list of locations\n   */\n  loadLocations() {\n    return this.LocationResource.query().$promise.then(locations => {\n      this.locations = locations;\n      return locations;\n    });\n  }\n\n  /**\n   * After selecting a location, loads categories and sets category\n   * to first item in list; kicks off category update.\n   */\n  updateLocation() {\n    this.loadCategories().then(categories => {\n      this.category = [...categories.map(category => category._id)];\n      this.updateCategory();\n    });\n  }\n\n  /**\n   * Load category list from server.\n   * \n   * @return {Promise} Resolves to list of categories\n   */\n  loadCategories() {\n    return this.CategoryResource.query().$promise.then(categories => {\n      this.categories = categories;\n      return categories;\n    });\n  }\n\n  /**\n   * After selecting a category, loads collections and sets collection\n   * to first item in list; kicks off collection update.\n   */\n  updateCategory() {\n    this.loadFeatures()\n    \t.then(() => this.updateFeatures())\n    \t.then(() => this.loadCollections())\n    \t.then(collections => {\n\t      this.collection = [...collections.map(collection => collection._id)];\n    //   this.updateCollection();\n\t    });\n  }\n\n  /**\n   * Load feature list from server using the `_id`s of the currently\n   * selected categories to filter by.\n   *\n   * @todo Update this doc to describe array of categories\n   * \n   * @return {Promise} Resolves to list of collections\n   */\n  loadFeatures() {\n    return this.FeatureResource.query({\n      filter: {\n      \t'properties.category': {\n      \t\t$in: [...this.category]\n      \t}\n      }\n    }).$promise.then(features => {\n      this.features = features;\n      console.log('FEATURES:', features)\n      return features;\n    });\n  }\n\n  updateFeatures() {\n  \tconst { location, category, features } = this;\n    this.setMapData({\n    \tlocation,\n    \tcategory,\n      collection: {\n        type: 'FeatureCollection',\n        features\n      }\n    });\n  }\n\n  /**\n   * Load collection list from server using the `_id` of the currently\n   * selected category and location (extracted directly from the\n   * controller / `this`) to filter by.\n   *\n   * @todo Update this doc to describe array of categories\n   * \n   * @return {Promise} Resolves to list of collections\n   */\n  loadCollections() {\n    return this.CollectionResource.query({\n      filter: {\n      \tlocation: this.location,\n      \tcategory: {\n      \t\t$in: [...this.category]\n      \t}\n      }\n    }).$promise.then(collections => {\n      this.collections = collections;\n      return collections;\n    });\n  }\n\n  /**\n   * After selecting a collection, extracts all relevant filter\n   * properties from controller and uses `setMapData()` to\n   * send the data to the view.\n   */\n  updateCollection() {\n    const { location, category, collection } = this;\n    this.setMapData({\n      location,\n      category,\n      collection\n    }, true);\n  }\n\n  /**\n   * Sends current data to view for rendering in selection dropdowns.\n   *\n   * In order for the map to properly render the selected collection, the\n   * `options.collection` param passed to this method must at least _look_\n   * like a valid `FeatureCollection` (i.e. it can be a \"true\" collection,\n   * or an object with a `type` property of `FeatureCollection` and a `features`\n   * property containing an array of `Feature` objects).\n   *\n   * @example\n   * // \"true\" collection\n   * const feature = this.CollectionResource.get('featureId');\n   * this.setMapData({ feature });\n   * \n   * // mock collection\n   * const features = this.FeatureResource.query();\n   * this.setMapData({\n   *   collection: {\n   *     type: 'FeatureCollection',\n   *     features\n   *   }\n   * }, true);\n   * \n   * @param {Object}  resources\n   * @param {Object}  resources.location    Currently selected location `$resource`\n   * @param {Object}  resources.category    Currently selected category `$resource`\n   * @param {Object}  resources.collection  Currently selected collection `$resource`\n   * @param {Boolean} [showAll=false]       Whether to show all features\n   */\n  setMapData({ location, category, collection }, isCollection = false) {\n    this.$ngModel.$setViewValue({\n      location,\n      category,\n      collection,\n      isCollection\n    });\n  }\n\n  // toggle(item, list) {\n  //   const idx = list.indexOf(item);\n  //   if (idx > -1) {\n  //     list.splice(idx, 1);\n  //   } else {\n  //     list.push(item);\n  //   }\n  // }\n\n  // exists(item, list) {\n  //   return list.indexOf(item) > -1;\n  // }\n\n  isIndeterminate(selected, items) {\n    return (this[selected] && this[items]) && (this[selected].length !== 0 &&\n        this[selected].length !== items.length);\n  }\n\n  isChecked(selected, items) {\n    return (this[selected] && this[items]) && (this[selected].length === this[items].length);\n  }\n\n  toggleAll(selected, items) {\n    if (this[selected].length === this[items].length) {\n    \tconsole.log('deselected all');\n      this[selected] = [];\n    } else if (this[selected].length >= 0) {\n    \tconsole.log('selected all');\n      this[selected] = [...this[items]];\n    }\n    const { location, category, collection } = this;\n    this.setMapData({\n      location,\n      category,\n      collection\n    }, true);\n  }\n}\n\nexport default MapControlsCtrl;"
   },
   {
     "__docId__": 9,
@@ -302,20 +302,6 @@
   },
   {
     "__docId__": 16,
-    "kind": "method",
-    "static": false,
-    "variation": null,
-    "name": "$onInit",
-    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
-    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#$onInit",
-    "access": null,
-    "description": "Initializes the controls (show all map elements)",
-    "lineNumber": 39,
-    "params": [],
-    "generator": false
-  },
-  {
-    "__docId__": 17,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -324,7 +310,25 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#location",
     "access": null,
     "description": null,
-    "lineNumber": 41,
+    "lineNumber": 35,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 17,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "category",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#category",
+    "access": null,
+    "description": null,
+    "lineNumber": 36,
     "undocument": true,
     "type": {
       "types": [
@@ -334,6 +338,117 @@
   },
   {
     "__docId__": 18,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "collection",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#collection",
+    "access": null,
+    "description": null,
+    "lineNumber": 37,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 19,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "$onInit",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#$onInit",
+    "access": null,
+    "description": "Initializes the controls (show all map elements)",
+    "lineNumber": 43,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 20,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "location",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#location",
+    "access": null,
+    "description": null,
+    "lineNumber": 45,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 21,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getFiltered",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#getFiltered",
+    "access": null,
+    "description": null,
+    "lineNumber": 52,
+    "undocument": true,
+    "params": [
+      {
+        "name": "filter",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "list",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 22,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "removeFromFiltered",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#removeFromFiltered",
+    "access": null,
+    "description": null,
+    "lineNumber": 58,
+    "undocument": true,
+    "params": [
+      {
+        "name": "item",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "list",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 23,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -342,7 +457,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#loadLocations",
     "access": null,
     "description": "Load location list from server.",
-    "lineNumber": 53,
+    "lineNumber": 69,
     "params": [],
     "return": {
       "nullable": null,
@@ -355,7 +470,7 @@
     "generator": false
   },
   {
-    "__docId__": 19,
+    "__docId__": 24,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -364,7 +479,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#locations",
     "access": null,
     "description": null,
-    "lineNumber": 55,
+    "lineNumber": 71,
     "undocument": true,
     "type": {
       "types": [
@@ -373,7 +488,39 @@
     }
   },
   {
-    "__docId__": 20,
+    "__docId__": 25,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "updateLocation",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#updateLocation",
+    "access": null,
+    "description": "After selecting a location, loads categories and sets category\nto first item in list; kicks off category update.",
+    "lineNumber": 80,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 26,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "category",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#category",
+    "access": null,
+    "description": null,
+    "lineNumber": 82,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 27,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -382,7 +529,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#loadCategories",
     "access": null,
     "description": "Load category list from server.",
-    "lineNumber": 65,
+    "lineNumber": 92,
     "params": [],
     "return": {
       "nullable": null,
@@ -395,7 +542,7 @@
     "generator": false
   },
   {
-    "__docId__": 21,
+    "__docId__": 28,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -404,7 +551,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#categories",
     "access": null,
     "description": null,
-    "lineNumber": 67,
+    "lineNumber": 94,
     "undocument": true,
     "type": {
       "types": [
@@ -413,125 +560,7 @@
     }
   },
   {
-    "__docId__": 22,
-    "kind": "method",
-    "static": false,
-    "variation": null,
-    "name": "loadFeatures",
-    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
-    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#loadFeatures",
-    "access": null,
-    "description": "Load feature list from server using the `_id`s of the currently\nselected categories to filter by.",
-    "lineNumber": 80,
-    "todo": [
-      "Update this doc to describe array of categories"
-    ],
-    "params": [],
-    "return": {
-      "nullable": null,
-      "types": [
-        "Promise"
-      ],
-      "spread": false,
-      "description": "Resolves to list of collections"
-    },
-    "generator": false
-  },
-  {
-    "__docId__": 23,
-    "kind": "member",
-    "static": false,
-    "variation": null,
-    "name": "features",
-    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
-    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#features",
-    "access": null,
-    "description": null,
-    "lineNumber": 88,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 24,
-    "kind": "method",
-    "static": false,
-    "variation": null,
-    "name": "loadCollections",
-    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
-    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#loadCollections",
-    "access": null,
-    "description": "Load collection list from server using the `_id` of the currently\nselected category and location (extracted directly from the\ncontroller / `this`) to filter by.",
-    "lineNumber": 103,
-    "todo": [
-      "Update this doc to describe array of categories"
-    ],
-    "params": [],
-    "return": {
-      "nullable": null,
-      "types": [
-        "Promise"
-      ],
-      "spread": false,
-      "description": "Resolves to list of collections"
-    },
-    "generator": false
-  },
-  {
-    "__docId__": 25,
-    "kind": "member",
-    "static": false,
-    "variation": null,
-    "name": "collections",
-    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
-    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#collections",
-    "access": null,
-    "description": null,
-    "lineNumber": 112,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 26,
-    "kind": "method",
-    "static": false,
-    "variation": null,
-    "name": "updateLocation",
-    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
-    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#updateLocation",
-    "access": null,
-    "description": "After selecting a location, loads categories and sets category\nto first item in list; kicks off category update.",
-    "lineNumber": 121,
-    "params": [],
-    "generator": false
-  },
-  {
-    "__docId__": 27,
-    "kind": "member",
-    "static": false,
-    "variation": null,
-    "name": "category",
-    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
-    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#category",
-    "access": null,
-    "description": null,
-    "lineNumber": 123,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 28,
+    "__docId__": 29,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -540,12 +569,12 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#updateCategory",
     "access": null,
     "description": "After selecting a category, loads collections and sets collection\nto first item in list; kicks off collection update.",
-    "lineNumber": 132,
+    "lineNumber": 103,
     "params": [],
     "generator": false
   },
   {
-    "__docId__": 29,
+    "__docId__": 30,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -554,7 +583,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#collection",
     "access": null,
     "description": null,
-    "lineNumber": 137,
+    "lineNumber": 108,
     "undocument": true,
     "type": {
       "types": [
@@ -563,7 +592,50 @@
     }
   },
   {
-    "__docId__": 30,
+    "__docId__": 31,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "loadFeatures",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#loadFeatures",
+    "access": null,
+    "description": "Load feature list from server using the `_id`s of the currently\nselected categories to filter by.",
+    "lineNumber": 121,
+    "todo": [
+      "Update this doc to describe array of categories"
+    ],
+    "params": [],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": "Resolves to list of collections"
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 32,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "features",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#features",
+    "access": null,
+    "description": null,
+    "lineNumber": 129,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 33,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -572,13 +644,56 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#updateFeatures",
     "access": null,
     "description": null,
-    "lineNumber": 142,
+    "lineNumber": 135,
     "undocument": true,
     "params": [],
     "generator": false
   },
   {
-    "__docId__": 31,
+    "__docId__": 34,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "loadCollections",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#loadCollections",
+    "access": null,
+    "description": "Load collection list from server using the `_id` of the currently\nselected category and location (extracted directly from the\ncontroller / `this`) to filter by.",
+    "lineNumber": 156,
+    "todo": [
+      "Update this doc to describe array of categories"
+    ],
+    "params": [],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": "Resolves to list of collections"
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 35,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "collections",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#collections",
+    "access": null,
+    "description": null,
+    "lineNumber": 165,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 36,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -586,25 +701,25 @@
     "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#updateCollection",
     "access": null,
-    "description": "After selecting a collection, extracts all relevant filter\nproperties from controller and uses `setCollection()` to\nsend the data to the view.",
-    "lineNumber": 159,
+    "description": "After selecting a collection, extracts all relevant filter\nproperties from controller and uses `setMapData()` to\nsend the data to the view.",
+    "lineNumber": 175,
     "params": [],
     "generator": false
   },
   {
-    "__docId__": 32,
+    "__docId__": 37,
     "kind": "method",
     "static": false,
     "variation": null,
-    "name": "setCollection",
+    "name": "setMapData",
     "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
-    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#setCollection",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#setMapData",
     "access": null,
     "description": "Sends current data to view for rendering in selection dropdowns.\n\nIn order for the map to properly render the selected collection, the\n`options.collection` param passed to this method must at least _look_\nlike a valid `FeatureCollection` (i.e. it can be a \"true\" collection,\nor an object with a `type` property of `FeatureCollection` and a `features`\nproperty containing an array of `Feature` objects).",
     "examples": [
-      "// \"true\" collection\nconst feature = this.CollectionResource.get('featureId');\nthis.setCollection({ feature });\n\n// mock collection\nconst features = this.FeatureResource.query();\nthis.setCollection({\n  collection: {\n    type: 'FeatureCollection',\n    features\n  }\n}, true);"
+      "// \"true\" collection\nconst feature = this.CollectionResource.get('featureId');\nthis.setMapData({ feature });\n\n// mock collection\nconst features = this.FeatureResource.query();\nthis.setMapData({\n  collection: {\n    type: 'FeatureCollection',\n    features\n  }\n}, true);"
     ],
-    "lineNumber": 197,
+    "lineNumber": 213,
     "params": [
       {
         "nullable": null,
@@ -662,29 +777,101 @@
     "generator": false
   },
   {
-    "__docId__": 33,
+    "__docId__": 38,
     "kind": "method",
     "static": false,
     "variation": null,
-    "name": "showAll",
+    "name": "isIndeterminate",
     "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
-    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#showAll",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#isIndeterminate",
     "access": null,
-    "description": "Fetches a list of every feature available for display on the map; mocks up\na \"fake\" `FeatureCollection` and uses `setCollection()` to render the\nselection to the component.",
-    "lineNumber": 213,
-    "params": [],
+    "description": null,
+    "lineNumber": 235,
+    "undocument": true,
+    "params": [
+      {
+        "name": "selected",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "items",
+        "types": [
+          "*"
+        ]
+      }
+    ],
     "return": {
-      "nullable": null,
       "types": [
-        "Promise"
-      ],
-      "spread": false,
-      "description": "Resolves to a list of the returned features"
+        "*"
+      ]
     },
     "generator": false
   },
   {
-    "__docId__": 34,
+    "__docId__": 39,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "isChecked",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#isChecked",
+    "access": null,
+    "description": null,
+    "lineNumber": 240,
+    "undocument": true,
+    "params": [
+      {
+        "name": "selected",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "items",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 40,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "toggleAll",
+    "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#toggleAll",
+    "access": null,
+    "description": null,
+    "lineNumber": 244,
+    "undocument": true,
+    "params": [
+      {
+        "name": "selected",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "items",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 41,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -697,7 +884,7 @@
     "content": "/**\n * The `MapDetailCtrl` is a small controller with few responsibilties –\n * it is only instantiated by ng-material's `$mdPanel` service as a means\n * to provide data from a clicked feature to a dialog window that will\n * display the data; it also contains transition methods for viewing\n * tour items (e.g. from the dialog's _\"Take a tour\"_ button).\n *\n * Since feature descriptions can contain HTML, the `$sce` service is used\n * to parse and sanitize the descriptions for rendering. The dialog has access\n * to:\n * - the feature that the user clicked, which can include information about...\n *   - the feature itself (`feature`), which supplies its own `name` and `desc`\n *   property, **or...**\n *   - a linked tour element (`building`), which the feature inherits those\n *   properties from instead\n * - the current campus location (`location`), which will either be north or downtown.\n *\n * The `onGoToBldg()` method simply executes a callback after closing the dialog,\n * passing it the `code` property of the controller's `location` and `building` –\n * this allows the context of the action to come from outside the component (i.e.\n * the codes can be used to transition states in the application.)\n */\nclass MapDetailCtrl {\n\tstatic get $inject() {\n\t\treturn ['$sce'];\n\t}\n\n\t/**\n\t * Initializes the controller's dependencies and extracts relevant information\n\t * from data passed in via the `locals` property (when `$mdPanel` initializes\n\t * the dialog).\n\t *\n\t * If the feature's `linked` property is true, the data is extracted from\n\t * the building. If not, it is extracted directly from the feature.\n\t * \n\t * @param  {Object} $sce Angular's strict contextual escape service\n\t */\n\tconstructor($sce) {\n  \tif (this.feature.getProperty('linked')) {\n  \t\tthis.building = this.feature.getProperty('building');\n\n  \t\tthis.name = this.building.name;\n  \t\tthis.description = $sce.trustAsHtml(this.building.desc);\n  \t} else {\n  \t\tthis.name = this.feature.getProperty('name');\n  \t\tthis.description = $sce.trustAsHtml(this.feature.getProperty('desc'));\n  \t}\n\n  \t/**\n  \t * Property to control the visibility of the description details inside\n  \t * the dialog.\n  \t * @type {Boolean}\n  \t */\n\t\tthis.detailsShowing = false;\n  }\n\n  /**\n   * Toggles the value of `detailsShowing` to hide and show the description.\n   * @return {Boolean} The visibility of the description _after_ method is run\n   */\n\tshowDetails() {\n\t\tthis.detailsShowing = !this.detailsShowing;\n\t}\n\n\t/**\n\t * Closes the dialog, and on completion, extracts the `code` property\n\t * from the controller's `location` and `building` (assuming they exist)\n\t * and runs a callback with these as the parameters.\n\t *\n\t * This can, for instance, be used to make a state transition from within\n\t * the application (as in the example below). The callback passed to this\n\t * method is the same as the one passed into the main map component.\n\t * \n\t * @example\n\t * // from app controller\n\t * const onGotoBldg = ({ location, building }) => {\n\t *   $state.go('building', { location, building });\n\t * };\n\t * // from HTML (map component)\n\t * <campus-map on-goto-bldg=\"$ctrl.onGotoBldg()\"></campus-map>\n\t * \n\t * @param  {Function} callback The function to be run\n\t * @return {Promise}           Status of dialog close\n\t */\n\tgotoBldg(callback) {\n\t\tconst { location, building } = this;\n\t\treturn this.close().then(() => {\n\t\t\tcallback({\n\t\t\t\tlocation: location.code,\n\t\t\t\tbuilding: building.code\n\t\t\t});\n\t\t});\n\t}\n\t\n\t/**\n\t * Closes the dialog using the panel reference stored on\n\t * the controller automatically by the `$mdPanel` service.\n\t * @return {Promise} Resolves to the status of the panel close\n\t */\n\tclose() {\n\t\treturn this.mdPanelRef.close();\n\t}\n}\n\nexport default MapDetailCtrl;"
   },
   {
-    "__docId__": 35,
+    "__docId__": 42,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -713,7 +900,7 @@
     "interface": false
   },
   {
-    "__docId__": 36,
+    "__docId__": 43,
     "kind": "get",
     "static": true,
     "variation": null,
@@ -732,7 +919,7 @@
     "generator": false
   },
   {
-    "__docId__": 37,
+    "__docId__": 44,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -757,7 +944,7 @@
     "generator": false
   },
   {
-    "__docId__": 38,
+    "__docId__": 45,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -775,7 +962,7 @@
     }
   },
   {
-    "__docId__": 39,
+    "__docId__": 46,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -793,7 +980,7 @@
     }
   },
   {
-    "__docId__": 40,
+    "__docId__": 47,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -811,7 +998,7 @@
     }
   },
   {
-    "__docId__": 41,
+    "__docId__": 48,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -829,7 +1016,7 @@
     }
   },
   {
-    "__docId__": 42,
+    "__docId__": 49,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -847,7 +1034,7 @@
     }
   },
   {
-    "__docId__": 43,
+    "__docId__": 50,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -867,7 +1054,7 @@
     }
   },
   {
-    "__docId__": 44,
+    "__docId__": 51,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -889,7 +1076,7 @@
     "generator": false
   },
   {
-    "__docId__": 45,
+    "__docId__": 52,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -907,7 +1094,7 @@
     }
   },
   {
-    "__docId__": 46,
+    "__docId__": 53,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -943,7 +1130,7 @@
     "generator": false
   },
   {
-    "__docId__": 47,
+    "__docId__": 54,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -965,7 +1152,227 @@
     "generator": false
   },
   {
-    "__docId__": 48,
+    "__docId__": 55,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/filter/filter-builder_controller.js",
+    "memberof": null,
+    "longname": "src/filter/filter-builder_controller.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import isArray from \"lodash.isarray\";\n\n/**\n * The FilterBuilderCtrl class provides a controller for the\n * `<filter-builder>` directive; it contains logic for extracting\n * and combining the `ng-model` of any number of arbitrary\n * transcluded inputs inside it.\n *\n * The values of its transcluded inputs are converted to a unified\n * query filter object (MongoDB/Mongoose-style in this case).\n *\n * Unlike the `<filter-controls>` component, this directive does not\n * make any server calls or deal otherwise with with the actual map\n * data – it is purely responsible for providing the filter to make\n * the server calls with.\n * \n * @todo\n * __Determine if $watch by string reference is more performant\n * than $watchCollection on parts array__\n */\nclass FilterBuilderCtrl {\n  static get $inject() {\n    return ['$scope', '$parse'];\n  }\n  constructor($scope, $parse) {\n    this.$scope = $scope;\n    this.$parse = $parse;\n    this.parts = {};\n  }\n  $onInit() {\n    /**\n     * @memberof FilterBuilderCtrl\n     * Removes null and undefined values from a given array.\n     * \n     * @example\n     * // turns these...\n     * ['', 0, false, null, null]\n     * [null, null]\n     * \n     * // ..into these:\n     * ['', 0, false]\n     * []\n     * \n     * @param  {Array} array The array to remove nulls from\n     * @return {Array}       A null-free array\n     */\n    const removeNulls = array => array.filter(v => v == null);\n    /**\n     * @memberof FilterBuilderCtrl\n     * Gets the `$viewValue` of each child input from the controller's\n     * `parts` collection and returns them in a newly-mapped array\n     * for efficient `$watchCollection`ing.\n     * \n     * @return {Array} Array of $viewValues\n     */\n    const getViewValue = () => Object.keys(this.parts).map(key => {\n      return this.parts[key].$viewValue;\n    });\n\n    /**\n     * @memberof FilterBuilderCtrl\n     * Sets the `$viewValue` of this directive's ng-model based on\n     * the `$watch` results of `getViewValue()`. Since the value needs\n     * to be bound by reference, the original `parts` collection is used\n     * instead of the `$watch`'s copy value.\n     *\n     * If the value is an array, it is wrapped in a MongoDB `{ $in: {...} }`\n     * and assigned to a property keyed by the input's `name` attribute; if\n     * it is a primitive it is assigned without wrapping.\n     *\n     * Before `setViewValue()` is called to fire off the parser pipeline,\n     * the final value is run through `removeNulls()` to cleanse it of\n     * `null` and `undefined` values.\n     */\n    const setViewValue = () => {\n      const newViewValue = Object.keys(this.parts).map(key => {\n        const { $name: name, $viewValue: viewValue } = this.parts[key];\n\n        return (viewValue && isArray(viewValue)) ?\n          viewValue.length ? \n            { [name]: { $in: viewValue } } :\n            null :\n          viewValue ?\n            { [name]: viewValue } :\n            null;\n      });\n\n      this.$ngModel.$setViewValue(removeNulls(newViewValue));\n    }\n    this.$scope.$watchCollection(getViewValue, setViewValue);\n    // this.$scope.$watch(\n    //  () => Object.keys(this.parts).map(key => {\n    //    const { $viewValue } = this.parts[key];\n    //    return _.isArray($viewValue) ? $viewValue.join('') : $viewValue;\n    //  }).join(''),\n    //  setViewValue\n    // );\n    \n    /**\n     * @memberof FilterBuilderCtrl\n     * The `builderParser` is pushed onto the model's `$parsers` pipeline;\n     * it is responsible for determining how many values are being set on\n     * the view. If the view has...\n     * - _no values_, return an empty object\n     * - _one value_, return that value\n     * - _more than one value_, return them wrapped in `{ $and: [...] }`\n     * \n     * @param  {Array} viewValue Incoming data from setViewValue\n     * @return {Object}          Final filter formatted for view\n     */\n    const builderParser = viewValue => {\n      console.log('builder parser (view » model)', viewValue)\n      if (!viewValue.length) return {};\n      if (viewValue.length === 1) return viewValue[0];\n      if (viewValue.length > 1) return { $and: viewValue };\n    }\n    this.$ngModel.$parsers.push(builderParser);\n    \n    /**\n     * @memberof FilterBuilderCtrl\n     * The `filterFormatter` is pushed onto the model's `$formatters` pipeline;\n     * it is responsible for delegating incoming scope values (set by user)\n     * to their respective input elements' scopes.\n     *\n     * The function needs to:\n     * - determine which scope models are available to set\n     * - disregard incoming values with no matching input element by building an\n     * array of models with a matching value\n     *   - `[{ modelName: '$ctrl.modelName', modelValue: '...' }, {...}]`\n     * - for each available model with a matching value:\n     *   - use Angular's `$parse` service to generate a getter/setter for the\n     *   model's scope reference\n     *   - use the provided setter to set the scope reference, therefore updating\n     *   the child input elements\n     * \n     * @param  {Object} modelValue Map of values by name to set on child scopes\n     */\n    const filterFormatter = modelValue => {\n      if (modelValue) {\n        const modelsToSet = Object.keys(this.parts).map(key => {\n          return modelValue[this.parts[key].$name] && {\n            modelName: key,\n            modelValue: modelValue[this.parts[key].$name] }; \n        });\n        modelsToSet.forEach(newModel => {\n          const getModel = this.$parse(newModel.modelName),\n                setModel = getModel.assign;\n          setModel(this.$scope, newModel.modelValue)\n        });\n        console.log(`formatter set input to`, modelsToSet);\n      }\n    }\n    \n    this.$ngModel.$formatters.push(filterFormatter);\n  }\n}\n\nexport default FilterBuilderCtrl;"
+  },
+  {
+    "__docId__": 56,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "FilterBuilderCtrl",
+    "memberof": "src/filter/filter-builder_controller.js",
+    "longname": "src/filter/filter-builder_controller.js~FilterBuilderCtrl",
+    "access": null,
+    "export": true,
+    "importPath": "uoit-campus-map/src/filter/filter-builder_controller.js",
+    "importStyle": "FilterBuilderCtrl",
+    "description": "The FilterBuilderCtrl class provides a controller for the\n`<filter-builder>` directive; it contains logic for extracting\nand combining the `ng-model` of any number of arbitrary\ntranscluded inputs inside it.\n\nThe values of its transcluded inputs are converted to a unified\nquery filter object (MongoDB/Mongoose-style in this case).\n\nUnlike the `<filter-controls>` component, this directive does not\nmake any server calls or deal otherwise with with the actual map\ndata – it is purely responsible for providing the filter to make\nthe server calls with.",
+    "lineNumber": 21,
+    "todo": [
+      "__Determine if $watch by string reference is more performant\nthan $watchCollection on parts array__"
+    ],
+    "interface": false
+  },
+  {
+    "__docId__": 57,
+    "kind": "get",
+    "static": true,
+    "variation": null,
+    "name": "$inject",
+    "memberof": "src/filter/filter-builder_controller.js~FilterBuilderCtrl",
+    "longname": "src/filter/filter-builder_controller.js~FilterBuilderCtrl.$inject",
+    "access": null,
+    "description": null,
+    "lineNumber": 22,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 58,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "src/filter/filter-builder_controller.js~FilterBuilderCtrl",
+    "longname": "src/filter/filter-builder_controller.js~FilterBuilderCtrl#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 25,
+    "undocument": true,
+    "params": [
+      {
+        "name": "$scope",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "$parse",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 59,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$scope",
+    "memberof": "src/filter/filter-builder_controller.js~FilterBuilderCtrl",
+    "longname": "src/filter/filter-builder_controller.js~FilterBuilderCtrl#$scope",
+    "access": null,
+    "description": null,
+    "lineNumber": 26,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 60,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "$parse",
+    "memberof": "src/filter/filter-builder_controller.js~FilterBuilderCtrl",
+    "longname": "src/filter/filter-builder_controller.js~FilterBuilderCtrl#$parse",
+    "access": null,
+    "description": null,
+    "lineNumber": 27,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 61,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "parts",
+    "memberof": "src/filter/filter-builder_controller.js~FilterBuilderCtrl",
+    "longname": "src/filter/filter-builder_controller.js~FilterBuilderCtrl#parts",
+    "access": null,
+    "description": null,
+    "lineNumber": 28,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 62,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "$onInit",
+    "memberof": "src/filter/filter-builder_controller.js~FilterBuilderCtrl",
+    "longname": "src/filter/filter-builder_controller.js~FilterBuilderCtrl#$onInit",
+    "access": null,
+    "description": null,
+    "lineNumber": 30,
+    "undocument": true,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 63,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/filter/filter-builder_directive.js",
+    "memberof": null,
+    "longname": "src/filter/filter-builder_directive.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import FilterBuilderCtrl from \"./filter-builder_controller.js\";\n\nfunction filterBuilder() {\n\treturn {\n\t\trestrict: 'E',\n\t\ttemplate: `<form novalidate ng-submit=\"$event.preventDefault()\" ng-transclude></form>`,\n\t\trequire: {\n\t\t\t$ngModel: 'ngModel'\n\t\t},\n\t\ttransclude: true,\n\t\tbindToController: true,\n\t\tcontroller: FilterBuilderCtrl\n\t};\n}\n\nexport default filterBuilder;"
+  },
+  {
+    "__docId__": 64,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "filterBuilder",
+    "memberof": "src/filter/filter-builder_directive.js",
+    "longname": "src/filter/filter-builder_directive.js~filterBuilder",
+    "access": null,
+    "export": true,
+    "importPath": "uoit-campus-map/src/filter/filter-builder_directive.js",
+    "importStyle": "filterBuilder",
+    "description": null,
+    "lineNumber": 3,
+    "undocument": true,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 65,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/filter/filter-input_directive.js",
+    "memberof": null,
+    "longname": "src/filter/filter-input_directive.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "function filterInput() {\n\treturn {\n\t\trestrict: 'A',\n\t\trequire: {\n\t\t\tNgModelCtrl: 'ngModel',\n\t\t\tFilterBuilderCtrl: '^filterBuilder'\n\t\t},\n\t\tlink: function FilterInputLink(scope, el, attrs, ctrl) {\n\t\t\tif (!attrs.name) throw new Error('A filter control is missing its \\'name\\' attribute!');\n\t\t\tconst { NgModelCtrl, FilterBuilderCtrl } = ctrl;\n\t\t\tFilterBuilderCtrl.parts[attrs.ngModel] = NgModelCtrl;\n\t\t}\n\t};\n}\n\nexport default filterInput;"
+  },
+  {
+    "__docId__": 66,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "filterInput",
+    "memberof": "src/filter/filter-input_directive.js",
+    "longname": "src/filter/filter-input_directive.js~filterInput",
+    "access": null,
+    "export": true,
+    "importPath": "uoit-campus-map/src/filter/filter-input_directive.js",
+    "importStyle": "filterInput",
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 67,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -975,10 +1382,10 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import campusMap from './map_component'\nimport MapCtrl from './map_controller';\n\nimport campusMapControls from './controls/map-controls_component';\nimport MapControlsCtrl from './controls/map-controls_controller';\n\nimport MapDetailCtrl from './detail/map-detail_controller';\n\nimport MAP_SETTINGS from './constants/map-settings_constant';\nimport MAP_ICONS from './constants/map-icons_constant';\n\n// development only\n//\nimport templates from './_templates';\n//\n// ----------------\n\nexport default angular.module('campusMap', [])\n\t.run(templates)\n  .controller('MapCtrl', MapCtrl)\n  .controller('MapControlsCtrl', MapControlsCtrl)\n  .component('campusMap', campusMap)\n  .component('campusMapControls', campusMapControls)\n  .constant('MAP_SETTINGS', MAP_SETTINGS)\n  .constant('MAP_ICONS', MAP_ICONS);\n"
+    "content": "import MapCtrl from './map_controller';\nimport MapControlsCtrl from './controls/map-controls_controller';\n// import FilterBuilderCtrl from './filter/filter-builder_controller';\n\nimport campusMap from './map_component'\nimport campusMapControls from './controls/map-controls_component';\nimport filterBuilder from './filter/filter-builder_directive';\nimport filterInput from './filter/filter-input_directive';\n\n\nimport MAP_SETTINGS from './constants/map-settings_constant';\nimport MAP_ICONS from './constants/map-icons_constant';\n\n// development only\n//\nimport templates from './_templates';\n//\n// ----------------\n\nexport default angular.module('campusMap', [])\n\t.run(templates)\n\n  .component('campusMap', campusMap)\n  .component('campusMapControls', campusMapControls)\n\n  .directive('filterBuilder', filterBuilder)\n  .directive('filterInput', filterInput)\n\n  .constant('MAP_SETTINGS', MAP_SETTINGS)\n  .constant('MAP_ICONS', MAP_ICONS);\n"
   },
   {
-    "__docId__": 49,
+    "__docId__": 68,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -988,10 +1395,10 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "const campusMap = {\n  // transclude: true,\n  bindings: {\n    onGotoBldg: '<',\n    collection: '<?'\n    // location: '<?',\n    // building: '<?',\n    // feature: '<?'\n  },\n  templateUrl: '_map.html',\n  controller: 'MapCtrl'\n}\n\nexport default campusMap;"
+    "content": "import MapCtrl from './map_controller.js'\n\nconst campusMap = {\n  // transclude: true,\n  bindings: {\n    onGotoBldg: '<?',\n    mapData: '<?'\n    // location: '<?',\n    // building: '<?',\n    // feature: '<?'\n  },\n  templateUrl: '_map.html',\n  transclude:  {\n    controls: 'campusMapControls'\n  },\n  controller: MapCtrl\n}\n\nexport default campusMap;"
   },
   {
-    "__docId__": 50,
+    "__docId__": 69,
     "kind": "variable",
     "static": true,
     "variation": null,
@@ -1003,7 +1410,7 @@
     "importPath": "uoit-campus-map/src/map_component.js",
     "importStyle": "campusMap",
     "description": null,
-    "lineNumber": 1,
+    "lineNumber": 3,
     "undocument": true,
     "type": {
       "types": [
@@ -1012,7 +1419,7 @@
     }
   },
   {
-    "__docId__": 51,
+    "__docId__": 70,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -1022,10 +1429,10 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import MapDetailCtrl from './detail/map-detail_controller.js';\n\n/**\n * The `MapCtrl` is the lead orchestrator of the component: it wraps the\n * `NgMap` directive's methods and provides its own for interfacing with\n * the map's controls, generating dialogs, and re-rendering the map elements.\n */\nclass MapCtrl {\n\tstatic get $inject() {\n\t\treturn [\n\t\t\t'$timeout', '$scope', '$window', // angular core\n\t\t\t'NgMap', // external deps\n\t\t\t'$mdToast', '$mdPanel', // md deps\n\t\t\t'MAP_SETTINGS', 'MAP_ICONS' // constants\n\t\t];\n\t}\n\t/**\n\t * Initialize the controller's dependencies.\n\t * \n\t * @param  {Object} $timeout     Angular's setTimeout wrapper\n\t * @param  {Object} $scope       The current scope\n\t * @param  {Object} $window      Angular's window wrapper\n\t * @param  {Object} NgMap        Angular Google Maps\n\t * @param  {Object} $mdToast     Material toast service\n\t * @param  {Object} $mdPanel     Material panel service\n\t * @param  {Object} MAP_SETTINGS Constant for map config object\n\t * @param  {Object} MAP_ICONS    Constant for map icon definitions\n\t */\n\tconstructor($timeout, $scope, $window, NgMap, $mdToast, $mdPanel, MAP_SETTINGS, MAP_ICONS) {\n    // attach dependencies\n    this._$timeout = $timeout;\n    this._$scope = $scope;\n    this._$window = $window;\n    this._$mdToast = $mdToast;\n    this._$mdPanel = $mdPanel;\n    // init constants\n    this._MAP_SETTINGS = MAP_SETTINGS;\n    this._MAP_ICONS = MAP_ICONS;\n    /**\n     * Function for resolving map instance from promise.\n     * @type {Function}\n     */\n    this.getMap = NgMap.getMap;\n    /**\n     * Property to store the loaded map instance.\n     * @type {null|Object}\n     */\n    this.map = null;\n    /**\n     * Helper factory object for deploying simple toasts.\n     * @type {Object}\n     */\n    this.toast = $mdToast.simple();\n    /**\n     * Token to hold a toast's `$timeout`.\n     * @type {null|Promise}\n     */\n    this.toastCanceler = null;\n    /**\n     * Flag to determine whether there is already an active toast.\n     * @type {Boolean}\n     */\n    this.toastActive = false;\n  }\n  $onInit() {\n    this.getMap().then(instance => {\n    \tthis.map = instance;\n\n    \t/*\n    \t\tThis is a stupid hack that makes the map fill space by force.\n    \t\tBest not used whenever possible.\n    \t */\n      // angular.element(this._$window).triggerHandler('resize');\n      google.maps.event.trigger(instance, 'resize');\n\n      instance.data.setStyle(feature => {\n        var category = feature.getProperty('category');\n        switch(category) {\n        \tcase '581a2c57d9ff16e787aa1b20': // Services\n        \t\treturn { icon: this._MAP_ICONS.SERVICE }\n        \t\tbreak;\n        \tcase '581a2c5ed9ff16e787aa1b21': // Emergency services\n        \t\treturn { icon: this._MAP_ICONS.AED }\n        \t\tbreak;\n        \tcase '581a2c77d9ff16e787aa1b22': // Restaurants and food courts\n        \t\treturn { \n        \t\t\ticon: this._MAP_ICONS.FOOD,\n\t\t          fillColor: '#5F259F',\n\t\t          fillOpacity: 1,\n\t\t          strokeWeight: 3,\n\t\t          strokeColor: 'white',\n\t\t          strokeOpacity: 0.3\n\t\t        }\n        \t\tbreak;\n        \tcase '581a2c8ad9ff16e787aa1b24': // Parking\n        \t\treturn { \n        \t\t\ticon: this._MAP_ICONS.PARKING,\n\t\t          fillColor: '#53565A',\n\t\t          fillOpacity: 0.5,\n\t\t          strokeWeight: 3,\n\t\t          strokeColor: 'white',\n\t\t          strokeOpacity: 0.3\n\t\t        }\n        \t\tbreak;\n        \tcase '581a2c8fd9ff16e787aa1b25': // Parking\n        \t\treturn { \n        \t\t\ticon: this._MAP_ICONS.OUTDOOR,\n\t\t          fillColor: '#1a875c',\n\t\t          fillOpacity: 0.5,\n\t\t          strokeWeight: 3,\n\t\t          strokeColor: 'white',\n\t\t          strokeOpacity: 0.1\n\t\t        }\n        \t\tbreak;\n      \t\tdefault: // other\n\t\t        return {\n\t\t        \ticon: this._MAP_ICONS.DEFAULT,\n\t\t          fillColor: '#0077CA',\n\t\t          fillOpacity: 1,\n\t\t          strokeWeight: 3,\n\t\t          strokeColor: '#003C71',\n\t\t          strokeOpacity: 0.3\n\t\t        }\n        }\n      });\n\n      instance.data.addListener('mouseover', event => {\n        instance.data.overrideStyle(event.feature, {\n          fillColor: '#C71566',\n          fillOpacity: 0.7,\n          strokeWeight: 5,\n          strokeColor: 'white',\n          strokeOpacity: 0.7\n        });\n        this.showToast(event.feature);\n      });\n\n      instance.data.addListener('mouseout', event => {\n        instance.data.revertStyle();\n        this.toastCanceler = this.hideToast();\n      });\n\n      instance.data.addListener('click', event => {\n        this.showDetail(event.feature, this.isolateMouseEvent(event));\n      });\n\n\t    this._$scope.$watch( () => this.mapControls, (newVal) => {\n\t    \tif (newVal) {\n\t\t\t\t\tconsole.log('map component detected internal changes:', newVal);\n\t\t\t  \tthis.clearMapData().then(() => this.updateMapData(newVal));\n\t\t    \tif (newVal.location && this.location !== newVal.location) {\n\t\t\t    \tthis.location = newVal.location;\n\t\t\t    }\n\t    \t}\n\t    });\n\n    });\n\t}\n\n\t// $onChanges({ collection: { currentValue: collection} }) {\n\t// \tconsole.log('map component detected external changes:', collection);\n //  \tthis.clearMapData().then(() => this.updateMapData({ collection }));\n\t// }\n\n\t/**\n\t * Clean up event listeners that the controller has attached via\n\t * the Google Maps API. This is especially important for the map\n\t * component in general, whose listeners may not always exist in\n\t * a context that Angular is aware of (and therefore will lead to\n\t * memory leaks if left attached).\n\t */\n\t$onDestroy() {\n\t\tgoogle.maps.event.clearInstanceListeners(this.map.data);\n\t}\n\n\t/**\n\t * Handler method for map data `$watch`; watches incoming geoJSON\n\t * data for changes and adds it to the map if detected. If the\n\t * new data has a `showAll` property (and it is true), all features\n\t * all loaded and the map bounds are recalculated.\n\t * \n\t * @param  {Object} newVal New incoming map data\n\t */\n\tupdateMapData(newVal) {\n\t\tconsole.log('updating map data...', newVal);\n\t\treturn this.clearMapData().then(map => {\n\t\t\tif (newVal.collection) {\n\t\t\t\tif (angular.isArray(newVal.collection)) {\n\t\t\t\t\tangular.forEach(newVal.collection, (collection, index) => {\n\t\t\t\t\t\tthis._$scope.$applyAsync(() => map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${collection._id}`, null, () => {\n\t\t\t\t\t\t  (index === newVal.collection.length - 1) && this.fitBounds(map);\n\t\t\t\t\t\t\tconsole.log('map data updated!');\n\t\t\t  \t\t}));\n\t\t\t\t\t});\n\t\t\t\t} else {\n\t\t      map.data.addGeoJson(newVal.collection);\n\t\t\t\t}\n\t\t\t\tconsole.log('map data updated!');\n\t\t\t}\n\t\t\t// } else {\n\t\t\t// \tthis._$scope.$applyAsync(() => {\n\t\t\t// \t\tangular.forEach(newVal.collection, (collection, index) => {\n\t\t\t// \t\t\tmap.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${collection._id}`, null, () => {\n\t\t\t// \t\t\t  (index === newVal.collection.length - 1) && this.fitBounds(map);\n\t\t\t// \t\t\t\tconsole.log('map data updated!');\n\t\t\t//   \t\t});\n\t\t\t// \t\t});\n\t\t\t// \t});\n\t\t\t// }\n\t\t});\n\t}\n\t\n\t/**\n\t * Removes all features from the map by looping over feature\n\t * data objects and calling their `map.remove()` on them.\n\t */\n\tclearMapData() {\n\t\tconsole.log('clearing map data...');\n\t\treturn this.getMap().then(map => {\n\t\t\tmap.data.forEach(feature => {\n\t\t\t\tmap.data.remove(feature);\n\t\t\t});\n\t\t\tconsole.log('map data cleared!');\n\t\t\treturn map;\n\t\t});\n\t}\n\n\t/**\n\t * Shows a detail popup, called by user clicking map feature. This\n\t * method uses ng-material's `$mdPanel` service to build a floating\n\t * panel config, immediately show it, and manually clean up its scope\n\t * listeners on close.\n\t * @param  {Object} feature         The feature that was clicked\n\t * @param  {Object} options\n\t * @param  {Number} options.clientX Horizontal position of user's click\n\t * @param  {Number} options.clientY Vertical position of user's click\n\t * @return {Promise}                Resolves to panel reference\n\t */\n\tshowDetail(feature, { clientX: left, clientY: top }) {\n\n\t\tlet panelRef;\n\t  const position = this._$mdPanel.newPanelPosition()\n\t    .absolute().center();\n\t    // .top(`${ top }px`)\n\t    // .left(`${ left }px`);\n\n\t  const animation = this._$mdPanel.newPanelAnimation()\n      .openFrom({ top, left })\n      .closeTo({ top, left })\n\t\t\t.withAnimation(this._$mdPanel.animation.SCALE);\n\n\t  return this._$mdPanel.open({\n\t    attachTo: angular.element(document.body),\n\t    controller: MapDetailCtrl,\n\t    controllerAs: 'ctrl',\n\t    templateUrl: 'detail/_map-detail.html',\n\t    hasBackdrop: true,\n\t    panelClass: 'map-detail',\n\t    locals: {\n\t    \tcallback: this.onGotoBldg(),\n\t    \tlocation: this.location,\n\t    \tfeature\n\t    },\n\t    trapFocus: true,\n\t    zIndex: 150,\n\t    clickOutsideToClose: true,\n\t    escapeToClose: true,\n\t    focusOnOpen: true,\n\t    onDomRemoved() {\n\t    \tpanelRef.destroy();\n\t    },\n\t    animation,\n\t    position\n\t  }).then(panel => {\n\t  \tpanelRef = panel;\n\t  });\n\t}\n\n\t/**\n\t * Shows a simple toast notification containing the name of the \n\t * future being hovered over. If there is already a toast active,\n\t * it updates the name in the toast instead of making a new one.\n\t * \n\t * @param  {Object} feature The feature being hovered over\n\t */\n\tshowToast(feature) {\n\t\tlet featureName = feature.getProperty('name');\n\t\tif (!this.toastActive) {\n\t\t\tthis.toast.textContent(featureName).position('bottom left').hideDelay(0);\n\t\t\tthis._$mdToast.show(this.toast);\n\t\t\tthis.toastActive = true;\n\t\t} else {\n\t\t\tthis._$timeout.cancel(this.toastCanceler);\n\t\t\tthis._$timeout( () => {\n\t\t\t\tthis._$mdToast.updateTextContent(featureName);\n\t\t\t});\n\t\t}\n\t}\n\n\t/**\n\t * Hides the toast notification after 3 seconds, but provides\n\t * a way to cancel the 3 seconds (`toastCanceler`).\n\t *\n\t * It is meant to be called on mouseout, so that the toast will\n\t * remain on screen for a few seconds, and only disappear if\n\t * another isn't needed within those seconds.\n\t * \n\t * @return {Promise} Resolves to completed timeout\n\t */\n\thideToast() {\n\t\treturn this._$timeout( () => {\n\t\t\tthis._$mdToast.hide(this.toast);\n\t\t\tthis.toastActive = false;\n\t  }, 3000);\n\t}\n\n\t/**\n\t * Direct port of Google Maps `processBounds` example function\n\t * for recalculation of map boundaries based on map data.\n\t * @param  {Object}   geometry LatLng geometry object\n\t * @param  {Function} callback Recursion callback\n\t * @param  {*}   \t\t\tthisArg  Context for `this`\n\t */\n\tprocessBounds(geometry, callback, thisArg) {\n\t  if (geometry instanceof google.maps.LatLng) {\n\t    callback.call(thisArg, geometry);\n\t  } else if (geometry instanceof google.maps.Data.Point) {\n\t    callback.call(thisArg, geometry.get());\n\t  } else {\n\t    geometry.getArray().forEach(g => {\n\t      this.processBounds(g, callback, thisArg);\n\t    });\n\t  }\n\t}\n\t/**\n\t * Resizes map view to fit recalculated bounds.\n\t */\n\tfitBounds() {\n\t  const bounds = new google.maps.LatLngBounds();\n\t  this.map.data.forEach(feature => {\n\t    this.processBounds(feature.getGeometry(), bounds.extend, bounds);\n\t  });\n\t  this.map.fitBounds(bounds);\n\t}\n\t/**\n\t * Since Google Map events store private properties under names\n\t * that change periodically, it is necessary to manually evaluate\n\t * which property is the `MouseEvent` by loop-and-compare. This\n\t * method returns a `MouseEvent` from a Map event.\n\t * @param  {Event} mapEvent Google map event\n\t * @return {Event}          MouseEvent\n\t */\n\tisolateMouseEvent(mapEvent) {\n\t\tfor (const prop in mapEvent) {\n\t\t\tif (mapEvent[prop] && mapEvent[prop] instanceof MouseEvent) {\n\t\t\t\tconsole.log(mapEvent[prop]);\n\t\t\t\treturn mapEvent[prop];\n\t\t\t}\n\t\t}\n\t}\n}\n\nexport default MapCtrl;"
+    "content": "import MapDetailCtrl from './detail/map-detail_controller.js';\n\n/**\n * The `MapCtrl` is the lead orchestrator of the component: it wraps the\n * `NgMap` directive's methods and provides its own for interfacing with\n * the map's controls, generating dialogs, and re-rendering the map elements.\n */\nclass MapCtrl {\n\tstatic get $inject() {\n\t\treturn [\n\t\t\t'$timeout', '$scope', '$window', // angular core\n\t\t\t'NgMap', // external deps\n\t\t\t'$mdToast', '$mdPanel', // md deps\n\t\t\t'MAP_SETTINGS', 'MAP_ICONS' // constants\n\t\t];\n\t}\n\t/**\n\t * Initialize the controller's dependencies.\n\t * \n\t * @param  {Object} $timeout     Angular's setTimeout wrapper\n\t * @param  {Object} $scope       The current scope\n\t * @param  {Object} $window      Angular's window wrapper\n\t * @param  {Object} NgMap        Angular Google Maps\n\t * @param  {Object} $mdToast     Material toast service\n\t * @param  {Object} $mdPanel     Material panel service\n\t * @param  {Object} MAP_SETTINGS Constant for map config object\n\t * @param  {Object} MAP_ICONS    Constant for map icon definitions\n\t */\n\tconstructor($timeout, $scope, $window, NgMap, $mdToast, $mdPanel, MAP_SETTINGS, MAP_ICONS) {\n    // attach dependencies\n    this._$timeout = $timeout;\n    this._$scope = $scope;\n    this._$window = $window;\n    this._$mdToast = $mdToast;\n    this._$mdPanel = $mdPanel;\n    // init constants\n    this._MAP_SETTINGS = MAP_SETTINGS;\n    this._MAP_ICONS = MAP_ICONS;\n    /**\n     * Function for resolving map instance from promise.\n     * @type {Function}\n     */\n    this.getMap = NgMap.getMap;\n    /**\n     * Property to store the loaded map instance.\n     * @type {null|Object}\n     */\n    this.map = null;\n    /**\n     * Helper factory object for deploying simple toasts.\n     * @type {Object}\n     */\n    this.toast = $mdToast.simple();\n    /**\n     * Token to hold a toast's `$timeout`.\n     * @type {null|Promise}\n     */\n    this.toastCanceler = null;\n    /**\n     * Flag to determine whether there is already an active toast.\n     * @type {Boolean}\n     */\n    this.toastActive = false;\n  }\n  $onInit() {\n    this.getMap().then(instance => {\n    \tthis.map = instance;\n\n    \t/*\n    \t\tThis is a stupid hack that makes the map fill space by force.\n    \t\tBest not used whenever possible.\n    \t */\n      // angular.element(this._$window).triggerHandler('resize');\n      google.maps.event.trigger(instance, 'resize');\n\n      instance.data.setStyle(feature => {\n        var category = feature.getProperty('category');\n        switch(category) {\n        \tcase '581a2c57d9ff16e787aa1b20': // Services\n        \t\treturn { icon: this._MAP_ICONS.SERVICE }\n        \t\tbreak;\n        \tcase '581a2c5ed9ff16e787aa1b21': // Emergency services\n        \t\treturn { icon: this._MAP_ICONS.AED }\n        \t\tbreak;\n        \tcase '581a2c77d9ff16e787aa1b22': // Restaurants and food courts\n        \t\treturn { \n        \t\t\ticon: this._MAP_ICONS.FOOD,\n\t\t          fillColor: '#5F259F',\n\t\t          fillOpacity: 1,\n\t\t          strokeWeight: 3,\n\t\t          strokeColor: 'white',\n\t\t          strokeOpacity: 0.3\n\t\t        }\n        \t\tbreak;\n        \tcase '581a2c8ad9ff16e787aa1b24': // Parking\n        \t\treturn { \n        \t\t\ticon: this._MAP_ICONS.PARKING,\n\t\t          fillColor: '#53565A',\n\t\t          fillOpacity: 0.5,\n\t\t          strokeWeight: 3,\n\t\t          strokeColor: 'white',\n\t\t          strokeOpacity: 0.3\n\t\t        }\n        \t\tbreak;\n        \tcase '581a2c8fd9ff16e787aa1b25': // Parking\n        \t\treturn { \n        \t\t\ticon: this._MAP_ICONS.OUTDOOR,\n\t\t          fillColor: '#1a875c',\n\t\t          fillOpacity: 0.5,\n\t\t          strokeWeight: 3,\n\t\t          strokeColor: 'white',\n\t\t          strokeOpacity: 0.1\n\t\t        }\n        \t\tbreak;\n      \t\tdefault: // other\n\t\t        return {\n\t\t        \ticon: this._MAP_ICONS.DEFAULT,\n\t\t          fillColor: '#0077CA',\n\t\t          fillOpacity: 1,\n\t\t          strokeWeight: 3,\n\t\t          strokeColor: '#003C71',\n\t\t          strokeOpacity: 0.3\n\t\t        }\n        }\n      });\n\n      instance.data.addListener('mouseover', event => {\n        instance.data.overrideStyle(event.feature, {\n          fillColor: '#C71566',\n          fillOpacity: 0.7,\n          strokeWeight: 5,\n          strokeColor: 'white',\n          strokeOpacity: 0.7\n        });\n        this.showToast(event.feature);\n      });\n\n      instance.data.addListener('mouseout', event => {\n        instance.data.revertStyle();\n        this.toastCanceler = this.hideToast();\n      });\n\n      instance.data.addListener('click', event => {\n        this.showDetail(event.feature, this.isolateMouseEvent(event));\n      });\n\n\t    // this._$scope.$watch( () => this.mapData, (newVal) => {\n\t    // \tif (newVal) {\n\t\t\t\t\t// console.log('map component detected internal changes:', newVal);\n\t\t\t  // \tthis.clearMapData().then(() => this.updateMapData(newVal));\n\t\t   //  \tif (newVal.location && this.location !== newVal.location) {\n\t\t\t  //   \tthis.location = newVal.location;\n\t\t\t  //   }\n\t    // \t}\n\t    // });\n\n    });\n\t}\n\n\t$onChanges({ mapData }) {\n\t\tif (mapData.isFirstChange()) return;\n\t\tconst\t{\n\t\t\tcurrentValue: { location, category, collection }\n\t\t} = mapData;\n\t\tconsole.log('map component detected external changes:', { location, category, collection });\n  \tthis.clearMapData()\n  \t\t.then(() => this.updateMapData({\n  \t\t\tlocation, category, collection\n  \t\t}));\n  \tif (location && this.location !== location) {\n    \tthis.location = location;\n    }\n\t}\n\n\t/**\n\t * Clean up event listeners that the controller has attached via\n\t * the Google Maps API. This is especially important for the map\n\t * component in general, whose listeners may not always exist in\n\t * a context that Angular is aware of (and therefore will lead to\n\t * memory leaks if left attached).\n\t */\n\t$onDestroy() {\n\t\tgoogle.maps.event.clearInstanceListeners(this.map.data);\n\t}\n\n\t/**\n\t * Handler method for map data `$watch`; watches incoming geoJSON\n\t * data for changes and adds it to the map if detected. If the\n\t * new data has a `showAll` property (and it is true), all features\n\t * all loaded and the map bounds are recalculated.\n\t * \n\t * @param  {Object} newVal New incoming map data\n\t */\n\tupdateMapData(newVal) {\n\t\tconsole.log('updating map data...', newVal);\n\t\treturn this.clearMapData().then(map => {\n\t\t\tif (newVal.collection && newVal.category.length) {\n\t\t\t\tif (newVal.isCollection) {\n\t\t\t\t\tangular.forEach(newVal.collection, (collection, index) => {\n\t\t\t\t\t\tthis._$scope.$applyAsync(() => map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${collection._id}`, null, () => {\n\t\t\t\t\t\t  (index === newVal.collection.length - 1) && this.fitBounds(map);\n\t\t\t  \t\t}));\n\t\t\t\t\t});\n\t\t\t\t} else {\n\t\t      map.data.addGeoJson(newVal.collection);\n\t\t\t\t}\n\t\t\t\tconsole.log('map data updated!');\n\t\t\t}\n\t\t});\n\t}\n\t\n\t/**\n\t * Removes all features from the map by looping over feature\n\t * data objects and calling their `map.remove()` on them.\n\t */\n\tclearMapData() {\n\t\tconsole.log('clearing map data...');\n\t\treturn this.getMap().then(map => {\n\t\t\tmap.data.forEach(feature => {\n\t\t\t\tmap.data.remove(feature);\n\t\t\t});\n\t\t\tconsole.log('map data cleared!');\n\t\t\treturn map;\n\t\t});\n\t}\n\n\t/**\n\t * Shows a detail popup, called by user clicking map feature. This\n\t * method uses ng-material's `$mdPanel` service to build a floating\n\t * panel config, immediately show it, and manually clean up its scope\n\t * listeners on close.\n\t * @param  {Object} feature         The feature that was clicked\n\t * @param  {Object} options\n\t * @param  {Number} options.clientX Horizontal position of user's click\n\t * @param  {Number} options.clientY Vertical position of user's click\n\t * @return {Promise}                Resolves to panel reference\n\t */\n\tshowDetail(feature, { clientX: left, clientY: top }) {\n\n\t\tlet panelRef;\n\t  const position = this._$mdPanel.newPanelPosition()\n\t    .absolute().center();\n\t    // .top(`${ top }px`)\n\t    // .left(`${ left }px`);\n\n\t  const animation = this._$mdPanel.newPanelAnimation()\n      .openFrom({ top, left })\n      .closeTo({ top, left })\n\t\t\t.withAnimation(this._$mdPanel.animation.SCALE);\n\n\t  return this._$mdPanel.open({\n\t    attachTo: angular.element(document.body),\n\t    controller: MapDetailCtrl,\n\t    controllerAs: 'ctrl',\n\t    templateUrl: 'detail/_map-detail.html',\n\t    hasBackdrop: true,\n\t    panelClass: 'map-detail',\n\t    locals: {\n\t    \tcallback: this.onGotoBldg(),\n\t    \tlocation: this.location,\n\t    \tfeature\n\t    },\n\t    trapFocus: true,\n\t    zIndex: 150,\n\t    clickOutsideToClose: true,\n\t    escapeToClose: true,\n\t    focusOnOpen: true,\n\t    onDomRemoved() {\n\t    \tpanelRef.destroy();\n\t    },\n\t    animation,\n\t    position\n\t  }).then(panel => {\n\t  \tpanelRef = panel;\n\t  });\n\t}\n\n\t/**\n\t * Shows a simple toast notification containing the name of the \n\t * future being hovered over. If there is already a toast active,\n\t * it updates the name in the toast instead of making a new one.\n\t * \n\t * @param  {Object} feature The feature being hovered over\n\t */\n\tshowToast(feature) {\n\t\tlet featureName = feature.getProperty('name');\n\t\tif (!this.toastActive) {\n\t\t\tthis.toast.textContent(featureName).position('bottom left').hideDelay(0);\n\t\t\tthis._$mdToast.show(this.toast);\n\t\t\tthis.toastActive = true;\n\t\t} else {\n\t\t\tthis._$timeout.cancel(this.toastCanceler);\n\t\t\tthis._$timeout( () => {\n\t\t\t\tthis._$mdToast.updateTextContent(featureName);\n\t\t\t});\n\t\t}\n\t}\n\n\t/**\n\t * Hides the toast notification after 3 seconds, but provides\n\t * a way to cancel the 3 seconds (`toastCanceler`).\n\t *\n\t * It is meant to be called on mouseout, so that the toast will\n\t * remain on screen for a few seconds, and only disappear if\n\t * another isn't needed within those seconds.\n\t * \n\t * @return {Promise} Resolves to completed timeout\n\t */\n\thideToast() {\n\t\treturn this._$timeout( () => {\n\t\t\tthis._$mdToast.hide(this.toast);\n\t\t\tthis.toastActive = false;\n\t  }, 3000);\n\t}\n\n\t/**\n\t * Direct port of Google Maps `processBounds` example function\n\t * for recalculation of map boundaries based on map data.\n\t * @param  {Object}   geometry LatLng geometry object\n\t * @param  {Function} callback Recursion callback\n\t * @param  {*}   \t\t\tthisArg  Context for `this`\n\t */\n\tprocessBounds(geometry, callback, thisArg) {\n\t  if (geometry instanceof google.maps.LatLng) {\n\t    callback.call(thisArg, geometry);\n\t  } else if (geometry instanceof google.maps.Data.Point) {\n\t    callback.call(thisArg, geometry.get());\n\t  } else {\n\t    geometry.getArray().forEach(g => {\n\t      this.processBounds(g, callback, thisArg);\n\t    });\n\t  }\n\t}\n\t/**\n\t * Resizes map view to fit recalculated bounds.\n\t */\n\tfitBounds() {\n\t  const bounds = new google.maps.LatLngBounds();\n\t  this.map.data.forEach(feature => {\n\t    this.processBounds(feature.getGeometry(), bounds.extend, bounds);\n\t  });\n\t  this.map.fitBounds(bounds);\n\t}\n\t/**\n\t * Since Google Map events store private properties under names\n\t * that change periodically, it is necessary to manually evaluate\n\t * which property is the `MouseEvent` by loop-and-compare. This\n\t * method returns a `MouseEvent` from a Map event.\n\t * @param  {Event} mapEvent Google map event\n\t * @return {Event}          MouseEvent\n\t */\n\tisolateMouseEvent(mapEvent) {\n\t\tfor (const prop in mapEvent) {\n\t\t\tif (mapEvent[prop] && mapEvent[prop] instanceof MouseEvent) {\n\t\t\t\tconsole.log(mapEvent[prop]);\n\t\t\t\treturn mapEvent[prop];\n\t\t\t}\n\t\t}\n\t}\n}\n\nexport default MapCtrl;"
   },
   {
-    "__docId__": 52,
+    "__docId__": 71,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -1041,7 +1448,7 @@
     "interface": false
   },
   {
-    "__docId__": 53,
+    "__docId__": 72,
     "kind": "get",
     "static": true,
     "variation": null,
@@ -1060,7 +1467,7 @@
     "generator": false
   },
   {
-    "__docId__": 54,
+    "__docId__": 73,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -1155,7 +1562,7 @@
     "generator": false
   },
   {
-    "__docId__": 55,
+    "__docId__": 74,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1173,7 +1580,7 @@
     }
   },
   {
-    "__docId__": 56,
+    "__docId__": 75,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1191,7 +1598,7 @@
     }
   },
   {
-    "__docId__": 57,
+    "__docId__": 76,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1209,7 +1616,7 @@
     }
   },
   {
-    "__docId__": 58,
+    "__docId__": 77,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1227,7 +1634,7 @@
     }
   },
   {
-    "__docId__": 59,
+    "__docId__": 78,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1245,7 +1652,7 @@
     }
   },
   {
-    "__docId__": 60,
+    "__docId__": 79,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1263,7 +1670,7 @@
     }
   },
   {
-    "__docId__": 61,
+    "__docId__": 80,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1281,7 +1688,7 @@
     }
   },
   {
-    "__docId__": 62,
+    "__docId__": 81,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1301,7 +1708,7 @@
     }
   },
   {
-    "__docId__": 63,
+    "__docId__": 82,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1322,7 +1729,7 @@
     }
   },
   {
-    "__docId__": 64,
+    "__docId__": 83,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1342,7 +1749,7 @@
     }
   },
   {
-    "__docId__": 65,
+    "__docId__": 84,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1363,7 +1770,7 @@
     }
   },
   {
-    "__docId__": 66,
+    "__docId__": 85,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1383,7 +1790,7 @@
     }
   },
   {
-    "__docId__": 67,
+    "__docId__": 86,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -1398,7 +1805,7 @@
     "generator": false
   },
   {
-    "__docId__": 68,
+    "__docId__": 87,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1416,7 +1823,7 @@
     }
   },
   {
-    "__docId__": 69,
+    "__docId__": 88,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1434,7 +1841,33 @@
     }
   },
   {
-    "__docId__": 70,
+    "__docId__": 89,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "$onChanges",
+    "memberof": "src/map_controller.js~MapCtrl",
+    "longname": "src/map_controller.js~MapCtrl#$onChanges",
+    "access": null,
+    "description": null,
+    "lineNumber": 160,
+    "undocument": true,
+    "params": [
+      {
+        "name": "objectPattern",
+        "types": [
+          "{\"mapData\": *}"
+        ],
+        "defaultRaw": {
+          "mapData": null
+        },
+        "defaultValue": "{\"mapData\":null}"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 90,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1443,7 +1876,7 @@
     "longname": "src/map_controller.js~MapCtrl#location",
     "access": null,
     "description": null,
-    "lineNumber": 152,
+    "lineNumber": 171,
     "undocument": true,
     "type": {
       "types": [
@@ -1452,7 +1885,7 @@
     }
   },
   {
-    "__docId__": 71,
+    "__docId__": 91,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -1461,12 +1894,12 @@
     "longname": "src/map_controller.js~MapCtrl#$onDestroy",
     "access": null,
     "description": "Clean up event listeners that the controller has attached via\nthe Google Maps API. This is especially important for the map\ncomponent in general, whose listeners may not always exist in\na context that Angular is aware of (and therefore will lead to\nmemory leaks if left attached).",
-    "lineNumber": 172,
+    "lineNumber": 182,
     "params": [],
     "generator": false
   },
   {
-    "__docId__": 72,
+    "__docId__": 92,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -1475,7 +1908,7 @@
     "longname": "src/map_controller.js~MapCtrl#updateMapData",
     "access": null,
     "description": "Handler method for map data `$watch`; watches incoming geoJSON\ndata for changes and adds it to the map if detected. If the\nnew data has a `showAll` property (and it is true), all features\nall loaded and the map bounds are recalculated.",
-    "lineNumber": 184,
+    "lineNumber": 194,
     "params": [
       {
         "nullable": null,
@@ -1496,7 +1929,7 @@
     "generator": false
   },
   {
-    "__docId__": 73,
+    "__docId__": 93,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -1505,7 +1938,7 @@
     "longname": "src/map_controller.js~MapCtrl#clearMapData",
     "access": null,
     "description": "Removes all features from the map by looping over feature\ndata objects and calling their `map.remove()` on them.",
-    "lineNumber": 217,
+    "lineNumber": 216,
     "params": [],
     "return": {
       "types": [
@@ -1515,7 +1948,7 @@
     "generator": false
   },
   {
-    "__docId__": 74,
+    "__docId__": 94,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -1524,7 +1957,7 @@
     "longname": "src/map_controller.js~MapCtrl#showDetail",
     "access": null,
     "description": "Shows a detail popup, called by user clicking map feature. This\nmethod uses ng-material's `$mdPanel` service to build a floating\npanel config, immediately show it, and manually clean up its scope\nlisteners on close.",
-    "lineNumber": 239,
+    "lineNumber": 238,
     "params": [
       {
         "nullable": null,
@@ -1578,7 +2011,7 @@
     "generator": false
   },
   {
-    "__docId__": 75,
+    "__docId__": 95,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -1587,7 +2020,7 @@
     "longname": "src/map_controller.js~MapCtrl#showToast",
     "access": null,
     "description": "Shows a simple toast notification containing the name of the \nfuture being hovered over. If there is already a toast active,\nit updates the name in the toast instead of making a new one.",
-    "lineNumber": 286,
+    "lineNumber": 285,
     "params": [
       {
         "nullable": null,
@@ -1603,7 +2036,7 @@
     "generator": false
   },
   {
-    "__docId__": 76,
+    "__docId__": 96,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1612,7 +2045,7 @@
     "longname": "src/map_controller.js~MapCtrl#toastActive",
     "access": null,
     "description": null,
-    "lineNumber": 291,
+    "lineNumber": 290,
     "undocument": true,
     "type": {
       "types": [
@@ -1621,7 +2054,7 @@
     }
   },
   {
-    "__docId__": 77,
+    "__docId__": 97,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -1630,7 +2063,7 @@
     "longname": "src/map_controller.js~MapCtrl#hideToast",
     "access": null,
     "description": "Hides the toast notification after 3 seconds, but provides\na way to cancel the 3 seconds (`toastCanceler`).\n\nIt is meant to be called on mouseout, so that the toast will\nremain on screen for a few seconds, and only disappear if\nanother isn't needed within those seconds.",
-    "lineNumber": 310,
+    "lineNumber": 309,
     "params": [],
     "return": {
       "nullable": null,
@@ -1643,7 +2076,7 @@
     "generator": false
   },
   {
-    "__docId__": 78,
+    "__docId__": 98,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1652,7 +2085,7 @@
     "longname": "src/map_controller.js~MapCtrl#toastActive",
     "access": null,
     "description": null,
-    "lineNumber": 313,
+    "lineNumber": 312,
     "undocument": true,
     "type": {
       "types": [
@@ -1661,7 +2094,7 @@
     }
   },
   {
-    "__docId__": 79,
+    "__docId__": 99,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -1670,7 +2103,7 @@
     "longname": "src/map_controller.js~MapCtrl#processBounds",
     "access": null,
     "description": "Direct port of Google Maps `processBounds` example function\nfor recalculation of map boundaries based on map data.",
-    "lineNumber": 324,
+    "lineNumber": 323,
     "params": [
       {
         "nullable": null,
@@ -1706,7 +2139,7 @@
     "generator": false
   },
   {
-    "__docId__": 80,
+    "__docId__": 100,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -1715,12 +2148,12 @@
     "longname": "src/map_controller.js~MapCtrl#fitBounds",
     "access": null,
     "description": "Resizes map view to fit recalculated bounds.",
-    "lineNumber": 338,
+    "lineNumber": 337,
     "params": [],
     "generator": false
   },
   {
-    "__docId__": 81,
+    "__docId__": 101,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -1729,7 +2162,7 @@
     "longname": "src/map_controller.js~MapCtrl#isolateMouseEvent",
     "access": null,
     "description": "Since Google Map events store private properties under names\nthat change periodically, it is necessary to manually evaluate\nwhich property is the `MouseEvent` by loop-and-compare. This\nmethod returns a `MouseEvent` from a Map event.",
-    "lineNumber": 353,
+    "lineNumber": 352,
     "params": [
       {
         "nullable": null,
@@ -1753,7 +2186,7 @@
     "generator": false
   },
   {
-    "__docId__": 83,
+    "__docId__": 103,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1766,7 +2199,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 84,
+    "__docId__": 104,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1779,7 +2212,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 85,
+    "__docId__": 105,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1792,7 +2225,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 86,
+    "__docId__": 106,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1805,7 +2238,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 87,
+    "__docId__": 107,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1818,7 +2251,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 88,
+    "__docId__": 108,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1831,7 +2264,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 89,
+    "__docId__": 109,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1844,7 +2277,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 90,
+    "__docId__": 110,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1857,7 +2290,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 91,
+    "__docId__": 111,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1870,7 +2303,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 92,
+    "__docId__": 112,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1883,7 +2316,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 93,
+    "__docId__": 113,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1896,7 +2329,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 94,
+    "__docId__": 114,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1909,7 +2342,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 95,
+    "__docId__": 115,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1922,7 +2355,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 96,
+    "__docId__": 116,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1935,7 +2368,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 97,
+    "__docId__": 117,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1948,7 +2381,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 98,
+    "__docId__": 118,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1961,7 +2394,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 99,
+    "__docId__": 119,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1974,7 +2407,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 100,
+    "__docId__": 120,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1987,7 +2420,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 101,
+    "__docId__": 121,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2000,7 +2433,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 102,
+    "__docId__": 122,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2013,7 +2446,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 103,
+    "__docId__": 123,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2026,7 +2459,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 104,
+    "__docId__": 124,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2039,7 +2472,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 105,
+    "__docId__": 125,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2052,7 +2485,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 106,
+    "__docId__": 126,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2065,7 +2498,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 107,
+    "__docId__": 127,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2078,7 +2511,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 108,
+    "__docId__": 128,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2091,7 +2524,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 109,
+    "__docId__": 129,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2104,7 +2537,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 110,
+    "__docId__": 130,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2117,7 +2550,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 111,
+    "__docId__": 131,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2130,7 +2563,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 112,
+    "__docId__": 132,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2143,7 +2576,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 113,
+    "__docId__": 133,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2156,7 +2589,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 114,
+    "__docId__": 134,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2169,7 +2602,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 115,
+    "__docId__": 135,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2182,7 +2615,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 116,
+    "__docId__": 136,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2195,7 +2628,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 117,
+    "__docId__": 137,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2208,7 +2641,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 118,
+    "__docId__": 138,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2221,7 +2654,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 119,
+    "__docId__": 139,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2234,7 +2667,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 120,
+    "__docId__": 140,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2247,7 +2680,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 121,
+    "__docId__": 141,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2260,7 +2693,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 122,
+    "__docId__": 142,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2273,7 +2706,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 123,
+    "__docId__": 143,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2286,7 +2719,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 124,
+    "__docId__": 144,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2299,7 +2732,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 125,
+    "__docId__": 145,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2312,7 +2745,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 126,
+    "__docId__": 146,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2325,7 +2758,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 127,
+    "__docId__": 147,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2338,7 +2771,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 128,
+    "__docId__": 148,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2351,7 +2784,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 129,
+    "__docId__": 149,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2364,7 +2797,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 131,
+    "__docId__": 151,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2377,7 +2810,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 132,
+    "__docId__": 152,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2390,7 +2823,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 133,
+    "__docId__": 153,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2403,7 +2836,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 134,
+    "__docId__": 154,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2416,7 +2849,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 135,
+    "__docId__": 155,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2429,7 +2862,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 136,
+    "__docId__": 156,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2442,7 +2875,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 137,
+    "__docId__": 157,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2455,7 +2888,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 138,
+    "__docId__": 158,
     "kind": "external",
     "static": true,
     "variation": null,

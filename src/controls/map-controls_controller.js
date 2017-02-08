@@ -42,11 +42,23 @@ class MapControlsCtrl {
    */
   $onInit() {
     this.loadLocations().then(locations => {
-			this.location = locations[1];
+			this.location = locations[1]._id;
 			this.updateLocation();
 			// this.showAll();
 			// angular.element(this.$window).triggerHandler('resize');
     });
+  }
+
+  getFiltered(filter, list) {
+    return list && [...list].filter(item => {
+      return [...filter].indexOf(item._id || item.id) !== -1;
+    });
+  }
+
+  removeFromFiltered(item, list) {
+  	const index = [...list].indexOf(item);
+  	console.log(item, list, index);
+  	(index > -1) && list.splice(index, 1);
   }
 
   /**
@@ -67,7 +79,7 @@ class MapControlsCtrl {
    */
   updateLocation() {
     this.loadCategories().then(categories => {
-      this.category = [...categories];
+      this.category = [...categories.map(category => category._id)];
       this.updateCategory();
     });
   }
@@ -93,7 +105,7 @@ class MapControlsCtrl {
     	.then(() => this.updateFeatures())
     	.then(() => this.loadCollections())
     	.then(collections => {
-	      this.collection = [...collections];
+	      this.collection = [...collections.map(collection => collection._id)];
     //   this.updateCollection();
 	    });
   }
@@ -110,7 +122,7 @@ class MapControlsCtrl {
     return this.FeatureResource.query({
       filter: {
       	'properties.category': {
-      		$in: [...this.category.map(category => category._id)]
+      		$in: [...this.category]
       	}
       }
     }).$promise.then(features => {
@@ -144,9 +156,9 @@ class MapControlsCtrl {
   loadCollections() {
     return this.CollectionResource.query({
       filter: {
-      	location:this.location._id,
+      	location: this.location,
       	category: {
-      		$in: [...this.category.map(category => category._id)]
+      		$in: [...this.category]
       	}
       }
     }).$promise.then(collections => {

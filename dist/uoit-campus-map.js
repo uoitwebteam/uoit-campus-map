@@ -60,35 +60,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _map_component = __webpack_require__(1);
-	
-	var _map_component2 = _interopRequireDefault(_map_component);
-	
-	var _map_controller = __webpack_require__(2);
+	var _map_controller = __webpack_require__(1);
 	
 	var _map_controller2 = _interopRequireDefault(_map_controller);
 	
-	var _mapControls_component = __webpack_require__(4);
-	
-	var _mapControls_component2 = _interopRequireDefault(_mapControls_component);
-	
-	var _mapControls_controller = __webpack_require__(5);
+	var _mapControls_controller = __webpack_require__(3);
 	
 	var _mapControls_controller2 = _interopRequireDefault(_mapControls_controller);
 	
-	var _mapDetail_controller = __webpack_require__(3);
+	var _map_component = __webpack_require__(4);
 	
-	var _mapDetail_controller2 = _interopRequireDefault(_mapDetail_controller);
+	var _map_component2 = _interopRequireDefault(_map_component);
 	
-	var _mapSettings_constant = __webpack_require__(6);
+	var _mapControls_component = __webpack_require__(5);
+	
+	var _mapControls_component2 = _interopRequireDefault(_mapControls_component);
+	
+	var _filterBuilder_directive = __webpack_require__(6);
+	
+	var _filterBuilder_directive2 = _interopRequireDefault(_filterBuilder_directive);
+	
+	var _filterInput_directive = __webpack_require__(9);
+	
+	var _filterInput_directive2 = _interopRequireDefault(_filterInput_directive);
+	
+	var _mapSettings_constant = __webpack_require__(10);
 	
 	var _mapSettings_constant2 = _interopRequireDefault(_mapSettings_constant);
 	
-	var _mapIcons_constant = __webpack_require__(7);
+	var _mapIcons_constant = __webpack_require__(11);
 	
 	var _mapIcons_constant2 = _interopRequireDefault(_mapIcons_constant);
 	
-	var _templates = __webpack_require__(8);
+	var _templates = __webpack_require__(12);
 	
 	var _templates2 = _interopRequireDefault(_templates);
 	
@@ -97,40 +101,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	//
 	// ----------------
 	
-	exports.default = angular.module('campusMap', []).run(_templates2.default).controller('MapCtrl', _map_controller2.default).controller('MapControlsCtrl', _mapControls_controller2.default).component('campusMap', _map_component2.default).component('campusMapControls', _mapControls_component2.default).constant('MAP_SETTINGS', _mapSettings_constant2.default).constant('MAP_ICONS', _mapIcons_constant2.default);
+	exports.default = angular.module('campusMap', []).run(_templates2.default).component('campusMap', _map_component2.default).component('campusMapControls', _mapControls_component2.default).directive('filterBuilder', _filterBuilder_directive2.default).directive('filterInput', _filterInput_directive2.default).constant('MAP_SETTINGS', _mapSettings_constant2.default).constant('MAP_ICONS', _mapIcons_constant2.default);
 	
 	// development only
 	//
+	
+	// import FilterBuilderCtrl from './filter/filter-builder_controller';
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var campusMap = {
-	  // transclude: true,
-	  bindings: {
-	    onGotoBldg: '<?',
-	    mapData: '<?'
-	    // location: '<?',
-	    // building: '<?',
-	    // feature: '<?'
-	  },
-	  templateUrl: '_map.html',
-	  transclude: {
-	    controls: 'campusMapControls'
-	  },
-	  controller: 'MapCtrl'
-	};
-	
-	exports.default = campusMap;
-
-/***/ },
-/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -141,7 +120,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _mapDetail_controller = __webpack_require__(3);
+	var _mapDetail_controller = __webpack_require__(2);
 	
 	var _mapDetail_controller2 = _interopRequireDefault(_mapDetail_controller);
 	
@@ -577,7 +556,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = MapCtrl;
 
 /***/ },
-/* 3 */
+/* 2 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -719,27 +698,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = MapDetailCtrl;
 
 /***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var campusMapControls = {
-	  require: {
-	    $ngModel: 'ngModel'
-	    // MapCtrl: '^map'
-	  },
-	  templateUrl: 'controls/_map-controls.html',
-	  controller: 'MapControlsCtrl'
-	};
-	
-	exports.default = campusMapControls;
-
-/***/ },
-/* 5 */
+/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -811,11 +770,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this = this;
 	
 	      this.loadLocations().then(function (locations) {
-	        _this.location = locations[1];
+	        _this.location = locations[1]._id;
 	        _this.updateLocation();
 	        // this.showAll();
 	        // angular.element(this.$window).triggerHandler('resize');
 	      });
+	    }
+	  }, {
+	    key: 'getFiltered',
+	    value: function getFiltered(filter, list) {
+	      return list && [].concat(_toConsumableArray(list)).filter(function (item) {
+	        return [].concat(_toConsumableArray(filter)).indexOf(item._id || item.id) !== -1;
+	      });
+	    }
+	  }, {
+	    key: 'removeFromFiltered',
+	    value: function removeFromFiltered(item, list) {
+	      var index = [].concat(_toConsumableArray(list)).indexOf(item);
+	      console.log(item, list, index);
+	      index > -1 && list.splice(index, 1);
 	    }
 	
 	    /**
@@ -846,7 +819,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this3 = this;
 	
 	      this.loadCategories().then(function (categories) {
-	        _this3.category = [].concat(_toConsumableArray(categories));
+	        _this3.category = [].concat(_toConsumableArray(categories.map(function (category) {
+	          return category._id;
+	        })));
 	        _this3.updateCategory();
 	      });
 	    }
@@ -883,7 +858,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }).then(function () {
 	        return _this5.loadCollections();
 	      }).then(function (collections) {
-	        _this5.collection = [].concat(_toConsumableArray(collections));
+	        _this5.collection = [].concat(_toConsumableArray(collections.map(function (collection) {
+	          return collection._id;
+	        })));
 	        //   this.updateCollection();
 	      });
 	    }
@@ -905,9 +882,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this.FeatureResource.query({
 	        filter: {
 	          'properties.category': {
-	            $in: [].concat(_toConsumableArray(this.category.map(function (category) {
-	              return category._id;
-	            })))
+	            $in: [].concat(_toConsumableArray(this.category))
 	          }
 	        }
 	      }).$promise.then(function (features) {
@@ -950,11 +925,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      return this.CollectionResource.query({
 	        filter: {
-	          location: this.location._id,
+	          location: this.location,
 	          category: {
-	            $in: [].concat(_toConsumableArray(this.category.map(function (category) {
-	              return category._id;
-	            })))
+	            $in: [].concat(_toConsumableArray(this.category))
 	          }
 	        }
 	      }).$promise.then(function (collections) {
@@ -1080,7 +1053,503 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = MapControlsCtrl;
 
 /***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _map_controller = __webpack_require__(1);
+	
+	var _map_controller2 = _interopRequireDefault(_map_controller);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var campusMap = {
+	  // transclude: true,
+	  bindings: {
+	    onGotoBldg: '<?',
+	    mapData: '<?'
+	    // location: '<?',
+	    // building: '<?',
+	    // feature: '<?'
+	  },
+	  templateUrl: '_map.html',
+	  transclude: {
+	    controls: 'campusMapControls'
+	  },
+	  controller: _map_controller2.default
+	};
+	
+	exports.default = campusMap;
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _mapControls_controller = __webpack_require__(3);
+	
+	var _mapControls_controller2 = _interopRequireDefault(_mapControls_controller);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var campusMapControls = {
+	  require: {
+	    $ngModel: 'ngModel'
+	    // MapCtrl: '^map'
+	  },
+	  templateUrl: 'controls/_map-controls.html',
+	  controller: _mapControls_controller2.default
+	};
+	
+	exports.default = campusMapControls;
+
+/***/ },
 /* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _filterBuilder_controller = __webpack_require__(7);
+	
+	var _filterBuilder_controller2 = _interopRequireDefault(_filterBuilder_controller);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function filterBuilder() {
+		return {
+			restrict: 'E',
+			template: '<form novalidate ng-submit="$event.preventDefault()" ng-transclude></form>',
+			require: {
+				$ngModel: 'ngModel'
+			},
+			transclude: true,
+			bindToController: true,
+			controller: _filterBuilder_controller2.default
+		};
+	}
+	
+	exports.default = filterBuilder;
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _lodash = __webpack_require__(8);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	/**
+	 * The FilterBuilderCtrl class provides a controller for the
+	 * `<filter-builder>` directive; it contains logic for extracting
+	 * and combining the `ng-model` of any number of arbitrary
+	 * transcluded inputs inside it.
+	 *
+	 * The values of its transcluded inputs are converted to a unified
+	 * query filter object (MongoDB/Mongoose-style in this case).
+	 *
+	 * Unlike the `<filter-controls>` component, this directive does not
+	 * make any server calls or deal otherwise with with the actual map
+	 * data – it is purely responsible for providing the filter to make
+	 * the server calls with.
+	 */
+	var FilterBuilderCtrl = function () {
+		_createClass(FilterBuilderCtrl, null, [{
+			key: '$inject',
+			get: function get() {
+				return ['$scope', '$parse'];
+			}
+		}]);
+	
+		function FilterBuilderCtrl($scope, $parse) {
+			_classCallCheck(this, FilterBuilderCtrl);
+	
+			this.$scope = $scope;
+			this.$parse = $parse;
+			this.parts = {};
+		}
+	
+		_createClass(FilterBuilderCtrl, [{
+			key: '$onInit',
+			value: function $onInit() {
+				var _this = this;
+	
+				/**
+	    * Removes null and undefined values from a given array.
+	    * 
+	    * @example
+	    * // turns these...
+	    * ['', 0, false, null, null]
+	    * [null, null]
+	    * 
+	    * // ..into these:
+	    * ['', 0, false]
+	    * []
+	    * 
+	    * @param  {Array} array The array to remove nulls from
+	    * @return {Array}       A null-free array
+	    */
+				var removeNulls = function removeNulls(array) {
+					return array.filter(function (v) {
+						return v == null;
+					});
+				};
+				/**
+	    * Gets the `$viewValue` of each child input from the controller's
+	    * `parts` collection and returns them in a newly-mapped array
+	    * for efficient `$watchCollection`ing.
+	    * @return {Array} Array of $viewValues
+	    */
+				var getViewValue = function getViewValue() {
+					return Object.keys(_this.parts).map(function (key) {
+						return _this.parts[key].$viewValue;
+					});
+				};
+	
+				/**
+	    * Sets the `$viewValue` of this directive's ng-model based on
+	    * the `$watch` results of `getViewValue()`. Since the value needs
+	    * to be bound by reference, the original `parts` collection is used
+	    * instead of the `$watch`'s copy value.
+	    *
+	    * If the value is an array, it is wrapped in a MongoDB `{ $in: {...} }`
+	    * and assigned to a property keyed by the input's `name` attribute; if
+	    * it is a primitive it is assigned without wrapping.
+	    *
+	    * Before `setViewValue()` is called to fire off the parser pipeline,
+	    * the final value is run through `removeNulls()` to cleanse it of
+	    * `null` and `undefined` values.
+	    */
+				var setViewValue = function setViewValue() {
+					var newViewValue = Object.keys(_this.parts).map(function (key) {
+						var _parts$key = _this.parts[key],
+						    name = _parts$key.$name,
+						    viewValue = _parts$key.$viewValue;
+	
+	
+						return viewValue && (0, _lodash2.default)(viewValue) ? viewValue.length ? _defineProperty({}, name, { $in: viewValue }) : null : viewValue ? _defineProperty({}, name, viewValue) : null;
+					});
+	
+					_this.$ngModel.$setViewValue(removeNulls(newViewValue));
+				};
+				this.$scope.$watchCollection(getViewValue, setViewValue);
+				/**
+	    * @todo Determine if `$watch`ing by string reference is more performant
+	    * than `$watchCollection` on parts array
+	    */
+				// this.$scope.$watch(
+				// 	() => Object.keys(this.parts).map(key => {
+				// 		const { $viewValue } = this.parts[key];
+				// 		return _.isArray($viewValue) ? $viewValue.join('') : $viewValue;
+				// 	}).join(''),
+				// 	setViewValue
+				// );
+	
+				/**
+	    * The `builderParser` is pushed onto the model's `$parsers` pipeline;
+	    * it is responsible for determining how many values are being set on
+	    * the view. If the view has...
+	    * - _no values_, return an empty object
+	    * - _one value_, return that value
+	    * - _more than one value_, return them wrapped in `{ $and: [...] }`
+	    * 
+	    * @param  {Array} viewValue Incoming data from setViewValue
+	    * @return {Object}          Final filter formatted for view
+	    */
+				var builderParser = function builderParser(viewValue) {
+					console.log('builder parser (view » model)', viewValue);
+					if (!viewValue.length) return {};
+					if (viewValue.length === 1) return viewValue[0];
+					if (viewValue.length > 1) return { $and: viewValue };
+				};
+				this.$ngModel.$parsers.push(builderParser);
+	
+				/**
+	    * The `filterFormatter` is pushed onto the model's `$formatters` pipeline;
+	    * it is responsible for delegating incoming scope values (set by user)
+	    * to their respective input elements' scopes.
+	    *
+	    * The function needs to:
+	    * - determine which scope models are available to set
+	    * - disregard incoming values with no matching input element by building an
+	    * array of models with a matching value
+	    *   - `[{ modelName: '$ctrl.modelName', modelValue: '...' }, {...}]`
+	    * - for each available model with a matching value:
+	    *   - use Angular's `$parse` service to generate a getter/setter for the
+	    *   model's scope reference
+	    *   - use the provided setter to set the scope reference, therefore updating
+	    *   the child input elements
+	    * 
+	    * @param  {Object} modelValue Map of values by name to set on child scopes
+	    */
+				var filterFormatter = function filterFormatter(modelValue) {
+					if (modelValue) {
+						var modelsToSet = Object.keys(_this.parts).map(function (key) {
+							return modelValue[_this.parts[key].$name] && {
+								modelName: key,
+								modelValue: modelValue[_this.parts[key].$name] };
+						});
+						modelsToSet.forEach(function (newModel) {
+							var getModel = _this.$parse(newModel.modelName),
+							    setModel = getModel.assign;
+							setModel(_this.$scope, newModel.modelValue);
+						});
+						console.log('formatter set input to', modelsToSet);
+					}
+				};
+	
+				this.$ngModel.$formatters.push(filterFormatter);
+			}
+		}]);
+	
+		return FilterBuilderCtrl;
+	}();
+	
+	exports.default = FilterBuilderCtrl;
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	/**
+	 * lodash 3.0.4 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+	
+	/** `Object#toString` result references. */
+	var arrayTag = '[object Array]',
+	    funcTag = '[object Function]';
+	
+	/** Used to detect host constructors (Safari > 5). */
+	var reIsHostCtor = /^\[object .+?Constructor\]$/;
+	
+	/**
+	 * Checks if `value` is object-like.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 */
+	function isObjectLike(value) {
+	  return !!value && typeof value == 'object';
+	}
+	
+	/** Used for native method references. */
+	var objectProto = Object.prototype;
+	
+	/** Used to resolve the decompiled source of functions. */
+	var fnToString = Function.prototype.toString;
+	
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+	
+	/**
+	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objToString = objectProto.toString;
+	
+	/** Used to detect if a method is native. */
+	var reIsNative = RegExp('^' +
+	  fnToString.call(hasOwnProperty).replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')
+	  .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
+	);
+	
+	/* Native method references for those with the same name as other `lodash` methods. */
+	var nativeIsArray = getNative(Array, 'isArray');
+	
+	/**
+	 * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
+	 * of an array-like value.
+	 */
+	var MAX_SAFE_INTEGER = 9007199254740991;
+	
+	/**
+	 * Gets the native function at `key` of `object`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @param {string} key The key of the method to get.
+	 * @returns {*} Returns the function if it's native, else `undefined`.
+	 */
+	function getNative(object, key) {
+	  var value = object == null ? undefined : object[key];
+	  return isNative(value) ? value : undefined;
+	}
+	
+	/**
+	 * Checks if `value` is a valid array-like length.
+	 *
+	 * **Note:** This function is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+	 */
+	function isLength(value) {
+	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+	}
+	
+	/**
+	 * Checks if `value` is classified as an `Array` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isArray([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArray(function() { return arguments; }());
+	 * // => false
+	 */
+	var isArray = nativeIsArray || function(value) {
+	  return isObjectLike(value) && isLength(value.length) && objToString.call(value) == arrayTag;
+	};
+	
+	/**
+	 * Checks if `value` is classified as a `Function` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isFunction(_);
+	 * // => true
+	 *
+	 * _.isFunction(/abc/);
+	 * // => false
+	 */
+	function isFunction(value) {
+	  // The use of `Object#toString` avoids issues with the `typeof` operator
+	  // in older versions of Chrome and Safari which return 'function' for regexes
+	  // and Safari 8 equivalents which return 'object' for typed array constructors.
+	  return isObject(value) && objToString.call(value) == funcTag;
+	}
+	
+	/**
+	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(1);
+	 * // => false
+	 */
+	function isObject(value) {
+	  // Avoid a V8 JIT bug in Chrome 19-20.
+	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
+	  var type = typeof value;
+	  return !!value && (type == 'object' || type == 'function');
+	}
+	
+	/**
+	 * Checks if `value` is a native function.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a native function, else `false`.
+	 * @example
+	 *
+	 * _.isNative(Array.prototype.push);
+	 * // => true
+	 *
+	 * _.isNative(_);
+	 * // => false
+	 */
+	function isNative(value) {
+	  if (value == null) {
+	    return false;
+	  }
+	  if (isFunction(value)) {
+	    return reIsNative.test(fnToString.call(value));
+	  }
+	  return isObjectLike(value) && reIsHostCtor.test(value);
+	}
+	
+	module.exports = isArray;
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	function filterInput() {
+		return {
+			restrict: 'A',
+			require: {
+				NgModelCtrl: 'ngModel',
+				FilterBuilderCtrl: '^filterBuilder'
+			},
+			link: function FilterInputLink(scope, el, attrs, ctrl) {
+				if (!attrs.name) throw new Error('A filter control is missing its \'name\' attribute!');
+				var NgModelCtrl = ctrl.NgModelCtrl,
+				    FilterBuilderCtrl = ctrl.FilterBuilderCtrl;
+	
+				FilterBuilderCtrl.parts[attrs.ngModel] = NgModelCtrl;
+			}
+		};
+	}
+	
+	exports.default = filterInput;
+
+/***/ },
+/* 10 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1188,7 +1657,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = MAP_SETTINGS;
 
 /***/ },
-/* 7 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1274,7 +1743,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = MAP_ICONS;
 
 /***/ },
-/* 8 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1284,7 +1753,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	var templates = ['$templateCache', function ($templateCache) {
 	  $templateCache.put('_map.html', '<ng-map\n  center="43.9443802,-78.8975857"\n  zoom="17"\n  styles="{{ ::$ctrl._MAP_SETTINGS.styles }}"\n  map-type-id="{{ ::$ctrl._MAP_SETTINGS.type }}"\n  disable-default-u-i="true"\n  tilt="45"\n  heading="0"\n  layout\n  layout-fill>\n  <custom-control id="map-controls" position="TOP_LEFT" index="1" ng-transclude="controls">\n\t\t<!-- <campus-map-controls ng-model="$ctrl.mapControls"></campus-map-controls> -->\n  </custom-control>\n</ng-map>');
-	  $templateCache.put('controls/_map-controls.html', '<md-whiteframe\n  class="md-whiteframe-16dp map-controls"\n  layout="column"\n  layout-align="center center"\n  layout-fill>\n  <div layout="row">\n\n    <md-input-container flex>\n      <label>Location</label>\n      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" ng-change="$ctrl.updateLocation()" ng-model-options="{trackBy: \'$value._id\'}">\n        <md-option ng-repeat="location in ::$ctrl.locations" ng-value="::location" ng-disabled="$ctrl.location === location">\n          {{ ::location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n\n    <md-input-container flex>\n      <label>Feature category</label>\n      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-change="$ctrl.updateCategory()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.location" multiple>\n        <md-select-header layout-padding>\n          <md-checkbox aria-label="Select All"\n                       ng-checked="$ctrl.isChecked(\'category\', \'categories\')"\n                       md-indeterminate="$ctrl.isIndeterminate(\'category\', \'categories\')"\n                       ng-click="$ctrl.toggleAll(\'category\', \'categories\')">\n            <span ng-if="isChecked(\'category\', \'categories\')">Un-</span>Select All\n          </md-checkbox>\n        </md-select-header>\n        <md-option ng-repeat="category in $ctrl.categories" ng-value="::category" ng-disabled="$ctrl.category === category">\n          {{ ::category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n\n    <md-input-container flex>\n      <label>Feature collection</label>\n      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-change="$ctrl.updateCollection()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.category" multiple>\n        <md-optgroup ng-repeat="group in $ctrl.category" label="{{ ::group.name }}">\n\t        <md-option ng-repeat="collection in $ctrl.collections | filter: { category: group._id }" ng-value="::collection" ng-disabled="$ctrl.collection === collection">\n\t          {{ ::collection.name }}\n\t        </md-option>\n        </md-optgroup>\n      </md-select>\n    </md-input-container>\n\n  </div>\n  <div layout="row">\n\n    <md-button class="md-primary" ng-click="$ctrl.showAll()">\n    \tShow all\n      <md-tooltip md-direction="bottom">\n        Turn on visibility for all available map features\n      </md-tooltip>\n    </md-button>\n\n  </div>\n</md-whiteframe>');
+	  $templateCache.put('controls/_map-controls.html', '<md-whiteframe\n  class="md-whiteframe-16dp map-controls"\n  layout="row"\n  layout-align="space-between center"\n  layout-fill>\n  <filter-builder ng-model="$ctrl.filter"\n  layout="row">\n    <md-input-container flex layout="column">\n      <label>Location</label>\n      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" filter-input name="location">\n        <md-option ng-repeat="location in ::$ctrl.locations" ng-value="::location._id" ng-disabled="$ctrl.location === location">\n          {{ ::location.label}}\n        </md-option>\n      </md-select>\n    </md-input-container>\n\n    <md-input-container flex layout="column">\n      <label>Feature category</label>\n      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-disabled="!$ctrl.location" multiple filter-input name="category">\n<!--         <md-select-header layout-padding>\n          <md-checkbox aria-label="Select All"\n                       ng-checked="$ctrl.isChecked(\'category\', \'categories\')"\n                       md-indeterminate="$ctrl.isIndeterminate(\'category\', \'categories\')"\n                       ng-click="$ctrl.toggleAll(\'category\', \'categories\')">\n            <span ng-if="isChecked(\'category\', \'categories\')">Un-</span>Select All\n          </md-checkbox>\n        </md-select-header> -->\n        <md-option ng-repeat="category in $ctrl.categories" ng-value="::category._id" ng-disabled="$ctrl.category === category">\n          {{ ::category.name }}\n        </md-option>\n      </md-select>\n    </md-input-container>\n\n      <md-chips layout="column">\n        <md-chip ng-repeat="category in $ctrl.getFiltered($ctrl.category, $ctrl.categories) track by $index">\n        \t{{ category.name }}\n\t\t\t\t  <button class="md-chip-remove" ng-click="$ctrl.removeFromFiltered(category._id, $ctrl.category)">&times;</button>\n        </md-chip>\n\t\t\t</md-chips>\n\n    <md-input-container flex layout="column">\n      <label>Feature collection</label>\n      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-model-options="{trackBy: \'$value._id\'}" ng-disabled="!$ctrl.category" multiple filter-input name="group">\n        <md-optgroup ng-repeat="group in $ctrl.category" label="{{ ::group.name }}">\n\t        <md-option ng-repeat="collection in $ctrl.collections | filter: { category: group._id }" ng-value="::collection._id" ng-disabled="$ctrl.collection === collection">\n\t          {{ ::collection.name }}\n\t        </md-option>\n        </md-optgroup>\n      </md-select>\n    </md-input-container>\n\n  </filter-builder>\n  <div layout="column">\n\n    <md-button class="md-primary" ng-click="$ctrl.showAll()">\n    \tShow all\n      <md-tooltip md-direction="bottom">\n        Turn on visibility for all available map features\n      </md-tooltip>\n    </md-button>\n\t\t<!-- {{ $ctrl.filter | json }} -->\n  </div>\n</md-whiteframe>');
 	  $templateCache.put('detail/_map-detail.html', '<md-whiteframe\n  class="md-whiteframe-16dp"\n  layout="column">\n  <md-toolbar>\n    <div class="md-toolbar-tools">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class="md-icon-button" aria-label="Close info" ng-click="ctrl.close()">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div\n  \tlayout="column"\n  \tlayout-margin\n  \tlayout-align="center center">\n    <md-button ng-click="ctrl.showDetails()">{{ ctrl.detailsShowing ? \'Hide\' : \'Show\'}} details <span class="detail-arrow" ng-class="{ \'arrow-up\' : ctrl.detailsShowing }"></span></md-button>\n  \t<md-content layout-padding layout-margin class="details-text" ng-bind-html="::ctrl.description" ng-show="ctrl.detailsShowing"></md-content>\n  \t<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="::ctrl.building" ng-click="ctrl.gotoBldg(ctrl.callback)">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>');
 	}];exports.default = templates;
 

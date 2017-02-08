@@ -40,18 +40,23 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">controls</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html">MapControlsCtrl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-campusMapControls">campusMapControls</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">detail</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html">MapDetailCtrl</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">filter</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html">FilterBuilderCtrl</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterBuilder">filterBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterInput">filterInput</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/index.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import campusMap from &apos;./map_component&apos;
-import MapCtrl from &apos;./map_controller&apos;;
-
-import campusMapControls from &apos;./controls/map-controls_component&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import MapCtrl from &apos;./map_controller&apos;;
 import MapControlsCtrl from &apos;./controls/map-controls_controller&apos;;
+// import FilterBuilderCtrl from &apos;./filter/filter-builder_controller&apos;;
 
-import MapDetailCtrl from &apos;./detail/map-detail_controller&apos;;
+import campusMap from &apos;./map_component&apos;
+import campusMapControls from &apos;./controls/map-controls_component&apos;;
+import filterBuilder from &apos;./filter/filter-builder_directive&apos;;
+import filterInput from &apos;./filter/filter-input_directive&apos;;
+
 
 import MAP_SETTINGS from &apos;./constants/map-settings_constant&apos;;
 import MAP_ICONS from &apos;./constants/map-icons_constant&apos;;
@@ -64,10 +69,13 @@ import templates from &apos;./_templates&apos;;
 
 export default angular.module(&apos;campusMap&apos;, [])
 	.run(templates)
-  .controller(&apos;MapCtrl&apos;, MapCtrl)
-  .controller(&apos;MapControlsCtrl&apos;, MapControlsCtrl)
+
   .component(&apos;campusMap&apos;, campusMap)
   .component(&apos;campusMapControls&apos;, campusMapControls)
+
+  .directive(&apos;filterBuilder&apos;, filterBuilder)
+  .directive(&apos;filterInput&apos;, filterInput)
+
   .constant(&apos;MAP_SETTINGS&apos;, MAP_SETTINGS)
   .constant(&apos;MAP_ICONS&apos;, MAP_ICONS);
 </code></pre>
