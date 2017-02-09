@@ -50,33 +50,6 @@ class MapControlsCtrl {
   }
 
   /**
-   * Filter an array for matches in another array by a property;
-   * return the matched items.
-   * 
-   * @param  {Array}  items Items to match with
-   * @param  {Array}  list  List to match from
-   * @param  {String} prop  Property to match against
-   * @return {Array}        List of filtered items
-   */
-  getItemsInListByProp(items, list, prop) {
-    return list && [...list].filter(item => {
-      return [...items].indexOf(item[prop] || item[prop]) !== -1;
-    });
-  }
-
-  /**
-   * Find a specific array item and remove it from the array.
-   * 
-   * @param  {*}     item The item to remove
-   * @param  {Array} list The list to remove from
-   */
-  removeItemFromList(item, list) {
-    const index = [...list].indexOf(item);
-    console.log(item, list, index);
-    (index > -1) && list.splice(index, 1);
-  }
-
-  /**
    * Load location list from server.
    * 
    * @return {Promise} Resolves to list of locations
@@ -116,13 +89,19 @@ class MapControlsCtrl {
    * to first item in list; kick off collection update.
    */
   updateCategory() {
-    this.loadFeatures()
-      .then(() => this.updateFeatures())
-      .then(() => this.loadCollections())
+    // this.loadFeatures()
+    //   .then(() => this.updateFeatures())
+    //   .then(() => this.loadCollections())
+    //   .then(collections => {
+    //     this.collection = [...collections.map(collection => collection._id)];
+    //     this.updateFeatures()
+    //   });
+    this.loadCollections()
       .then(collections => {
         this.collection = [...collections.map(collection => collection._id)];
-    //   this.updateCollection();
-      });
+        return this.loadFeatures();
+      })
+      .then(() => this.updateFeatures());
   }
 
   /**
@@ -138,6 +117,9 @@ class MapControlsCtrl {
       filter: {
         'properties.category': {
           $in: [...this.category]
+        },
+        'group': {
+          $in: [...this.collection]
         }
       }
     }).$promise.then(features => {
@@ -234,18 +216,32 @@ class MapControlsCtrl {
     });
   }
 
-  // toggle(item, list) {
-  //   const idx = list.indexOf(item);
-  //   if (idx > -1) {
-  //     list.splice(idx, 1);
-  //   } else {
-  //     list.push(item);
-  //   }
-  // }
+  /**
+   * Filter an array for matches in another array by a property;
+   * return the matched items.
+   * 
+   * @param  {Array}  items Items to match with
+   * @param  {Array}  list  List to match from
+   * @param  {String} prop  Property to match against
+   * @return {Array}        List of filtered items
+   */
+  getItemsInListByProp(items, list, prop) {
+    return list && [...list].filter(item => {
+      return [...items].indexOf(item[prop] || item[prop]) !== -1;
+    });
+  }
 
-  // exists(item, list) {
-  //   return list.indexOf(item) > -1;
-  // }
+  /**
+   * Find a specific array item and remove it from the array.
+   * 
+   * @param  {*}     item The item to remove
+   * @param  {Array} list The list to remove from
+   */
+  removeItemFromList(item, list) {
+    const index = [...list].indexOf(item);
+    console.log(item, list, index);
+    (index > -1) && list.splice(index, 1);
+  }
 
   isIndeterminate(selected, items) {
     return (this[selected] && this[items]) && (this[selected].length !== 0 &&

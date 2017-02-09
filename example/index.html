@@ -58,29 +58,53 @@
 		.detail-arrow.arrow-up::after {
 			transform: rotate(-135deg);
 		}
-/* 		.map-controls {
+/* 	
+		.map-controls {
 			width: 500px;
 		}
 		.map-controls, .map-detail {
 		  background-color: rgba(255, 255, 255, 0.75);
 		  -webkit-transition: 0.3s;
 		  transition: 0.3s;
-		} */
-		.map-controls-sidenav {
-
 		}
+		.map-controls-sidenav.md-closed {
+			display: flex;
+		}
+
 		@media (min-width: 600px) {
-			md-sidenav {
+			.map-controls-sidenav {
 				width: auto;
 		    max-width: 600px;
 			}
 		}
+*/
+
+		.map-controls-handle {
+			height: 100%;
+			position: absolute;
+			right: 0;
+		}
+
+		.map-controls-handle .md-button {
+			transition: 0.4s;
+			background: rgba(0, 0, 0, 0.15);
+		}
+
+		.map-controls-handle.map-controls-open .md-button {
+			/* opacity: 0; */
+			transform: translateX(100%);
+		}
+
 		.map-controls md-input-container {
 		  padding: 0;
-		  max-width: 260px;
+		  /* max-width: 260px; */
 		  margin-left: 0.5rem;
 		  margin-right: 0.5rem;
 		  margin-bottom: 0;
+		}
+
+		.map-controls .md-chips {
+			font-size: 12px;
 		}
 
 		.map-controls:hover, .map-detail:hover {
@@ -98,8 +122,7 @@
   	map-data="$ctrl.mapData"
   	on-goto-bldg="$ctrl.onGotoBldg"
   	layout
-  	layout-fill
-  	flex>
+  	flex="grow">
   	<campus-map-controls ng-model="$ctrl.mapData" layout="column" flex="grow"></campus-map-controls>
   </campus-map>
 

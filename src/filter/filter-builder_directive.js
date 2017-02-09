@@ -6,7 +6,7 @@ function filterBuilder() {
 		template: `<form novalidate
 								ng-submit="$event.preventDefault()"
 								layout="column"
-								layout-align="space-between center"
+								layout-align="start center"
 								flex="grow"
 								ng-transclude>
 							</form>`,

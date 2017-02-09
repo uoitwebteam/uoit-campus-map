@@ -8,29 +8,5 @@
   heading="0"
   layout
   layout-fill>
-  <custom-control id="map-controls" position="TOP_LEFT" index="1">
-		<!-- <campus-map-controls ng-model="$ctrl.mapControls"></campus-map-controls> -->
-  </custom-control>
 </ng-map>
-<md-sidenav
-    class="md-sidenav-left map-controls-sidenav"
-    md-component-id="uoit-campus-map:right"
-    md-is-locked-open="$mdMedia('gt-md')"
-    md-whiteframe="4"
-    layout="column">
-  <md-toolbar class="md-primary" layout>
-    <div class="md-toolbar-tools">
-	    <md-button class="md-icon-button" aria-label="Collapse menu">
-	      <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-			    <path fill="#FFFFFF" d="M4,10V14H13L9.5,17.5L11.92,19.92L19.84,12L11.92,4.08L9.5,6.5L13,10H4Z" />
-				</svg>
-	    </md-button>
-	  	<h1>Map controls</h1>
-  	</div>
-  </md-toolbar>
-  <md-content ng-transclude="controls"
-	  flex="grow"
-	  layout="column">
-  </md-content>
-
-</md-sidenav>
+<div ng-transclude="controls" class="map-controls"></div>
