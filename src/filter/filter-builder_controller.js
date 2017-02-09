@@ -25,6 +25,27 @@ class FilterBuilderCtrl {
   constructor($scope, $parse) {
     this.$scope = $scope;
     this.$parse = $parse;
+    /**
+     * Holds a map of child input NgModelControllers keyed by the
+     * _string reference to the scope model_ of the input. For example,
+     * if a child input has an `ng-model="this.that"` attribute, its
+     * key in this property will be `'this.that'`.
+     * 
+     * Its value represents the "model" of this directive: the
+     * parts of this property are compiled an parsed into the final filter.
+     *
+     * @example
+     * // in HTML...
+     * `<filter-builder ng-model="$ctrl.animalFilter">
+     *   <select ng-model="$ctrl.furType">....</select>
+     *   <input type="checkbox" ng-model="$ctrl.hasClaws" />
+     * </filter builder>`
+     *
+     * // ...will result in `this.parts` being equivalent to:
+     * { '$ctrl.furType': NgModel, '$ctrl.hasClaws': NgModel }
+     * 
+     * @type {Object}
+     */
     this.parts = {};
   }
   /**

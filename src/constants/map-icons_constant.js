@@ -4,7 +4,7 @@ const MAP_ICONS = {
 		fillColor: '#c71566',
 		fillOpacity: 1,
     strokeOpacity: 0.5,
-    strokeWeight: 2,
+    strokeWeight: 1,
     strokeColor: 'white',
     anchor: new google.maps.Point(12, 12),
     size: new google.maps.Size(24, 24)
@@ -14,7 +14,7 @@ const MAP_ICONS = {
 		fillColor: '#0077CA',
 		fillOpacity: 1,
     strokeOpacity: 0.5,
-    strokeWeight: 2,
+    strokeWeight: 1,
     strokeColor: 'white',
     anchor: new google.maps.Point(12, 12),
     size: new google.maps.Size(24, 24)
@@ -24,7 +24,7 @@ const MAP_ICONS = {
 		fillColor: '#5F259F',
 		fillOpacity: 0.8,
     strokeOpacity: 0.5,
-    strokeWeight: 2,
+    strokeWeight: 1,
     strokeColor: 'white',
     anchor: new google.maps.Point(12, 12),
     size: new google.maps.Size(24, 24)
@@ -34,7 +34,7 @@ const MAP_ICONS = {
 		fillColor: '#003c71',
 		fillOpacity: 0.8,
     strokeOpacity: 0.5,
-    strokeWeight: 2,
+    strokeWeight: 1,
     strokeColor: 'white',
     anchor: new google.maps.Point(12, 12),
     size: new google.maps.Size(24, 24)
@@ -44,7 +44,7 @@ const MAP_ICONS = {
 		fillColor: '#1a875c',
 		fillOpacity: 0.8,
     strokeOpacity: 0.5,
-    strokeWeight: 2,
+    strokeWeight: 1,
     strokeColor: 'white',
     anchor: new google.maps.Point(12, 12),
     size: new google.maps.Size(24, 24)
@@ -54,7 +54,7 @@ const MAP_ICONS = {
 		fillColor: '#1a875c',
 		fillOpacity: 0.8,
     strokeOpacity: 0.5,
-    strokeWeight: 2,
+    strokeWeight: 1,
     strokeColor: 'white',
     anchor: new google.maps.Point(12, 12),
     size: new google.maps.Size(24, 24)
@@ -63,7 +63,7 @@ const MAP_ICONS = {
     path: 'M3.83,3.57A11.8,11.8,0,0,1,12.5,0a11.8,11.8,0,0,1,8.67,3.57,11.8,11.8,0,0,1,3.57,8.67,16.43,16.43,0,0,1-1.27,5.83,36,36,0,0,1-3.08,6.16q-1.81,2.88-3.57,5.38t-3,4L12.5,35l-1.31-1.52q-.82-.94-3-3.78a63.32,63.32,0,0,1-3.74-5.5,40,40,0,0,1-2.92-6A16.62,16.62,0,0,1,.26,12.24,11.8,11.8,0,0,1,3.83,3.57ZM9.42,15.32A4.2,4.2,0,0,0,12.5,16.6a4.35,4.35,0,0,0,4.35-4.35A4.35,4.35,0,0,0,12.5,7.89a4.35,4.35,0,0,0-4.35,4.35A4.2,4.2,0,0,0,9.42,15.32Z',
     strokeColor: 'white',
     strokeOpacity: 0.5,
-    strokeWeight: 2,
+    strokeWeight: 1,
     fillColor: '#003c71',
     fillOpacity: 0.9,
     rotation: 0,

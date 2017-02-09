@@ -58,13 +58,22 @@
 		.detail-arrow.arrow-up::after {
 			transform: rotate(-135deg);
 		}
-		.map-controls {
+/* 		.map-controls {
 			width: 500px;
 		}
 		.map-controls, .map-detail {
 		  background-color: rgba(255, 255, 255, 0.75);
 		  -webkit-transition: 0.3s;
 		  transition: 0.3s;
+		} */
+		.map-controls-sidenav {
+
+		}
+		@media (min-width: 600px) {
+			md-sidenav {
+				width: auto;
+		    max-width: 600px;
+			}
 		}
 		.map-controls md-input-container {
 		  padding: 0;
@@ -91,7 +100,7 @@
   	layout
   	layout-fill
   	flex>
-  	<campus-map-controls ng-model="$ctrl.mapData"></campus-map-controls>
+  	<campus-map-controls ng-model="$ctrl.mapData" layout="column" flex="grow"></campus-map-controls>
   </campus-map>
 
   <!-- Google Maps -->

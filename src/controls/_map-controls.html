@@ -1,56 +1,49 @@
-<md-whiteframe
-  class="md-whiteframe-16dp map-controls"
-  layout="row"
-  layout-align="space-between center"
-  layout-fill>
-  <filter-builder ng-model="$ctrl.filter"
-  layout="row">
-    <md-input-container flex layout="column">
-      <label>Location</label>
-      <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" filter-input name="location">
-        <md-option ng-repeat="location in ::$ctrl.locations" ng-value="::location._id" ng-disabled="$ctrl.location === location">
-          {{ ::location.label}}
-        </md-option>
-      </md-select>
-    </md-input-container>
+<filter-builder ng-model="$ctrl.filter" layout="column" layout-padding flex="grow">
+  <md-input-container>
+    <label>Location</label>
+    <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" filter-input name="location">
+      <md-option ng-repeat="location in ::$ctrl.locations" ng-value="::location._id" ng-disabled="$ctrl.location === location">
+        {{ ::location.label}}
+      </md-option>
+    </md-select>
+  </md-input-container>
 
-    <md-input-container flex layout="column">
-      <label>Feature category</label>
-      <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-disabled="!$ctrl.location" multiple filter-input name="category">
+  <md-input-container>
+    <label>Feature category</label>
+    <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-disabled="!$ctrl.location" multiple filter-input name="category">
 <!--         <md-select-header layout-padding>
-          <md-checkbox aria-label="Select All"
-                       ng-checked="$ctrl.isChecked('category', 'categories')"
-                       md-indeterminate="$ctrl.isIndeterminate('category', 'categories')"
-                       ng-click="$ctrl.toggleAll('category', 'categories')">
-            <span ng-if="isChecked('category', 'categories')">Un-</span>Select All
-          </md-checkbox>
-        </md-select-header> -->
-        <md-option ng-repeat="category in $ctrl.categories" ng-value="::category._id" ng-disabled="$ctrl.category === category">
-          {{ ::category.name }}
+        <md-checkbox aria-label="Select All"
+                     ng-checked="$ctrl.isChecked('category', 'categories')"
+                     md-indeterminate="$ctrl.isIndeterminate('category', 'categories')"
+                     ng-click="$ctrl.toggleAll('category', 'categories')">
+          <span ng-if="isChecked('category', 'categories')">Un-</span>Select All
+        </md-checkbox>
+      </md-select-header> -->
+      <md-option ng-repeat="category in $ctrl.categories" ng-value="::category._id" ng-disabled="$ctrl.category === category">
+        {{ ::category.name }}
+      </md-option>
+    </md-select>
+  </md-input-container>
+
+    <md-chips>
+      <md-chip ng-repeat="category in $ctrl.getItemsInListByProp($ctrl.category, $ctrl.categories, '_id') track by $index">
+      	{{ category.name }}
+			  <button class="md-chip-remove" ng-click="$ctrl.removeItemFromList(category._id, $ctrl.category)">&times;</button>
+      </md-chip>
+		</md-chips>
+
+  <md-input-container>
+    <label>Feature collection</label>
+    <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-disabled="!$ctrl.category" multiple filter-input name="group">
+      <md-optgroup ng-repeat="group in $ctrl.getItemsInListByProp($ctrl.category, $ctrl.categories, '_id')" label="{{ ::group.name }}">
+        <md-option ng-repeat="collection in $ctrl.collections | filter: { category: group._id }" ng-value="::collection._id" ng-disabled="$ctrl.collection === collection">
+          {{ ::collection.name }}
         </md-option>
-      </md-select>
-    </md-input-container>
-
-      <md-chips layout="column">
-        <md-chip ng-repeat="category in $ctrl.getItemsInListByProp($ctrl.category, $ctrl.categories, '_id') track by $index">
-        	{{ category.name }}
-				  <button class="md-chip-remove" ng-click="$ctrl.removeItemFromList(category._id, $ctrl.category)">&times;</button>
-        </md-chip>
-			</md-chips>
-
-    <md-input-container flex layout="column">
-      <label>Feature collection</label>
-      <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-disabled="!$ctrl.category" multiple filter-input name="group">
-        <md-optgroup ng-repeat="group in $ctrl.getItemsInListByProp($ctrl.category, $ctrl.categories, '_id')" label="{{ ::group.name }}">
-	        <md-option ng-repeat="collection in $ctrl.collections | filter: { category: group._id }" ng-value="::collection._id" ng-disabled="$ctrl.collection === collection">
-	          {{ ::collection.name }}
-	        </md-option>
-        </md-optgroup>
-      </md-select>
-    </md-input-container>
-
-  </filter-builder>
-  <div layout="column">
+      </md-optgroup>
+    </md-select>
+  </md-input-container>
+</filter-builder>
+<!--   <div layout="column">
 
     <md-button class="md-primary" ng-click="$ctrl.showAll()">
     	Show all
@@ -58,6 +51,5 @@
         Turn on visibility for all available map features
       </md-tooltip>
     </md-button>
-		{{ $ctrl.filter | json }}
-  </div>
-</md-whiteframe>
+		<small><pre>{{ $ctrl.filter | json }}</pre></small>
+  </div> -->
