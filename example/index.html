@@ -33,12 +33,15 @@
 		}
 
 		.map-detail {
-			max-width: 400px;
+			/* max-width: 400px; */
+		  background-color: rgba(255, 255, 255, 0.75);
+		  -webkit-transition: 0.3s;
+		  transition: 0.3s;
 		}
 
 		.details-text {
 			font-size: 14px;
-			max-height: 300px;
+			/* max-height: 300px; */
 			line-height: 1.6em;
 			color: rgba(0,0,0,0.54);
 		}
@@ -58,26 +61,21 @@
 		.detail-arrow.arrow-up::after {
 			transform: rotate(-135deg);
 		}
-/* 	
-		.map-controls {
-			width: 500px;
+
+		.map-controls-sidenav {
+			background: rgba(255,255,255,0.8);
 		}
-		.map-controls, .map-detail {
-		  background-color: rgba(255, 255, 255, 0.75);
-		  -webkit-transition: 0.3s;
-		  transition: 0.3s;
-		}
-		.map-controls-sidenav.md-closed {
-			display: flex;
+		.map-controls-sidenav md-content {
+			background: transparent;
 		}
 
-		@media (min-width: 600px) {
+/* 		@media (min-width: 600px) {
 			.map-controls-sidenav {
 				width: auto;
 		    max-width: 600px;
 			}
-		}
-*/
+		} */
+
 
 		.map-controls-handle {
 			height: 100%;
@@ -86,13 +84,19 @@
 		}
 
 		.map-controls-handle .md-button {
-			transition: 0.4s;
+			transition: 0.4s ease;
 			background: rgba(0, 0, 0, 0.15);
 		}
 
 		.map-controls-handle.map-controls-open .md-button {
 			/* opacity: 0; */
-			transform: translateX(100%);
+			transition: 0.4s ease;
+			transform: translateX(70%);
+		}
+
+		.map-controls-handle.map-controls-open .md-button svg {
+			transition: 0.6s ease;
+			transform: translateX(-80%) rotateY(180deg);
 		}
 
 		.map-controls md-input-container {

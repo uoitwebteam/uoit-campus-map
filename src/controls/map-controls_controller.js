@@ -41,12 +41,19 @@ class MapControlsCtrl {
    * Initialize the controls (show all map elements)
    */
   $onInit() {
-    this.loadLocations().then(locations => {
-      this.location = locations[1]._id;
-      this.updateLocation();
-      // this.showAll();
-      // angular.element(this.$window).triggerHandler('resize');
-    });
+    this.loadLocations()
+      .then(locations => {
+        this.location = locations[1]._id;
+        return this.loadCategories();
+      })
+      .then(categories => {
+        this.category = [...categories.map(category => category._id)];
+        return this.loadCollections();
+      })
+      .then(collections => {
+        this.collection = [...collections.map(collection => collection._id)];
+        return this.loadFeatures(this.filter);
+      });
   }
 
   /**
@@ -55,21 +62,11 @@ class MapControlsCtrl {
    * @return {Promise} Resolves to list of locations
    */
   loadLocations() {
-    return this.LocationResource.query().$promise.then(locations => {
-      this.locations = locations;
-      return locations;
-    });
-  }
-
-  /**
-   * After selecting a location, loads categories and sets category
-   * to first item in list; kicks off category update.
-   */
-  updateLocation() {
-    this.loadCategories().then(categories => {
-      this.category = [...categories.map(category => category._id)];
-      this.updateCategory();
-    });
+    return this.locations || this.LocationResource.query().$promise
+      .then(locations => {
+        this.locations = locations;
+        return locations;
+      });
   }
 
   /**
@@ -78,67 +75,11 @@ class MapControlsCtrl {
    * @return {Promise} Resolves to list of categories
    */
   loadCategories() {
-    return this.CategoryResource.query().$promise.then(categories => {
-      this.categories = categories;
-      return categories;
-    });
-  }
-
-  /**
-   * After selecting a category, load collections and set collection
-   * to first item in list; kick off collection update.
-   */
-  updateCategory() {
-    // this.loadFeatures()
-    //   .then(() => this.updateFeatures())
-    //   .then(() => this.loadCollections())
-    //   .then(collections => {
-    //     this.collection = [...collections.map(collection => collection._id)];
-    //     this.updateFeatures()
-    //   });
-    this.loadCollections()
-      .then(collections => {
-        this.collection = [...collections.map(collection => collection._id)];
-        return this.loadFeatures();
-      })
-      .then(() => this.updateFeatures());
-  }
-
-  /**
-   * Load feature list from server using the `_id`s of the currently
-   * selected categories to filter by.
-   *
-   * @todo Update this doc to describe array of categories
-   * 
-   * @return {Promise} Resolves to list of collections
-   */
-  loadFeatures() {
-    return this.FeatureResource.query({
-      filter: {
-        'properties.category': {
-          $in: [...this.category]
-        },
-        'group': {
-          $in: [...this.collection]
-        }
-      }
-    }).$promise.then(features => {
-      this.features = features;
-      console.log('FEATURES:', features)
-      return features;
-    });
-  }
-
-  updateFeatures() {
-    const { location, category, features } = this;
-    this.setMapData({
-      location,
-      category,
-      collection: {
-        type: 'FeatureCollection',
-        features
-      }
-    });
+    return this.categories || this.CategoryResource.query().$promise
+      .then(categories => {
+        this.categories = categories;
+        return categories;
+      });
   }
 
   /**
@@ -158,24 +99,37 @@ class MapControlsCtrl {
           $in: [...this.category]
         }
       }
-    }).$promise.then(collections => {
-      this.collections = collections;
-      return collections;
-    });
+    }).$promise
+      .then(collections => {
+        this.collections = collections;
+        return collections;
+      });
   }
 
   /**
-   * After selecting a collection, extracts all relevant filter
-   * properties from controller and uses `setMapData()` to
-   * send the data to the view.
+   * Load feature list from server using the `_id`s of the currently
+   * selected categories to filter by.
+   *
+   * @todo Update this doc to describe array of categories
+   * 
+   * @return {Promise} Resolves to list of collections
    */
-  updateCollection() {
-    const { location, category, collection } = this;
-    this.setMapData({
-      location,
-      category,
-      collection
-    }, true);
+  loadFeatures(filter) {
+    return this.FeatureResource.query({ filter }).$promise
+      .then(features => {
+        this.features = features;
+        return features;
+      })
+      .then(features => {
+        return this.setMapData({
+          location: this.location,
+          category: this.category,
+          collection: {
+            type: 'FeatureCollection',
+            features
+          }
+        });
+      });
   }
 
   /**
@@ -243,29 +197,46 @@ class MapControlsCtrl {
     (index > -1) && list.splice(index, 1);
   }
 
+  /**
+   * Checks whether the number of selected items is more than zero but
+   * less than the total of available items (sets checkbox inputs to "indeterminate").
+   * 
+   * @param  {String}  selected Name of property that holds selected items
+   * @param  {String}  items    Name of property that holds all items
+   * @return {Boolean}          Whether checkbox should be indeterminate
+   */
   isIndeterminate(selected, items) {
     return (this[selected] && this[items]) && (this[selected].length !== 0 &&
-        this[selected].length !== items.length);
+        this[selected].length !== this[items].length);
   }
 
+  /**
+   * Utility function for determining whether all items are selected (set
+   * 'select all' checkbox to checked if so).
+   * 
+   * @param  {String}  selected Name of property that holds selected items
+   * @param  {String}  items    Name of property that holds all items
+   * @return {Boolean}          Whether checkbox should be checked
+   */
   isChecked(selected, items) {
     return (this[selected] && this[items]) && (this[selected].length === this[items].length);
   }
 
+  /**
+   * Utility function for or selecting or deselecting all items (set all
+   * item checkboxes to checked/unchecked).
+   * 
+   * @param  {String}  selected Name of property that holds selected items
+   * @param  {String}  items    Name of property that holds all items
+   */
   toggleAll(selected, items) {
     if (this[selected].length === this[items].length) {
       console.log('deselected all');
       this[selected] = [];
     } else if (this[selected].length >= 0) {
       console.log('selected all');
-      this[selected] = [...this[items]];
+      this[selected] = [...this[items].map(item => item._id || item.id)];
     }
-    const { location, category, collection } = this;
-    this.setMapData({
-      location,
-      category,
-      collection
-    }, true);
   }
 }
 

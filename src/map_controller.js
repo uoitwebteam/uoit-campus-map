@@ -143,17 +143,6 @@ class MapCtrl {
       instance.data.addListener('click', event => {
         this.showDetail(event.feature, this.isolateMouseEvent(event));
       });
-
-	    // this._$scope.$watch( () => this.mapData, (newVal) => {
-	    // 	if (newVal) {
-					// console.log('map component detected internal changes:', newVal);
-			  // 	this.clearMapData().then(() => this.updateMapData(newVal));
-		   //  	if (newVal.location && this.location !== newVal.location) {
-			  //   	this.location = newVal.location;
-			  //   }
-	    // 	}
-	    // });
-
     });
 	}
 
@@ -193,16 +182,9 @@ class MapCtrl {
 	updateMapData(newVal) {
 		console.log('updating map data...', newVal);
 		return this.clearMapData().then(map => {
-			if (newVal.collection && newVal.category.length) {
-				if (newVal.isCollection) {
-					angular.forEach(newVal.collection, (collection, index) => {
-						this._$scope.$applyAsync(() => map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${collection._id}`, null, () => {
-						  (index === newVal.collection.length - 1) && this.fitBounds(map);
-			  		}));
-					});
-				} else {
+			if (newVal.collection.features.length && newVal.category.length) {
 		      map.data.addGeoJson(newVal.collection);
-				}
+		      this.fitBounds(map);
 				console.log('map data updated!');
 			}
 		});
@@ -330,6 +312,7 @@ class MapCtrl {
 	    });
 	  }
 	}
+
 	/**
 	 * Resizes map view to fit recalculated bounds.
 	 */
@@ -340,6 +323,7 @@ class MapCtrl {
 	  });
 	  this.map.fitBounds(bounds);
 	}
+	
 	/**
 	 * Since Google Map events store private properties under names
 	 * that change periodically, it is necessary to manually evaluate

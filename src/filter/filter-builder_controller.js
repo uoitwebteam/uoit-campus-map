@@ -1,5 +1,3 @@
-import isArray from "lodash.isarray";
-
 /**
  * The FilterBuilderCtrl class provides a controller for the
  * `<filter-builder>` directive; it contains logic for extracting
@@ -13,18 +11,15 @@ import isArray from "lodash.isarray";
  * make any server calls or deal otherwise with with the actual map
  * data – it is purely responsible for providing the filter to make
  * the server calls with.
- * 
- * @todo
- * Determine if $watch by string reference is more performant
- * than $watchCollection on parts array (fn that calls setViewValue)
  */
 class FilterBuilderCtrl {
   static get $inject() {
-    return ['$scope', '$parse'];
+    return ['$scope', '$attrs', '$parse'];
   }
-  constructor($scope, $parse) {
-    this.$scope = $scope;
-    this.$parse = $parse;
+  constructor($scope, $attrs, $parse) {
+    this._$scope = $scope;
+    this._$attrs = $attrs;
+    this._$parse = $parse;
     /**
      * Holds a map of child input NgModelControllers keyed by the
      * _string reference to the scope model_ of the input. For example,
@@ -57,20 +52,16 @@ class FilterBuilderCtrl {
    * - pushing `formatModelValue` onto ng-model's `$formatters`
    */
   $onInit() {
-    this.$scope.$watchCollection(
+    this._$scope.$watchCollection(
       () => this.getViewValue(),
       () => this.setViewValue()
     );
-    // this.$scope.$watch(
-    //  () => Object.keys(this.parts).map(key => {
-    //    const { $viewValue } = this.parts[key];
-    //    return _.isArray($viewValue) ? $viewValue.join('') : $viewValue;
-    //  }).join(''),
-    //  setViewValue
-    // );
-    // 
+
     this.$ngModel.$parsers.push(viewValue => this.parseViewValue(viewValue));
     this.$ngModel.$formatters.push(modelValue => this.formatModelValue(modelValue));
+
+    const onUpdate = this._$parse(this._$attrs.onUpdate);
+    this.$ngModel.$viewChangeListeners.push(() => onUpdate(this._$scope));
   }
 
   /**
@@ -92,33 +83,27 @@ class FilterBuilderCtrl {
    * to be bound by reference, the original `parts` collection is used
    * instead of the `$watch`'s copy value.
    *
-   * If the value is an array, it is wrapped in a MongoDB `{ $in: {...} }`
-   * and assigned to a property keyed by the input's `name` attribute; if
-   * it is a primitive it is assigned without wrapping.
+   * The values mapped into the new view value by this function are
+   * obtained by using the `parts[key].getFilter()` method, which is
+   * defined on the filter input directive's NgModelController object.
+   * If the value is an array, the `getFilter()` wraps the array in
+   * a MongoDB `{ $in: {...} }` operator and assigns it to a property
+   * keyed by the input's `name` attribute; if it is a primitive it
+   * is assigned without wrapping.
    *
    * Before `setViewValue()` is called to fire off the parser pipeline,
    * the final value is run through `removeNulls()` to cleanse it of
    * `null` and `undefined` values.
    */
   setViewValue() {
-    const newViewValue = Object.keys(this.parts).map(key => {
-      const { $name: name, $viewValue: viewValue } = this.parts[key];
-
-      return (viewValue && isArray(viewValue)) ?
-        viewValue.length ? 
-          { [name]: { $in: viewValue } } :
-          null :
-        viewValue ?
-          { [name]: viewValue } :
-          null;
-    });
+    const newViewValue = Object.keys(this.parts).map(key => this.parts[key].getFilter());
     this.$ngModel.$setViewValue(this.removeNulls(newViewValue));
   }
 
   /**
    * The `formatModelValue` function is pushed onto the `$formatters` of
    * the `NgModelController`. It is responsible for delegating incoming
-   * scope values (set by user) to their respective input elements' scopes.
+   * scope values (set programmatically) to their respective input elements' scopes.
    * The function needs to:
    * - determine which scope models are available to set
    * - disregard incoming values with no matching input element by building an
@@ -128,7 +113,7 @@ class FilterBuilderCtrl {
    *   - use Angular's `$parse` service to generate a getter/setter for the
    *   model's scope reference
    *   - use the provided setter to set the scope reference, therefore updating
-   *   the child input elements
+   *   the child input elements by setting off their respective `$formatters`
    * 
    * @param  {Object} modelValue Map of values by name to set on child scopes
    */
@@ -140,9 +125,9 @@ class FilterBuilderCtrl {
           modelValue: modelValue[this.parts[key].$name] }; 
       });
       modelsToSet.forEach(newModel => {
-        const getModel = this.$parse(newModel.modelName),
+        const getModel = this._$parse(newModel.modelName),
               setModel = getModel.assign;
-        setModel(this.$scope, newModel.modelValue)
+        setModel(this._$scope, newModel.modelValue)
       });
       // console.log(`formatter set input to`, modelsToSet);
     }
@@ -157,8 +142,21 @@ class FilterBuilderCtrl {
    * - **more than one value**, return them wrapped in `{ $and: [...] }`
    *
    * @example
-   * [{ category: 'abc123' }]; // becomes...
+   * // anything considered empty...
+   * []
+   * [{}]
+   * // turns into this:
+   * {}
+   *
+   * // a single predicate...
+   * [{ category: 'abc123' }];
+   * // gets flattened:
    * { category: 'abc123' };
+   *
+   * // multiple predicates...
+   * [{ category: 'abc123' }, { feature: '123abc' }];
+   * // get wrapped with the `$and` operator:
+   * { $and: [{ category: 'abc123' }, { feature: '123abc' }] }
    * 
    * 
    * @param  {Array} viewValue Incoming data from setViewValue
