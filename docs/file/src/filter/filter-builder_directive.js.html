@@ -42,7 +42,7 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">detail</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html">MapDetailCtrl</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">filter</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html">FilterBuilderCtrl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterBuilder">filterBuilder</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterInput">filterInput</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-filterInput">filterInput</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -53,7 +53,13 @@
 function filterBuilder() {
 	return {
 		restrict: &apos;E&apos;,
-		template: `&lt;form novalidate ng-submit=&quot;$event.preventDefault()&quot; ng-transclude&gt;&lt;/form&gt;`,
+		template: `&lt;form novalidate
+								ng-submit=&quot;$event.preventDefault()&quot;
+								layout=&quot;column&quot;
+								layout-align=&quot;start center&quot;
+								flex=&quot;grow&quot;
+								ng-transclude&gt;
+							&lt;/form&gt;`,
 		require: {
 			$ngModel: &apos;ngModel&apos;
 		},

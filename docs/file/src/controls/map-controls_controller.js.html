@@ -42,7 +42,7 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">detail</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html">MapDetailCtrl</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">filter</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html">FilterBuilderCtrl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterBuilder">filterBuilder</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterInput">filterInput</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-filterInput">filterInput</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -88,27 +88,22 @@ class MapControlsCtrl {
   }
 
   /**
-   * Initializes the controls (show all map elements)
+   * Initialize the controls (show all map elements)
    */
   $onInit() {
-    this.loadLocations().then(locations =&gt; {
-			this.location = locations[1]._id;
-			this.updateLocation();
-			// this.showAll();
-			// angular.element(this.$window).triggerHandler(&apos;resize&apos;);
-    });
-  }
-
-  getFiltered(filter, list) {
-    return list &amp;&amp; [...list].filter(item =&gt; {
-      return [...filter].indexOf(item._id || item.id) !== -1;
-    });
-  }
-
-  removeFromFiltered(item, list) {
-  	const index = [...list].indexOf(item);
-  	console.log(item, list, index);
-  	(index &gt; -1) &amp;&amp; list.splice(index, 1);
+    this.loadLocations()
+      .then(locations =&gt; {
+        this.location = locations[1]._id;
+        return this.loadCategories();
+      })
+      .then(categories =&gt; {
+        this.category = [...categories.map(category =&gt; category._id)];
+        return this.loadCollections();
+      })
+      .then(collections =&gt; {
+        this.collection = [...collections.map(collection =&gt; collection._id)];
+        return this.loadFeatures(this.filter);
+      });
   }
 
   /**
@@ -117,21 +112,11 @@ class MapControlsCtrl {
    * @return {Promise} Resolves to list of locations
    */
   loadLocations() {
-    return this.LocationResource.query().$promise.then(locations =&gt; {
-      this.locations = locations;
-      return locations;
-    });
-  }
-
-  /**
-   * After selecting a location, loads categories and sets category
-   * to first item in list; kicks off category update.
-   */
-  updateLocation() {
-    this.loadCategories().then(categories =&gt; {
-      this.category = [...categories.map(category =&gt; category._id)];
-      this.updateCategory();
-    });
+    return this.locations || this.LocationResource.query().$promise
+      .then(locations =&gt; {
+        this.locations = locations;
+        return locations;
+      });
   }
 
   /**
@@ -140,58 +125,11 @@ class MapControlsCtrl {
    * @return {Promise} Resolves to list of categories
    */
   loadCategories() {
-    return this.CategoryResource.query().$promise.then(categories =&gt; {
-      this.categories = categories;
-      return categories;
-    });
-  }
-
-  /**
-   * After selecting a category, loads collections and sets collection
-   * to first item in list; kicks off collection update.
-   */
-  updateCategory() {
-    this.loadFeatures()
-    	.then(() =&gt; this.updateFeatures())
-    	.then(() =&gt; this.loadCollections())
-    	.then(collections =&gt; {
-	      this.collection = [...collections.map(collection =&gt; collection._id)];
-    //   this.updateCollection();
-	    });
-  }
-
-  /**
-   * Load feature list from server using the `_id`s of the currently
-   * selected categories to filter by.
-   *
-   * @todo Update this doc to describe array of categories
-   * 
-   * @return {Promise} Resolves to list of collections
-   */
-  loadFeatures() {
-    return this.FeatureResource.query({
-      filter: {
-      	&apos;properties.category&apos;: {
-      		$in: [...this.category]
-      	}
-      }
-    }).$promise.then(features =&gt; {
-      this.features = features;
-      console.log(&apos;FEATURES:&apos;, features)
-      return features;
-    });
-  }
-
-  updateFeatures() {
-  	const { location, category, features } = this;
-    this.setMapData({
-    	location,
-    	category,
-      collection: {
-        type: &apos;FeatureCollection&apos;,
-        features
-      }
-    });
+    return this.categories || this.CategoryResource.query().$promise
+      .then(categories =&gt; {
+        this.categories = categories;
+        return categories;
+      });
   }
 
   /**
@@ -206,29 +144,42 @@ class MapControlsCtrl {
   loadCollections() {
     return this.CollectionResource.query({
       filter: {
-      	location: this.location,
-      	category: {
-      		$in: [...this.category]
-      	}
+        location: this.location,
+        category: {
+          $in: [...this.category]
+        }
       }
-    }).$promise.then(collections =&gt; {
-      this.collections = collections;
-      return collections;
-    });
+    }).$promise
+      .then(collections =&gt; {
+        this.collections = collections;
+        return collections;
+      });
   }
 
   /**
-   * After selecting a collection, extracts all relevant filter
-   * properties from controller and uses `setMapData()` to
-   * send the data to the view.
+   * Load feature list from server using the `_id`s of the currently
+   * selected categories to filter by.
+   *
+   * @todo Update this doc to describe array of categories
+   * 
+   * @return {Promise} Resolves to list of collections
    */
-  updateCollection() {
-    const { location, category, collection } = this;
-    this.setMapData({
-      location,
-      category,
-      collection
-    }, true);
+  loadFeatures(filter) {
+    return this.FeatureResource.query({ filter }).$promise
+      .then(features =&gt; {
+        this.features = features;
+        return features;
+      })
+      .then(features =&gt; {
+        return this.setMapData({
+          location: this.location,
+          category: this.category,
+          collection: {
+            type: &apos;FeatureCollection&apos;,
+            features
+          }
+        });
+      });
   }
 
   /**
@@ -269,42 +220,73 @@ class MapControlsCtrl {
     });
   }
 
-  // toggle(item, list) {
-  //   const idx = list.indexOf(item);
-  //   if (idx &gt; -1) {
-  //     list.splice(idx, 1);
-  //   } else {
-  //     list.push(item);
-  //   }
-  // }
-
-  // exists(item, list) {
-  //   return list.indexOf(item) &gt; -1;
-  // }
-
-  isIndeterminate(selected, items) {
-    return (this[selected] &amp;&amp; this[items]) &amp;&amp; (this[selected].length !== 0 &amp;&amp;
-        this[selected].length !== items.length);
+  /**
+   * Filter an array for matches in another array by a property;
+   * return the matched items.
+   * 
+   * @param  {Array}  items Items to match with
+   * @param  {Array}  list  List to match from
+   * @param  {String} prop  Property to match against
+   * @return {Array}        List of filtered items
+   */
+  getItemsInListByProp(items, list, prop) {
+    return list &amp;&amp; [...list].filter(item =&gt; {
+      return [...items].indexOf(item[prop] || item[prop]) !== -1;
+    });
   }
 
+  /**
+   * Find a specific array item and remove it from the array.
+   * 
+   * @param  {*}     item The item to remove
+   * @param  {Array} list The list to remove from
+   */
+  removeItemFromList(item, list) {
+    const index = [...list].indexOf(item);
+    console.log(item, list, index);
+    (index &gt; -1) &amp;&amp; list.splice(index, 1);
+  }
+
+  /**
+   * Checks whether the number of selected items is more than zero but
+   * less than the total of available items (sets checkbox inputs to &quot;indeterminate&quot;).
+   * 
+   * @param  {String}  selected Name of property that holds selected items
+   * @param  {String}  items    Name of property that holds all items
+   * @return {Boolean}          Whether checkbox should be indeterminate
+   */
+  isIndeterminate(selected, items) {
+    return (this[selected] &amp;&amp; this[items]) &amp;&amp; (this[selected].length !== 0 &amp;&amp;
+        this[selected].length !== this[items].length);
+  }
+
+  /**
+   * Utility function for determining whether all items are selected (set
+   * &apos;select all&apos; checkbox to checked if so).
+   * 
+   * @param  {String}  selected Name of property that holds selected items
+   * @param  {String}  items    Name of property that holds all items
+   * @return {Boolean}          Whether checkbox should be checked
+   */
   isChecked(selected, items) {
     return (this[selected] &amp;&amp; this[items]) &amp;&amp; (this[selected].length === this[items].length);
   }
 
+  /**
+   * Utility function for or selecting or deselecting all items (set all
+   * item checkboxes to checked/unchecked).
+   * 
+   * @param  {String}  selected Name of property that holds selected items
+   * @param  {String}  items    Name of property that holds all items
+   */
   toggleAll(selected, items) {
     if (this[selected].length === this[items].length) {
-    	console.log(&apos;deselected all&apos;);
+      console.log(&apos;deselected all&apos;);
       this[selected] = [];
     } else if (this[selected].length &gt;= 0) {
-    	console.log(&apos;selected all&apos;);
-      this[selected] = [...this[items]];
+      console.log(&apos;selected all&apos;);
+      this[selected] = [...this[items].map(item =&gt; item._id || item.id)];
     }
-    const { location, category, collection } = this;
-    this.setMapData({
-      location,
-      category,
-      collection
-    }, true);
   }
 }
 

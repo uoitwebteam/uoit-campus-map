@@ -42,7 +42,7 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">detail</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html">MapDetailCtrl</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">filter</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html">FilterBuilderCtrl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterBuilder">filterBuilder</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterInput">filterInput</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-filterInput">filterInput</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -468,7 +468,7 @@ simply makes it available.</p>
       <div>
         
         
-        <div data-ice="description"><p>Initializes the controls (show all map elements)</p>
+        <div data-ice="description"><p>Initialize the controls (show all map elements)</p>
 </div>
       </div>
     </td>
@@ -488,13 +488,15 @@ simply makes it available.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-getFiltered">getFiltered</a></span></span><span data-ice="signature">(filter: <span>*</span>, list: <span>*</span>): <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-getItemsInListByProp">getItemsInListByProp</a></span></span><span data-ice="signature">(items: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>, list: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>, prop: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Filter an array for matches in another array by a property;
+return the matched items.</p>
+</div>
       </div>
     </td>
     <td>
@@ -513,13 +515,15 @@ simply makes it available.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-isChecked">isChecked</a></span></span><span data-ice="signature">(selected: <span>*</span>, items: <span>*</span>): <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-isChecked">isChecked</a></span></span><span data-ice="signature">(selected: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, items: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Utility function for determining whether all items are selected (set
+&apos;select all&apos; checkbox to checked if so).</p>
+</div>
       </div>
     </td>
     <td>
@@ -538,13 +542,15 @@ simply makes it available.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-isIndeterminate">isIndeterminate</a></span></span><span data-ice="signature">(selected: <span>*</span>, items: <span>*</span>): <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-isIndeterminate">isIndeterminate</a></span></span><span data-ice="signature">(selected: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, items: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Checks whether the number of selected items is more than zero but
+less than the total of available items (sets checkbox inputs to &quot;indeterminate&quot;).</p>
+</div>
       </div>
     </td>
     <td>
@@ -617,7 +623,7 @@ controller / <code>this</code>) to filter by.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-loadFeatures">loadFeatures</a></span></span><span data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></span>
+           <span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-loadFeatures">loadFeatures</a></span></span><span data-ice="signature">(filter: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></span>
         </p>
       </div>
       <div>
@@ -670,13 +676,14 @@ selected categories to filter by.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-removeFromFiltered">removeFromFiltered</a></span></span><span data-ice="signature">(item: <span>*</span>, list: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-removeItemFromList">removeItemFromList</a></span></span><span data-ice="signature">(item: <span>*</span>, list: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Find a specific array item and remove it from the array.</p>
+</div>
       </div>
     </td>
     <td>
@@ -721,119 +728,14 @@ selected categories to filter by.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-toggleAll">toggleAll</a></span></span><span data-ice="signature">(selected: <span>*</span>, items: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-toggleAll">toggleAll</a></span></span><span data-ice="signature">(selected: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, items: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-updateCategory">updateCategory</a></span></span><span data-ice="signature">()</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>After selecting a category, loads collections and sets collection
-to first item in list; kicks off collection update.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-updateCollection">updateCollection</a></span></span><span data-ice="signature">()</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>After selecting a collection, extracts all relevant filter
-properties from controller and uses <code>setMapData()</code> to
-send the data to the view.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-updateFeatures">updateFeatures</a></span></span><span data-ice="signature">()</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-updateLocation">updateLocation</a></span></span><span data-ice="signature">()</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>After selecting a location, loads categories and sets category
-to first item in list; kicks off category update.</p>
+        <div data-ice="description"><p>Utility function for or selecting or deselecting all items (set all
+item checkboxes to checked/unchecked).</p>
 </div>
       </div>
     </td>
@@ -1140,7 +1042,7 @@ to first item in list; kicks off category update.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber94">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber80">source</a></span></span>
     </span>
   </h3>
 
@@ -1260,7 +1162,7 @@ to first item in list; kicks off category update.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber165">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber104">source</a></span></span>
     </span>
   </h3>
 
@@ -1300,7 +1202,7 @@ to first item in list; kicks off category update.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber129">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber120">source</a></span></span>
     </span>
   </h3>
 
@@ -1380,7 +1282,7 @@ to first item in list; kicks off category update.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber71">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber67">source</a></span></span>
     </span>
   </h3>
 
@@ -1430,7 +1332,7 @@ to first item in list; kicks off category update.</p>
   
   
   
-  <div data-ice="description"><p>Initializes the controls (show all map elements)</p>
+  <div data-ice="description"><p>Initialize the controls (show all map elements)</p>
 </div>
 
   
@@ -1454,24 +1356,26 @@ to first item in list; kicks off category update.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-getFiltered">
+  <h3 data-ice="anchor" id="instance-method-getItemsInListByProp">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">getFiltered</span><span data-ice="signature">(filter: <span>*</span>, list: <span>*</span>): <span>*</span></span>
+    <span data-ice="name">getItemsInListByProp</span><span data-ice="signature">(items: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>, list: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>, prop: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber52">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber182">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Filter an array for matches in another array by a property;
+return the matched items.</p>
+</div>
 
   
 
@@ -1484,16 +1388,25 @@ to first item in list; kicks off category update.</p>
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">filter</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="name" data-depth="0">items</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Items to match with</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">list</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>List to match from</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">prop</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Property to match against</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -1504,8 +1417,9 @@ to first item in list; kicks off category update.</p>
     <h4>Return:</h4>
     <table>
       <tr>
-        <td class="return-type" data-ice="returnType"><span>*</span></td>
-        
+        <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>List of filtered items</p>
+</td>
       </tr>
     </table>
     <div data-ice="returnProperties">
@@ -1532,18 +1446,20 @@ to first item in list; kicks off category update.</p>
     
     
     
-    <span data-ice="name">isChecked</span><span data-ice="signature">(selected: <span>*</span>, items: <span>*</span>): <span>*</span></span>
+    <span data-ice="name">isChecked</span><span data-ice="signature">(selected: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, items: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber240">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber221">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Utility function for determining whether all items are selected (set
+&apos;select all&apos; checkbox to checked if so).</p>
+</div>
 
   
 
@@ -1557,15 +1473,17 @@ to first item in list; kicks off category update.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">selected</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Name of property that holds selected items</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">items</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Name of property that holds all items</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -1576,8 +1494,9 @@ to first item in list; kicks off category update.</p>
     <h4>Return:</h4>
     <table>
       <tr>
-        <td class="return-type" data-ice="returnType"><span>*</span></td>
-        
+        <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>Whether checkbox should be checked</p>
+</td>
       </tr>
     </table>
     <div data-ice="returnProperties">
@@ -1604,18 +1523,20 @@ to first item in list; kicks off category update.</p>
     
     
     
-    <span data-ice="name">isIndeterminate</span><span data-ice="signature">(selected: <span>*</span>, items: <span>*</span>): <span>*</span></span>
+    <span data-ice="name">isIndeterminate</span><span data-ice="signature">(selected: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, items: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber235">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber208">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Checks whether the number of selected items is more than zero but
+less than the total of available items (sets checkbox inputs to &quot;indeterminate&quot;).</p>
+</div>
 
   
 
@@ -1629,15 +1550,17 @@ to first item in list; kicks off category update.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">selected</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Name of property that holds selected items</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">items</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Name of property that holds all items</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -1648,8 +1571,9 @@ to first item in list; kicks off category update.</p>
     <h4>Return:</h4>
     <table>
       <tr>
-        <td class="return-type" data-ice="returnType"><span>*</span></td>
-        
+        <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+        <td class="return-desc" data-ice="returnDescription"><p>Whether checkbox should be indeterminate</p>
+</td>
       </tr>
     </table>
     <div data-ice="returnProperties">
@@ -1680,7 +1604,7 @@ to first item in list; kicks off category update.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber92">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber77">source</a></span></span>
     </span>
   </h3>
 
@@ -1732,7 +1656,7 @@ to first item in list; kicks off category update.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber156">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber94">source</a></span></span>
     </span>
   </h3>
 
@@ -1782,11 +1706,11 @@ controller / <code>this</code>) to filter by.</p>
     
     
     
-    <span data-ice="name">loadFeatures</span><span data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></span>
+    <span data-ice="name">loadFeatures</span><span data-ice="signature">(filter: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber121">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber117">source</a></span></span>
     </span>
   </h3>
 
@@ -1799,7 +1723,23 @@ selected categories to filter by.</p>
 
   
 
-  <div data-ice="properties">
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">filter</td>
+      <td data-ice="type"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
 </div>
 
   <div class="return-params" data-ice="returnParams">
@@ -1839,7 +1779,7 @@ selected categories to filter by.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber69">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber64">source</a></span></span>
     </span>
   </h3>
 
@@ -1881,24 +1821,25 @@ selected categories to filter by.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-removeFromFiltered">
+  <h3 data-ice="anchor" id="instance-method-removeItemFromList">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">removeFromFiltered</span><span data-ice="signature">(item: <span>*</span>, list: <span>*</span>)</span>
+    <span data-ice="name">removeItemFromList</span><span data-ice="signature">(item: <span>*</span>, list: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber58">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber194">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Find a specific array item and remove it from the array.</p>
+</div>
 
   
 
@@ -1914,13 +1855,15 @@ selected categories to filter by.</p>
       <td data-ice="name" data-depth="0">item</td>
       <td data-ice="type"><span>*</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The item to remove</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">list</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The list to remove from</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -1953,7 +1896,7 @@ selected categories to filter by.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber213">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber164">source</a></span></span>
     </span>
   </h3>
 
@@ -2058,18 +2001,20 @@ this.setMapData({
     
     
     
-    <span data-ice="name">toggleAll</span><span data-ice="signature">(selected: <span>*</span>, items: <span>*</span>)</span>
+    <span data-ice="name">toggleAll</span><span data-ice="signature">(selected: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, items: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber244">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber232">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Utility function for or selecting or deselecting all items (set all
+item checkboxes to checked/unchecked).</p>
+</div>
 
   
 
@@ -2083,186 +2028,21 @@ this.setMapData({
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">selected</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Name of property that holds selected items</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">items</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>Name of property that holds all items</p>
+</td>
     </tr>
 </tbody>
   </table>
 </div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-updateCategory">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">updateCategory</span><span data-ice="signature">()</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber103">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>After selecting a category, loads collections and sets collection
-to first item in list; kicks off collection update.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-updateCollection">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">updateCollection</span><span data-ice="signature">()</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber175">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>After selecting a collection, extracts all relevant filter
-properties from controller and uses <code>setMapData()</code> to
-send the data to the view.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-updateFeatures">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">updateFeatures</span><span data-ice="signature">()</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber135">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-updateLocation">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">updateLocation</span><span data-ice="signature">()</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber80">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>After selecting a location, loads categories and sets category
-to first item in list; kicks off category update.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
 </div>
 
   

@@ -42,7 +42,7 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">detail</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html">MapDetailCtrl</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">filter</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html">FilterBuilderCtrl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterBuilder">filterBuilder</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterInput">filterInput</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-filterInput">filterInput</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -193,17 +193,6 @@ class MapCtrl {
       instance.data.addListener(&apos;click&apos;, event =&gt; {
         this.showDetail(event.feature, this.isolateMouseEvent(event));
       });
-
-	    // this._$scope.$watch( () =&gt; this.mapData, (newVal) =&gt; {
-	    // 	if (newVal) {
-					// console.log(&apos;map component detected internal changes:&apos;, newVal);
-			  // 	this.clearMapData().then(() =&gt; this.updateMapData(newVal));
-		   //  	if (newVal.location &amp;&amp; this.location !== newVal.location) {
-			  //   	this.location = newVal.location;
-			  //   }
-	    // 	}
-	    // });
-
     });
 	}
 
@@ -213,10 +202,9 @@ class MapCtrl {
 			currentValue: { location, category, collection }
 		} = mapData;
 		console.log(&apos;map component detected external changes:&apos;, { location, category, collection });
-  	this.clearMapData()
-  		.then(() =&gt; this.updateMapData({
-  			location, category, collection
-  		}));
+		this.updateMapData({
+			location, category, collection
+		});
   	if (location &amp;&amp; this.location !== location) {
     	this.location = location;
     }
@@ -244,16 +232,9 @@ class MapCtrl {
 	updateMapData(newVal) {
 		console.log(&apos;updating map data...&apos;, newVal);
 		return this.clearMapData().then(map =&gt; {
-			if (newVal.collection &amp;&amp; newVal.category.length) {
-				if (newVal.isCollection) {
-					angular.forEach(newVal.collection, (collection, index) =&gt; {
-						this._$scope.$applyAsync(() =&gt; map.data.loadGeoJson(`http://localhost:3000/api/v1/feature-collections/${collection._id}`, null, () =&gt; {
-						  (index === newVal.collection.length - 1) &amp;&amp; this.fitBounds(map);
-			  		}));
-					});
-				} else {
+			if (newVal.collection.features.length &amp;&amp; newVal.category.length) {
 		      map.data.addGeoJson(newVal.collection);
-				}
+		      this.fitBounds(map);
 				console.log(&apos;map data updated!&apos;);
 			}
 		});
@@ -381,6 +362,7 @@ class MapCtrl {
 	    });
 	  }
 	}
+
 	/**
 	 * Resizes map view to fit recalculated bounds.
 	 */
@@ -391,6 +373,7 @@ class MapCtrl {
 	  });
 	  this.map.fitBounds(bounds);
 	}
+	
 	/**
 	 * Since Google Map events store private properties under names
 	 * that change periodically, it is necessary to manually evaluate

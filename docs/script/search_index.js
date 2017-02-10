@@ -55,9 +55,9 @@ window.esdocSearchIndex = [
   ],
   [
     "uoit-campus-map/src/filter/filter-input_directive.js~filterinput",
-    "function/index.html#static-function-filterInput",
+    "variable/index.html#static-variable-filterInput",
     "<span>filterInput</span> <span class=\"search-result-import-path\">uoit-campus-map/src/filter/filter-input_directive.js</span>",
-    "function"
+    "variable"
   ],
   [
     "uoit-campus-map/src/_templates.js~templates",
@@ -492,9 +492,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/controls/map-controls_controller.js~mapcontrolsctrl#getfiltered",
-    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-getFiltered",
-    "src/controls/map-controls_controller.js~MapControlsCtrl#getFiltered",
+    "src/controls/map-controls_controller.js~mapcontrolsctrl#getitemsinlistbyprop",
+    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-getItemsInListByProp",
+    "src/controls/map-controls_controller.js~MapControlsCtrl#getItemsInListByProp",
     "method"
   ],
   [
@@ -546,9 +546,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/controls/map-controls_controller.js~mapcontrolsctrl#removefromfiltered",
-    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-removeFromFiltered",
-    "src/controls/map-controls_controller.js~MapControlsCtrl#removeFromFiltered",
+    "src/controls/map-controls_controller.js~mapcontrolsctrl#removeitemfromlist",
+    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-removeItemFromList",
+    "src/controls/map-controls_controller.js~MapControlsCtrl#removeItemFromList",
     "method"
   ],
   [
@@ -561,30 +561,6 @@ window.esdocSearchIndex = [
     "src/controls/map-controls_controller.js~mapcontrolsctrl#toggleall",
     "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-toggleAll",
     "src/controls/map-controls_controller.js~MapControlsCtrl#toggleAll",
-    "method"
-  ],
-  [
-    "src/controls/map-controls_controller.js~mapcontrolsctrl#updatecategory",
-    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-updateCategory",
-    "src/controls/map-controls_controller.js~MapControlsCtrl#updateCategory",
-    "method"
-  ],
-  [
-    "src/controls/map-controls_controller.js~mapcontrolsctrl#updatecollection",
-    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-updateCollection",
-    "src/controls/map-controls_controller.js~MapControlsCtrl#updateCollection",
-    "method"
-  ],
-  [
-    "src/controls/map-controls_controller.js~mapcontrolsctrl#updatefeatures",
-    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-updateFeatures",
-    "src/controls/map-controls_controller.js~MapControlsCtrl#updateFeatures",
-    "method"
-  ],
-  [
-    "src/controls/map-controls_controller.js~mapcontrolsctrl#updatelocation",
-    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-method-updateLocation",
-    "src/controls/map-controls_controller.js~MapControlsCtrl#updateLocation",
     "method"
   ],
   [
@@ -664,18 +640,6 @@ window.esdocSearchIndex = [
     "class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-method-$onInit",
     "src/filter/filter-builder_controller.js~FilterBuilderCtrl#$onInit",
     "method"
-  ],
-  [
-    "src/filter/filter-builder_controller.js~filterbuilderctrl#$parse",
-    "class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-member-$parse",
-    "src/filter/filter-builder_controller.js~FilterBuilderCtrl#$parse",
-    "member"
-  ],
-  [
-    "src/filter/filter-builder_controller.js~filterbuilderctrl#$scope",
-    "class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-member-$scope",
-    "src/filter/filter-builder_controller.js~FilterBuilderCtrl#$scope",
-    "member"
   ],
   [
     "src/filter/filter-builder_controller.js~filterbuilderctrl#constructor",

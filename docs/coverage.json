@@ -1,29 +1,8 @@
 {
-  "coverage": "51.28%",
-  "expectCount": 78,
-  "actualCount": 40,
+  "coverage": "59.72%",
+  "expectCount": 72,
+  "actualCount": 43,
   "files": {
-    "src/map_controller.js": {
-      "expectCount": 20,
-      "actualCount": 16,
-      "undocumentLines": [
-        9,
-        160,
-        65,
-        171
-      ]
-    },
-    "src/filter/filter-builder_controller.js": {
-      "expectCount": 12,
-      "actualCount": 7,
-      "undocumentLines": [
-        22,
-        27,
-        26,
-        25,
-        28
-      ]
-    },
     "src/detail/map-detail_controller.js": {
       "expectCount": 10,
       "actualCount": 6,
@@ -34,28 +13,40 @@
         42
       ]
     },
+    "src/filter/filter-builder_controller.js": {
+      "expectCount": 10,
+      "actualCount": 8,
+      "undocumentLines": [
+        16,
+        19
+      ]
+    },
+    "src/map_controller.js": {
+      "expectCount": 20,
+      "actualCount": 16,
+      "undocumentLines": [
+        9,
+        149,
+        65,
+        159
+      ]
+    },
     "src/controls/map-controls_controller.js": {
-      "expectCount": 29,
-      "actualCount": 11,
+      "expectCount": 25,
+      "actualCount": 13,
       "undocumentLines": [
         18,
         32,
         31,
         30,
         33,
-        94,
+        80,
         36,
         37,
-        165,
-        129,
-        52,
-        240,
-        235,
+        104,
+        120,
         35,
-        71,
-        58,
-        244,
-        135
+        67
       ]
     },
     "src/constants/map-icons_constant.js": {
@@ -97,7 +88,7 @@
       "expectCount": 1,
       "actualCount": 0,
       "undocumentLines": [
-        1
+        13
       ]
     },
     "src/_templates.js": {

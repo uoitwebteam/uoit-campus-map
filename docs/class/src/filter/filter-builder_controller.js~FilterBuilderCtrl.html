@@ -42,19 +42,19 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">detail</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html">MapDetailCtrl</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">filter</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html">FilterBuilderCtrl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterBuilder">filterBuilder</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterInput">filterInput</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-filterInput">filterInput</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import FilterBuilderCtrl from &apos;<span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber21">uoit-campus-map/src/filter/filter-builder_controller.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import FilterBuilderCtrl from &apos;<span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber15">uoit-campus-map/src/filter/filter-builder_controller.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber21">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber15">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -92,8 +92,7 @@ the server calls with.</p>
 
   
 
-  <div data-ice="todo"><h4>TODO:</h4><ul><li><span>Determine if $watch by string reference is more performant
-than $watchCollection on parts array (fn that calls setViewValue)</span></li></ul></div>
+  
 </div>
 
 <div data-ice="staticMemberSummary"><h2>Static Member Summary</h2><table class="summary" data-ice="summary">
@@ -144,7 +143,7 @@ than $watchCollection on parts array (fn that calls setViewValue)</span></li></u
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">($scope: <span>*</span>, $parse: <span>*</span>)</span>
+           <span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">($scope: <span>*</span>, $attrs: <span>*</span>, $parse: <span>*</span>)</span>
         </p>
       </div>
       <div>
@@ -176,63 +175,15 @@ than $watchCollection on parts array (fn that calls setViewValue)</span></li></u
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-member-$parse">$parse</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-member-parts">parts</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-member-$scope">$scope</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html#instance-member-parts">parts</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
+        <div data-ice="description"><p>Holds a map of child input NgModelControllers keyed by the
+<em>string reference to the scope model</em> of the input.</p>
+</div>
       </div>
     </td>
     <td>
@@ -438,7 +389,7 @@ instead of the <code>$watch</code>&apos;s copy value.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber22">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber16">source</a></span></span>
     </span>
   </h3>
 
@@ -478,11 +429,11 @@ instead of the <code>$watch</code>&apos;s copy value.</p>
     
     
     
-    <span data-ice="name">constructor</span><span data-ice="signature">($scope: <span>*</span>, $parse: <span>*</span>)</span>
+    <span data-ice="name">constructor</span><span data-ice="signature">($scope: <span>*</span>, $attrs: <span>*</span>, $parse: <span>*</span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber25">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber19">source</a></span></span>
     </span>
   </h3>
 
@@ -503,6 +454,12 @@ instead of the <code>$watch</code>&apos;s copy value.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">$scope</td>
+      <td data-ice="type"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">$attrs</td>
       <td data-ice="type"><span>*</span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"></td>
@@ -537,104 +494,30 @@ instead of the <code>$watch</code>&apos;s copy value.</p>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-$parse">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">$parse</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber27">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-$scope">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">$scope</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber26">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-parts">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">parts</span><span data-ice="signature">: <span>*</span></span>
+    <span data-ice="name">parts</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber28">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber44">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Holds a map of child input NgModelControllers keyed by the
+<em>string reference to the scope model</em> of the input. For example,
+if a child input has an <code>ng-model=&quot;this.that&quot;</code> attribute, its
+key in this property will be <code>&apos;this.that&apos;</code>.</p>
+<p>Its value represents the &quot;model&quot; of this directive: the
+parts of this property are compiled an parsed into the final filter.</p>
+</div>
 
   
 
@@ -649,7 +532,21 @@ instead of the <code>$watch</code>&apos;s copy value.</p>
 
   
 
-  
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">// in HTML...
+`&lt;filter-builder ng-model=&quot;$ctrl.animalFilter&quot;&gt;
+  &lt;select ng-model=&quot;$ctrl.furType&quot;&gt;....&lt;/select&gt;
+  &lt;input type=&quot;checkbox&quot; ng-model=&quot;$ctrl.hasClaws&quot; /&gt;
+&lt;/filter builder&gt;`
+
+// ...will result in `this.parts` being equivalent to:
+{ &apos;$ctrl.furType&apos;: NgModel, &apos;$ctrl.hasClaws&apos;: NgModel }</code></pre>
+    </div>
+</div>
 
   
 
@@ -670,7 +567,7 @@ instead of the <code>$watch</code>&apos;s copy value.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber38">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber54">source</a></span></span>
     </span>
   </h3>
 
@@ -720,7 +617,7 @@ instead of the <code>$watch</code>&apos;s copy value.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber114">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber120">source</a></span></span>
     </span>
   </h3>
 
@@ -729,7 +626,7 @@ instead of the <code>$watch</code>&apos;s copy value.</p>
   
   <div data-ice="description"><p>The <code>formatModelValue</code> function is pushed onto the <code>$formatters</code> of
 the <code>NgModelController</code>. It is responsible for delegating incoming
-scope values (set by user) to their respective input elements&apos; scopes.
+scope values (set programmatically) to their respective input elements&apos; scopes.
 The function needs to:</p>
 <ul>
 <li>determine which scope models are available to set</li>
@@ -742,7 +639,7 @@ array of models with a matching value<ul>
 <li>use Angular&apos;s <code>$parse</code> service to generate a getter/setter for the
 model&apos;s scope reference</li>
 <li>use the provided setter to set the scope reference, therefore updating
-the child input elements</li>
+the child input elements by setting off their respective <code>$formatters</code></li>
 </ul>
 </li>
 </ul>
@@ -796,7 +693,7 @@ the child input elements</li>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber62">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber74">source</a></span></span>
     </span>
   </h3>
 
@@ -850,7 +747,7 @@ for efficient <code>$watchCollection</code>ing.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber141">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber165">source</a></span></span>
     </span>
   </h3>
 
@@ -908,7 +805,28 @@ are being set on the view. If the view has...</p>
 
   
 
-  
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">// anything considered empty...
+[]
+[{}]
+// turns into this:
+{}
+
+// a single predicate...
+[{ category: &apos;abc123&apos; }];
+// gets flattened:
+{ category: &apos;abc123&apos; };
+
+// multiple predicates...
+[{ category: &apos;abc123&apos; }, { feature: &apos;123abc&apos; }];
+// get wrapped with the `$and` operator:
+{ $and: [{ category: &apos;abc123&apos; }, { feature: &apos;123abc&apos; }] }</code></pre>
+    </div>
+</div>
 
   
 
@@ -926,7 +844,7 @@ are being set on the view. If the view has...</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber163">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber187">source</a></span></span>
     </span>
   </h3>
 
@@ -1008,7 +926,7 @@ are being set on the view. If the view has...</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber82">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/filter/filter-builder_controller.js.html#lineNumber98">source</a></span></span>
     </span>
   </h3>
 
@@ -1019,9 +937,13 @@ are being set on the view. If the view has...</p>
 the <code>$watch</code> results of <code>getViewValue()</code>. Since the value needs
 to be bound by reference, the original <code>parts</code> collection is used
 instead of the <code>$watch</code>&apos;s copy value.</p>
-<p>If the value is an array, it is wrapped in a MongoDB <code>{ $in: {...} }</code>
-and assigned to a property keyed by the input&apos;s <code>name</code> attribute; if
-it is a primitive it is assigned without wrapping.</p>
+<p>The values mapped into the new view value by this function are
+obtained by using the <code>parts[key].getFilter()</code> method, which is
+defined on the filter input directive&apos;s NgModelController object.
+If the value is an array, the <code>getFilter()</code> wraps the array in
+a MongoDB <code>{ $in: {...} }</code> operator and assigns it to a property
+keyed by the input&apos;s <code>name</code> attribute; if it is a primitive it
+is assigned without wrapping.</p>
 <p>Before <code>setViewValue()</code> is called to fire off the parser pipeline,
 the final value is run through <code>removeNulls()</code> to cleanse it of
 <code>null</code> and <code>undefined</code> values.</p>

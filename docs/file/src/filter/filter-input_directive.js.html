@@ -42,13 +42,25 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">detail</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/detail/map-detail_controller.js~MapDetailCtrl.html">MapDetailCtrl</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">filter</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/filter/filter-builder_controller.js~FilterBuilderCtrl.html">FilterBuilderCtrl</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterBuilder">filterBuilder</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filterInput">filterInput</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-filterInput">filterInput</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/filter/filter-input_directive.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">function filterInput() {
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import isArray from &quot;lodash.isarray&quot;;
+
+function getFilter(filterName) {
+  return (this.$viewValue &amp;&amp; isArray(this.$viewValue)) ?
+    this.$viewValue.length ? 
+      { [this.$name]: { $in: this.$viewValue } } :
+      null :
+    this.$viewValue ?
+      { [this.$name]: this.$viewValue } :
+      null;
+}
+
+const filterInput = [&apos;$parse&apos;, function filterInput($parse) {
 	return {
 		restrict: &apos;A&apos;,
 		require: {
@@ -58,10 +70,14 @@
 		link: function FilterInputLink(scope, el, attrs, ctrl) {
 			if (!attrs.name) throw new Error(&apos;A filter control is missing its \&apos;name\&apos; attribute!&apos;);
 			const { NgModelCtrl, FilterBuilderCtrl } = ctrl;
+			NgModelCtrl.getFilter = getFilter;
+			if (attrs.filterInput) {
+				$parse(attrs.filterInput).assign(scope, () =&gt; NgModelCtrl.getFilter());
+			}
 			FilterBuilderCtrl.parts[attrs.ngModel] = NgModelCtrl;
 		}
 	};
-}
+}];
 
 export default filterInput;</code></pre>
 
