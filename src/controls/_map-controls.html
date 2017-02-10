@@ -1,7 +1,7 @@
-<div class="map-controls-handle" layout="row" ng-mouseenter="$ctrl.mapControlsOpen = true" ng-mouseleave="$ctrl.mapControlsOpen = false" ng-class="{ 'map-controls-open': $ctrl.mapControlsOpen }">
+<div class="map-controls-handle" layout="row" ng-click="$ctrl.mapControlsOpen = !$ctrl.mapControlsOpen" ng-mouseleave="$ctrl.mapControlsOpen = false" ng-class="{ 'map-controls-open': $ctrl.mapControlsOpen }">
 	<md-button>
 	  <svg style="width:32px;height:32px" viewBox="0 0 24 24">
-	    <path fill="#FFFFFF" d="M3,2H21V2H21V4H20.92L15,9.92V22.91L9,16.91V9.91L3.09,4H3V2M11,16.08L13,18.08V9H13.09L18.09,4H5.92L10.92,9H11V16.08Z" />
+	    <path fill="#FFFFFF" d="M20,10V14H11L14.5,17.5L12.08,19.92L4.16,12L12.08,4.08L14.5,6.5L11,10H20Z" />
 		</svg>
 	</md-button>
 
@@ -34,7 +34,7 @@
 
 			  <md-input-container>
 			    <label>Feature category</label>
-			    <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-disabled="!$ctrl.location" multiple filter-input name="category" ng-change="$ctrl.updateCategory()">
+			    <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-disabled="!$ctrl.location" multiple filter-input name="properties.category" ng-change="$ctrl.updateCategory()">
 			      <md-option ng-repeat="category in $ctrl.categories" ng-value="::category._id" ng-disabled="$ctrl.category === category">
 			        {{ ::category.name }}
 			      </md-option>
