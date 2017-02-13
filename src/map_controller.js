@@ -152,12 +152,12 @@ class MapCtrl {
 		const	{
 			currentValue: { location, category, collection }
 		} = mapData;
-		this.updateMapData({
-			location, category, collection
-		});
-  	// if (location && this.location !== location) {
+		if (location && collection) {
     	this.location = location;
-    // }
+			this.updateMapData({
+				location, category, collection
+			});
+		}
 	}
 
 	/**
