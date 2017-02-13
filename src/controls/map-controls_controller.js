@@ -153,19 +153,23 @@ class MapControlsCtrl {
    * or an object with a `type` property of `FeatureCollection` and a `features`
    * property containing an array of `Feature` objects).
    *
+   * In the example, both scenarios are demonstrated – the `location` and
+   * `category` properties are left out for brevity, but `location` is
+   * required in order for features to properly direct to tour scenes.
+   *
    * @example
    * // "true" collection
-   * const feature = this._CollectionResource.get('featureId');
-   * this.setMapData({ feature });
+   * const collection = this._CollectionResource.get('collectionId');
+   * this.setMapData({ collection });
    * 
-   * // mock collection
+   * // "mock" collection
    * const features = this._FeatureResource.query();
    * this.setMapData({
    *   collection: {
    *     type: 'FeatureCollection',
    *     features
    *   }
-   * }, true);
+   * });
    * 
    * @param {Object}  resources
    * @param {Object}  resources.location    Currently selected location `$resource`

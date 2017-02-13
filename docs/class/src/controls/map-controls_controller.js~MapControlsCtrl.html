@@ -1112,7 +1112,7 @@ item checkboxes to checked/unchecked).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber192">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber196">source</a></span></span>
     </span>
   </h3>
 
@@ -1196,7 +1196,7 @@ return the matched items.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber231">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber235">source</a></span></span>
     </span>
   </h3>
 
@@ -1273,7 +1273,7 @@ return the matched items.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber218">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber222">source</a></span></span>
     </span>
   </h3>
 
@@ -1577,7 +1577,7 @@ selected categories to filter by.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber204">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber208">source</a></span></span>
     </span>
   </h3>
 
@@ -1642,7 +1642,7 @@ selected categories to filter by.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber175">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber179">source</a></span></span>
     </span>
   </h3>
 
@@ -1655,6 +1655,9 @@ selected categories to filter by.</p>
 like a valid <code>FeatureCollection</code> (i.e. it can be a &quot;true&quot; collection,
 or an object with a <code>type</code> property of <code>FeatureCollection</code> and a <code>features</code>
 property containing an array of <code>Feature</code> objects).</p>
+<p>In the example, both scenarios are demonstrated &#x2013; the <code>location</code> and
+<code>category</code> properties are left out for brevity, but <code>location</code> is
+required in order for features to properly direct to tour scenes.</p>
 </div>
 
   
@@ -1713,17 +1716,17 @@ property containing an array of <code>Feature</code> objects).</p>
   <div class="example-doc" data-ice="exampleDoc">
       
       <pre class="prettyprint source-code"><code data-ice="exampleCode">// &quot;true&quot; collection
-const feature = this._CollectionResource.get(&apos;featureId&apos;);
-this.setMapData({ feature });
+const collection = this._CollectionResource.get(&apos;collectionId&apos;);
+this.setMapData({ collection });
 
-// mock collection
+// &quot;mock&quot; collection
 const features = this._FeatureResource.query();
 this.setMapData({
   collection: {
     type: &apos;FeatureCollection&apos;,
     features
   }
-}, true);</code></pre>
+});</code></pre>
     </div>
 </div>
 
@@ -1743,7 +1746,7 @@ this.setMapData({
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber242">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/controls/map-controls_controller.js.html#lineNumber246">source</a></span></span>
     </span>
   </h3>
 
