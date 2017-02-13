@@ -408,11 +408,11 @@
                           },
                           {
                             "type": "Literal",
-                            "value": "<md-whiteframe\n  class=\"md-whiteframe-16dp\"\n  layout=\"column\">\n  <md-toolbar>\n    <div class=\"md-toolbar-tools\">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div\n  \tlayout=\"column\"\n  \tlayout-margin\n  \tlayout-align=\"center center\">\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? 'Hide' : 'Show'}} details <span class=\"detail-arrow\" ng-class=\"{ 'arrow-up' : ctrl.detailsShowing }\"></span></md-button>\n  \t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\n  \t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg(ctrl.callback)\">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>",
-                            "raw": "'<md-whiteframe\\n  class=\"md-whiteframe-16dp\"\\n  layout=\"column\">\\n  <md-toolbar>\\n    <div class=\"md-toolbar-tools\">\\n      <h2>\\n        <span>{{ ::ctrl.name }}</span>\\n      </h2>\\n      <span flex></span>\\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\\n        <span>&times;</span>\\n      </md-button>\\n    </div>\\n  </md-toolbar>\\n  <div\\n  \\tlayout=\"column\"\\n  \\tlayout-margin\\n  \\tlayout-align=\"center center\">\\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? \\'Hide\\' : \\'Show\\'}} details <span class=\"detail-arrow\" ng-class=\"{ \\'arrow-up\\' : ctrl.detailsShowing }\"></span></md-button>\\n  \\t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\\n  \\t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg(ctrl.callback)\">\\n  \\t\\tTake a tour &raquo;\\n  \\t</md-button>\\n  </div>\\n</md-whiteframe>'",
+                            "value": "<md-whiteframe\n  class=\"md-whiteframe-16dp\"\n  layout=\"column\">\n  <md-toolbar>\n    <div class=\"md-toolbar-tools\">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div\n  \tlayout=\"column\"\n  \tlayout-margin\n  \tlayout-align=\"center center\">\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? 'Hide' : 'Show'}} details <span class=\"detail-arrow\" ng-class=\"{ 'arrow-up' : ctrl.detailsShowing }\"></span></md-button>\n  \t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\n  \t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg()\">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>",
+                            "raw": "'<md-whiteframe\\n  class=\"md-whiteframe-16dp\"\\n  layout=\"column\">\\n  <md-toolbar>\\n    <div class=\"md-toolbar-tools\">\\n      <h2>\\n        <span>{{ ::ctrl.name }}</span>\\n      </h2>\\n      <span flex></span>\\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\\n        <span>&times;</span>\\n      </md-button>\\n    </div>\\n  </md-toolbar>\\n  <div\\n  \\tlayout=\"column\"\\n  \\tlayout-margin\\n  \\tlayout-align=\"center center\">\\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? \\'Hide\\' : \\'Show\\'}} details <span class=\"detail-arrow\" ng-class=\"{ \\'arrow-up\\' : ctrl.detailsShowing }\"></span></md-button>\\n  \\t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\\n  \\t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg()\">\\n  \\t\\tTake a tour &raquo;\\n  \\t</md-button>\\n  </div>\\n</md-whiteframe>'",
                             "range": [
                               4904,
-                              5938
+                              5925
                             ],
                             "loc": {
                               "start": {
@@ -421,14 +421,14 @@
                               },
                               "end": {
                                 "line": 3,
-                                "column": 1079
+                                "column": 1066
                               }
                             }
                           }
                         ],
                         "range": [
                           4859,
-                          5939
+                          5926
                         ],
                         "loc": {
                           "start": {
@@ -437,13 +437,13 @@
                           },
                           "end": {
                             "line": 3,
-                            "column": 1080
+                            "column": 1067
                           }
                         }
                       },
                       "range": [
                         4859,
-                        5939
+                        5926
                       ],
                       "loc": {
                         "start": {
@@ -452,14 +452,14 @@
                         },
                         "end": {
                           "line": 3,
-                          "column": 1080
+                          "column": 1067
                         }
                       }
                     }
                   ],
                   "range": [
                     62,
-                    5940
+                    5927
                   ],
                   "loc": {
                     "start": {
@@ -468,7 +468,7 @@
                     },
                     "end": {
                       "line": 3,
-                      "column": 1081
+                      "column": 1068
                     }
                   }
                 },
@@ -476,7 +476,7 @@
                 "expression": false,
                 "range": [
                   37,
-                  5940
+                  5927
                 ],
                 "loc": {
                   "start": {
@@ -485,14 +485,14 @@
                   },
                   "end": {
                     "line": 3,
-                    "column": 1081
+                    "column": 1068
                   }
                 }
               }
             ],
             "range": [
               18,
-              5941
+              5928
             ],
             "loc": {
               "start": {
@@ -501,13 +501,13 @@
               },
               "end": {
                 "line": 3,
-                "column": 1082
+                "column": 1069
               }
             }
           },
           "range": [
             6,
-            5941
+            5928
           ],
           "loc": {
             "start": {
@@ -516,7 +516,7 @@
             },
             "end": {
               "line": 3,
-              "column": 1082
+              "column": 1069
             }
           }
         }
@@ -524,7 +524,7 @@
       "kind": "const",
       "range": [
         0,
-        5942
+        5929
       ],
       "loc": {
         "start": {
@@ -533,7 +533,7 @@
         },
         "end": {
           "line": 3,
-          "column": 1083
+          "column": 1070
         }
       },
       "name": "_",
@@ -546,32 +546,32 @@
         "type": "Identifier",
         "name": "templates",
         "range": [
-          5958,
-          5967
+          5945,
+          5954
         ],
         "loc": {
           "start": {
             "line": 3,
-            "column": 1099
+            "column": 1086
           },
           "end": {
             "line": 3,
-            "column": 1108
+            "column": 1095
           }
         }
       },
       "range": [
-        5943,
-        5968
+        5930,
+        5955
       ],
       "loc": {
         "start": {
           "line": 3,
-          "column": 1084
+          "column": 1071
         },
         "end": {
           "line": 3,
-          "column": 1109
+          "column": 1096
         }
       },
       "name": "_",
@@ -987,11 +987,11 @@
                             },
                             {
                               "type": "Literal",
-                              "value": "<md-whiteframe\n  class=\"md-whiteframe-16dp\"\n  layout=\"column\">\n  <md-toolbar>\n    <div class=\"md-toolbar-tools\">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div\n  \tlayout=\"column\"\n  \tlayout-margin\n  \tlayout-align=\"center center\">\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? 'Hide' : 'Show'}} details <span class=\"detail-arrow\" ng-class=\"{ 'arrow-up' : ctrl.detailsShowing }\"></span></md-button>\n  \t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\n  \t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg(ctrl.callback)\">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>",
-                              "raw": "'<md-whiteframe\\n  class=\"md-whiteframe-16dp\"\\n  layout=\"column\">\\n  <md-toolbar>\\n    <div class=\"md-toolbar-tools\">\\n      <h2>\\n        <span>{{ ::ctrl.name }}</span>\\n      </h2>\\n      <span flex></span>\\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\\n        <span>&times;</span>\\n      </md-button>\\n    </div>\\n  </md-toolbar>\\n  <div\\n  \\tlayout=\"column\"\\n  \\tlayout-margin\\n  \\tlayout-align=\"center center\">\\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? \\'Hide\\' : \\'Show\\'}} details <span class=\"detail-arrow\" ng-class=\"{ \\'arrow-up\\' : ctrl.detailsShowing }\"></span></md-button>\\n  \\t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\\n  \\t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg(ctrl.callback)\">\\n  \\t\\tTake a tour &raquo;\\n  \\t</md-button>\\n  </div>\\n</md-whiteframe>'",
+                              "value": "<md-whiteframe\n  class=\"md-whiteframe-16dp\"\n  layout=\"column\">\n  <md-toolbar>\n    <div class=\"md-toolbar-tools\">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div\n  \tlayout=\"column\"\n  \tlayout-margin\n  \tlayout-align=\"center center\">\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? 'Hide' : 'Show'}} details <span class=\"detail-arrow\" ng-class=\"{ 'arrow-up' : ctrl.detailsShowing }\"></span></md-button>\n  \t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\n  \t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg()\">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>",
+                              "raw": "'<md-whiteframe\\n  class=\"md-whiteframe-16dp\"\\n  layout=\"column\">\\n  <md-toolbar>\\n    <div class=\"md-toolbar-tools\">\\n      <h2>\\n        <span>{{ ::ctrl.name }}</span>\\n      </h2>\\n      <span flex></span>\\n      <md-button class=\"md-icon-button\" aria-label=\"Close info\" ng-click=\"ctrl.close()\">\\n        <span>&times;</span>\\n      </md-button>\\n    </div>\\n  </md-toolbar>\\n  <div\\n  \\tlayout=\"column\"\\n  \\tlayout-margin\\n  \\tlayout-align=\"center center\">\\n    <md-button ng-click=\"ctrl.showDetails()\">{{ ctrl.detailsShowing ? \\'Hide\\' : \\'Show\\'}} details <span class=\"detail-arrow\" ng-class=\"{ \\'arrow-up\\' : ctrl.detailsShowing }\"></span></md-button>\\n  \\t<md-content layout-padding layout-margin class=\"details-text\" ng-bind-html=\"::ctrl.description\" ng-show=\"ctrl.detailsShowing\"></md-content>\\n  \\t<md-button layout-padding class=\"md-raised md-primary\" aria-label=\"Tour this building\" ng-if=\"::ctrl.building\" ng-click=\"ctrl.gotoBldg()\">\\n  \\t\\tTake a tour &raquo;\\n  \\t</md-button>\\n  </div>\\n</md-whiteframe>'",
                               "range": [
                                 4904,
-                                5938
+                                5925
                               ],
                               "loc": {
                                 "start": {
@@ -1000,14 +1000,14 @@
                                 },
                                 "end": {
                                   "line": 3,
-                                  "column": 1079
+                                  "column": 1066
                                 }
                               }
                             }
                           ],
                           "range": [
                             4859,
-                            5939
+                            5926
                           ],
                           "loc": {
                             "start": {
@@ -1016,13 +1016,13 @@
                             },
                             "end": {
                               "line": 3,
-                              "column": 1080
+                              "column": 1067
                             }
                           }
                         },
                         "range": [
                           4859,
-                          5939
+                          5926
                         ],
                         "loc": {
                           "start": {
@@ -1031,14 +1031,14 @@
                           },
                           "end": {
                             "line": 3,
-                            "column": 1080
+                            "column": 1067
                           }
                         }
                       }
                     ],
                     "range": [
                       62,
-                      5940
+                      5927
                     ],
                     "loc": {
                       "start": {
@@ -1047,7 +1047,7 @@
                       },
                       "end": {
                         "line": 3,
-                        "column": 1081
+                        "column": 1068
                       }
                     }
                   },
@@ -1055,7 +1055,7 @@
                   "expression": false,
                   "range": [
                     37,
-                    5940
+                    5927
                   ],
                   "loc": {
                     "start": {
@@ -1064,14 +1064,14 @@
                     },
                     "end": {
                       "line": 3,
-                      "column": 1081
+                      "column": 1068
                     }
                   }
                 }
               ],
               "range": [
                 18,
-                5941
+                5928
               ],
               "loc": {
                 "start": {
@@ -1080,13 +1080,13 @@
                 },
                 "end": {
                   "line": 3,
-                  "column": 1082
+                  "column": 1069
                 }
               }
             },
             "range": [
               6,
-              5941
+              5928
             ],
             "loc": {
               "start": {
@@ -1095,7 +1095,7 @@
               },
               "end": {
                 "line": 3,
-                "column": 1082
+                "column": 1069
               }
             }
           }
@@ -1103,7 +1103,7 @@
         "kind": "const",
         "range": [
           0,
-          5942
+          5929
         ],
         "loc": {
           "start": {
@@ -1112,24 +1112,24 @@
           },
           "end": {
             "line": 3,
-            "column": 1083
+            "column": 1070
           }
         },
         "leadingComments": [],
         "trailingComments": []
       },
       "range": [
-        5943,
-        5968
+        5930,
+        5955
       ],
       "loc": {
         "start": {
           "line": 3,
-          "column": 1084
+          "column": 1071
         },
         "end": {
           "line": 3,
-          "column": 1109
+          "column": 1096
         }
       }
     }
@@ -1137,7 +1137,7 @@
   "sourceType": "module",
   "range": [
     0,
-    5968
+    5955
   ],
   "loc": {
     "start": {
@@ -1146,7 +1146,7 @@
     },
     "end": {
       "line": 3,
-      "column": 1109
+      "column": 1096
     }
   },
   "comments": []

@@ -3,7 +3,7 @@ import MapCtrl from './map_controller.js'
 const campusMap = {
   // transclude: true,
   bindings: {
-    onGotoBldg: '<?',
+    onGotoBldg: '&?',
     mapData: '<?'
     // location: '<?',
     // building: '<?',

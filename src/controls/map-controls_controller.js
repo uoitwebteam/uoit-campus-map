@@ -122,8 +122,8 @@ class MapControlsCtrl {
       })
       .then(features => {
         return this.setMapData({
-          location: this.location,
-          category: this.category,
+          location: this.locations.find(location => location._id === this.location),
+          category: this.getItemsInListByProp(this.category, this.categories, '_id'),
           collection: {
             type: 'FeatureCollection',
             features
@@ -181,7 +181,7 @@ class MapControlsCtrl {
    */
   getItemsInListByProp(items, list, prop) {
     return list && [...list].filter(item => {
-      return [...items].indexOf(item[prop] || item[prop]) !== -1;
+      return [...items].indexOf(item[prop]) !== -1;
     });
   }
 

@@ -82,10 +82,10 @@ class MapDetailCtrl {
 	 * @param  {Function} callback The function to be run
 	 * @return {Promise}           Status of dialog close
 	 */
-	gotoBldg(callback) {
+	gotoBldg() {
 		const { location, building } = this;
 		return this.close().then(() => {
-			callback({
+			this.onGotoBldg({
 				location: location.code,
 				building: building.code
 			});

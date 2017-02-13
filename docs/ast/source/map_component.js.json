@@ -145,8 +145,8 @@
                       },
                       "value": {
                         "type": "Literal",
-                        "value": "<?",
-                        "raw": "'<?'",
+                        "value": "&?",
+                        "raw": "'&?'",
                         "range": [
                           116,
                           120
@@ -799,8 +799,8 @@
                         },
                         "value": {
                           "type": "Literal",
-                          "value": "<?",
-                          "raw": "'<?'",
+                          "value": "&?",
+                          "raw": "'&?'",
                           "range": [
                             116,
                             120

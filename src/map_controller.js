@@ -148,16 +148,16 @@ class MapCtrl {
 
 	$onChanges({ mapData }) {
 		if (mapData.isFirstChange()) return;
+		console.log('map component detected external changes:', mapData);
 		const	{
 			currentValue: { location, category, collection }
 		} = mapData;
-		console.log('map component detected external changes:', { location, category, collection });
 		this.updateMapData({
 			location, category, collection
 		});
-  	if (location && this.location !== location) {
+  	// if (location && this.location !== location) {
     	this.location = location;
-    }
+    // }
 	}
 
 	/**
@@ -237,7 +237,7 @@ class MapCtrl {
 	    hasBackdrop: true,
 	    panelClass: 'map-detail',
 	    locals: {
-	    	callback: this.onGotoBldg(),
+	    	onGotoBldg: this.onGotoBldg(),
 	    	location: this.location,
 	    	feature
 	    },
@@ -323,7 +323,7 @@ class MapCtrl {
 	  });
 	  this.map.fitBounds(bounds);
 	}
-	
+
 	/**
 	 * Since Google Map events store private properties under names
 	 * that change periodically, it is necessary to manually evaluate
