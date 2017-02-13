@@ -146,7 +146,7 @@
     "access": null,
     "description": null,
     "lineNumber": 17,
-    "content": "/**\n * The `MapControlsCtrl` provides an interface between the map component\n * and the map control filter dropdowns.\n * \n * It is not responsible for much actual map logic, but instead for\n * accepting user input and turning it into queries whose results\n * are assigned back to the controller. The `MapCtrl` takes care of\n * turning the returned values into map-usable data, whereas this controller\n * simply makes it available.\n *\n * The controller is made up of:\n * - constructor\n * - 3 methods for loading query results (location, category, collection)\n * - 3 methods for updating dropdown contents\n * - utility methods for setting active collection and showing all collections\n */\nclass MapControlsCtrl {\n  static get $inject(){\n    return ['$mapApi', '$tourApi'];\n  }\n\n  /**\n   * Initialize controller dependencies.\n   * \n   * @param  {Object} $mapApi  Map $resource service\n   * @param  {Object} $tourApi Tour $resource service\n   * @param  {Object} $window  Angular's window wrapper\n   */\n  constructor($mapApi, $tourApi) {\n    this.FeatureResource = $mapApi.feature;\n    this.CollectionResource = $mapApi.collection;\n    this.CategoryResource = $mapApi.category;\n    this.LocationResource = $tourApi.location;\n\n    this.location = [];\n    this.category = [];\n    this.collection = [];\n  }\n\n  /**\n   * Initialize the controls (show all map elements)\n   */\n  $onInit() {\n    this.loadLocations()\n      .then(locations => {\n        this.location = locations[1]._id;\n        return this.loadCategories();\n      })\n      .then(categories => {\n        this.category = [...categories.map(category => category._id)];\n        return this.loadCollections();\n      })\n      .then(collections => {\n        this.collection = [...collections.map(collection => collection._id)];\n        return this.loadFeatures(this.filter);\n      });\n  }\n\n  /**\n   * Load location list from server.\n   * \n   * @return {Promise} Resolves to list of locations\n   */\n  loadLocations() {\n    return this.locations || this.LocationResource.query().$promise\n      .then(locations => {\n        this.locations = locations;\n        return locations;\n      });\n  }\n\n  /**\n   * Load category list from server.\n   * \n   * @return {Promise} Resolves to list of categories\n   */\n  loadCategories() {\n    return this.categories || this.CategoryResource.query().$promise\n      .then(categories => {\n        this.categories = categories;\n        return categories;\n      });\n  }\n\n  /**\n   * Load collection list from server using the `_id` of the currently\n   * selected category and location (extracted directly from the\n   * controller / `this`) to filter by.\n   *\n   * @todo Update this doc to describe array of categories\n   * \n   * @return {Promise} Resolves to list of collections\n   */\n  loadCollections() {\n    return this.CollectionResource.query({\n      filter: {\n        location: this.location,\n        category: {\n          $in: [...this.category]\n        }\n      }\n    }).$promise\n      .then(collections => {\n        this.collections = collections;\n        return collections;\n      });\n  }\n\n  /**\n   * Load feature list from server using the `_id`s of the currently\n   * selected categories to filter by.\n   *\n   * @todo Update this doc to describe array of categories\n   * \n   * @return {Promise} Resolves to list of collections\n   */\n  loadFeatures(filter) {\n    return this.FeatureResource.query({ filter }).$promise\n      .then(features => {\n        this.features = features;\n        return features;\n      })\n      .then(features => {\n        return this.setMapData({\n          location: this.locations.find(location => location._id === this.location),\n          category: this.getItemsInListByProp(this.category, this.categories, '_id'),\n          collection: {\n            type: 'FeatureCollection',\n            features\n          }\n        });\n      });\n  }\n\n  /**\n   * Sends current data to view for rendering in selection dropdowns.\n   *\n   * In order for the map to properly render the selected collection, the\n   * `options.collection` param passed to this method must at least _look_\n   * like a valid `FeatureCollection` (i.e. it can be a \"true\" collection,\n   * or an object with a `type` property of `FeatureCollection` and a `features`\n   * property containing an array of `Feature` objects).\n   *\n   * @example\n   * // \"true\" collection\n   * const feature = this.CollectionResource.get('featureId');\n   * this.setMapData({ feature });\n   * \n   * // mock collection\n   * const features = this.FeatureResource.query();\n   * this.setMapData({\n   *   collection: {\n   *     type: 'FeatureCollection',\n   *     features\n   *   }\n   * }, true);\n   * \n   * @param {Object}  resources\n   * @param {Object}  resources.location    Currently selected location `$resource`\n   * @param {Object}  resources.category    Currently selected category `$resource`\n   * @param {Object}  resources.collection  Currently selected collection `$resource`\n   * @param {Boolean} [showAll=false]       Whether to show all features\n   */\n  setMapData({ location, category, collection }, isCollection = false) {\n    this.$ngModel.$setViewValue({\n      location,\n      category,\n      collection,\n      isCollection\n    });\n  }\n\n  /**\n   * Filter an array for matches in another array by a property;\n   * return the matched items.\n   * \n   * @param  {Array}  items Items to match with\n   * @param  {Array}  list  List to match from\n   * @param  {String} prop  Property to match against\n   * @return {Array}        List of filtered items\n   */\n  getItemsInListByProp(items, list, prop) {\n    return list && [...list].filter(item => {\n      return [...items].indexOf(item[prop]) !== -1;\n    });\n  }\n\n  /**\n   * Find a specific array item and remove it from the array.\n   * \n   * @param  {*}     item The item to remove\n   * @param  {Array} list The list to remove from\n   */\n  removeItemFromList(item, list) {\n    const index = [...list].indexOf(item);\n    console.log(item, list, index);\n    (index > -1) && list.splice(index, 1);\n  }\n\n  /**\n   * Checks whether the number of selected items is more than zero but\n   * less than the total of available items (sets checkbox inputs to \"indeterminate\").\n   * \n   * @param  {String}  selected Name of property that holds selected items\n   * @param  {String}  items    Name of property that holds all items\n   * @return {Boolean}          Whether checkbox should be indeterminate\n   */\n  isIndeterminate(selected, items) {\n    return (this[selected] && this[items]) && (this[selected].length !== 0 &&\n        this[selected].length !== this[items].length);\n  }\n\n  /**\n   * Utility function for determining whether all items are selected (set\n   * 'select all' checkbox to checked if so).\n   * \n   * @param  {String}  selected Name of property that holds selected items\n   * @param  {String}  items    Name of property that holds all items\n   * @return {Boolean}          Whether checkbox should be checked\n   */\n  isChecked(selected, items) {\n    return (this[selected] && this[items]) && (this[selected].length === this[items].length);\n  }\n\n  /**\n   * Utility function for or selecting or deselecting all items (set all\n   * item checkboxes to checked/unchecked).\n   * \n   * @param  {String}  selected Name of property that holds selected items\n   * @param  {String}  items    Name of property that holds all items\n   */\n  toggleAll(selected, items) {\n    if (this[selected].length === this[items].length) {\n      console.log('deselected all');\n      this[selected] = [];\n    } else if (this[selected].length >= 0) {\n      console.log('selected all');\n      this[selected] = [...this[items].map(item => item._id || item.id)];\n    }\n  }\n}\n\nexport default MapControlsCtrl;"
+    "content": "/**\n * The `MapControlsCtrl` provides an interface between the map component\n * and the map control filter dropdowns.\n * \n * It is not responsible for much actual map logic, but instead for\n * accepting user input and turning it into queries whose results\n * are assigned back to the controller. The `MapCtrl` takes care of\n * turning the returned values into map-usable data, whereas this controller\n * simply makes it available.\n *\n * The controller is made up of:\n * - constructor\n * - 3 methods for loading query results (location, category, collection)\n * - 3 methods for updating dropdown contents\n * - utility methods for setting active collection and showing all collections\n */\nclass MapControlsCtrl {\n  static get $inject(){\n    return ['$mapApi', '$tourApi'];\n  }\n\n  /**\n   * Initialize controller dependencies.\n   * \n   * @param  {Object} $mapApi  Map $resource service\n   * @param  {Object} $tourApi Tour $resource service\n   * @param  {Object} $window  Angular's window wrapper\n   */\n  constructor($mapApi, $tourApi) {\n    this._FeatureResource = $mapApi.feature;\n    this._CollectionResource = $mapApi.collection;\n    this._CategoryResource = $mapApi.category;\n    this._LocationResource = $tourApi.location;\n\n    /**\n     * Holds the user's selected location (by ID).\n     * @type {String}\n     */\n    this.location = '';\n    /**\n     * Holds the user's selected categories (by ID).\n     * @type {Array}\n     */\n    this.category = [];\n    /**\n     * Holds the user's selected feature collections (by ID).\n     * @type {Array}\n     */\n    this.collection = [];\n  }\n\n  /**\n   * Initialize the controls (show all map elements)\n   */\n  $onInit() {\n    this.loadLocations()\n      .then(locations => {\n        this.location = locations[1]._id;\n        return this.loadCategories();\n      })\n      .then(categories => {\n        this.category = [...categories.map(category => category._id)];\n        return this.loadCollections();\n      })\n      .then(collections => {\n        this.collection = [...collections.map(collection => collection._id)];\n        return this.loadFeatures(this.filter);\n      });\n  }\n\n  /**\n   * Load location list from server.\n   * \n   * @return {Promise} Resolves to list of locations\n   */\n  loadLocations() {\n    return this.locations || this._LocationResource.query().$promise\n      .then(locations => {\n        this.locations = locations;\n        return locations;\n      });\n  }\n\n  /**\n   * Load category list from server.\n   * \n   * @return {Promise} Resolves to list of categories\n   */\n  loadCategories() {\n    return this.categories || this._CategoryResource.query().$promise\n      .then(categories => {\n        this.categories = categories;\n        return categories;\n      });\n  }\n\n  /**\n   * Load collection list from server using the `_id` of the currently\n   * selected category and location (extracted directly from the\n   * controller / `this`) to filter by.\n   *\n   * @todo Update this doc to describe array of categories\n   * \n   * @return {Promise} Resolves to list of collections\n   */\n  loadCollections() {\n    return this._CollectionResource.query({\n      filter: {\n        location: this.location,\n        category: {\n          $in: [...this.category]\n        }\n      }\n    }).$promise\n      .then(collections => {\n        this.collections = collections;\n        return collections;\n      });\n  }\n\n  /**\n   * Load feature list from server using the `_id`s of the currently\n   * selected categories to filter by.\n   *\n   * @todo Update this doc to describe array of categories\n   * \n   * @return {Promise} Resolves to list of collections\n   */\n  loadFeatures(filter) {\n    return this._FeatureResource.query({ filter }).$promise\n      .then(features => {\n        this.features = features;\n        return features;\n      })\n      .then(features => {\n        return this.setMapData({\n          location: this.locations.find(location => location._id === this.location),\n          category: this.getItemsInListByProp(this.category, this.categories, '_id'),\n          collection: {\n            type: 'FeatureCollection',\n            features\n          }\n        });\n      });\n  }\n\n  /**\n   * Sends current data to view for rendering in selection dropdowns.\n   *\n   * In order for the map to properly render the selected collection, the\n   * `options.collection` param passed to this method must at least _look_\n   * like a valid `FeatureCollection` (i.e. it can be a \"true\" collection,\n   * or an object with a `type` property of `FeatureCollection` and a `features`\n   * property containing an array of `Feature` objects).\n   *\n   * @example\n   * // \"true\" collection\n   * const feature = this._CollectionResource.get('featureId');\n   * this.setMapData({ feature });\n   * \n   * // mock collection\n   * const features = this._FeatureResource.query();\n   * this.setMapData({\n   *   collection: {\n   *     type: 'FeatureCollection',\n   *     features\n   *   }\n   * }, true);\n   * \n   * @param {Object}  resources\n   * @param {Object}  resources.location    Currently selected location `$resource`\n   * @param {Object}  resources.category    Currently selected category `$resource`\n   * @param {Object}  resources.collection  Currently selected collection `$resource`\n   */\n  setMapData({ location, category, collection }) {\n    this.$ngModel.$setViewValue({\n      location,\n      category,\n      collection\n    });\n  }\n\n  /**\n   * Filter an array for matches in another array by a property;\n   * return the matched items.\n   * \n   * @param  {Array}  items Items to match with\n   * @param  {Array}  list  List to match from\n   * @param  {String} prop  Property to match against\n   * @return {Array}        List of filtered items\n   */\n  getItemsInListByProp(items, list, prop) {\n    return list && [...list].filter(item => {\n      return [...items].indexOf(item[prop]) !== -1;\n    });\n  }\n\n  /**\n   * Find a specific array item and remove it from the array.\n   * \n   * @param  {*}     item The item to remove\n   * @param  {Array} list The list to remove from\n   */\n  removeItemFromList(item, list) {\n    const index = [...list].indexOf(item);\n    console.log(item, list, index);\n    (index > -1) && list.splice(index, 1);\n  }\n\n  /**\n   * Checks whether the number of selected items is more than zero but\n   * less than the total of available items (sets checkbox inputs to \"indeterminate\").\n   * \n   * @param  {String}  selected Name of property that holds selected items\n   * @param  {String}  items    Name of property that holds all items\n   * @return {Boolean}          Whether checkbox should be indeterminate\n   */\n  isIndeterminate(selected, items) {\n    return (this[selected] && this[items]) && (this[selected].length !== 0 &&\n        this[selected].length !== this[items].length);\n  }\n\n  /**\n   * Utility function for determining whether all items are selected (set\n   * 'select all' checkbox to checked if so).\n   * \n   * @param  {String}  selected Name of property that holds selected items\n   * @param  {String}  items    Name of property that holds all items\n   * @return {Boolean}          Whether checkbox should be checked\n   */\n  isChecked(selected, items) {\n    return (this[selected] && this[items]) && (this[selected].length === this[items].length);\n  }\n\n  /**\n   * Utility function for or selecting or deselecting all items (set all\n   * item checkboxes to checked/unchecked).\n   * \n   * @param  {String}  selected Name of property that holds selected items\n   * @param  {String}  items    Name of property that holds all items\n   */\n  toggleAll(selected, items) {\n    if (this[selected].length === this[items].length) {\n      console.log('deselected all');\n      this[selected] = [];\n    } else if (this[selected].length >= 0) {\n      console.log('selected all');\n      this[selected] = [...this[items].map(item => item._id || item.id)];\n    }\n  }\n}\n\nexport default MapControlsCtrl;"
   },
   {
     "__docId__": 9,
@@ -233,9 +233,9 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "FeatureResource",
+    "name": "_FeatureResource",
     "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
-    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#FeatureResource",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#_FeatureResource",
     "access": null,
     "description": null,
     "lineNumber": 30,
@@ -251,9 +251,9 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "CollectionResource",
+    "name": "_CollectionResource",
     "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
-    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#CollectionResource",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#_CollectionResource",
     "access": null,
     "description": null,
     "lineNumber": 31,
@@ -269,9 +269,9 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "CategoryResource",
+    "name": "_CategoryResource",
     "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
-    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#CategoryResource",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#_CategoryResource",
     "access": null,
     "description": null,
     "lineNumber": 32,
@@ -287,9 +287,9 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "LocationResource",
+    "name": "_LocationResource",
     "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
-    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#LocationResource",
+    "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#_LocationResource",
     "access": null,
     "description": null,
     "lineNumber": 33,
@@ -309,13 +309,15 @@
     "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#location",
     "access": null,
-    "description": null,
-    "lineNumber": 35,
-    "undocument": true,
+    "description": "Holds the user's selected location (by ID).",
+    "lineNumber": 39,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -327,13 +329,15 @@
     "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#category",
     "access": null,
-    "description": null,
-    "lineNumber": 36,
-    "undocument": true,
+    "description": "Holds the user's selected categories (by ID).",
+    "lineNumber": 44,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Array"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -345,13 +349,15 @@
     "memberof": "src/controls/map-controls_controller.js~MapControlsCtrl",
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#collection",
     "access": null,
-    "description": null,
-    "lineNumber": 37,
-    "undocument": true,
+    "description": "Holds the user's selected feature collections (by ID).",
+    "lineNumber": 49,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Array"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -364,7 +370,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#$onInit",
     "access": null,
     "description": "Initialize the controls (show all map elements)",
-    "lineNumber": 43,
+    "lineNumber": 55,
     "params": [],
     "generator": false
   },
@@ -378,7 +384,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#location",
     "access": null,
     "description": null,
-    "lineNumber": 46,
+    "lineNumber": 58,
     "undocument": true,
     "type": {
       "types": [
@@ -396,7 +402,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#category",
     "access": null,
     "description": null,
-    "lineNumber": 50,
+    "lineNumber": 62,
     "undocument": true,
     "type": {
       "types": [
@@ -414,7 +420,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#collection",
     "access": null,
     "description": null,
-    "lineNumber": 54,
+    "lineNumber": 66,
     "undocument": true,
     "type": {
       "types": [
@@ -432,7 +438,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#loadLocations",
     "access": null,
     "description": "Load location list from server.",
-    "lineNumber": 64,
+    "lineNumber": 76,
     "params": [],
     "return": {
       "nullable": null,
@@ -454,7 +460,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#locations",
     "access": null,
     "description": null,
-    "lineNumber": 67,
+    "lineNumber": 79,
     "undocument": true,
     "type": {
       "types": [
@@ -472,7 +478,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#loadCategories",
     "access": null,
     "description": "Load category list from server.",
-    "lineNumber": 77,
+    "lineNumber": 89,
     "params": [],
     "return": {
       "nullable": null,
@@ -494,7 +500,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#categories",
     "access": null,
     "description": null,
-    "lineNumber": 80,
+    "lineNumber": 92,
     "undocument": true,
     "type": {
       "types": [
@@ -512,7 +518,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#loadCollections",
     "access": null,
     "description": "Load collection list from server using the `_id` of the currently\nselected category and location (extracted directly from the\ncontroller / `this`) to filter by.",
-    "lineNumber": 94,
+    "lineNumber": 106,
     "todo": [
       "Update this doc to describe array of categories"
     ],
@@ -537,7 +543,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#collections",
     "access": null,
     "description": null,
-    "lineNumber": 104,
+    "lineNumber": 116,
     "undocument": true,
     "type": {
       "types": [
@@ -555,7 +561,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#loadFeatures",
     "access": null,
     "description": "Load feature list from server using the `_id`s of the currently\nselected categories to filter by.",
-    "lineNumber": 117,
+    "lineNumber": 129,
     "todo": [
       "Update this doc to describe array of categories"
     ],
@@ -587,7 +593,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#features",
     "access": null,
     "description": null,
-    "lineNumber": 120,
+    "lineNumber": 132,
     "undocument": true,
     "type": {
       "types": [
@@ -606,9 +612,9 @@
     "access": null,
     "description": "Sends current data to view for rendering in selection dropdowns.\n\nIn order for the map to properly render the selected collection, the\n`options.collection` param passed to this method must at least _look_\nlike a valid `FeatureCollection` (i.e. it can be a \"true\" collection,\nor an object with a `type` property of `FeatureCollection` and a `features`\nproperty containing an array of `Feature` objects).",
     "examples": [
-      "// \"true\" collection\nconst feature = this.CollectionResource.get('featureId');\nthis.setMapData({ feature });\n\n// mock collection\nconst features = this.FeatureResource.query();\nthis.setMapData({\n  collection: {\n    type: 'FeatureCollection',\n    features\n  }\n}, true);"
+      "// \"true\" collection\nconst feature = this._CollectionResource.get('featureId');\nthis.setMapData({ feature });\n\n// mock collection\nconst features = this._FeatureResource.query();\nthis.setMapData({\n  collection: {\n    type: 'FeatureCollection',\n    features\n  }\n}, true);"
     ],
-    "lineNumber": 164,
+    "lineNumber": 175,
     "params": [
       {
         "nullable": null,
@@ -649,18 +655,6 @@
         "optional": false,
         "name": "resources.collection",
         "description": "Currently selected collection `$resource`"
-      },
-      {
-        "nullable": null,
-        "types": [
-          "Boolean"
-        ],
-        "spread": false,
-        "optional": true,
-        "defaultValue": "false",
-        "defaultRaw": false,
-        "name": "showAll",
-        "description": "Whether to show all features"
       }
     ],
     "generator": false
@@ -675,7 +669,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#getItemsInListByProp",
     "access": null,
     "description": "Filter an array for matches in another array by a property;\nreturn the matched items.",
-    "lineNumber": 182,
+    "lineNumber": 192,
     "params": [
       {
         "nullable": null,
@@ -728,7 +722,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#removeItemFromList",
     "access": null,
     "description": "Find a specific array item and remove it from the array.",
-    "lineNumber": 194,
+    "lineNumber": 204,
     "params": [
       {
         "nullable": null,
@@ -763,7 +757,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#isIndeterminate",
     "access": null,
     "description": "Checks whether the number of selected items is more than zero but\nless than the total of available items (sets checkbox inputs to \"indeterminate\").",
-    "lineNumber": 208,
+    "lineNumber": 218,
     "params": [
       {
         "nullable": null,
@@ -806,7 +800,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#isChecked",
     "access": null,
     "description": "Utility function for determining whether all items are selected (set\n'select all' checkbox to checked if so).",
-    "lineNumber": 221,
+    "lineNumber": 231,
     "params": [
       {
         "nullable": null,
@@ -849,7 +843,7 @@
     "longname": "src/controls/map-controls_controller.js~MapControlsCtrl#toggleAll",
     "access": null,
     "description": "Utility function for or selecting or deselecting all items (set all\nitem checkboxes to checked/unchecked).",
-    "lineNumber": 232,
+    "lineNumber": 242,
     "params": [
       {
         "nullable": null,
@@ -885,7 +879,7 @@
     "access": null,
     "description": null,
     "lineNumber": 23,
-    "content": "/**\n * The `MapDetailCtrl` is a small controller with few responsibilties –\n * it is only instantiated by ng-material's `$mdPanel` service as a means\n * to provide data from a clicked feature to a dialog window that will\n * display the data; it also contains transition methods for viewing\n * tour items (e.g. from the dialog's _\"Take a tour\"_ button).\n *\n * Since feature descriptions can contain HTML, the `$sce` service is used\n * to parse and sanitize the descriptions for rendering. The dialog has access\n * to:\n * - the feature that the user clicked, which can include information about...\n *   - the feature itself (`feature`), which supplies its own `name` and `desc`\n *   property, **or...**\n *   - a linked tour element (`building`), which the feature inherits those\n *   properties from instead\n * - the current campus location (`location`), which will either be north or downtown.\n *\n * The `onGoToBldg()` method simply executes a callback after closing the dialog,\n * passing it the `code` property of the controller's `location` and `building` –\n * this allows the context of the action to come from outside the component (i.e.\n * the codes can be used to transition states in the application.)\n */\nclass MapDetailCtrl {\n\tstatic get $inject() {\n\t\treturn ['$sce'];\n\t}\n\n\t/**\n\t * Initializes the controller's dependencies and extracts relevant information\n\t * from data passed in via the `locals` property (when `$mdPanel` initializes\n\t * the dialog).\n\t *\n\t * If the feature's `linked` property is true, the data is extracted from\n\t * the building. If not, it is extracted directly from the feature.\n\t * \n\t * @param  {Object} $sce Angular's strict contextual escape service\n\t */\n\tconstructor($sce) {\n  \tif (this.feature.getProperty('linked')) {\n  \t\tthis.building = this.feature.getProperty('building');\n\n  \t\tthis.name = this.building.name;\n  \t\tthis.description = $sce.trustAsHtml(this.building.desc);\n  \t} else {\n  \t\tthis.name = this.feature.getProperty('name');\n  \t\tthis.description = $sce.trustAsHtml(this.feature.getProperty('desc'));\n  \t}\n\n  \t/**\n  \t * Property to control the visibility of the description details inside\n  \t * the dialog.\n  \t * @type {Boolean}\n  \t */\n\t\tthis.detailsShowing = false;\n  }\n\n  /**\n   * Toggles the value of `detailsShowing` to hide and show the description.\n   * @return {Boolean} The visibility of the description _after_ method is run\n   */\n\tshowDetails() {\n\t\tthis.detailsShowing = !this.detailsShowing;\n\t}\n\n\t/**\n\t * Closes the dialog, and on completion, extracts the `code` property\n\t * from the controller's `location` and `building` (assuming they exist)\n\t * and runs a callback with these as the parameters.\n\t *\n\t * This can, for instance, be used to make a state transition from within\n\t * the application (as in the example below). The callback passed to this\n\t * method is the same as the one passed into the main map component.\n\t * \n\t * @example\n\t * // from app controller\n\t * const onGotoBldg = ({ location, building }) => {\n\t *   $state.go('building', { location, building });\n\t * };\n\t * // from HTML (map component)\n\t * <campus-map on-goto-bldg=\"$ctrl.onGotoBldg()\"></campus-map>\n\t * \n\t * @param  {Function} callback The function to be run\n\t * @return {Promise}           Status of dialog close\n\t */\n\tgotoBldg() {\n\t\tconst { location, building } = this;\n\t\treturn this.close().then(() => {\n\t\t\tthis.onGotoBldg({\n\t\t\t\tlocation: location.code,\n\t\t\t\tbuilding: building.code\n\t\t\t});\n\t\t});\n\t}\n\t\n\t/**\n\t * Closes the dialog using the panel reference stored on\n\t * the controller automatically by the `$mdPanel` service.\n\t * @return {Promise} Resolves to the status of the panel close\n\t */\n\tclose() {\n\t\treturn this.mdPanelRef.close();\n\t}\n}\n\nexport default MapDetailCtrl;"
+    "content": "/**\n * The `MapDetailCtrl` is a small controller with few responsibilties –\n * it is only instantiated by ng-material's `$mdPanel` service as a means\n * to provide data from a clicked feature to a dialog window that will\n * display the data; it also contains transition methods for viewing\n * tour items (e.g. from the dialog's _\"Take a tour\"_ button).\n *\n * Since feature descriptions can contain HTML, the `$sce` service is used\n * to parse and sanitize the descriptions for rendering. The dialog has access\n * to:\n * - the feature that the user clicked, which can include information about...\n *   - the feature itself (`feature`), which supplies its own `name` and `desc`\n *   property, **or...**\n *   - a linked tour element (`building`), which the feature inherits those\n *   properties from instead\n * - the current campus location (`location`), which will either be north or downtown.\n *\n * The `onGoToBldg()` method simply executes a callback after closing the dialog,\n * passing it the `code` property of the controller's `location` and `building` –\n * this allows the context of the action to come from outside the component (i.e.\n * the codes can be used to transition states in the application.)\n */\nclass MapDetailCtrl {\n\tstatic get $inject() {\n\t\treturn ['$sce'];\n\t}\n\n\t/**\n\t * Initializes the controller's dependencies and extracts relevant information\n\t * from data passed in via the `locals` property (when `$mdPanel` initializes\n\t * the dialog).\n\t *\n\t * If the feature's `linked` property is true, the data is extracted from\n\t * the building. If not, it is extracted directly from the feature.\n\t * \n\t * @param  {Object} $sce Angular's strict contextual escape service\n\t */\n\tconstructor($sce) {\n  \tif (this.feature.getProperty('linked')) {\n  \t\tthis.building = this.feature.getProperty('building');\n\n  \t\tthis.name = this.building.name;\n  \t\tthis.description = $sce.trustAsHtml(this.building.desc);\n  \t} else {\n  \t\tthis.name = this.feature.getProperty('name');\n  \t\tthis.description = $sce.trustAsHtml(this.feature.getProperty('desc'));\n  \t}\n\n  \t/**\n  \t * Property to control the visibility of the description details inside\n  \t * the dialog.\n  \t * @type {Boolean}\n  \t */\n\t\tthis.detailsShowing = false;\n  }\n\n  /**\n   * Toggles the value of `detailsShowing` to hide and show the description.\n   * @return {Boolean} The visibility of the description _after_ method is run\n   */\n\tshowDetails() {\n\t\tthis.detailsShowing = !this.detailsShowing;\n\t}\n\n\t/**\n\t * Closes the dialog, and on completion, extracts the `code` property\n\t * from the controller's `location` and `building` (assuming they exist)\n\t * and runs a callback with these as the parameters.\n\t *\n\t * This can, for instance, be used to make a state transition from within\n\t * the application (as in the example below). The callback passed to this\n\t * method is the same as the one passed into the main map component.\n\t * \n\t * @example\n\t * // from app controller\n\t * const onGotoBldg = ({ location, building }) => {\n\t *   $state.go('building', { location, building });\n\t * };\n\t * // from HTML (map component)\n\t * <campus-map on-goto-bldg=\"$ctrl.onGotoBldg()\"></campus-map>\n\t * \n\t * @return {Promise}           Status of dialog close\n\t */\n\tgotoBldg() {\n\t\tconst { location, building } = this;\n\t\treturn this.close().then(() => {\n\t\t\tthis.onGotoBldg({\n\t\t\t\tlocation: location.code,\n\t\t\t\tbuilding: building.code\n\t\t\t});\n\t\t});\n\t}\n\t\n\t/**\n\t * Closes the dialog using the panel reference stored on\n\t * the controller automatically by the `$mdPanel` service.\n\t * @return {Promise} Resolves to the status of the panel close\n\t */\n\tclose() {\n\t\treturn this.mdPanelRef.close();\n\t}\n}\n\nexport default MapDetailCtrl;"
   },
   {
     "__docId__": 38,
@@ -1110,19 +1104,8 @@
     "examples": [
       "// from app controller\nconst onGotoBldg = ({ location, building }) => {\n  $state.go('building', { location, building });\n};\n// from HTML (map component)\n<campus-map on-goto-bldg=\"$ctrl.onGotoBldg()\"></campus-map>"
     ],
-    "lineNumber": 85,
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "Function"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "callback",
-        "description": "The function to be run"
-      }
-    ],
+    "lineNumber": 84,
+    "params": [],
     "return": {
       "nullable": null,
       "types": [
@@ -1143,7 +1126,7 @@
     "longname": "src/detail/map-detail_controller.js~MapDetailCtrl#close",
     "access": null,
     "description": "Closes the dialog using the panel reference stored on\nthe controller automatically by the `$mdPanel` service.",
-    "lineNumber": 100,
+    "lineNumber": 99,
     "params": [],
     "return": {
       "nullable": null,

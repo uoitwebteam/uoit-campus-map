@@ -432,30 +432,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/controls/map-controls_controller.js~mapcontrolsctrl#categoryresource",
-    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-member-CategoryResource",
-    "src/controls/map-controls_controller.js~MapControlsCtrl#CategoryResource",
-    "member"
-  ],
-  [
-    "src/controls/map-controls_controller.js~mapcontrolsctrl#collectionresource",
-    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-member-CollectionResource",
-    "src/controls/map-controls_controller.js~MapControlsCtrl#CollectionResource",
-    "member"
-  ],
-  [
-    "src/controls/map-controls_controller.js~mapcontrolsctrl#featureresource",
-    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-member-FeatureResource",
-    "src/controls/map-controls_controller.js~MapControlsCtrl#FeatureResource",
-    "member"
-  ],
-  [
-    "src/controls/map-controls_controller.js~mapcontrolsctrl#locationresource",
-    "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-member-LocationResource",
-    "src/controls/map-controls_controller.js~MapControlsCtrl#LocationResource",
-    "member"
-  ],
-  [
     "src/controls/map-controls_controller.js~mapcontrolsctrl#categories",
     "class/src/controls/map-controls_controller.js~MapControlsCtrl.html#instance-member-categories",
     "src/controls/map-controls_controller.js~MapControlsCtrl#categories",

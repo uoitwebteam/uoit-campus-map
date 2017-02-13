@@ -79,7 +79,6 @@ class MapDetailCtrl {
 	 * // from HTML (map component)
 	 * <campus-map on-goto-bldg="$ctrl.onGotoBldg()"></campus-map>
 	 * 
-	 * @param  {Function} callback The function to be run
 	 * @return {Promise}           Status of dialog close
 	 */
 	gotoBldg() {

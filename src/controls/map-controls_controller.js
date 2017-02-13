@@ -27,13 +27,25 @@ class MapControlsCtrl {
    * @param  {Object} $window  Angular's window wrapper
    */
   constructor($mapApi, $tourApi) {
-    this.FeatureResource = $mapApi.feature;
-    this.CollectionResource = $mapApi.collection;
-    this.CategoryResource = $mapApi.category;
-    this.LocationResource = $tourApi.location;
+    this._FeatureResource = $mapApi.feature;
+    this._CollectionResource = $mapApi.collection;
+    this._CategoryResource = $mapApi.category;
+    this._LocationResource = $tourApi.location;
 
-    this.location = [];
+    /**
+     * Holds the user's selected location (by ID).
+     * @type {String}
+     */
+    this.location = '';
+    /**
+     * Holds the user's selected categories (by ID).
+     * @type {Array}
+     */
     this.category = [];
+    /**
+     * Holds the user's selected feature collections (by ID).
+     * @type {Array}
+     */
     this.collection = [];
   }
 
@@ -62,7 +74,7 @@ class MapControlsCtrl {
    * @return {Promise} Resolves to list of locations
    */
   loadLocations() {
-    return this.locations || this.LocationResource.query().$promise
+    return this.locations || this._LocationResource.query().$promise
       .then(locations => {
         this.locations = locations;
         return locations;
@@ -75,7 +87,7 @@ class MapControlsCtrl {
    * @return {Promise} Resolves to list of categories
    */
   loadCategories() {
-    return this.categories || this.CategoryResource.query().$promise
+    return this.categories || this._CategoryResource.query().$promise
       .then(categories => {
         this.categories = categories;
         return categories;
@@ -92,7 +104,7 @@ class MapControlsCtrl {
    * @return {Promise} Resolves to list of collections
    */
   loadCollections() {
-    return this.CollectionResource.query({
+    return this._CollectionResource.query({
       filter: {
         location: this.location,
         category: {
@@ -115,7 +127,7 @@ class MapControlsCtrl {
    * @return {Promise} Resolves to list of collections
    */
   loadFeatures(filter) {
-    return this.FeatureResource.query({ filter }).$promise
+    return this._FeatureResource.query({ filter }).$promise
       .then(features => {
         this.features = features;
         return features;
@@ -143,11 +155,11 @@ class MapControlsCtrl {
    *
    * @example
    * // "true" collection
-   * const feature = this.CollectionResource.get('featureId');
+   * const feature = this._CollectionResource.get('featureId');
    * this.setMapData({ feature });
    * 
    * // mock collection
-   * const features = this.FeatureResource.query();
+   * const features = this._FeatureResource.query();
    * this.setMapData({
    *   collection: {
    *     type: 'FeatureCollection',
@@ -159,14 +171,12 @@ class MapControlsCtrl {
    * @param {Object}  resources.location    Currently selected location `$resource`
    * @param {Object}  resources.category    Currently selected category `$resource`
    * @param {Object}  resources.collection  Currently selected collection `$resource`
-   * @param {Boolean} [showAll=false]       Whether to show all features
    */
-  setMapData({ location, category, collection }, isCollection = false) {
+  setMapData({ location, category, collection }) {
     this.$ngModel.$setViewValue({
       location,
       category,
-      collection,
-      isCollection
+      collection
     });
   }
 

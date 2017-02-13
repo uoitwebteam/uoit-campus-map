@@ -1,8 +1,27 @@
 {
-  "coverage": "59.72%",
-  "expectCount": 72,
-  "actualCount": 43,
+  "coverage": "67.64%",
+  "expectCount": 68,
+  "actualCount": 46,
   "files": {
+    "src/filter/filter-builder_controller.js": {
+      "expectCount": 10,
+      "actualCount": 8,
+      "undocumentLines": [
+        16,
+        19
+      ]
+    },
+    "src/controls/map-controls_controller.js": {
+      "expectCount": 21,
+      "actualCount": 16,
+      "undocumentLines": [
+        18,
+        92,
+        116,
+        132,
+        79
+      ]
+    },
     "src/detail/map-detail_controller.js": {
       "expectCount": 10,
       "actualCount": 6,
@@ -13,14 +32,6 @@
         42
       ]
     },
-    "src/filter/filter-builder_controller.js": {
-      "expectCount": 10,
-      "actualCount": 8,
-      "undocumentLines": [
-        16,
-        19
-      ]
-    },
     "src/map_controller.js": {
       "expectCount": 20,
       "actualCount": 16,
@@ -29,24 +40,6 @@
         149,
         65,
         159
-      ]
-    },
-    "src/controls/map-controls_controller.js": {
-      "expectCount": 25,
-      "actualCount": 13,
-      "undocumentLines": [
-        18,
-        32,
-        31,
-        30,
-        33,
-        80,
-        36,
-        37,
-        104,
-        120,
-        35,
-        67
       ]
     },
     "src/constants/map-icons_constant.js": {
