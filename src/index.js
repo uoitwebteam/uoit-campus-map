@@ -4,9 +4,7 @@ import campusMapControls from './controls/map-controls_component';
 import filterBuilder from './filter/filter-builder_directive';
 import filterInput from './filter/filter-input_directive';
 
-
-import MAP_SETTINGS from './constants/map-settings_constant';
-import MAP_ICONS from './constants/map-icons_constant';
+import MAP_DEFAULTS from './map_constant';
 
 // development only
 //
@@ -23,5 +21,4 @@ export default angular.module('campusMap', [])
   .directive('filterBuilder', filterBuilder)
   .directive('filterInput', filterInput)
 
-  .constant('MAP_SETTINGS', MAP_SETTINGS)
-  .constant('MAP_ICONS', MAP_ICONS);
+  .constant('MAP_DEFAULTS', MAP_DEFAULTS);

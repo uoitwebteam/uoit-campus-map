@@ -64,27 +64,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _map_component2 = _interopRequireDefault(_map_component);
 	
-	var _mapControls_component = __webpack_require__(4);
+	var _mapControls_component = __webpack_require__(10);
 	
 	var _mapControls_component2 = _interopRequireDefault(_mapControls_component);
 	
-	var _filterBuilder_directive = __webpack_require__(6);
+	var _filterBuilder_directive = __webpack_require__(14);
 	
 	var _filterBuilder_directive2 = _interopRequireDefault(_filterBuilder_directive);
 	
-	var _filterInput_directive = __webpack_require__(8);
+	var _filterInput_directive = __webpack_require__(16);
 	
 	var _filterInput_directive2 = _interopRequireDefault(_filterInput_directive);
 	
-	var _mapSettings_constant = __webpack_require__(10);
+	var _map_constant = __webpack_require__(18);
 	
-	var _mapSettings_constant2 = _interopRequireDefault(_mapSettings_constant);
+	var _map_constant2 = _interopRequireDefault(_map_constant);
 	
-	var _mapIcons_constant = __webpack_require__(11);
-	
-	var _mapIcons_constant2 = _interopRequireDefault(_mapIcons_constant);
-	
-	var _templates = __webpack_require__(12);
+	var _templates = __webpack_require__(19);
 	
 	var _templates2 = _interopRequireDefault(_templates);
 	
@@ -93,7 +89,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//
 	// ----------------
 	
-	exports.default = angular.module('campusMap', []).run(_templates2.default).component('campusMap', _map_component2.default).component('campusMapControls', _mapControls_component2.default).directive('filterBuilder', _filterBuilder_directive2.default).directive('filterInput', _filterInput_directive2.default).constant('MAP_SETTINGS', _mapSettings_constant2.default).constant('MAP_ICONS', _mapIcons_constant2.default);
+	exports.default = angular.module('campusMap', []).run(_templates2.default).component('campusMap', _map_component2.default).component('campusMapControls', _mapControls_component2.default).directive('filterBuilder', _filterBuilder_directive2.default).directive('filterInput', _filterInput_directive2.default).constant('MAP_DEFAULTS', _map_constant2.default);
 	
 	// development only
 	//
@@ -111,6 +107,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _map_controller = __webpack_require__(2);
 	
 	var _map_controller2 = _interopRequireDefault(_map_controller);
+	
+	__webpack_require__(8);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -164,7 +162,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				return ['$timeout', '$scope', '$window', // angular core
 				'NgMap', // external deps
 				'$mdToast', '$mdPanel', // md deps
-				'MAP_SETTINGS', 'MAP_ICONS' // constants
+				'MAP_DEFAULTS' // constants
 				];
 			}
 			/**
@@ -182,7 +180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 		}]);
 	
-		function MapCtrl($timeout, $scope, $window, NgMap, $mdToast, $mdPanel, MAP_SETTINGS, MAP_ICONS) {
+		function MapCtrl($timeout, $scope, $window, NgMap, $mdToast, $mdPanel, MAP_DEFAULTS) {
 			_classCallCheck(this, MapCtrl);
 	
 			this._$timeout = $timeout;
@@ -190,8 +188,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			this._$window = $window;
 			this._$mdToast = $mdToast;
 			this._$mdPanel = $mdPanel;
-			this._MAP_SETTINGS = MAP_SETTINGS;
-			this._MAP_ICONS = MAP_ICONS;
+			this._defaults = MAP_DEFAULTS;
 			/**
 	   * Function for resolving map instance from promise.
 	   * @type {Function}
@@ -202,11 +199,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @type {null|Object}
 	   */
 			this.map = null;
-			/**
-	   * Property to store map event listeners for later deregistration.
-	   * @type {null|Object}
-	   */
-			this.mapListeners = [];
 			/**
 	   * Helper factory object for deploying simple toasts.
 	   * @type {Object}
@@ -244,35 +236,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 					// angular.element(this._$window).triggerHandler('resize');
 					google.maps.event.trigger(instance, 'resize');
-					console.log(_this.categories);
+	
 					instance.data.setStyle(function (feature) {
-						// console.log(feature.getId())
-						var styles = _this.categories[feature.getProperty('category')];
-						styles.title = feature.getProperty('name');
-						return styles; //this.categories[feature.getProperty('category')];
+						return Object.assign({}, _this._defaults.geometryStyles, { icon: _this._defaults.iconStyles, title: feature.getProperty('name') }, _this.categories[feature.getProperty('category')]);
 					});
 	
-					var mouseoverListener = instance.data.addListener('mouseover', function (event) {
-						instance.data.overrideStyle(event.feature, {
-							fillColor: '#C71566',
-							fillOpacity: 0.7,
-							strokeWeight: 5,
-							strokeColor: 'white',
-							strokeOpacity: 0.7
-						});
-						_this.showToast(event.feature);
-					});
+					/**
+	     * Property to store map event listeners for later deregistration.
+	     * @type {Object}
+	     */
+					_this.listeners = {
+						mouseover: function mouseover(event) {
+							instance.data.overrideStyle(event.feature, _this._defaults.hoverStyles);
+							_this.showToast(event.feature);
+						},
+						mouseout: function mouseout(event) {
+							instance.data.revertStyle();
+							_this.toastCanceler = _this.hideToast();
+						},
+						click: function click(event) {
+							_this.showDetail(event.feature, _this.isolateMouseEvent(event));
+						}
+					};
 	
-					var mouseoutListener = instance.data.addListener('mouseout', function (event) {
-						instance.data.revertStyle();
-						_this.toastCanceler = _this.hideToast();
+					Object.keys(_this.listeners).forEach(function (event) {
+						return instance.data.addListener(event, _this.listeners[event]);
 					});
-	
-					var clickListener = instance.data.addListener('click', function (event) {
-						_this.showDetail(event.feature, _this.isolateMouseEvent(event));
-					});
-	
-					_this.mapListeners.push(mouseoverListener, mouseoutListener, clickListener);
 				});
 			}
 		}, {
@@ -306,8 +295,13 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: '$onDestroy',
 			value: function $onDestroy() {
-				this.mapListeners.forEach(function (listener) {
-					return google.maps.event.removeListener(listener);
+				var _this2 = this;
+	
+				this.getMap().then(function (instance) {
+					Object.keys(_this2.listeners).forEach(function (event) {
+						return instance.data.removeListener(event, _this2.listeners[event]) && console.log('map listener removed!');
+					});
+					// this.mapListeners.forEach(listener => google.maps.event.removeListener(listener)&&console.log('map listener removed!'));
 				});
 				google.maps.event.clearInstanceListeners(this.map.data);
 			}
@@ -324,13 +318,13 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'updateMapData',
 			value: function updateMapData(newVal) {
-				var _this2 = this;
+				var _this3 = this;
 	
 				console.log('updating map data...', newVal);
 				return this.clearMapData().then(function (map) {
 					if (newVal.collection.features.length && newVal.category.length) {
 						map.data.addGeoJson(newVal.collection);
-						_this2.fitBounds(map);
+						_this3.fitBounds(map);
 						console.log('map data updated!');
 					}
 				});
@@ -419,7 +413,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'showToast',
 			value: function showToast(feature) {
-				var _this3 = this;
+				var _this4 = this;
 	
 				var featureName = feature.getProperty('name');
 				if (!this.toastActive) {
@@ -429,7 +423,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				} else {
 					this._$timeout.cancel(this.toastCanceler);
 					this._$timeout(function () {
-						_this3._$mdToast.updateTextContent(featureName);
+						_this4._$mdToast.updateTextContent(featureName);
 					});
 				}
 			}
@@ -448,11 +442,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'hideToast',
 			value: function hideToast() {
-				var _this4 = this;
+				var _this5 = this;
 	
 				return this._$timeout(function () {
-					_this4._$mdToast.hide(_this4.toast);
-					_this4.toastActive = false;
+					_this5._$mdToast.hide(_this5.toast);
+					_this5.toastActive = false;
 				}, 3000);
 			}
 	
@@ -467,7 +461,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'processBounds',
 			value: function processBounds(geometry, callback, thisArg) {
-				var _this5 = this;
+				var _this6 = this;
 	
 				if (geometry instanceof google.maps.LatLng) {
 					callback.call(thisArg, geometry);
@@ -475,7 +469,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					callback.call(thisArg, geometry.get());
 				} else {
 					geometry.getArray().forEach(function (g) {
-						_this5.processBounds(g, callback, thisArg);
+						_this6.processBounds(g, callback, thisArg);
 					});
 				}
 			}
@@ -487,11 +481,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'fitBounds',
 			value: function fitBounds(map) {
-				var _this6 = this;
+				var _this7 = this;
 	
 				var bounds = new google.maps.LatLngBounds();
 				map.data.forEach(function (feature) {
-					_this6.processBounds(feature.getGeometry(), bounds.extend, bounds);
+					_this7.processBounds(feature.getGeometry(), bounds.extend, bounds);
 				});
 				map.fitBounds(bounds);
 			}
@@ -524,7 +518,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 3 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
@@ -533,6 +527,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	__webpack_require__(4);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -672,15 +668,405 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(5);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(7)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/sass-loader/lib/loader.js?sourceMap!./map-detail.scss", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/sass-loader/lib/loader.js?sourceMap!./map-detail.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(6)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".map-detail {\n  /* max-width: 400px; */\n  background-color: rgba(255, 255, 255, 0.75);\n  -webkit-transition: 0.3s;\n  transition: 0.3s; }\n\n.details-text {\n  font-size: 14px;\n  /* max-height: 300px; */\n  line-height: 1.6em;\n  color: rgba(0, 0, 0, 0.54); }\n\n.detail-arrow {\n  margin-left: 3px; }\n  .detail-arrow::after {\n    display: inline-block;\n    width: 6px;\n    height: 6px;\n    content: '';\n    border-bottom: solid 2px;\n    border-right: solid 2px;\n    transform: rotate(45deg);\n    transition: transform 0.3s ease; }\n  .detail-arrow.arrow-up::after {\n    transform: rotate(-135deg); }\n", "", {"version":3,"sources":["/./src/detail/map-detail.scss"],"names":[],"mappings":"AAAA;EACC,uBAAuB;EACtB,4CAA2C;EAC3C,yBAAwB;EACxB,iBAAgB,EACjB;;AAED;EACC,gBAAe;EACf,wBAAwB;EACxB,mBAAkB;EAClB,2BAAuB,EACvB;;AACD;EACC,iBAAgB,EAchB;EAfD;IAGE,sBAAqB;IACrB,WAAU;IACV,YAAW;IACX,YAAW;IACX,yBAAwB;IACxB,wBAAuB;IACvB,yBAAwB;IACxB,gCAA+B,EAC/B;EAXF;IAaE,2BAA0B,EAC1B","file":"map-detail.scss","sourcesContent":[".map-detail {\n\t/* max-width: 400px; */\n  background-color: rgba(255, 255, 255, 0.75);\n  -webkit-transition: 0.3s;\n  transition: 0.3s;\n}\n\n.details-text {\n\tfont-size: 14px;\n\t/* max-height: 300px; */\n\tline-height: 1.6em;\n\tcolor: rgba(0,0,0,0.54);\n}\n.detail-arrow {\n\tmargin-left: 3px;\n\t&::after {\n\t\tdisplay: inline-block;\n\t\twidth: 6px;\n\t\theight: 6px;\n\t\tcontent: '';\n\t\tborder-bottom: solid 2px;\n\t\tborder-right: solid 2px;\n\t\ttransform: rotate(45deg);\n\t\ttransition: transform 0.3s ease;\n\t}\n\t&.arrow-up::after {\n\t\ttransform: rotate(-135deg);\n\t}\n}"],"sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function() {
+		var list = [];
+	
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+	
+		// import a list of modules into the list
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for(var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
+			}
+			for(i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if(mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	var stylesInDom = {},
+		memoize = function(fn) {
+			var memo;
+			return function () {
+				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+				return memo;
+			};
+		},
+		isOldIE = memoize(function() {
+			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		}),
+		getHeadElement = memoize(function () {
+			return document.head || document.getElementsByTagName("head")[0];
+		}),
+		singletonElement = null,
+		singletonCounter = 0,
+		styleElementsInsertedAtTop = [];
+	
+	module.exports = function(list, options) {
+		if(false) {
+			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+		}
+	
+		options = options || {};
+		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+		// tags it will allow on a page
+		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+	
+		// By default, add <style> tags to the bottom of <head>.
+		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+	
+		var styles = listToStyles(list);
+		addStylesToDom(styles, options);
+	
+		return function update(newList) {
+			var mayRemove = [];
+			for(var i = 0; i < styles.length; i++) {
+				var item = styles[i];
+				var domStyle = stylesInDom[item.id];
+				domStyle.refs--;
+				mayRemove.push(domStyle);
+			}
+			if(newList) {
+				var newStyles = listToStyles(newList);
+				addStylesToDom(newStyles, options);
+			}
+			for(var i = 0; i < mayRemove.length; i++) {
+				var domStyle = mayRemove[i];
+				if(domStyle.refs === 0) {
+					for(var j = 0; j < domStyle.parts.length; j++)
+						domStyle.parts[j]();
+					delete stylesInDom[domStyle.id];
+				}
+			}
+		};
+	}
+	
+	function addStylesToDom(styles, options) {
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			if(domStyle) {
+				domStyle.refs++;
+				for(var j = 0; j < domStyle.parts.length; j++) {
+					domStyle.parts[j](item.parts[j]);
+				}
+				for(; j < item.parts.length; j++) {
+					domStyle.parts.push(addStyle(item.parts[j], options));
+				}
+			} else {
+				var parts = [];
+				for(var j = 0; j < item.parts.length; j++) {
+					parts.push(addStyle(item.parts[j], options));
+				}
+				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+			}
+		}
+	}
+	
+	function listToStyles(list) {
+		var styles = [];
+		var newStyles = {};
+		for(var i = 0; i < list.length; i++) {
+			var item = list[i];
+			var id = item[0];
+			var css = item[1];
+			var media = item[2];
+			var sourceMap = item[3];
+			var part = {css: css, media: media, sourceMap: sourceMap};
+			if(!newStyles[id])
+				styles.push(newStyles[id] = {id: id, parts: [part]});
+			else
+				newStyles[id].parts.push(part);
+		}
+		return styles;
+	}
+	
+	function insertStyleElement(options, styleElement) {
+		var head = getHeadElement();
+		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+		if (options.insertAt === "top") {
+			if(!lastStyleElementInsertedAtTop) {
+				head.insertBefore(styleElement, head.firstChild);
+			} else if(lastStyleElementInsertedAtTop.nextSibling) {
+				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+			} else {
+				head.appendChild(styleElement);
+			}
+			styleElementsInsertedAtTop.push(styleElement);
+		} else if (options.insertAt === "bottom") {
+			head.appendChild(styleElement);
+		} else {
+			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+		}
+	}
+	
+	function removeStyleElement(styleElement) {
+		styleElement.parentNode.removeChild(styleElement);
+		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+		if(idx >= 0) {
+			styleElementsInsertedAtTop.splice(idx, 1);
+		}
+	}
+	
+	function createStyleElement(options) {
+		var styleElement = document.createElement("style");
+		styleElement.type = "text/css";
+		insertStyleElement(options, styleElement);
+		return styleElement;
+	}
+	
+	function createLinkElement(options) {
+		var linkElement = document.createElement("link");
+		linkElement.rel = "stylesheet";
+		insertStyleElement(options, linkElement);
+		return linkElement;
+	}
+	
+	function addStyle(obj, options) {
+		var styleElement, update, remove;
+	
+		if (options.singleton) {
+			var styleIndex = singletonCounter++;
+			styleElement = singletonElement || (singletonElement = createStyleElement(options));
+			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+		} else if(obj.sourceMap &&
+			typeof URL === "function" &&
+			typeof URL.createObjectURL === "function" &&
+			typeof URL.revokeObjectURL === "function" &&
+			typeof Blob === "function" &&
+			typeof btoa === "function") {
+			styleElement = createLinkElement(options);
+			update = updateLink.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+				if(styleElement.href)
+					URL.revokeObjectURL(styleElement.href);
+			};
+		} else {
+			styleElement = createStyleElement(options);
+			update = applyToTag.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+			};
+		}
+	
+		update(obj);
+	
+		return function updateStyle(newObj) {
+			if(newObj) {
+				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+					return;
+				update(obj = newObj);
+			} else {
+				remove();
+			}
+		};
+	}
+	
+	var replaceText = (function () {
+		var textStore = [];
+	
+		return function (index, replacement) {
+			textStore[index] = replacement;
+			return textStore.filter(Boolean).join('\n');
+		};
+	})();
+	
+	function applyToSingletonTag(styleElement, index, remove, obj) {
+		var css = remove ? "" : obj.css;
+	
+		if (styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = replaceText(index, css);
+		} else {
+			var cssNode = document.createTextNode(css);
+			var childNodes = styleElement.childNodes;
+			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+			if (childNodes.length) {
+				styleElement.insertBefore(cssNode, childNodes[index]);
+			} else {
+				styleElement.appendChild(cssNode);
+			}
+		}
+	}
+	
+	function applyToTag(styleElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+	
+		if(media) {
+			styleElement.setAttribute("media", media)
+		}
+	
+		if(styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = css;
+		} else {
+			while(styleElement.firstChild) {
+				styleElement.removeChild(styleElement.firstChild);
+			}
+			styleElement.appendChild(document.createTextNode(css));
+		}
+	}
+	
+	function updateLink(linkElement, obj) {
+		var css = obj.css;
+		var sourceMap = obj.sourceMap;
+	
+		if(sourceMap) {
+			// http://stackoverflow.com/a/26603875
+			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+		}
+	
+		var blob = new Blob([css], { type: "text/css" });
+	
+		var oldSrc = linkElement.href;
+	
+		linkElement.href = URL.createObjectURL(blob);
+	
+		if(oldSrc)
+			URL.revokeObjectURL(oldSrc);
+	}
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(9);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(7)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js?sourceMap!./../node_modules/sass-loader/lib/loader.js?sourceMap!./map.scss", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js?sourceMap!./../node_modules/sass-loader/lib/loader.js?sourceMap!./map.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(6)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "ng-map,\ncampus-map {\n  width: 100%;\n  height: 100%; }\n\ncampus-map {\n  background: linear-gradient(135deg, rgba(0, 119, 202, 0.7) 0%, rgba(199, 21, 102, 0.7) 100%) !important; }\n\nng-map,\nng-map > div,\nng-map > div > div {\n  background-color: transparent !important; }\n", "", {"version":3,"sources":["/./src/map.scss"],"names":[],"mappings":"AAAA;;EAEE,YAAW;EACX,aAAY,EACb;;AAED;EACC,wGAAgG,EAChG;;AAED;;;EAGE,yCAAwC,EACzC","file":"map.scss","sourcesContent":["ng-map,\ncampus-map {\n  width: 100%;\n  height: 100%;\n}\n\ncampus-map {\n\tbackground: linear-gradient(135deg, rgba(0,119,202,0.7) 0%,rgba(199,21,102,0.7) 100%) !important;\n}\n\nng-map,\nng-map > div,\nng-map > div > div {\n  background-color: transparent !important;\n}"],"sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	
-	var _mapControls_controller = __webpack_require__(5);
+	var _mapControls_controller = __webpack_require__(11);
 	
 	var _mapControls_controller2 = _interopRequireDefault(_mapControls_controller);
+	
+	__webpack_require__(12);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -696,7 +1082,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = campusMapControls;
 
 /***/ },
-/* 5 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1040,7 +1426,47 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = MapControlsCtrl;
 
 /***/ },
-/* 6 */
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(13);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(7)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/sass-loader/lib/loader.js?sourceMap!./map-controls.scss", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js?sourceMap!./../../node_modules/sass-loader/lib/loader.js?sourceMap!./map-controls.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(6)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".map-controls-sidenav {\n  background: rgba(255, 255, 255, 0.8); }\n  .map-controls-sidenav md-content {\n    background: transparent; }\n\n.map-controls-handle {\n  height: 100%;\n  position: absolute;\n  right: 0; }\n  .map-controls-handle .md-button {\n    transition: 0.4s ease;\n    background: rgba(0, 0, 0, 0.15); }\n  .map-controls-handle .map-controls-open .md-button {\n    /* opacity: 0; */\n    transition: 0.4s ease;\n    transform: translateX(70%); }\n    .map-controls-handle .map-controls-open .md-button svg {\n      transition: 0.6s ease;\n      transform: translateX(-80%) rotateY(180deg); }\n\n.map-controls md-input-container {\n  padding: 0;\n  /* max-width: 260px; */\n  margin-left: 0.5rem;\n  margin-right: 0.5rem;\n  margin-bottom: 0; }\n\n.map-controls .md-chips {\n  font-size: 12px; }\n\n.map-controls:hover {\n  background-color: rgba(255, 255, 255, 0.9); }\n\nmd-toolbar:not(.md-menu-toolbar),\n.md-button.md-primary.md-raised {\n  background-color: #0077CA; }\n", "", {"version":3,"sources":["/./src/controls/map-controls.scss"],"names":[],"mappings":"AAAA;EACC,qCAAiC,EAIjC;EALD;IAGE,wBAAuB,EACvB;;AAGF;EACC,aAAY;EACZ,mBAAkB;EAClB,SAAQ,EAcR;EAjBD;IAKE,sBAAqB;IACrB,gCAA+B,EAC/B;EAPF;IASE,iBAAiB;IACjB,sBAAqB;IACrB,2BAA0B,EAK1B;IAhBF;MAaG,sBAAqB;MACrB,4CAA2C,EAC3C;;AAIH;EAEG,WAAU;EACV,uBAAuB;EACvB,oBAAmB;EACnB,qBAAoB;EACpB,iBAAgB,EACjB;;AAPF;EAUE,gBAAe,EACf;;AAXF;EAcG,2CAA0C,EAC3C;;AAGF;;EAEE,0BAAyB,EAC1B","file":"map-controls.scss","sourcesContent":[".map-controls-sidenav {\n\tbackground: rgba(255,255,255,0.8);\n\tmd-content {\n\t\tbackground: transparent;\n\t}\n}\n\n.map-controls-handle {\n\theight: 100%;\n\tposition: absolute;\n\tright: 0;\n\t.md-button {\n\t\ttransition: 0.4s ease;\n\t\tbackground: rgba(0, 0, 0, 0.15);\n\t}\n\t.map-controls-open .md-button {\n\t\t/* opacity: 0; */\n\t\ttransition: 0.4s ease;\n\t\ttransform: translateX(70%);\n\t\tsvg {\n\t\t\ttransition: 0.6s ease;\n\t\t\ttransform: translateX(-80%) rotateY(180deg);\n\t\t}\n\t}\n}\n\n.map-controls {\n\tmd-input-container {\n\t  padding: 0;\n\t  /* max-width: 260px; */\n\t  margin-left: 0.5rem;\n\t  margin-right: 0.5rem;\n\t  margin-bottom: 0;\n\t}\n\n\t.md-chips {\n\t\tfont-size: 12px;\n\t}\n\n\t&:hover {\n\t  background-color: rgba(255, 255, 255, 0.9);\n\t}\n}\n\nmd-toolbar:not(.md-menu-toolbar),\n.md-button.md-primary.md-raised {\n  background-color: #0077CA;\n}"],"sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1049,7 +1475,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		value: true
 	});
 	
-	var _filterBuilder_controller = __webpack_require__(7);
+	var _filterBuilder_controller = __webpack_require__(15);
 	
 	var _filterBuilder_controller2 = _interopRequireDefault(_filterBuilder_controller);
 	
@@ -1071,7 +1497,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = filterBuilder;
 
 /***/ },
-/* 7 */
+/* 15 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1325,7 +1751,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = FilterBuilderCtrl;
 
 /***/ },
-/* 8 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1334,7 +1760,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		value: true
 	});
 	
-	var _lodash = __webpack_require__(9);
+	var _lodash = __webpack_require__(17);
 	
 	var _lodash2 = _interopRequireDefault(_lodash);
 	
@@ -1372,7 +1798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = filterInput;
 
 /***/ },
-/* 9 */
+/* 17 */
 /***/ function(module, exports) {
 
 	/**
@@ -1558,7 +1984,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 10 */
+/* 18 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1566,9 +1992,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var MAP_SETTINGS = {
-	  type: 'ROADMAP',
-	  styles: [{
+	var MAP_DEFAULTS = {
+	  mapType: 'ROADMAP',
+	  mapStyles: [{
 	    "stylers": [{
 	      "visibility": "on"
 	    }, {
@@ -1641,118 +2067,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	    "stylers": [{
 	      "gamma": 7.18
 	    }]
-	  }]
-	  // [{
-	  //   "featureType": "landscape.natural",
-	  //   "elementType": "geometry",
-	  //   "stylers": [{
-	  //     "visibility": "off"
-	  //   }]
-	  // }, {
-	  //   "featureType": "poi.school",
-	  //   "elementType": "geometry",
-	  //   "stylers": [{
-	  //     "color": "#ededed"
-	  //   }]
-	  // }, {
-	  //   "featureType": "landscape.man_made",
-	  //   "elementType": "geometry",
-	  //   "stylers": [{
-	  //     "color": "#0077ca"
-	  //   }]
-	  // }],
-	};
-	
-	exports.default = MAP_SETTINGS;
-
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var MAP_ICONS = {
-	  AED: {
-	    path: 'M7.5,4A5.5,5.5 0 0,0 2,9.5C2,10 2.09,10.5 2.22,11H6.3L7.57,7.63C7.87,6.83 9.05,6.75 9.43,7.63L11.5,13L12.09,11.58C12.22,11.25 12.57,11 13,11H21.78C21.91,10.5 22,10 22,9.5A5.5,5.5 0 0,0 16.5,4C14.64,4 13,4.93 12,6.34C11,4.93 9.36,4 7.5,4V4M3,12.5A1,1 0 0,0 2,13.5A1,1 0 0,0 3,14.5H5.44L11,20C12,20.9 12,20.9 13,20L18.56,14.5H21A1,1 0 0,0 22,13.5A1,1 0 0,0 21,12.5H13.4L12.47,14.8C12.07,15.81 10.92,15.67 10.55,14.83L8.5,9.5L7.54,11.83C7.39,12.21 7.05,12.5 6.6,12.5H3Z',
-	    fillColor: '#c71566',
-	    fillOpacity: 1,
+	  }],
+	  iconStyles: {
+	    path: 'M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,12.5A1.5,1.5 0 0,1 10.5,11A1.5,1.5 0 0,1 12,9.5A1.5,1.5 0 0,1 13.5,11A1.5,1.5 0 0,1 12,12.5M12,7.2C9.9,7.2 8.2,8.9 8.2,11C8.2,14 12,17.5 12,17.5C12,17.5 15.8,14 15.8,11C15.8,8.9 14.1,7.2 12,7.2Z',
+	    strokeColor: '#FFFFFF',
 	    strokeOpacity: 0.5,
 	    strokeWeight: 1,
-	    strokeColor: 'white',
-	    anchor: new google.maps.Point(12, 12),
-	    size: new google.maps.Size(24, 24)
-	  },
-	  ACCESS: {
-	    path: 'M21,9H15V22H13V16H11V22H9V9H3V7H21M12,2A2,2 0 0,1 14,4A2,2 0 0,1 12,6C10.89,6 10,5.1 10,4C10,2.89 10.89,2 12,2Z',
 	    fillColor: '#0077CA',
-	    fillOpacity: 1,
-	    strokeOpacity: 0.5,
-	    strokeWeight: 1,
-	    strokeColor: 'white',
-	    anchor: new google.maps.Point(12, 12),
-	    size: new google.maps.Size(24, 24)
-	  },
-	  FOOD: {
-	    path: 'M3,3A1,1 0 0,0 2,4V8L2,9.5C2,11.19 3.03,12.63 4.5,13.22V19.5A1.5,1.5 0 0,0 6,21A1.5,1.5 0 0,0 7.5,19.5V13.22C8.97,12.63 10,11.19 10,9.5V8L10,4A1,1 0 0,0 9,3A1,1 0 0,0 8,4V8A0.5,0.5 0 0,1 7.5,8.5A0.5,0.5 0 0,1 7,8V4A1,1 0 0,0 6,3A1,1 0 0,0 5,4V8A0.5,0.5 0 0,1 4.5,8.5A0.5,0.5 0 0,1 4,8V4A1,1 0 0,0 3,3M19.88,3C19.75,3 19.62,3.09 19.5,3.16L16,5.25V9H12V11H13L14,21H20L21,11H22V9H18V6.34L20.5,4.84C21,4.56 21.13,4 20.84,3.5C20.63,3.14 20.26,2.95 19.88,3Z',
-	    fillColor: '#5F259F',
 	    fillOpacity: 0.8,
-	    strokeOpacity: 0.5,
-	    strokeWeight: 1,
-	    strokeColor: 'white',
-	    anchor: new google.maps.Point(12, 12),
-	    size: new google.maps.Size(24, 24)
-	  },
-	  SERVICE: {
-	    path: 'M18,16H6V15.1C6,13.1 10,12 12,12C14,12 18,13.1 18,15.1M12,5.3C13.5,5.3 14.7,6.5 14.7,8C14.7,9.5 13.5,10.7 12,10.7C10.5,10.7 9.3,9.5 9.3,8C9.3,6.5 10.5,5.3 12,5.3M19,2H5C3.89,2 3,2.89 3,4V18A2,2 0 0,0 5,20H9L12,23L15,20H19A2,2 0 0,0 21,18V4C21,2.89 20.1,2 19,2Z',
-	    fillColor: '#003c71',
-	    fillOpacity: 0.8,
-	    strokeOpacity: 0.5,
-	    strokeWeight: 1,
-	    strokeColor: 'white',
-	    anchor: new google.maps.Point(12, 12),
-	    size: new google.maps.Size(24, 24)
-	  },
-	  OUTDOOR: {
-	    path: 'M10,21V18H3L8,13H5L10,8H7L12,3L17,8H14L19,13H16L21,18H14V21H10Z',
-	    fillColor: '#1a875c',
-	    fillOpacity: 0.8,
-	    strokeOpacity: 0.5,
-	    strokeWeight: 1,
-	    strokeColor: 'white',
-	    anchor: new google.maps.Point(12, 12),
-	    size: new google.maps.Size(24, 24)
-	  },
-	  PARKING: {
-	    path: 'M13.2,11H10V7H13.2A2,2 0 0,1 15.2,9A2,2 0 0,1 13.2,11M13,3H6V21H10V15H13A6,6 0 0,0 19,9C19,5.68 16.31,3 13,3Z',
-	    fillColor: '#1a875c',
-	    fillOpacity: 0.8,
-	    strokeOpacity: 0.5,
-	    strokeWeight: 1,
-	    strokeColor: 'white',
-	    anchor: new google.maps.Point(12, 12),
-	    size: new google.maps.Size(24, 24)
-	  },
-	  DEFAULT: {
-	    path: 'M3.83,3.57A11.8,11.8,0,0,1,12.5,0a11.8,11.8,0,0,1,8.67,3.57,11.8,11.8,0,0,1,3.57,8.67,16.43,16.43,0,0,1-1.27,5.83,36,36,0,0,1-3.08,6.16q-1.81,2.88-3.57,5.38t-3,4L12.5,35l-1.31-1.52q-.82-.94-3-3.78a63.32,63.32,0,0,1-3.74-5.5,40,40,0,0,1-2.92-6A16.62,16.62,0,0,1,.26,12.24,11.8,11.8,0,0,1,3.83,3.57ZM9.42,15.32A4.2,4.2,0,0,0,12.5,16.6a4.35,4.35,0,0,0,4.35-4.35A4.35,4.35,0,0,0,12.5,7.89a4.35,4.35,0,0,0-4.35,4.35A4.2,4.2,0,0,0,9.42,15.32Z',
-	    strokeColor: 'white',
-	    strokeOpacity: 0.5,
-	    strokeWeight: 1,
-	    fillColor: '#003c71',
-	    fillOpacity: 0.9,
 	    rotation: 0,
-	    scale: 1.0,
-	    anchor: new google.maps.Point(12.5, 35),
-	    size: new google.maps.Size(30, 40)
+	    scale: 1.5,
+	    anchor: new google.maps.Point(12, 12),
+	    size: new google.maps.Size(24, 24)
+	  },
+	  geometryStyles: {
+	    strokeColor: '#003C71',
+	    strokeOpacity: 0.3,
+	    strokeWeight: 3,
+	    fillColor: '#0077CA',
+	    fillOpacity: 0.5,
+	    zIndex: 1
+	  },
+	  hoverStyles: {
+	    fillColor: '#C71566',
+	    fillOpacity: 0.7,
+	    strokeWeight: 5,
+	    strokeColor: '#FFFFFF',
+	    strokeOpacity: 0.7
 	  }
 	};
 	
-	exports.default = MAP_ICONS;
+	exports.default = MAP_DEFAULTS;
 
 /***/ },
-/* 12 */
+/* 19 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1761,7 +2109,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	var templates = ['$templateCache', function ($templateCache) {
-	  $templateCache.put('_map.html', '<ng-map\n  center="43.9443802,-78.8975857"\n  zoom="17"\n  styles="{{ ::$ctrl._MAP_SETTINGS.styles }}"\n  map-type-id="{{ ::$ctrl._MAP_SETTINGS.type }}"\n  disable-default-u-i="true"\n  tilt="45"\n  heading="0"\n  layout\n  layout-fill>\n</ng-map>\n<div ng-transclude="controls" class="map-controls"></div>');
+	  $templateCache.put('_map.html', '<ng-map\n  center="43.9443802,-78.8975857"\n  zoom="17"\n  styles="{{ ::$ctrl._defaults.mapStyles }}"\n  map-type-id="{{ ::$ctrl._defaults.mapType }}"\n  disable-default-u-i="true"\n  tilt="45"\n  heading="0"\n  layout\n  layout-fill>\n</ng-map>\n<div ng-transclude="controls" class="map-controls"></div>');
 	  $templateCache.put('controls/_map-controls.html', '<div class="map-controls-handle" layout="row" ng-class="{ \'map-controls-open\': $ctrl.mapControlsOpen }">\n\t<md-button ng-click="$ctrl.mapControlsOpen = !$ctrl.mapControlsOpen">\n\t  <svg style="width:32px;height:32px" viewBox="0 0 24 24">\n\t    <path fill="#FFFFFF" d="M20,10V14H11L14.5,17.5L12.08,19.92L4.16,12L12.08,4.08L14.5,6.5L11,10H20Z" />\n\t\t</svg>\n\t</md-button>\n\n\t<md-sidenav\n\t    class="md-sidenav-right map-controls-sidenav"\n\t    md-component-id="uoit-campus-map:right"\n\t    md-disable-backdrop\n\t    md-whiteframe="4"\n\t    md-is-locked-open="$ctrl.mapControlsOpen" \n\t    md-is-open="$ctrl.mapControlsOpen"\n\t    layout="column">\n\t  <md-toolbar class="md-primary" layout>\n\t    <div class="md-toolbar-tools">\n\t\t  \t<h1>Map filtering</h1>\n\t  \t</div>\n\t  </md-toolbar>\n\n\t  <md-content\n\t\t  flex="grow"\n\t\t  layout="column">\n\t\t\t<filter-builder ng-model="$ctrl.filter" on-update="$ctrl.loadFeatures($ctrl.filter)" layout="column" layout-padding flex="grow">\n\t\t\t  <md-input-container>\n\t\t\t    <label>Location</label>\n\t\t\t    <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" filter-input name="location" md-on-close="$ctrl.loadFeatures($ctrl.filter)">\n\t\t\t      <md-option ng-repeat="location in ::$ctrl.locations" ng-value="::location._id" ng-disabled="$ctrl.location === location">\n\t\t\t        {{ ::location.label}}\n\t\t\t      </md-option>\n\t\t\t    </md-select>\n\t\t\t  </md-input-container>\n\n\t\t\t  <md-input-container>\n\t\t\t    <label>Feature category</label>\n\t\t\t    <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-disabled="!$ctrl.location.length" multiple filter-input name="properties.category" md-on-close="$ctrl.loadFeatures($ctrl.filter)">\n\t\t\t      <md-option ng-repeat="category in $ctrl.categories" ng-value="::category._id" ng-disabled="$ctrl.category === category">\n\t\t\t        {{ ::category.name }}\n\t\t\t      </md-option>\n\t\t\t    </md-select>\n\t\t\t  </md-input-container>\n\t\t\t  <div layout-padding>\n\t        <md-checkbox aria-label="Select All"\n\t\t\t\t\t\tng-checked="$ctrl.isChecked(\'category\', \'categories\')"\n\t\t\t\t\t\tmd-indeterminate="$ctrl.isIndeterminate(\'category\', \'categories\')"\n\t\t\t\t\t\tng-click="$ctrl.toggleAll(\'category\', \'categories\')">\n\t\t\t\t\t\tSelect all categories\n\t        </md-checkbox>\n        </div>\n<!-- \t\t\t\t<div>\n\t\t\t    <md-chips>\n\t\t\t      <md-chip ng-repeat="category in $ctrl.getItemsInListByProp($ctrl.category, $ctrl.categories, \'_id\') track by $index">\n\t\t\t      \t{{ category.name }}\n\t\t\t\t\t\t  <button class="md-chip-remove" ng-click="$ctrl.removeItemFromList(category._id, $ctrl.category)">&times;</button>\n\t\t\t      </md-chip>\n\t\t\t\t\t</md-chips>\n\t\t\t\t</div> -->\n\n\t\t\t  <md-input-container>\n\t\t\t    <label>Feature collection</label>\n\t\t\t    <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-disabled="!$ctrl.category.length" multiple filter-input="filters.collection" name="group" md-on-close="$ctrl.loadFeatures($ctrl.filter)">\n\t\t\t      <md-optgroup ng-repeat="group in $ctrl.getItemsInListByProp($ctrl.category, $ctrl.categories, \'_id\')" label="{{ ::group.name }}">\n\t\t\t        <md-option ng-repeat="collection in $ctrl.collections | filter: { category: group._id }" ng-value="::collection._id" ng-disabled="$ctrl.collection === collection">\n\t\t\t          {{ ::collection.name }}\n\t\t\t        </md-option>\n\t\t\t      </md-optgroup>\n\t\t\t    </md-select>\n\t\t\t  </md-input-container>\n\t\t\t  <div layout-padding>\n\t        <md-checkbox aria-label="Select All"\n\t\t\t\t\t\tng-checked="$ctrl.isChecked(\'collection\', \'collections\')"\n\t\t\t\t\t\tmd-indeterminate="$ctrl.isIndeterminate(\'collection\', \'collections\')"\n\t\t\t\t\t\tng-click="$ctrl.toggleAll(\'collection\', \'collections\')">\n\t\t\t\t\t\tSelect all collections\n\t        </md-checkbox>\n        </div>\n\t\t\t\t<!-- <small><pre>{{ $ctrl.filter | json }}</pre></small> -->\n\t\t\t</filter-builder>\n\t<!--   <div layout="column">\n\n\t    <md-button class="md-primary" ng-click="$ctrl.showAll()">\n\t    \tShow all\n\t      <md-tooltip md-direction="bottom">\n\t        Turn on visibility for all available map features\n\t      </md-tooltip>\n\t    </md-button>\n\t  </div> -->\n\t  </md-content>\n\t</md-sidenav>\n</div>');
 	  $templateCache.put('detail/_map-detail.html', '<md-whiteframe\n  class="md-whiteframe-16dp"\n  layout="column">\n  <md-toolbar>\n    <div class="md-toolbar-tools">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class="md-icon-button" aria-label="Close info" ng-click="ctrl.close()">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div\n  \tlayout="column"\n  \tlayout-margin\n  \tlayout-align="center center">\n    <md-button ng-click="ctrl.showDetails()">{{ ctrl.detailsShowing ? \'Hide\' : \'Show\'}} details <span class="detail-arrow" ng-class="{ \'arrow-up\' : ctrl.detailsShowing }"></span></md-button>\n  \t<md-content layout-padding layout-margin class="details-text" ng-bind-html="::ctrl.description" ng-show="ctrl.detailsShowing"></md-content>\n  \t<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="::ctrl.building" ng-click="ctrl.gotoBldg()">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>');
 	}];exports.default = templates;

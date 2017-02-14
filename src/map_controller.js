@@ -11,7 +11,7 @@ class MapCtrl {
 			'$timeout', '$scope', '$window', // angular core
 			'NgMap', // external deps
 			'$mdToast', '$mdPanel', // md deps
-			'MAP_SETTINGS', 'MAP_ICONS' // constants
+			'MAP_DEFAULTS' // constants
 		];
 	}
 	/**
@@ -26,14 +26,13 @@ class MapCtrl {
 	 * @param  {Object} MAP_SETTINGS Constant for map config object
 	 * @param  {Object} MAP_ICONS    Constant for map icon definitions
 	 */
-	constructor($timeout, $scope, $window, NgMap, $mdToast, $mdPanel, MAP_SETTINGS, MAP_ICONS) {
+	constructor($timeout, $scope, $window, NgMap, $mdToast, $mdPanel, MAP_DEFAULTS) {
     this._$timeout = $timeout;
     this._$scope = $scope;
     this._$window = $window;
     this._$mdToast = $mdToast;
     this._$mdPanel = $mdPanel;
-    this._MAP_SETTINGS = MAP_SETTINGS;
-    this._MAP_ICONS = MAP_ICONS;
+    this._defaults = MAP_DEFAULTS;
     /**
      * Function for resolving map instance from promise.
      * @type {Function}
@@ -44,11 +43,6 @@ class MapCtrl {
      * @type {null|Object}
      */
     this.map = null;
-    /**
-     * Property to store map event listeners for later deregistration.
-     * @type {null|Object}
-     */
-    this.mapListeners = [];
     /**
      * Helper factory object for deploying simple toasts.
      * @type {Object}
@@ -82,31 +76,32 @@ class MapCtrl {
       // angular.element(this._$window).triggerHandler('resize');
       google.maps.event.trigger(instance, 'resize');
 
-      instance.data.setStyle(feature => {
-      	const styles = this.categories[feature.getProperty('category')];
-      	styles.title = feature.getProperty('name');
-        return styles;
-      });
+      instance.data.setStyle(feature => Object.assign(
+	      {},
+	      this._defaults.geometryStyles,
+	      { icon: this._defaults.iconStyles, title: feature.getProperty('name') },
+    		this.categories[feature.getProperty('category')]
+    	));
 
-      const mouseoverListener = instance.data.addListener('mouseover', event => {
-        instance.data.overrideStyle(event.feature, {
-          fillColor: '#C71566',
-          fillOpacity: 0.7,
-          strokeWeight: 5,
-          strokeColor: 'white',
-          strokeOpacity: 0.7
-        });
-        this.showToast(event.feature);
-      });
-      const mouseoutListener = instance.data.addListener('mouseout', event => {
-        instance.data.revertStyle();
-        this.toastCanceler = this.hideToast();
-      });
-      const clickListener = instance.data.addListener('click', event => {
-        this.showDetail(event.feature, this.isolateMouseEvent(event));
-      });
-
-      this.mapListeners.push(mouseoverListener, mouseoutListener, clickListener);
+	    /**
+	     * Property to store map event listeners for later deregistration.
+	     * @type {Object}
+	     */
+      this.listeners = {
+      	mouseover: event => {
+	        instance.data.overrideStyle(event.feature, this._defaults.hoverStyles);
+	        this.showToast(event.feature);
+	      },
+	      mouseout: event => {
+	        instance.data.revertStyle();
+	        this.toastCanceler = this.hideToast();
+	      },
+	      click: event => {
+	        this.showDetail(event.feature, this.isolateMouseEvent(event));
+	      }
+      }
+      
+      Object.keys(this.listeners).forEach(event => instance.data.addListener(event, this.listeners[event]));
     });
 	}
 
@@ -132,7 +127,10 @@ class MapCtrl {
 	 * memory leaks if left attached).
 	 */
 	$onDestroy() {
-		this.mapListeners.forEach(listener => google.maps.event.removeListener(listener)&&console.log('map listener removed!'));
+    this.getMap().then(instance => {
+			Object.keys(this.listeners).forEach(event => instance.data.removeListener(event, this.listeners[event])&&console.log('map listener removed!'));
+			// this.mapListeners.forEach(listener => google.maps.event.removeListener(listener)&&console.log('map listener removed!'));
+		});
 		google.maps.event.clearInstanceListeners(this.map.data);
 	}
 
@@ -148,8 +146,8 @@ class MapCtrl {
 		console.log('updating map data...', newVal);
 		return this.clearMapData().then(map => {
 			if (newVal.collection.features.length && newVal.category.length) {
-		      map.data.addGeoJson(newVal.collection);
-		      this.fitBounds(map);
+	      map.data.addGeoJson(newVal.collection);
+	      this.fitBounds(map);
 				console.log('map data updated!');
 			}
 		});
