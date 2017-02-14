@@ -1,3 +1,4 @@
+import './map-detail.scss';
 /**
  * The `MapDetailCtrl` is a small controller with few responsibilties –
  * it is only instantiated by ng-material's `$mdPanel` service as a means

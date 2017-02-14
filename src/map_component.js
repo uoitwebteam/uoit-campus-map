@@ -1,4 +1,5 @@
 import MapCtrl from './map_controller.js'
+import './map.scss';
 
 const campusMap = {
   // transclude: true,

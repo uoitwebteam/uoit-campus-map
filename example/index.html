@@ -7,7 +7,6 @@
 		body {
 		  position: relative;
 		  overflow: hidden;
-			background: linear-gradient(135deg, rgba(0,119,202,0.7) 0%,rgba(199,21,102,0.7) 100%) !important;
 		}	
 		body::before {
 		  position: fixed;
@@ -20,103 +19,6 @@
 		  background-size: cover;
 		  -webkit-filter: blur(10px);
 		  opacity: 0.3;
-		}
-
-		ng-map, campus-map {
-		  background-color: transparent !important;
-		  width: 100%;
-		  height: 100%;
-		}
-
-		ng-map > div, ng-map > div > div {
-		  background-color: transparent !important;
-		}
-
-		.map-detail {
-			/* max-width: 400px; */
-		  background-color: rgba(255, 255, 255, 0.75);
-		  -webkit-transition: 0.3s;
-		  transition: 0.3s;
-		}
-
-		.details-text {
-			font-size: 14px;
-			/* max-height: 300px; */
-			line-height: 1.6em;
-			color: rgba(0,0,0,0.54);
-		}
-		.detail-arrow {
-			margin-left: 3px;
-		}
-		.detail-arrow::after {
-	  	display: inline-block;
-			width: 6px;
-			height: 6px;
-			content: '';
-			border-bottom: solid 2px;
-			border-right: solid 2px;
-			transform: rotate(45deg);
-			transition: transform 0.3s ease;
-		}
-		.detail-arrow.arrow-up::after {
-			transform: rotate(-135deg);
-		}
-
-		.map-controls-sidenav {
-			background: rgba(255,255,255,0.8);
-		}
-		.map-controls-sidenav md-content {
-			background: transparent;
-		}
-
-/* 		@media (min-width: 600px) {
-			.map-controls-sidenav {
-				width: auto;
-		    max-width: 600px;
-			}
-		} */
-
-
-		.map-controls-handle {
-			height: 100%;
-			position: absolute;
-			right: 0;
-		}
-
-		.map-controls-handle .md-button {
-			transition: 0.4s ease;
-			background: rgba(0, 0, 0, 0.15);
-		}
-
-		.map-controls-handle.map-controls-open .md-button {
-			/* opacity: 0; */
-			transition: 0.4s ease;
-			transform: translateX(70%);
-		}
-
-		.map-controls-handle.map-controls-open .md-button svg {
-			transition: 0.6s ease;
-			transform: translateX(-80%) rotateY(180deg);
-		}
-
-		.map-controls md-input-container {
-		  padding: 0;
-		  /* max-width: 260px; */
-		  margin-left: 0.5rem;
-		  margin-right: 0.5rem;
-		  margin-bottom: 0;
-		}
-
-		.map-controls .md-chips {
-			font-size: 12px;
-		}
-
-		.map-controls:hover, .map-detail:hover {
-		  background-color: rgba(255, 255, 255, 0.9);
-		}
-		md-toolbar:not(.md-menu-toolbar),
-		.md-button.md-primary.md-raised {
-	    background-color: #0077CA;
 		}
   </style>
 </head>

@@ -1,0 +1,29 @@
+.map-detail {
+	/* max-width: 400px; */
+  background-color: rgba(255, 255, 255, 0.75);
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.details-text {
+	font-size: 14px;
+	/* max-height: 300px; */
+	line-height: 1.6em;
+	color: rgba(0,0,0,0.54);
+}
+.detail-arrow {
+	margin-left: 3px;
+	&::after {
+		display: inline-block;
+		width: 6px;
+		height: 6px;
+		content: '';
+		border-bottom: solid 2px;
+		border-right: solid 2px;
+		transform: rotate(45deg);
+		transition: transform 0.3s ease;
+	}
+	&.arrow-up::after {
+		transform: rotate(-135deg);
+	}
+}
