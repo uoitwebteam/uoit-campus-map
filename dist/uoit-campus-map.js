@@ -185,13 +185,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		function MapCtrl($timeout, $scope, $window, NgMap, $mdToast, $mdPanel, MAP_SETTINGS, MAP_ICONS) {
 			_classCallCheck(this, MapCtrl);
 	
-			// attach dependencies
 			this._$timeout = $timeout;
 			this._$scope = $scope;
 			this._$window = $window;
 			this._$mdToast = $mdToast;
 			this._$mdPanel = $mdPanel;
-			// init constants
 			this._MAP_SETTINGS = MAP_SETTINGS;
 			this._MAP_ICONS = MAP_ICONS;
 			/**
@@ -204,6 +202,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @type {null|Object}
 	   */
 			this.map = null;
+			/**
+	   * Property to store map event listeners for later deregistration.
+	   * @type {null|Object}
+	   */
+			this.mapListeners = [];
 			/**
 	   * Helper factory object for deploying simple toasts.
 	   * @type {Object}
@@ -219,6 +222,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @type {Boolean}
 	   */
 			this.toastActive = false;
+			/**
+	   * Object to hold map of available categories by `_id` (will be populated
+	   * by `MapControlsCtrl` when categories are loaded).
+	   * @type {Object}
+	   */
+			this.categories = {};
 		}
 	
 		_createClass(MapCtrl, [{
@@ -231,69 +240,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 					/*
 	    	This is a stupid hack that makes the map fill space by force.
-	    	Best not used whenever possible.
+	    	Best not used whenever possible; this isn't one of those times.
 	     */
 					// angular.element(this._$window).triggerHandler('resize');
 					google.maps.event.trigger(instance, 'resize');
-	
+					console.log(_this.categories);
 					instance.data.setStyle(function (feature) {
-						var category = feature.getProperty('category');
-						switch (category) {
-							case '581a2c57d9ff16e787aa1b20':
-								// Services
-								return { icon: _this._MAP_ICONS.SERVICE };
-								break;
-							case '581a2c5ed9ff16e787aa1b21':
-								// Emergency services
-								return { icon: _this._MAP_ICONS.AED };
-								break;
-							case '581a2c77d9ff16e787aa1b22':
-								// Restaurants and food courts
-								return {
-									icon: _this._MAP_ICONS.FOOD,
-									fillColor: '#5F259F',
-									fillOpacity: 1,
-									strokeWeight: 3,
-									strokeColor: 'white',
-									strokeOpacity: 0.3
-								};
-								break;
-							case '581a2c8ad9ff16e787aa1b24':
-								// Parking
-								return {
-									icon: _this._MAP_ICONS.PARKING,
-									fillColor: '#53565A',
-									fillOpacity: 0.5,
-									strokeWeight: 3,
-									strokeColor: 'white',
-									strokeOpacity: 0.3
-								};
-								break;
-							case '581a2c8fd9ff16e787aa1b25':
-								// Parking
-								return {
-									icon: _this._MAP_ICONS.OUTDOOR,
-									fillColor: '#1a875c',
-									fillOpacity: 0.5,
-									strokeWeight: 3,
-									strokeColor: 'white',
-									strokeOpacity: 0.1
-								};
-								break;
-							default:
-								// other
-								return {
-									icon: _this._MAP_ICONS.DEFAULT,
-									fillColor: '#0077CA',
-									fillOpacity: 1,
-									strokeWeight: 3,
-									strokeColor: '#003C71',
-									strokeOpacity: 0.3
-								};
-						}
+						// console.log(feature.getId())
+						var styles = _this.categories[feature.getProperty('category')];
+						styles.title = feature.getProperty('name');
+						return styles; //this.categories[feature.getProperty('category')];
 					});
 	
-					instance.data.addListener('mouseover', function (event) {
+					var mouseoverListener = instance.data.addListener('mouseover', function (event) {
 						instance.data.overrideStyle(event.feature, {
 							fillColor: '#C71566',
 							fillOpacity: 0.7,
@@ -304,14 +263,16 @@ return /******/ (function(modules) { // webpackBootstrap
 						_this.showToast(event.feature);
 					});
 	
-					instance.data.addListener('mouseout', function (event) {
+					var mouseoutListener = instance.data.addListener('mouseout', function (event) {
 						instance.data.revertStyle();
 						_this.toastCanceler = _this.hideToast();
 					});
 	
-					instance.data.addListener('click', function (event) {
+					var clickListener = instance.data.addListener('click', function (event) {
 						_this.showDetail(event.feature, _this.isolateMouseEvent(event));
 					});
+	
+					_this.mapListeners.push(mouseoverListener, mouseoutListener, clickListener);
 				});
 			}
 		}, {
@@ -345,6 +306,9 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: '$onDestroy',
 			value: function $onDestroy() {
+				this.mapListeners.forEach(function (listener) {
+					return google.maps.event.removeListener(listener);
+				});
 				google.maps.event.clearInstanceListeners(this.map.data);
 			}
 	
@@ -522,14 +486,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 		}, {
 			key: 'fitBounds',
-			value: function fitBounds() {
+			value: function fitBounds(map) {
 				var _this6 = this;
 	
 				var bounds = new google.maps.LatLngBounds();
-				this.map.data.forEach(function (feature) {
+				map.data.forEach(function (feature) {
 					_this6.processBounds(feature.getGeometry(), bounds.extend, bounds);
 				});
-				this.map.fitBounds(bounds);
+				map.fitBounds(bounds);
 			}
 	
 			/**
@@ -617,11 +581,14 @@ return /******/ (function(modules) { // webpackBootstrap
 		function MapDetailCtrl($sce) {
 			_classCallCheck(this, MapDetailCtrl);
 	
-			if (this.feature.getProperty('linked')) {
+			var linked = this.feature.getProperty('linked');
+			if (linked === 'buildings' || linked === 'true') {
 				this.building = this.feature.getProperty('building');
-	
 				this.name = this.building.name;
 				this.description = $sce.trustAsHtml(this.building.desc);
+			} else if (linked === 'scenes') {
+				this.scene = this.feature.getProperty('scene');
+				this.name = this.scene.name;
 			} else {
 				this.name = this.feature.getProperty('name');
 				this.description = $sce.trustAsHtml(this.feature.getProperty('desc'));
@@ -719,8 +686,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var campusMapControls = {
 	  require: {
-	    $ngModel: 'ngModel'
-	    // MapCtrl: '^map'
+	    $ngModel: 'ngModel',
+	    MapCtrl: '^campusMap'
 	  },
 	  templateUrl: 'controls/_map-controls.html',
 	  controller: _mapControls_controller2.default
@@ -816,6 +783,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.location = locations[1]._id;
 	        return _this.loadCategories();
 	      }).then(function (categories) {
+	        categories.forEach(function (category) {
+	          var _category$icon = category.icon,
+	              _category$icon$anchor = _category$icon.anchor,
+	              left = _category$icon$anchor.left,
+	              top = _category$icon$anchor.top,
+	              _category$icon$size = _category$icon.size,
+	              width = _category$icon$size.width,
+	              height = _category$icon$size.height;
+	
+	          category.icon.anchor = new google.maps.Point(left, top);
+	          category.icon.size = new google.maps.Point(width, height);
+	          _this.MapCtrl.categories[category._id] = category;
+	        });
 	        _this.category = [].concat(_toConsumableArray(categories.map(function (category) {
 	          return category._id;
 	        })));
@@ -1782,8 +1762,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	var templates = ['$templateCache', function ($templateCache) {
 	  $templateCache.put('_map.html', '<ng-map\n  center="43.9443802,-78.8975857"\n  zoom="17"\n  styles="{{ ::$ctrl._MAP_SETTINGS.styles }}"\n  map-type-id="{{ ::$ctrl._MAP_SETTINGS.type }}"\n  disable-default-u-i="true"\n  tilt="45"\n  heading="0"\n  layout\n  layout-fill>\n</ng-map>\n<div ng-transclude="controls" class="map-controls"></div>');
-	  $templateCache.put('detail/_map-detail.html', '<md-whiteframe\n  class="md-whiteframe-16dp"\n  layout="column">\n  <md-toolbar>\n    <div class="md-toolbar-tools">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class="md-icon-button" aria-label="Close info" ng-click="ctrl.close()">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div\n  \tlayout="column"\n  \tlayout-margin\n  \tlayout-align="center center">\n    <md-button ng-click="ctrl.showDetails()">{{ ctrl.detailsShowing ? \'Hide\' : \'Show\'}} details <span class="detail-arrow" ng-class="{ \'arrow-up\' : ctrl.detailsShowing }"></span></md-button>\n  \t<md-content layout-padding layout-margin class="details-text" ng-bind-html="::ctrl.description" ng-show="ctrl.detailsShowing"></md-content>\n  \t<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="::ctrl.building" ng-click="ctrl.gotoBldg()">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>');
 	  $templateCache.put('controls/_map-controls.html', '<div class="map-controls-handle" layout="row" ng-class="{ \'map-controls-open\': $ctrl.mapControlsOpen }">\n\t<md-button ng-click="$ctrl.mapControlsOpen = !$ctrl.mapControlsOpen">\n\t  <svg style="width:32px;height:32px" viewBox="0 0 24 24">\n\t    <path fill="#FFFFFF" d="M20,10V14H11L14.5,17.5L12.08,19.92L4.16,12L12.08,4.08L14.5,6.5L11,10H20Z" />\n\t\t</svg>\n\t</md-button>\n\n\t<md-sidenav\n\t    class="md-sidenav-right map-controls-sidenav"\n\t    md-component-id="uoit-campus-map:right"\n\t    md-disable-backdrop\n\t    md-whiteframe="4"\n\t    md-is-locked-open="$ctrl.mapControlsOpen" \n\t    md-is-open="$ctrl.mapControlsOpen"\n\t    layout="column">\n\t  <md-toolbar class="md-primary" layout>\n\t    <div class="md-toolbar-tools">\n\t\t  \t<h1>Map filtering</h1>\n\t  \t</div>\n\t  </md-toolbar>\n\n\t  <md-content\n\t\t  flex="grow"\n\t\t  layout="column">\n\t\t\t<filter-builder ng-model="$ctrl.filter" on-update="$ctrl.loadFeatures($ctrl.filter)" layout="column" layout-padding flex="grow">\n\t\t\t  <md-input-container>\n\t\t\t    <label>Location</label>\n\t\t\t    <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" filter-input name="location" md-on-close="$ctrl.loadFeatures($ctrl.filter)">\n\t\t\t      <md-option ng-repeat="location in ::$ctrl.locations" ng-value="::location._id" ng-disabled="$ctrl.location === location">\n\t\t\t        {{ ::location.label}}\n\t\t\t      </md-option>\n\t\t\t    </md-select>\n\t\t\t  </md-input-container>\n\n\t\t\t  <md-input-container>\n\t\t\t    <label>Feature category</label>\n\t\t\t    <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-disabled="!$ctrl.location.length" multiple filter-input name="properties.category" md-on-close="$ctrl.loadFeatures($ctrl.filter)">\n\t\t\t      <md-option ng-repeat="category in $ctrl.categories" ng-value="::category._id" ng-disabled="$ctrl.category === category">\n\t\t\t        {{ ::category.name }}\n\t\t\t      </md-option>\n\t\t\t    </md-select>\n\t\t\t  </md-input-container>\n\t\t\t  <div layout-padding>\n\t        <md-checkbox aria-label="Select All"\n\t\t\t\t\t\tng-checked="$ctrl.isChecked(\'category\', \'categories\')"\n\t\t\t\t\t\tmd-indeterminate="$ctrl.isIndeterminate(\'category\', \'categories\')"\n\t\t\t\t\t\tng-click="$ctrl.toggleAll(\'category\', \'categories\')">\n\t\t\t\t\t\tSelect all categories\n\t        </md-checkbox>\n        </div>\n<!-- \t\t\t\t<div>\n\t\t\t    <md-chips>\n\t\t\t      <md-chip ng-repeat="category in $ctrl.getItemsInListByProp($ctrl.category, $ctrl.categories, \'_id\') track by $index">\n\t\t\t      \t{{ category.name }}\n\t\t\t\t\t\t  <button class="md-chip-remove" ng-click="$ctrl.removeItemFromList(category._id, $ctrl.category)">&times;</button>\n\t\t\t      </md-chip>\n\t\t\t\t\t</md-chips>\n\t\t\t\t</div> -->\n\n\t\t\t  <md-input-container>\n\t\t\t    <label>Feature collection</label>\n\t\t\t    <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-disabled="!$ctrl.category.length" multiple filter-input="filters.collection" name="group" md-on-close="$ctrl.loadFeatures($ctrl.filter)">\n\t\t\t      <md-optgroup ng-repeat="group in $ctrl.getItemsInListByProp($ctrl.category, $ctrl.categories, \'_id\')" label="{{ ::group.name }}">\n\t\t\t        <md-option ng-repeat="collection in $ctrl.collections | filter: { category: group._id }" ng-value="::collection._id" ng-disabled="$ctrl.collection === collection">\n\t\t\t          {{ ::collection.name }}\n\t\t\t        </md-option>\n\t\t\t      </md-optgroup>\n\t\t\t    </md-select>\n\t\t\t  </md-input-container>\n\t\t\t  <div layout-padding>\n\t        <md-checkbox aria-label="Select All"\n\t\t\t\t\t\tng-checked="$ctrl.isChecked(\'collection\', \'collections\')"\n\t\t\t\t\t\tmd-indeterminate="$ctrl.isIndeterminate(\'collection\', \'collections\')"\n\t\t\t\t\t\tng-click="$ctrl.toggleAll(\'collection\', \'collections\')">\n\t\t\t\t\t\tSelect all collections\n\t        </md-checkbox>\n        </div>\n\t\t\t\t<!-- <small><pre>{{ $ctrl.filter | json }}</pre></small> -->\n\t\t\t</filter-builder>\n\t<!--   <div layout="column">\n\n\t    <md-button class="md-primary" ng-click="$ctrl.showAll()">\n\t    \tShow all\n\t      <md-tooltip md-direction="bottom">\n\t        Turn on visibility for all available map features\n\t      </md-tooltip>\n\t    </md-button>\n\t  </div> -->\n\t  </md-content>\n\t</md-sidenav>\n</div>');
+	  $templateCache.put('detail/_map-detail.html', '<md-whiteframe\n  class="md-whiteframe-16dp"\n  layout="column">\n  <md-toolbar>\n    <div class="md-toolbar-tools">\n      <h2>\n        <span>{{ ::ctrl.name }}</span>\n      </h2>\n      <span flex></span>\n      <md-button class="md-icon-button" aria-label="Close info" ng-click="ctrl.close()">\n        <span>&times;</span>\n      </md-button>\n    </div>\n  </md-toolbar>\n  <div\n  \tlayout="column"\n  \tlayout-margin\n  \tlayout-align="center center">\n    <md-button ng-click="ctrl.showDetails()">{{ ctrl.detailsShowing ? \'Hide\' : \'Show\'}} details <span class="detail-arrow" ng-class="{ \'arrow-up\' : ctrl.detailsShowing }"></span></md-button>\n  \t<md-content layout-padding layout-margin class="details-text" ng-bind-html="::ctrl.description" ng-show="ctrl.detailsShowing"></md-content>\n  \t<md-button layout-padding class="md-raised md-primary" aria-label="Tour this building" ng-if="::ctrl.building" ng-click="ctrl.gotoBldg()">\n  \t\tTake a tour &raquo;\n  \t</md-button>\n  </div>\n</md-whiteframe>');
 	}];exports.default = templates;
 
 /***/ }

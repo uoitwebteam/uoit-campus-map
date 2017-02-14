@@ -124,7 +124,7 @@
 
   <campus-map
   	map-data="$ctrl.mapData"
-  	on-goto-bldg="$ctrl.onGotoBldg"
+  	on-goto-bldg="$ctrl.onGotoBldg()"
   	layout
   	flex="grow">
   	<campus-map-controls ng-model="$ctrl.mapData" layout="column" flex="grow"></campus-map-controls>
@@ -174,15 +174,6 @@
 	    			alert(JSON.stringify(data));
 	    		}
     		}
-    		this.collection = {
-			    "_id": "5810ef6a3054425c7cc4770e",
-			    "updatedAt": "2016-11-02T21:02:01.095Z",
-			    "createdAt": "2016-10-26T18:01:14.558Z",
-			    "name": "ACE",
-			    "location": "57ead427e481ce773d1544f5",
-			    "category": "581a2c45d9ff16e787aa1b1f",
-			    "type": "FeatureCollection"
-			  };
     	});
   </script>
   

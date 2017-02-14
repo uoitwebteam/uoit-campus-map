@@ -36,11 +36,14 @@ class MapDetailCtrl {
 	 * @param  {Object} $sce Angular's strict contextual escape service
 	 */
 	constructor($sce) {
-  	if (this.feature.getProperty('linked')) {
+		const linked = this.feature.getProperty('linked');
+  	if (linked === 'buildings' || linked === 'true') {
   		this.building = this.feature.getProperty('building');
-
   		this.name = this.building.name;
   		this.description = $sce.trustAsHtml(this.building.desc);
+  	} else if (linked === 'scenes') {
+  		this.scene = this.feature.getProperty('scene');
+  		this.name = this.scene.name;
   	} else {
   		this.name = this.feature.getProperty('name');
   		this.description = $sce.trustAsHtml(this.feature.getProperty('desc'));

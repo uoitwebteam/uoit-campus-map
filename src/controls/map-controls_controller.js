@@ -59,6 +59,17 @@ class MapControlsCtrl {
         return this.loadCategories();
       })
       .then(categories => {
+      	categories.forEach(category => {
+      		const {
+      			icon: {
+      				anchor: { left, top },
+      				size: { width, height }
+      			}
+      		} = category;
+      		category.icon.anchor = new google.maps.Point(left, top);
+      		category.icon.size = new google.maps.Point(width, height);
+      		this.MapCtrl.categories[category._id] = category;
+      	});
         this.category = [...categories.map(category => category._id)];
         return this.loadCollections();
       })

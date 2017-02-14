@@ -27,13 +27,11 @@ class MapCtrl {
 	 * @param  {Object} MAP_ICONS    Constant for map icon definitions
 	 */
 	constructor($timeout, $scope, $window, NgMap, $mdToast, $mdPanel, MAP_SETTINGS, MAP_ICONS) {
-    // attach dependencies
     this._$timeout = $timeout;
     this._$scope = $scope;
     this._$window = $window;
     this._$mdToast = $mdToast;
     this._$mdPanel = $mdPanel;
-    // init constants
     this._MAP_SETTINGS = MAP_SETTINGS;
     this._MAP_ICONS = MAP_ICONS;
     /**
@@ -46,6 +44,11 @@ class MapCtrl {
      * @type {null|Object}
      */
     this.map = null;
+    /**
+     * Property to store map event listeners for later deregistration.
+     * @type {null|Object}
+     */
+    this.mapListeners = [];
     /**
      * Helper factory object for deploying simple toasts.
      * @type {Object}
@@ -61,6 +64,12 @@ class MapCtrl {
      * @type {Boolean}
      */
     this.toastActive = false;
+    /**
+     * Object to hold map of available categories by `_id` (will be populated
+     * by `MapControlsCtrl` when categories are loaded).
+     * @type {Object}
+     */
+    this.categories = {};
   }
   $onInit() {
     this.getMap().then(instance => {
@@ -68,63 +77,18 @@ class MapCtrl {
 
     	/*
     		This is a stupid hack that makes the map fill space by force.
-    		Best not used whenever possible.
+    		Best not used whenever possible; this isn't one of those times.
     	 */
       // angular.element(this._$window).triggerHandler('resize');
       google.maps.event.trigger(instance, 'resize');
 
       instance.data.setStyle(feature => {
-        var category = feature.getProperty('category');
-        switch(category) {
-        	case '581a2c57d9ff16e787aa1b20': // Services
-        		return { icon: this._MAP_ICONS.SERVICE }
-        		break;
-        	case '581a2c5ed9ff16e787aa1b21': // Emergency services
-        		return { icon: this._MAP_ICONS.AED }
-        		break;
-        	case '581a2c77d9ff16e787aa1b22': // Restaurants and food courts
-        		return { 
-        			icon: this._MAP_ICONS.FOOD,
-		          fillColor: '#5F259F',
-		          fillOpacity: 1,
-		          strokeWeight: 3,
-		          strokeColor: 'white',
-		          strokeOpacity: 0.3
-		        }
-        		break;
-        	case '581a2c8ad9ff16e787aa1b24': // Parking
-        		return { 
-        			icon: this._MAP_ICONS.PARKING,
-		          fillColor: '#53565A',
-		          fillOpacity: 0.5,
-		          strokeWeight: 3,
-		          strokeColor: 'white',
-		          strokeOpacity: 0.3
-		        }
-        		break;
-        	case '581a2c8fd9ff16e787aa1b25': // Parking
-        		return { 
-        			icon: this._MAP_ICONS.OUTDOOR,
-		          fillColor: '#1a875c',
-		          fillOpacity: 0.5,
-		          strokeWeight: 3,
-		          strokeColor: 'white',
-		          strokeOpacity: 0.1
-		        }
-        		break;
-      		default: // other
-		        return {
-		        	icon: this._MAP_ICONS.DEFAULT,
-		          fillColor: '#0077CA',
-		          fillOpacity: 1,
-		          strokeWeight: 3,
-		          strokeColor: '#003C71',
-		          strokeOpacity: 0.3
-		        }
-        }
+      	const styles = this.categories[feature.getProperty('category')];
+      	styles.title = feature.getProperty('name');
+        return styles;
       });
 
-      instance.data.addListener('mouseover', event => {
+      const mouseoverListener = instance.data.addListener('mouseover', event => {
         instance.data.overrideStyle(event.feature, {
           fillColor: '#C71566',
           fillOpacity: 0.7,
@@ -134,20 +98,20 @@ class MapCtrl {
         });
         this.showToast(event.feature);
       });
-
-      instance.data.addListener('mouseout', event => {
+      const mouseoutListener = instance.data.addListener('mouseout', event => {
         instance.data.revertStyle();
         this.toastCanceler = this.hideToast();
       });
-
-      instance.data.addListener('click', event => {
+      const clickListener = instance.data.addListener('click', event => {
         this.showDetail(event.feature, this.isolateMouseEvent(event));
       });
+
+      this.mapListeners.push(mouseoverListener, mouseoutListener, clickListener);
     });
 	}
 
 	$onChanges({ mapData }) {
-		if (mapData.isFirstChange()) return;
+		if (mapData.isFirstChange()) return;	
 		console.log('map component detected external changes:', mapData);
 		const	{
 			currentValue: { location, category, collection }
@@ -168,6 +132,7 @@ class MapCtrl {
 	 * memory leaks if left attached).
 	 */
 	$onDestroy() {
+		this.mapListeners.forEach(listener => google.maps.event.removeListener(listener)&&console.log('map listener removed!'));
 		google.maps.event.clearInstanceListeners(this.map.data);
 	}
 
@@ -316,12 +281,12 @@ class MapCtrl {
 	/**
 	 * Resizes map view to fit recalculated bounds.
 	 */
-	fitBounds() {
+	fitBounds(map) {
 	  const bounds = new google.maps.LatLngBounds();
-	  this.map.data.forEach(feature => {
+	  map.data.forEach(feature => {
 	    this.processBounds(feature.getGeometry(), bounds.extend, bounds);
 	  });
-	  this.map.fitBounds(bounds);
+	  map.fitBounds(bounds);
 	}
 
 	/**
