@@ -89,7 +89,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//
 	// ----------------
 	
-	exports.default = angular.module('campusMap', []).run(_templates2.default).component('campusMap', _map_component2.default).component('campusMapControls', _mapControls_component2.default).directive('filterBuilder', _filterBuilder_directive2.default).directive('filterInput', _filterInput_directive2.default).constant('MAP_DEFAULTS', _map_constant2.default);
+	exports.default = angular.module('campusMap', []).component('campusMap', _map_component2.default).component('campusMapControls', _mapControls_component2.default).directive('filterBuilder', _filterBuilder_directive2.default).directive('filterInput', _filterInput_directive2.default).constant('MAP_DEFAULTS', _map_constant2.default).run(_templates2.default).name;
 	
 	// development only
 	//

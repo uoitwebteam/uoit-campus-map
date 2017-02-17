@@ -13,7 +13,6 @@ import templates from './_templates';
 // ----------------
 
 export default angular.module('campusMap', [])
-	.run(templates)
 
   .component('campusMap', campusMap)
   .component('campusMapControls', campusMapControls)
@@ -21,4 +20,8 @@ export default angular.module('campusMap', [])
   .directive('filterBuilder', filterBuilder)
   .directive('filterInput', filterInput)
 
-  .constant('MAP_DEFAULTS', MAP_DEFAULTS);
+  .constant('MAP_DEFAULTS', MAP_DEFAULTS)
+
+	.run(templates)
+
+	.name;
