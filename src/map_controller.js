@@ -127,10 +127,6 @@ class MapCtrl {
 	 * memory leaks if left attached).
 	 */
 	$onDestroy() {
-    this.getMap().then(instance => {
-			Object.keys(this.listeners).forEach(event => instance.data.removeListener(event, this.listeners[event])&&console.log('map listener removed!'));
-			// this.mapListeners.forEach(listener => google.maps.event.removeListener(listener)&&console.log('map listener removed!'));
-		});
 		google.maps.event.clearInstanceListeners(this.map.data);
 	}
 

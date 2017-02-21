@@ -6,11 +6,17 @@ import filterInput from './filter/filter-input_directive';
 
 import MAP_DEFAULTS from './map_constant';
 
-// development only
-//
 import templates from './_templates';
-//
-// ----------------
+
+/**
+ * Removes default injection of "Roboto" font by Google Maps.
+ */
+const head = document.getElementsByTagName('head')[0];
+const insertBefore = head.insertBefore;
+head.insertBefore = (newElement, referenceElement) =>
+	(newElement.href && newElement.href.indexOf('https://fonts.googleapis.com/css?family=Roboto') === 0) ?
+    console.info('Prevented Roboto from loading!') :
+  	insertBefore.call(head, newElement, referenceElement);
 
 export default angular.module('campusMap', [])
 

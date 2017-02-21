@@ -86,13 +86,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	//
-	// ----------------
+	/**
+	 * Removes default injection of "Roboto" font by Google Maps.
+	 */
+	var head = document.getElementsByTagName('head')[0];
+	var insertBefore = head.insertBefore;
+	head.insertBefore = function (newElement, referenceElement) {
+	  return newElement.href && newElement.href.indexOf('https://fonts.googleapis.com/css?family=Roboto') === 0 ? console.info('Prevented Roboto from loading!') : insertBefore.call(head, newElement, referenceElement);
+	};
 	
 	exports.default = angular.module('campusMap', []).component('campusMap', _map_component2.default).component('campusMapControls', _mapControls_component2.default).directive('filterBuilder', _filterBuilder_directive2.default).directive('filterInput', _filterInput_directive2.default).constant('MAP_DEFAULTS', _map_constant2.default).run(_templates2.default).name;
-	
-	// development only
-	//
 
 /***/ },
 /* 1 */
@@ -295,14 +298,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: '$onDestroy',
 			value: function $onDestroy() {
-				var _this2 = this;
-	
-				this.getMap().then(function (instance) {
-					Object.keys(_this2.listeners).forEach(function (event) {
-						return instance.data.removeListener(event, _this2.listeners[event]) && console.log('map listener removed!');
-					});
-					// this.mapListeners.forEach(listener => google.maps.event.removeListener(listener)&&console.log('map listener removed!'));
-				});
 				google.maps.event.clearInstanceListeners(this.map.data);
 			}
 	
@@ -318,13 +313,13 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'updateMapData',
 			value: function updateMapData(newVal) {
-				var _this3 = this;
+				var _this2 = this;
 	
 				console.log('updating map data...', newVal);
 				return this.clearMapData().then(function (map) {
 					if (newVal.collection.features.length && newVal.category.length) {
 						map.data.addGeoJson(newVal.collection);
-						_this3.fitBounds(map);
+						_this2.fitBounds(map);
 						console.log('map data updated!');
 					}
 				});
@@ -413,7 +408,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'showToast',
 			value: function showToast(feature) {
-				var _this4 = this;
+				var _this3 = this;
 	
 				var featureName = feature.getProperty('name');
 				if (!this.toastActive) {
@@ -423,7 +418,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				} else {
 					this._$timeout.cancel(this.toastCanceler);
 					this._$timeout(function () {
-						_this4._$mdToast.updateTextContent(featureName);
+						_this3._$mdToast.updateTextContent(featureName);
 					});
 				}
 			}
@@ -442,11 +437,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'hideToast',
 			value: function hideToast() {
-				var _this5 = this;
+				var _this4 = this;
 	
 				return this._$timeout(function () {
-					_this5._$mdToast.hide(_this5.toast);
-					_this5.toastActive = false;
+					_this4._$mdToast.hide(_this4.toast);
+					_this4.toastActive = false;
 				}, 3000);
 			}
 	
@@ -461,7 +456,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'processBounds',
 			value: function processBounds(geometry, callback, thisArg) {
-				var _this6 = this;
+				var _this5 = this;
 	
 				if (geometry instanceof google.maps.LatLng) {
 					callback.call(thisArg, geometry);
@@ -469,7 +464,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					callback.call(thisArg, geometry.get());
 				} else {
 					geometry.getArray().forEach(function (g) {
-						_this6.processBounds(g, callback, thisArg);
+						_this5.processBounds(g, callback, thisArg);
 					});
 				}
 			}
@@ -481,11 +476,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'fitBounds',
 			value: function fitBounds(map) {
-				var _this7 = this;
+				var _this6 = this;
 	
 				var bounds = new google.maps.LatLngBounds();
 				map.data.forEach(function (feature) {
-					_this7.processBounds(feature.getGeometry(), bounds.extend, bounds);
+					_this6.processBounds(feature.getGeometry(), bounds.extend, bounds);
 				});
 				map.fitBounds(bounds);
 			}
