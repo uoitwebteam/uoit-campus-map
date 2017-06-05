@@ -1,4 +1,4 @@
-import FilterBuilderCtrl from "./filter-builder_controller.js";
+import controller from "./filter-builder_controller.js";
 
 function filterBuilder() {
 	return {
@@ -15,7 +15,7 @@ function filterBuilder() {
 		},
 		transclude: true,
 		bindToController: true,
-		controller: FilterBuilderCtrl
+		controller
 	};
 }
 

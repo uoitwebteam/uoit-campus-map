@@ -1,4 +1,4 @@
-import MapControlsCtrl from './map-controls_controller.js'
+import controller from './map-controls_controller.js'
 import './map-controls.scss';
 
 const campusMapControls = {
@@ -7,7 +7,7 @@ const campusMapControls = {
     MapCtrl: '^campusMap'
   },
   templateUrl: 'controls/_map-controls.html',
-  controller: MapControlsCtrl
+  controller
 }
 
 export default campusMapControls;

@@ -1,4 +1,4 @@
-import MapDetailCtrl from './detail/map-detail_controller.js';
+import controller from './detail/map-detail_controller.js';
 
 /**
  * The `MapCtrl` is the lead orchestrator of the component: it wraps the
@@ -189,9 +189,9 @@ class MapCtrl {
 			.withAnimation(this._$mdPanel.animation.SCALE);
 
 	  return this._$mdPanel.open({
-	    attachTo: angular.element(document.body),
-	    controller: MapDetailCtrl,
+	    controller,
 	    controllerAs: 'ctrl',
+	    attachTo: angular.element(document.body),
 	    templateUrl: 'detail/_map-detail.html',
 	    hasBackdrop: true,
 	    panelClass: 'map-detail',

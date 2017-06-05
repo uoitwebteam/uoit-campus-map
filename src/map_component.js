@@ -1,4 +1,4 @@
-import MapCtrl from './map_controller.js'
+import controller from './map_controller.js'
 import './map.scss';
 
 const campusMap = {
@@ -14,7 +14,7 @@ const campusMap = {
   transclude:  {
     controls: 'campusMapControls'
   },
-  controller: MapCtrl
+  controller
 }
 
 export default campusMap;
