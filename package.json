@@ -2,7 +2,7 @@
   "name": "uoit-campus-map",
   "version": "0.0.1",
   "description": "Campus map components for UOIT using Google Maps and Angular",
-  "main": "dist/uoit-campus-map.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "gulp",
     "lint": "gulp lint",
@@ -59,6 +59,7 @@
   },
   "babelBoilerplateOptions": {
     "entryFileName": "index.js",
+    "distFileName": "dist/uoit-campus-map.js",
     "mainVarName": "campusMap"
   }
 }
