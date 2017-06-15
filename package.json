@@ -9,6 +9,7 @@
     "test-browser": "gulp test-browser",
     "watch": "gulp watch",
     "build": "gulp build",
+    "start": "gulp watch & python -m SimpleHTTPServer 4200 | echo 'Server listening on port 4200'",
     "coverage": "gulp coverage"
   },
   "repository": {

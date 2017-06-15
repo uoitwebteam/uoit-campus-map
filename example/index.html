@@ -33,7 +33,7 @@
   </campus-map>
 
   <!-- Google Maps -->
-  <script src="https://maps.googleapis.com/maps/api/js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1jk1XLwGumgFRELljo2fjUeXNh3Oh-Ls"></script>
   <!-- Angular Material requires Angular.js Libraries -->
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-resource.js"></script>
@@ -50,24 +50,25 @@
   <!-- Mock resources and controller -->
   <script type="text/javascript">
     angular.module('app', ['ngMaterial', 'ngResource', 'ngMap', 'ui.router', 'campusMap'])
-    	.factory('$mapApi', ['$resource', function($resource){
+    	.constant('API_URL', 'http://localhost:3000/api/v1') // https://virtualtour.uoit.ca/api/v1
+    	.factory('$mapApi', ['$resource', 'API_URL', function($resource, API_URL){
     		return {
-			  	category: $resource('http://localhost:3000/api/v1/categories/:id'),
-			  	feature: $resource('http://localhost:3000/api/v1/features/:id'),
-			  	collection: $resource('http://localhost:3000/api/v1/feature-collections/:id')
+			  	category: $resource(API_URL + '/categories/:id'),
+			  	feature: $resource(API_URL + '/features/:id'),
+			  	collection: $resource(API_URL + '/feature-collections/:id')
 			  };
     	}])
-    	.factory('$tourApi', ['$resource', function($resource){
+    	.factory('$tourApi', ['$resource', 'API_URL', function($resource, API_URL){
     		return {
-			  	location: $resource('http://localhost:3000/api/v1/locations/:id'),
-			  	building: $resource('http://localhost:3000/api/v1/buildings/:id'),
-			  	scene: $resource('http://localhost:3000/api/v1/scenes/:id', null, {
+			  	location: $resource(API_URL + '/locations/:id'),
+			  	building: $resource(API_URL + '/buildings/:id'),
+			  	scene: $resource(API_URL + '/scenes/:id', null, {
 						'update': { method: 'PATCH' }
 				  }),
-				  preload: $resource('http://localhost:3000/api/v1/scenes/:id/preload', null, {
+				  preload: $resource(API_URL + '/scenes/:id/preload', null, {
 				  	'get': {method:'GET', isArray:true}
 				  }),
-			  	entity: $resource('http://localhost:3000/api/v1/entities/:id')
+			  	entity: $resource(API_URL + '/entities/:id')
 			  };
     	}])
     	.controller('mainCtrl', function() {
