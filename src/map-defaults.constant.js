@@ -86,8 +86,8 @@ export const MAP_DEFAULTS = {
     fillOpacity: 0.8,
     rotation: 0,
     scale: 1.5,
-    anchor: new google.maps.Point(12, 12),
-    size: new google.maps.Size(24, 24)
+    // anchor: new google.maps.Point(12, 12),
+    // size: new google.maps.Size(24, 24)
   },
   geometryStyles: {
     strokeColor: '#003C71',

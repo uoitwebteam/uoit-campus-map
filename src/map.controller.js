@@ -39,7 +39,6 @@ export class MapCtrl {
      * @type {Function}
      */
     this.$campusMap = $campusMap;
-    this.getMap = $campusMap.getMap.bind($campusMap);
     /**
      * Property to store the loaded map instance.
      * @type {null|Object}
@@ -67,9 +66,11 @@ export class MapCtrl {
      */
     this.categories = {};
   }
-  $onInit() {
-    this.getMap().then(instance => {
+  async $onInit() {
+    	const google = await this.$campusMap.getGoogle();
+    	const instance = await this.$campusMap.getMap();
     	this.map = instance;
+	    console.log('MAP INSTANCE:', this.map);
 
     	/*
     		This is a stupid hack that makes the map fill space by force.
@@ -104,7 +105,6 @@ export class MapCtrl {
       }
       
       Object.keys(this.listeners).forEach(event => instance.data.addListener(event, this.listeners[event]));
-    });
 	}
 
 	$onChanges({ mapData }) {
@@ -140,30 +140,28 @@ export class MapCtrl {
 	 * 
 	 * @param  {Object} newVal New incoming map data
 	 */
-	updateMapData(newVal) {
+	async updateMapData(newVal) {
 		console.log('updating map data...', newVal);
-		return this.clearMapData().then(map => {
-			if (newVal.collection.features.length && newVal.category.length) {
-	      map.data.addGeoJson(newVal.collection);
-	      this.fitBounds(map);
-				console.log('map data updated!');
-			}
-		});
+		const instance = await this.clearMapData();
+		if (newVal.collection.features.length && newVal.category.length) {
+      instance.data.addGeoJson(newVal.collection);
+      this.fitBounds(instance);
+			console.log('map data updated!');
+		}
 	}
 	
 	/**
 	 * Removes all features from the map by looping over feature
 	 * data objects and calling their `map.remove()` on them.
 	 */
-	clearMapData() {
+	async clearMapData() {
 		console.log('clearing map data...');
-		return this.getMap().then(map => {
-			map.data.forEach(feature => {
-				map.data.remove(feature);
-			});
-			console.log('map data cleared!');
-			return map;
+  	const instance = await this.$campusMap.getMap();
+		instance.data.forEach(feature => {
+			instance.data.remove(feature);
 		});
+		console.log('map data cleared!');
+		return instance;
 	}
 
 	/**

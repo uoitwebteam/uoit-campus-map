@@ -11,40 +11,52 @@ export class CampusMapService {
     this.apiUrl = API_URL;
     this.apiKey = API_KEY;
 
+    this.mapStyles = MAP_DEFAULTS.mapStyles;
+    this.mapType = MAP_DEFAULTS.mapType;
+
     this._mapInstance = null;
   }
 
-  getMap() {
-    return (async () => {
-      if (this._mapInstance) {
-        return this._mapInstance;
-      } else {
-        const google = await this.getGoogle();
-        const mapInstance = this.$document[0].getElementById('map-instance');
-        this._mapInstance = new google.maps.Map(mapInstance);
-        return this._mapInstance;
+  async getMap() {
+    if (this._mapInstance) {
+      return this._mapInstance;
+    } else {
+      const google = await this.getGoogle();
+      const mapOptions = {
+        center: await this.newLatLng({ lat: 43.9443802, lng: -78.8975857 }),
+        zoom: 17,
+        styles: this.mapStyles,
+        // mapTypeId: this.mapType,
+        disableDefaultUI: true,
+        tilt: 45,
+        heading: 0
       }
-    })();
+      const mapInstance = this.$document[0].getElementById('map-instance');
+      this._mapInstance = new google.maps.Map(mapInstance, mapOptions);
+      return this._mapInstance;
+    }
+  }
+
+  async newLatLng(coords) {
+    const google = await this.getGoogle();
+    const latLng = new google.maps.LatLng(coords)
+    return latLng;
   }
 
   getGoogle() {
-    const deferred = this.$q.defer();
-
-    if (window.google) {
-      deferred.resolve(window.google);
-    } else {
-      const head = this.$document.find('head')[0];
-      window.gmapCallback = () => {
-        console.log('GMAP LOADED!', window.google);
-        deferred.resolve(window.google);
+    return new Promise((resolve, reject) => {
+      if (window.google) {
+        resolve(window.google);
+      } else {
+        window.gmapCallback = () => {
+          console.log('GMAP LOADED!', window.google);
+          resolve(window.google);
+        }
+        const script = document.createElement('script');
+        script.src = `${this.apiUrl}?key=${this.apiKey}&callback=gmapCallback`;
+        script.onerror = reject;
+        this.$document.find('head')[0].appendChild(script);
       }
-      let s;
-      s = document.createElement('script');
-      s.src = `${this.apiUrl}?key=${this.apiKey}&callback=gmapCallback`;
-      // s.onload = resolve;
-      s.onerror = deferred.reject;
-      head.appendChild(s);
-    }
-    return deferred.promise;
+    });
   }
 }
