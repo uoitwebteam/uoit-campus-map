@@ -31,7 +31,7 @@ build/Release
 node_modules
 
 # Temporary files
-tmp
+.tmp
 
 # Distribution files
 dist
