@@ -1,4 +1,6 @@
 export const MAP_DEFAULTS = {
+	API_URL: 'https://maps.googleapis.com/maps/api/js',
+	API_KEY: 'AIzaSyC1jk1XLwGumgFRELljo2fjUeXNh3Oh-Ls',
   mapType: 'ROADMAP',
   mapStyles: [
   {

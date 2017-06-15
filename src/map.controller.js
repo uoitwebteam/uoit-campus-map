@@ -10,7 +10,7 @@ export class MapCtrl {
 	static get $inject() {
 		return [
 			'$timeout', '$scope', '$window', // angular core
-			'NgMap', // external deps
+			'$campusMap', // services
 			'$mdToast', '$mdPanel', // md deps
 			'MAP_DEFAULTS' // constants
 		];
@@ -21,13 +21,13 @@ export class MapCtrl {
 	 * @param  {Object} $timeout     Angular's setTimeout wrapper
 	 * @param  {Object} $scope       The current scope
 	 * @param  {Object} $window      Angular's window wrapper
-	 * @param  {Object} NgMap        Angular Google Maps
+	 * @param  {Object} $campusMap   CampusMapService
 	 * @param  {Object} $mdToast     Material toast service
 	 * @param  {Object} $mdPanel     Material panel service
 	 * @param  {Object} MAP_SETTINGS Constant for map config object
 	 * @param  {Object} MAP_ICONS    Constant for map icon definitions
 	 */
-	constructor($timeout, $scope, $window, NgMap, $mdToast, $mdPanel, MAP_DEFAULTS) {
+	constructor($timeout, $scope, $window, $campusMap, $mdToast, $mdPanel, MAP_DEFAULTS) {
     this._$timeout = $timeout;
     this._$scope = $scope;
     this._$window = $window;
@@ -38,7 +38,8 @@ export class MapCtrl {
      * Function for resolving map instance from promise.
      * @type {Function}
      */
-    this.getMap = NgMap.getMap;
+    this.$campusMap = $campusMap;
+    this.getMap = $campusMap.getMap.bind($campusMap);
     /**
      * Property to store the loaded map instance.
      * @type {null|Object}
