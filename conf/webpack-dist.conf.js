@@ -70,7 +70,7 @@ module.exports = {
     filename: '[name]-[hash].js'
   },
   entry: {
-    app: `./${conf.path.src('index')}`,
+    app: ['babel-polyfill', `./${conf.path.src('index')}`],
     vendor: Object.keys(pkg.dependencies)
   }
 };
