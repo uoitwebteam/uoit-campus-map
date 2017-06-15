@@ -1,4 +1,5 @@
-import { MapCtrl as controller } from './map_controller.js'
+import { MapCtrl as controller } from './map.controller.js'
+import template from './map.component.html';
 import './map.scss';
 
 export const CampusMapComponent = {
@@ -10,9 +11,9 @@ export const CampusMapComponent = {
     // building: '<?',
     // feature: '<?'
   },
-  templateUrl: '_map.html',
   transclude:  {
     controls: 'campusMapControls'
   },
+  template,
   controller
 }

@@ -1,4 +1,5 @@
-import { MapDetailCtrl as controller } from './detail/map-detail_controller.js';
+import { MapDetailCtrl as controller } from './detail/map-detail.controller.js';
+import template from './detail/map-detail.component.html';
 
 /**
  * The `MapCtrl` is the lead orchestrator of the component: it wraps the
@@ -192,7 +193,7 @@ export class MapCtrl {
 	    controller,
 	    controllerAs: 'ctrl',
 	    attachTo: angular.element(document.body),
-	    templateUrl: 'detail/_map-detail.html',
+	    template,
 	    hasBackdrop: true,
 	    panelClass: 'map-detail',
 	    locals: {

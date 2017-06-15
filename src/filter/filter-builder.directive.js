@@ -1,4 +1,4 @@
-import { FilterBuilderCtrl as controller } from "./filter-builder_controller.js";
+import { FilterBuilderCtrl as controller } from "./filter-builder.controller.js";
 
 export const FilterBuilderDirective = () => {
 	return {

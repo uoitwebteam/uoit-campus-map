@@ -1,12 +1,10 @@
-import { CampusMapComponent } from './map_component'
-import { CampusMapControlsComponent } from './controls/map-controls_component';
+import { CampusMapComponent } from './map.component'
+import { CampusMapControlsComponent } from './controls/map-controls.component';
 
-import { FilterBuilderDirective } from './filter/filter-builder_directive';
-import { FilterInputDirective } from './filter/filter-input_directive';
+import { FilterBuilderDirective } from './filter/filter-builder.directive';
+import { FilterInputDirective } from './filter/filter-input.directive';
 
-import { MAP_DEFAULTS } from './map_constant';
-
-import { TemplateRun } from './_templates';
+import { MAP_DEFAULTS } from './map-defaults.constant';
 
 /**
  * Removes default injection of "Roboto" font by Google Maps.
@@ -27,7 +25,5 @@ export default angular.module('campusMap', [])
   .directive('filterInput', FilterInputDirective)
 
   .constant('MAP_DEFAULTS', MAP_DEFAULTS)
-
-	.run(TemplateRun)
 
 	.name;
