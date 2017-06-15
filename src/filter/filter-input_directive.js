@@ -10,14 +10,14 @@ function getFilter(filterName) {
       null;
 }
 
-const filterInput = ['$parse', function filterInput($parse) {
+export const FilterInputDirective = ['$parse', ($parse) => {
 	return {
 		restrict: 'A',
 		require: {
 			NgModelCtrl: 'ngModel',
 			FilterBuilderCtrl: '^filterBuilder'
 		},
-		link: function FilterInputLink(scope, el, attrs, ctrl) {
+		link(scope, el, attrs, ctrl) {
 			if (!attrs.name) throw new Error('A filter control is missing its \'name\' attribute!');
 			const { NgModelCtrl, FilterBuilderCtrl } = ctrl;
 			NgModelCtrl.getFilter = getFilter;
@@ -28,5 +28,3 @@ const filterInput = ['$parse', function filterInput($parse) {
 		}
 	};
 }];
-
-export default filterInput;

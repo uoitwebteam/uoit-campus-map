@@ -1,4 +1,4 @@
-const MAP_DEFAULTS = {
+export const MAP_DEFAULTS = {
   mapType: 'ROADMAP',
   mapStyles: [
   {
@@ -103,5 +103,3 @@ const MAP_DEFAULTS = {
     strokeOpacity: 0.7
   }
 }
-
-  export default MAP_DEFAULTS;

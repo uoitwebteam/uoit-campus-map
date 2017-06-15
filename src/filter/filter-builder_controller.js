@@ -12,7 +12,7 @@
  * data – it is purely responsible for providing the filter to make
  * the server calls with.
  */
-class FilterBuilderCtrl {
+export class FilterBuilderCtrl {
   static get $inject() {
     return ['$scope', '$attrs', '$parse'];
   }
@@ -188,5 +188,3 @@ class FilterBuilderCtrl {
     return array.filter(v => v != null);
   }
 }
-
-export default FilterBuilderCtrl;

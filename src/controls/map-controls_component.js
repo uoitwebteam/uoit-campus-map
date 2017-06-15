@@ -1,7 +1,7 @@
-import controller from './map-controls_controller.js'
+import { MapControlsCtrl as controller } from './map-controls_controller.js'
 import './map-controls.scss';
 
-const campusMapControls = {
+export const CampusMapControlsComponent = {
   require: {
     $ngModel: 'ngModel',
     MapCtrl: '^campusMap'
@@ -9,5 +9,3 @@ const campusMapControls = {
   templateUrl: 'controls/_map-controls.html',
   controller
 }
-
-export default campusMapControls;

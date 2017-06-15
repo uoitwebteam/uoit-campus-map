@@ -21,7 +21,7 @@ import './map-detail.scss';
  * this allows the context of the action to come from outside the component (i.e.
  * the codes can be used to transition states in the application.)
  */
-class MapDetailCtrl {
+export class MapDetailCtrl {
 	static get $inject() {
 		return ['$sce'];
 	}
@@ -104,5 +104,3 @@ class MapDetailCtrl {
 		return this.mdPanelRef.close();
 	}
 }
-
-export default MapDetailCtrl;

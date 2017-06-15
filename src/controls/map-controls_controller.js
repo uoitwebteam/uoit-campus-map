@@ -14,7 +14,7 @@
  * - 3 methods for updating dropdown contents
  * - utility methods for setting active collection and showing all collections
  */
-class MapControlsCtrl {
+export class MapControlsCtrl {
   static get $inject(){
     return ['$mapApi', '$tourApi'];
   }
@@ -264,5 +264,3 @@ class MapControlsCtrl {
     }
   }
 }
-
-export default MapControlsCtrl;

@@ -1,7 +1,7 @@
-import controller from './map_controller.js'
+import { MapCtrl as controller } from './map_controller.js'
 import './map.scss';
 
-const campusMap = {
+export const CampusMapComponent = {
   // transclude: true,
   bindings: {
     onGotoBldg: '&?',
@@ -16,5 +16,3 @@ const campusMap = {
   },
   controller
 }
-
-export default campusMap;

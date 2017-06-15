@@ -1,11 +1,11 @@
-import controller from './detail/map-detail_controller.js';
+import { MapDetailCtrl as controller } from './detail/map-detail_controller.js';
 
 /**
  * The `MapCtrl` is the lead orchestrator of the component: it wraps the
  * `NgMap` directive's methods and provides its own for interfacing with
  * the map's controls, generating dialogs, and re-rendering the map elements.
  */
-class MapCtrl {
+export class MapCtrl {
 	static get $inject() {
 		return [
 			'$timeout', '$scope', '$window', // angular core
@@ -300,5 +300,3 @@ class MapCtrl {
 		}
 	}
 }
-
-export default MapCtrl;

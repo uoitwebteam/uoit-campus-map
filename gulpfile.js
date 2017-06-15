@@ -56,12 +56,9 @@ function views() {
   // Process any other view files from app/views
   return gulp.src('src/**/*.html')
     .pipe($.angularTemplatecache('_templates.js', {
-   //    transformUrl: function(url) {
-		 //    return url.replace(/\_/, 'sidebar/map/_')
-			// },
-			templateHeader: `const templates = ['$templateCache', function($templateCache) {`,
+			templateHeader: `export const TemplateRun = ['$templateCache', ($templateCache) => {`,
 			templateBody: `$templateCache.put('<%= url %>','<%= contents %>')`,
-			templateFooter: `}]; export default templates;`
+			templateFooter: `}];\n`
     }))
     .pipe(gulp.dest('src'));
 }

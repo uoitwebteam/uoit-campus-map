@@ -1,6 +1,6 @@
-import controller from "./filter-builder_controller.js";
+import { FilterBuilderCtrl as controller } from "./filter-builder_controller.js";
 
-function filterBuilder() {
+export const FilterBuilderDirective = () => {
 	return {
 		restrict: 'E',
 		template: `<form novalidate
@@ -18,5 +18,3 @@ function filterBuilder() {
 		controller
 	};
 }
-
-export default filterBuilder;
