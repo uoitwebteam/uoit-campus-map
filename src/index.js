@@ -3,6 +3,7 @@ import { CampusMapUiService } from './map/map-ui.service';
 
 import { CampusMapComponent } from './map/map.component'
 import { CampusMapControlsComponent } from './map/map-controls/map-controls.component';
+// import { FilterBuilderComponent } from './filter/filter-builder.component';
 
 import { FilterBuilderDirective } from './filter/filter-builder.directive';
 import { FilterInputDirective } from './filter/filter-input.directive';
@@ -26,6 +27,7 @@ export default angular.module('campusMap', [])
 
   .component('campusMap', CampusMapComponent)
   .component('campusMapControls', CampusMapControlsComponent)
+  // .component('filterBuilder', FilterBuilderComponent)
 
   .directive('filterBuilder', FilterBuilderDirective)
   .directive('filterInput', FilterInputDirective)
