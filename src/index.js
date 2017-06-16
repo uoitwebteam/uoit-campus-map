@@ -1,13 +1,13 @@
-import { CampusMapService } from './map.service';
-import { CampusMapUiService } from './map-ui.service';
+import { CampusMapService } from './map/map.service';
+import { CampusMapUiService } from './map/map-ui.service';
 
-import { CampusMapComponent } from './map.component'
-import { CampusMapControlsComponent } from './controls/map-controls.component';
+import { CampusMapComponent } from './map/map.component'
+import { CampusMapControlsComponent } from './map/map-controls/map-controls.component';
 
 import { FilterBuilderDirective } from './filter/filter-builder.directive';
 import { FilterInputDirective } from './filter/filter-input.directive';
 
-import { MAP_DEFAULTS } from './map-defaults.constant';
+import { MAP_DEFAULTS } from './map/map-defaults.constant';
 
 /**
  * Removes default injection of "Roboto" font by Google Maps.

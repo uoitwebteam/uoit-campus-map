@@ -1,5 +1,5 @@
-import { MapDetailCtrl as controller } from './detail/map-detail.controller.js';
-import template from './detail/map-detail.component.html';
+import { MapDetailCtrl as controller } from './map-detail/map-detail.controller.js';
+import template from './map-detail/map-detail.component.html';
 
 /**
  * The `MapCtrl` is the lead orchestrator of the component: it wraps the
@@ -78,7 +78,7 @@ export class MapCtrl {
       Object.keys(this.listeners).forEach(event => instance.data.addListener(event, this.listeners[event]));
 	}
 
-	$onChanges({ mapData }) {
+	async $onChanges({ mapData }) {
 		if (mapData.isFirstChange()) return;	
 		console.log('map component detected external changes:', mapData);
 		const	{
@@ -86,7 +86,7 @@ export class MapCtrl {
 		} = mapData;
 		if (location && collection) {
     	this.location = location;
-			this.updateMapData({
+			await this.updateMapData({
 				location, category, collection
 			});
 		}
