@@ -49,15 +49,22 @@ export class CampusMapUiService {
   }
 
   async updateStyles() {
+    const google = await this.$campusMap.getGoogle();
   	const instance = await this.$campusMap.getMap();
-  	  instance.data.setStyle(
-  	  	feature => Object.assign(
-  	      {},
-  	      this.geometryStyles,
-  	      { icon: this.iconStyles, title: feature.getProperty('name') },
-      		this.categories[feature.getProperty('category')]
-      	)
-  	  );
+		instance.data.setStyle(
+			feature => Object.assign(
+		    {},
+		    this.geometryStyles,
+		    { icon: this.iconStyles, title: feature.getProperty('name') },
+				this.categories[feature.getProperty('category')]
+			)
+		);
+  	/*
+  		This is a stupid hack that makes the map fill space by force.
+  		Best not used whenever possible; this isn't one of those times.
+  	 */
+    // angular.element(this._$window).triggerHandler('resize');
+    google.maps.event.trigger(instance, 'resize');
   }
 
   async setFeatureStyle(feature) {

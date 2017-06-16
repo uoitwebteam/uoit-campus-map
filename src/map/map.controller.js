@@ -37,23 +37,9 @@ export class MapCtrl {
 
     this.$campusMap = $campusMap;
     this.$mapInterface = $mapInterface;
-    /**
-     * Property to store the loaded map instance.
-     * @type {null|Object}
-     */
-    this.map = null;
   }
   async $onInit() {
-    	const google = await this.$campusMap.getGoogle();
     	const instance = await this.$campusMap.getMap();
-	    console.log('MAP INSTANCE:', instance);
-
-    	/*
-    		This is a stupid hack that makes the map fill space by force.
-    		Best not used whenever possible; this isn't one of those times.
-    	 */
-      // angular.element(this._$window).triggerHandler('resize');
-      google.maps.event.trigger(instance, 'resize');
 
       this.$mapInterface.updateStyles();
 
@@ -100,7 +86,9 @@ export class MapCtrl {
 	 * memory leaks if left attached).
 	 */
 	$onDestroy() {
-		google.maps.event.clearInstanceListeners(this.map.data);
+  	const google = await this.$campusMap.getGoogle();
+  	const instance = await this.$campusMap.getMap();
+		google.maps.event.clearInstanceListeners(instance.data);
 	}
 
 	/**
