@@ -69,8 +69,7 @@ export class MapCtrl {
   async $onInit() {
     	const google = await this.$campusMap.getGoogle();
     	const instance = await this.$campusMap.getMap();
-    	this.map = instance;
-	    console.log('MAP INSTANCE:', this.map);
+	    console.log('MAP INSTANCE:', instance);
 
     	/*
     		This is a stupid hack that makes the map fill space by force.
@@ -79,12 +78,7 @@ export class MapCtrl {
       // angular.element(this._$window).triggerHandler('resize');
       google.maps.event.trigger(instance, 'resize');
 
-      instance.data.setStyle(feature => Object.assign(
-	      {},
-	      this._defaults.geometryStyles,
-	      { icon: this._defaults.iconStyles, title: feature.getProperty('name') },
-    		this.categories[feature.getProperty('category')]
-    	));
+      this.$campusMap.updateStyles();
 
 	    /**
 	     * Property to store map event listeners for later deregistration.

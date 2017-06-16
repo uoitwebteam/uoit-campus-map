@@ -16,7 +16,7 @@
  */
 export class MapControlsCtrl {
   static get $inject(){
-    return ['$mapApi', '$tourApi'];
+    return ['$mapApi', '$tourApi', '$campusMap'];
   }
 
   /**
@@ -26,11 +26,12 @@ export class MapControlsCtrl {
    * @param  {Object} $tourApi Tour $resource service
    * @param  {Object} $window  Angular's window wrapper
    */
-  constructor($mapApi, $tourApi) {
+  constructor($mapApi, $tourApi, $campusMap) {
     this._FeatureResource = $mapApi.feature;
     this._CollectionResource = $mapApi.collection;
     this._CategoryResource = $mapApi.category;
     this._LocationResource = $tourApi.location;
+    this.$campusMap = $campusMap;
 
     /**
      * Holds the user's selected location (by ID).
@@ -59,17 +60,11 @@ export class MapControlsCtrl {
         return this.loadCategories();
       })
       .then(categories => {
-      	categories.forEach(category => {
-      		const {
-      			icon: {
-      				anchor: { left, top },
-      				size: { width, height }
-      			}
-      		} = category;
-      		category.icon.anchor = new google.maps.Point(left, top);
-      		category.icon.size = new google.maps.Point(width, height);
-      		this.MapCtrl.categories[category._id] = category;
-      	});
+      	categories.forEach(
+      		async category => {
+		      	await this.$campusMap.addCategory(category);
+	      	}
+      	);
         this.category = [...categories.map(category => category._id)];
         return this.loadCollections();
       })
