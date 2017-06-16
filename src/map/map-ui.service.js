@@ -27,8 +27,6 @@ export class CampusMapUiService {
     this.geometryStyles = MAP_DEFAULTS.geometryStyles;
     this.hoverStyles = MAP_DEFAULTS.hoverStyles;
     this.iconStyles = MAP_DEFAULTS.iconStyles;
-    this.mapStyles = MAP_DEFAULTS.mapStyles;
-    this.mapType = MAP_DEFAULTS.mapType;
 
     this.categories = {};
   }

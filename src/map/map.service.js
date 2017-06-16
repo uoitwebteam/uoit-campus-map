@@ -35,7 +35,6 @@ export class CampusMapService {
         center: new google.maps.LatLng({ lat: 43.9443802, lng: -78.8975857 }),
         zoom: 17,
         styles: this.MAP_DEFAULTS.mapStyles,
-        // mapTypeId: this.mapType,
         disableDefaultUI: true,
         tilt: 45,
         heading: 0

@@ -85,7 +85,7 @@ export class MapCtrl {
 	 * a context that Angular is aware of (and therefore will lead to
 	 * memory leaks if left attached).
 	 */
-	$onDestroy() {
+	async $onDestroy() {
   	const google = await this.$campusMap.getGoogle();
   	const instance = await this.$campusMap.getMap();
 		google.maps.event.clearInstanceListeners(instance.data);

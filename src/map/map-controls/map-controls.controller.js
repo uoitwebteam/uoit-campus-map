@@ -4,7 +4,7 @@
  * 
  * It is not responsible for much actual map logic, but instead for
  * accepting user input and turning it into queries whose results
- * are assigned back to the controller. The `MapCtrl` takes care of
+ * are assigned back to the controller. The services take care of
  * turning the returned values into map-usable data, whereas this controller
  * simply makes it available.
  *
@@ -61,9 +61,7 @@ export class MapControlsCtrl {
       })
       .then(categories => {
       	categories.forEach(
-      		async category => {
-		      	await this.$mapInterface.addCategory(category);
-	      	}
+      		category => this.$mapInterface.addCategory(category)
       	);
         this.category = [...categories.map(category => category._id)];
         return this.loadCollections();
