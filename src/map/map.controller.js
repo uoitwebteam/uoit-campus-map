@@ -112,10 +112,10 @@ export class MapCtrl {
 	 * @param  {Object} newVal New incoming map data
 	 */
 	async updateMapData(newVal) {
-		console.log('updating map data...', newVal);
 		await this.clearMapData();
+		console.log('updating map data...', newVal);
 		if (newVal.collection.features.length && newVal.category.length) {
-      this.$campusMap.addData(newVal.collection);
+      await this.$campusMap.addData(newVal.collection);
 			console.log('map data updated!');
 		}
 	}
@@ -126,12 +126,8 @@ export class MapCtrl {
 	 */
 	async clearMapData() {
 		console.log('clearing map data...');
-  	const instance = await this.$campusMap.getMap();
-		instance.data.forEach(feature => {
-			instance.data.remove(feature);
-		});
+    await this.$campusMap.clearData();
 		console.log('map data cleared!');
-		return instance;
 	}
 
 	/**

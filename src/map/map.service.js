@@ -32,7 +32,7 @@ export class CampusMapService {
     } else {
       const google = await this.getGoogle();
       const mapOptions = {
-        center: await this.newLatLng({ lat: 43.9443802, lng: -78.8975857 }),
+        center: new google.maps.LatLng({ lat: 43.9443802, lng: -78.8975857 }),
         zoom: 17,
         styles: this.MAP_DEFAULTS.mapStyles,
         // mapTypeId: this.mapType,
@@ -46,16 +46,17 @@ export class CampusMapService {
     }
   }
 
-  async newLatLng(coords) {
-    const google = await this.getGoogle();
-    const latLng = new google.maps.LatLng(coords)
-    return latLng;
-  }
-
   async addData(collection) {
     const instance = await this.getMap();
-		instance.data.addGeoJson(collection);
-		await this.fitBounds(instance);
+		await instance.data.addGeoJson(collection);
+		this.fitBounds(instance);
+  }
+
+  async clearData() {
+    const instance = await this.getMap();
+		await instance.data.forEach(feature => {
+			instance.data.remove(feature);
+		});
   }
 
 	/**
