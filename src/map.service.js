@@ -6,18 +6,9 @@ export class CampusMapService {
   constructor($document, $q, MAP_DEFAULTS) {
     this.$document = $document;
     this.$q = $q;
-
-    const { API_URL, API_KEY } = MAP_DEFAULTS;
-    this.apiUrl = API_URL;
-    this.apiKey = API_KEY;
-
-    this.geometryStyles = MAP_DEFAULTS.geometryStyles;
-    this.iconStyles = MAP_DEFAULTS.iconStyles;
-    this.mapStyles = MAP_DEFAULTS.mapStyles;
-    this.mapType = MAP_DEFAULTS.mapType;
+    this.MAP_DEFAULTS = MAP_DEFAULTS;
 
     this._mapInstance = null;
-    this.categories = {};
   }
 
   getGoogle() {
@@ -25,12 +16,10 @@ export class CampusMapService {
       if (window.google) {
         resolve(window.google);
       } else {
-        window.gmapCallback = () => {
-          console.log('GMAP LOADED!', window.google);
-          resolve(window.google);
-        }
+		   	const { API_URL, API_KEY } = this.MAP_DEFAULTS;
+        window.gmapCallback = () => resolve(window.google);
         const script = document.createElement('script');
-        script.src = `${this.apiUrl}?key=${this.apiKey}&callback=gmapCallback`;
+        script.src = `${API_URL}?key=${API_KEY}&callback=gmapCallback`;
         script.onerror = reject;
         this.$document.find('head')[0].appendChild(script);
       }
@@ -45,7 +34,7 @@ export class CampusMapService {
       const mapOptions = {
         center: await this.newLatLng({ lat: 43.9443802, lng: -78.8975857 }),
         zoom: 17,
-        styles: this.mapStyles,
+        styles: this.MAP_DEFAULTS.mapStyles,
         // mapTypeId: this.mapType,
         disableDefaultUI: true,
         tilt: 45,
@@ -61,32 +50,5 @@ export class CampusMapService {
     const google = await this.getGoogle();
     const latLng = new google.maps.LatLng(coords)
     return latLng;
-  }
-
-  async addCategory(_category) {
-    const google = await this.getGoogle();
-  	const category = Object.assign({}, _category)
-		const {
-			icon: {
-				anchor: { left, top },
-				size: { width, height }
-			}
-		} = _category;
-		category.icon.anchor = new google.maps.Point(left, top);
-		category.icon.size = new google.maps.Point(width, height);
-		this.categories[_category._id] = category;
-		console.log('Category added to CampusMapService:', category);
-  }
-
-  async updateStyles() {
-  	const instance = await this.getMap();
-  	  instance.data.setStyle(
-  	  	feature => Object.assign(
-  	      {},
-  	      this.geometryStyles,
-  	      { icon: this.iconStyles, title: feature.getProperty('name') },
-      		this.categories[feature.getProperty('category')]
-      	)
-  	  );
   }
 }

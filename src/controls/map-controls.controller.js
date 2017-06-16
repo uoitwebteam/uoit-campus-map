@@ -16,7 +16,7 @@
  */
 export class MapControlsCtrl {
   static get $inject(){
-    return ['$mapApi', '$tourApi', '$campusMap'];
+    return ['$mapApi', '$tourApi', '$mapInterface'];
   }
 
   /**
@@ -26,12 +26,12 @@ export class MapControlsCtrl {
    * @param  {Object} $tourApi Tour $resource service
    * @param  {Object} $window  Angular's window wrapper
    */
-  constructor($mapApi, $tourApi, $campusMap) {
+  constructor($mapApi, $tourApi, $mapInterface) {
     this._FeatureResource = $mapApi.feature;
     this._CollectionResource = $mapApi.collection;
     this._CategoryResource = $mapApi.category;
     this._LocationResource = $tourApi.location;
-    this.$campusMap = $campusMap;
+    this.$mapInterface = $mapInterface;
 
     /**
      * Holds the user's selected location (by ID).
@@ -62,7 +62,7 @@ export class MapControlsCtrl {
       .then(categories => {
       	categories.forEach(
       		async category => {
-		      	await this.$campusMap.addCategory(category);
+		      	await this.$mapInterface.addCategory(category);
 	      	}
       	);
         this.category = [...categories.map(category => category._id)];

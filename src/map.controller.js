@@ -10,7 +10,7 @@ export class MapCtrl {
 	static get $inject() {
 		return [
 			'$timeout', '$scope', '$window', // angular core
-			'$campusMap', // services
+			'$campusMap', '$mapInterface', // services
 			'$mdToast', '$mdPanel', // md deps
 			'MAP_DEFAULTS' // constants
 		];
@@ -27,44 +27,21 @@ export class MapCtrl {
 	 * @param  {Object} MAP_SETTINGS Constant for map config object
 	 * @param  {Object} MAP_ICONS    Constant for map icon definitions
 	 */
-	constructor($timeout, $scope, $window, $campusMap, $mdToast, $mdPanel, MAP_DEFAULTS) {
+	constructor($timeout, $scope, $window, $campusMap, $mapInterface, $mdToast, $mdPanel, MAP_DEFAULTS) {
     this._$timeout = $timeout;
     this._$scope = $scope;
     this._$window = $window;
     this._$mdToast = $mdToast;
     this._$mdPanel = $mdPanel;
     this._defaults = MAP_DEFAULTS;
-    /**
-     * Function for resolving map instance from promise.
-     * @type {Function}
-     */
+
     this.$campusMap = $campusMap;
+    this.$mapInterface = $mapInterface;
     /**
      * Property to store the loaded map instance.
      * @type {null|Object}
      */
     this.map = null;
-    /**
-     * Helper factory object for deploying simple toasts.
-     * @type {Object}
-     */
-    this.toast = $mdToast.simple();
-    /**
-     * Token to hold a toast's `$timeout`.
-     * @type {null|Promise}
-     */
-    this.toastCanceler = null;
-    /**
-     * Flag to determine whether there is already an active toast.
-     * @type {Boolean}
-     */
-    this.toastActive = false;
-    /**
-     * Object to hold map of available categories by `_id` (will be populated
-     * by `MapControlsCtrl` when categories are loaded).
-     * @type {Object}
-     */
-    this.categories = {};
   }
   async $onInit() {
     	const google = await this.$campusMap.getGoogle();
@@ -78,7 +55,7 @@ export class MapCtrl {
       // angular.element(this._$window).triggerHandler('resize');
       google.maps.event.trigger(instance, 'resize');
 
-      this.$campusMap.updateStyles();
+      this.$mapInterface.updateStyles();
 
 	    /**
 	     * Property to store map event listeners for later deregistration.
@@ -86,12 +63,12 @@ export class MapCtrl {
 	     */
       this.listeners = {
       	mouseover: event => {
-	        instance.data.overrideStyle(event.feature, this._defaults.hoverStyles);
-	        this.showToast(event.feature);
+		      this.$mapInterface.setFeatureStyle(event.feature);
+	        this.$mapInterface.showToast(event.feature);
 	      },
 	      mouseout: event => {
-	        instance.data.revertStyle();
-	        this.toastCanceler = this.hideToast();
+		      this.$mapInterface.resetFeatureStyles();
+	        this.$mapInterface.hideToast();
 	      },
 	      click: event => {
 	        this.showDetail(event.feature, this.isolateMouseEvent(event));
@@ -207,44 +184,6 @@ export class MapCtrl {
 	  }).then(panel => {
 	  	panelRef = panel;
 	  });
-	}
-
-	/**
-	 * Shows a simple toast notification containing the name of the 
-	 * future being hovered over. If there is already a toast active,
-	 * it updates the name in the toast instead of making a new one.
-	 * 
-	 * @param  {Object} feature The feature being hovered over
-	 */
-	showToast(feature) {
-		let featureName = feature.getProperty('name');
-		if (!this.toastActive) {
-			this.toast.textContent(featureName).position('bottom left').hideDelay(0);
-			this._$mdToast.show(this.toast);
-			this.toastActive = true;
-		} else {
-			this._$timeout.cancel(this.toastCanceler);
-			this._$timeout( () => {
-				this._$mdToast.updateTextContent(featureName);
-			});
-		}
-	}
-
-	/**
-	 * Hides the toast notification after 3 seconds, but provides
-	 * a way to cancel the 3 seconds (`toastCanceler`).
-	 *
-	 * It is meant to be called on mouseout, so that the toast will
-	 * remain on screen for a few seconds, and only disappear if
-	 * another isn't needed within those seconds.
-	 * 
-	 * @return {Promise} Resolves to completed timeout
-	 */
-	hideToast() {
-		return this._$timeout( () => {
-			this._$mdToast.hide(this.toast);
-			this.toastActive = false;
-	  }, 3000);
 	}
 
 	/**

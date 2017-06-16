@@ -1,4 +1,5 @@
-import { CampusMapService } from './map.service'
+import { CampusMapService } from './map.service';
+import { CampusMapUiService } from './map-ui.service';
 
 import { CampusMapComponent } from './map.component'
 import { CampusMapControlsComponent } from './controls/map-controls.component';
@@ -21,6 +22,7 @@ head.insertBefore = (newElement, referenceElement) =>
 export default angular.module('campusMap', [])
 
   .service('$campusMap', CampusMapService)
+  .service('$mapInterface', CampusMapUiService)
 
   .component('campusMap', CampusMapComponent)
   .component('campusMapControls', CampusMapControlsComponent)
