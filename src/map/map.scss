@@ -1,4 +1,4 @@
-ng-map,
+.campus-map,
 campus-map {
   width: 100%;
   height: 100%;
@@ -8,8 +8,8 @@ campus-map {
 	background: linear-gradient(135deg, rgba(0,119,202,0.7) 0%,rgba(199,21,102,0.7) 100%) !important;
 }
 
-ng-map,
-ng-map > div,
-ng-map > div > div {
+.campus-map,
+.campus-map > div,
+.campus-map > div > div {
   background-color: transparent !important;
 }

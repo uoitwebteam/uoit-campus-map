@@ -4,8 +4,7 @@ import './map-controls.scss';
 
 export const CampusMapControlsComponent = {
   require: {
-    $ngModel: 'ngModel',
-    MapCtrl: '^campusMap'
+    $ngModel: 'ngModel'
   },
   template,
   controller
