@@ -51,4 +51,42 @@ export class CampusMapService {
     const latLng = new google.maps.LatLng(coords)
     return latLng;
   }
+
+  async addData(collection) {
+    const instance = await this.getMap();
+		instance.data.addGeoJson(collection);
+		await this.fitBounds(instance);
+  }
+
+	/**
+	 * Direct port of Google Maps `processBounds` example function
+	 * for recalculation of map boundaries based on map data.
+	 * @param  {Object}   geometry LatLng geometry object
+	 * @param  {Function} callback Recursion callback
+	 * @param  {*}   			thisArg  Context for `this`
+	 */
+	async processBounds(geometry, callback, thisArg) {
+    const google = await this.getGoogle();
+	  if (geometry instanceof google.maps.LatLng) {
+	    callback.call(thisArg, geometry);
+	  } else if (geometry instanceof google.maps.Data.Point) {
+	    callback.call(thisArg, geometry.get());
+	  } else {
+	    geometry.getArray().forEach(g => {
+	      this.processBounds(g, callback, thisArg);
+	    });
+	  }
+	}
+
+	/**
+	 * Resizes map view to fit recalculated bounds.
+	 */
+	async fitBounds(instance) {
+    const google = await this.getGoogle();
+	  const bounds = new google.maps.LatLngBounds();
+	  await instance.data.forEach(feature => {
+	    this.processBounds(feature.getGeometry(), bounds.extend, bounds);
+	  });
+	  instance.fitBounds(bounds);
+	}
 }

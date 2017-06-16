@@ -113,10 +113,9 @@ export class MapCtrl {
 	 */
 	async updateMapData(newVal) {
 		console.log('updating map data...', newVal);
-		const instance = await this.clearMapData();
+		await this.clearMapData();
 		if (newVal.collection.features.length && newVal.category.length) {
-      instance.data.addGeoJson(newVal.collection);
-      this.fitBounds(instance);
+      this.$campusMap.addData(newVal.collection);
 			console.log('map data updated!');
 		}
 	}
@@ -184,36 +183,6 @@ export class MapCtrl {
 	  }).then(panel => {
 	  	panelRef = panel;
 	  });
-	}
-
-	/**
-	 * Direct port of Google Maps `processBounds` example function
-	 * for recalculation of map boundaries based on map data.
-	 * @param  {Object}   geometry LatLng geometry object
-	 * @param  {Function} callback Recursion callback
-	 * @param  {*}   			thisArg  Context for `this`
-	 */
-	processBounds(geometry, callback, thisArg) {
-	  if (geometry instanceof google.maps.LatLng) {
-	    callback.call(thisArg, geometry);
-	  } else if (geometry instanceof google.maps.Data.Point) {
-	    callback.call(thisArg, geometry.get());
-	  } else {
-	    geometry.getArray().forEach(g => {
-	      this.processBounds(g, callback, thisArg);
-	    });
-	  }
-	}
-
-	/**
-	 * Resizes map view to fit recalculated bounds.
-	 */
-	fitBounds(map) {
-	  const bounds = new google.maps.LatLngBounds();
-	  map.data.forEach(feature => {
-	    this.processBounds(feature.getGeometry(), bounds.extend, bounds);
-	  });
-	  map.fitBounds(bounds);
 	}
 
 	/**
