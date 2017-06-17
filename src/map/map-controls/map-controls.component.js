@@ -3,8 +3,8 @@ import template from './map-controls.component.html';
 import './map-controls.scss';
 
 export const CampusMapControlsComponent = {
-  require: {
-    $ngModel: 'ngModel'
+  bindings: {
+  	onChange: '&'
   },
   template,
   controller

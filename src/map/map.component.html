@@ -4,4 +4,6 @@
   layout
   layout-fill>
 </div>
-<div ng-transclude="controls" class="map-controls"></div>
+<div class="map-controls">
+	<campus-map-controls layout="column" flex="grow" on-change="$ctrl.onControlChanged($event)"></campus-map-controls>
+</div>

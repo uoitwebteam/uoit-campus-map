@@ -11,9 +11,6 @@ export const CampusMapComponent = {
     // building: '<?',
     // feature: '<?'
   },
-  transclude:  {
-    controls: 'campusMapControls'
-  },
   template,
   controller
 }

@@ -54,22 +54,12 @@ export class MapControlsCtrl {
    * Initialize the controls (show all map elements)
    */
   $onInit() {
-    this.loadLocations()
-      .then(locations => {
-        this.location = locations[1]._id;
-        return this.loadCategories();
-      })
-      .then(categories => {
-      	categories.forEach(
-      		category => this.$mapInterface.addCategory(category)
-      	);
-        this.category = [...categories.map(category => category._id)];
-        return this.loadCollections();
-      })
-      .then(collections => {
-        this.collection = [...collections.map(collection => collection._id)];
-        return this.loadFeatures(this.filter);
-      });
+
+  	Promise.all([
+  		this.loadLocations(),
+  		this.loadCategories(), 
+  		this.loadCollections()
+  	]).then(() => this.loadFeatures(this.filter))
   }
 
   /**
@@ -77,12 +67,9 @@ export class MapControlsCtrl {
    * 
    * @return {Promise} Resolves to list of locations
    */
-  loadLocations() {
-    return this.locations || this._LocationResource.query().$promise
-      .then(locations => {
-        this.locations = locations;
-        return locations;
-      });
+  async loadLocations() {
+  	this.locations = await this._LocationResource.query().$promise;
+    this.location = this.locations[1]._id;
   }
 
   /**
@@ -90,12 +77,9 @@ export class MapControlsCtrl {
    * 
    * @return {Promise} Resolves to list of categories
    */
-  loadCategories() {
-    return this.categories || this._CategoryResource.query().$promise
-      .then(categories => {
-        this.categories = categories;
-        return categories;
-      });
+  async loadCategories() {
+    this.categories = await this._CategoryResource.query().$promise;
+    this.category = this.categories.map(category => this.$mapInterface.addCategory(category) && category._id);
   }
 
   /**
@@ -107,19 +91,9 @@ export class MapControlsCtrl {
    * 
    * @return {Promise} Resolves to list of collections
    */
-  loadCollections() {
-    return this._CollectionResource.query({
-      filter: {
-        location: this.location,
-        category: {
-          $in: [...this.category]
-        }
-      }
-    }).$promise
-      .then(collections => {
-        this.collections = collections;
-        return collections;
-      });
+  async loadCollections() {
+    this.collections = await this._CollectionResource.query().$promise;
+    this.collection = this.collections.map(collection => collection._id);
   }
 
   /**
@@ -130,89 +104,21 @@ export class MapControlsCtrl {
    * 
    * @return {Promise} Resolves to list of collections
    */
-  loadFeatures(filter) {
-    return this._FeatureResource.query({ filter }).$promise
-      .then(features => {
-        this.features = features;
-        return features;
-      })
-      .then(features => {
-        return this.setMapData({
-          location: this.locations.find(location => location._id === this.location),
-          category: this.getItemsInListByProp(this.category, this.categories, '_id'),
-          collection: {
-            type: 'FeatureCollection',
-            features
-          }
-        });
-      });
-  }
-
-  /**
-   * Sends current data to view for rendering in selection dropdowns.
-   *
-   * In order for the map to properly render the selected collection, the
-   * `options.collection` param passed to this method must at least _look_
-   * like a valid `FeatureCollection` (i.e. it can be a "true" collection,
-   * or an object with a `type` property of `FeatureCollection` and a `features`
-   * property containing an array of `Feature` objects).
-   *
-   * In the example, both scenarios are demonstrated – the `location` and
-   * `category` properties are left out for brevity, but `location` is
-   * required in order for features to properly direct to tour scenes.
-   *
-   * @example
-   * // "true" collection
-   * const collection = this._CollectionResource.get('collectionId');
-   * this.setMapData({ collection });
-   * 
-   * // "mock" collection
-   * const features = this._FeatureResource.query();
-   * this.setMapData({
-   *   collection: {
-   *     type: 'FeatureCollection',
-   *     features
-   *   }
-   * });
-   * 
-   * @param {Object}  resources
-   * @param {Object}  resources.location    Currently selected location `$resource`
-   * @param {Object}  resources.category    Currently selected category `$resource`
-   * @param {Object}  resources.collection  Currently selected collection `$resource`
-   */
-  setMapData({ location, category, collection }) {
-    this.$ngModel.$setViewValue({
-      location,
-      category,
-      collection
+  async loadFeatures(filter) {
+  	console.log('Filter to load', filter)
+    const features = this.features = await this._FeatureResource.query({ filter }).$promise;
+    const location = this.locations.find(location => location._id === this.location);
+    const category = this.categories.filter(item => this.category.indexOf(item._id) !== -1);
+  	this.onChange({
+    	$event: {
+        location,
+        category,
+        collection: {
+          type: 'FeatureCollection',
+          features
+        }
+      }
     });
-  }
-
-  /**
-   * Filter an array for matches in another array by a property;
-   * return the matched items.
-   * 
-   * @param  {Array}  items Items to match with
-   * @param  {Array}  list  List to match from
-   * @param  {String} prop  Property to match against
-   * @return {Array}        List of filtered items
-   */
-  getItemsInListByProp(items, list, prop) {
-    return list && [...list].filter(item => {
-      return [...items].indexOf(item[prop]) !== -1;
-    });
-  }
-
-  /**
-   * Find a specific array item and remove it from the array.
-   * 
-   * @param  {*}     item The item to remove
-   * @param  {Array} list The list to remove from
-   */
-  removeItemFromList(item, list) {
-    const index = [...list].indexOf(item);
-    console.log(item, list, index);
-    (index > -1) && list.splice(index, 1);
   }
 
   /**

@@ -8,6 +8,8 @@ import { CampusMapControlsComponent } from './map/map-controls/map-controls.comp
 import { FilterBuilderDirective } from './filter/filter-builder.directive';
 import { FilterInputDirective } from './filter/filter-input.directive';
 
+import { FilterFrom } from './filter-from.filter';
+
 import { MAP_DEFAULTS } from './map/map-defaults.constant';
 
 /**
@@ -31,6 +33,8 @@ export default angular.module('campusMap', [])
 
   .directive('filterBuilder', FilterBuilderDirective)
   .directive('filterInput', FilterInputDirective)
+
+  .filter('filterFrom', FilterFrom)
 
   .constant('MAP_DEFAULTS', MAP_DEFAULTS)
 

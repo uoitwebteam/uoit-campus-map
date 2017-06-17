@@ -38,6 +38,7 @@ export class MapCtrl {
     this.$campusMap = $campusMap;
     this.$mapInterface = $mapInterface;
   }
+
   async $onInit() {
     	const instance = await this.$campusMap.getMap();
 
@@ -67,15 +68,7 @@ export class MapCtrl {
 	async $onChanges({ mapData }) {
 		if (mapData.isFirstChange()) return;	
 		console.log('map component detected external changes:', mapData);
-		const	{
-			currentValue: { location, category, collection }
-		} = mapData;
-		if (location && collection) {
-    	this.location = location;
-			await this.updateMapData({
-				location, category, collection
-			});
-		}
+		this.updateMapData(mapData);
 	}
 
 	/**
@@ -91,6 +84,11 @@ export class MapCtrl {
 		google.maps.event.clearInstanceListeners(instance.data);
 	}
 
+	onControlChanged(data) {
+		console.log('FILTERCHANGE', data);
+		this.updateMapData(data);
+	}
+
 	/**
 	 * Handler method for map data `$watch`; watches incoming geoJSON
 	 * data for changes and adds it to the map if detected. If the
@@ -99,12 +97,16 @@ export class MapCtrl {
 	 * 
 	 * @param  {Object} newVal New incoming map data
 	 */
-	async updateMapData(newVal) {
-		await this.clearMapData();
-		console.log('updating map data...', newVal);
-		if (newVal.collection.features.length && newVal.category.length) {
-      await this.$campusMap.addData(newVal.collection);
-			console.log('map data updated!');
+	async updateMapData(data) {
+		const	{ location, category, collection } = data;
+		if (location && collection) {
+    	this.location = location;
+			await this.clearMapData();
+			console.log('updating map data...', data);
+			if (data.collection.features.length && data.category.length) {
+	      await this.$campusMap.addData(data.collection);
+				console.log('map data updated!');
+			}
 		}
 	}
 	

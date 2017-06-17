@@ -29,7 +29,6 @@
   	on-goto-bldg="$ctrl.onGotoBldg()"
   	layout
   	flex="grow">
-  	<campus-map-controls ng-model="$ctrl.mapData" layout="column" flex="grow"></campus-map-controls>
   </campus-map>
 
   <!-- Google Maps -->
@@ -74,6 +73,7 @@
 	    			alert(JSON.stringify(data));
 	    		}
     		}
+    		this.mapData = {};
     	});
   </script>
   

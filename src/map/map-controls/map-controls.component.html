@@ -22,10 +22,10 @@
 	  <md-content
 		  flex="grow"
 		  layout="column">
-			<filter-builder ng-model="$ctrl.filter" on-update="$ctrl.loadFeatures($ctrl.filter)" layout="column" layout-padding flex="grow">
+		  <filter-builder ng-model="$ctrl.filter" ng-change="$ctrl.loadFeatures($ctrl.filter)" layout="column" layout-padding flex="grow">
 			  <md-input-container>
 			    <label>Location</label>
-			    <md-select ng-model="$ctrl.location" md-on-open="$ctrl.loadLocations()" filter-input name="location" md-on-close="$ctrl.loadFeatures($ctrl.filter)">
+			    <md-select ng-model="$ctrl.location" filter-input name="location">
 			      <md-option ng-repeat="location in ::$ctrl.locations" ng-value="::location._id" ng-disabled="$ctrl.location === location">
 			        {{ ::location.label}}
 			      </md-option>
@@ -34,7 +34,7 @@
 
 			  <md-input-container>
 			    <label>Feature category</label>
-			    <md-select ng-model="$ctrl.category" md-on-open="$ctrl.loadCategories()" ng-disabled="!$ctrl.location.length" multiple filter-input name="properties.category" md-on-close="$ctrl.loadFeatures($ctrl.filter)">
+			    <md-select ng-model="$ctrl.category" ng-disabled="!$ctrl.location.length" multiple filter-input name="properties.category">
 			      <md-option ng-repeat="category in $ctrl.categories" ng-value="::category._id" ng-disabled="$ctrl.category === category">
 			        {{ ::category.name }}
 			      </md-option>
@@ -48,20 +48,12 @@
 						Select all categories
 	        </md-checkbox>
         </div>
-<!-- 				<div>
-			    <md-chips>
-			      <md-chip ng-repeat="category in $ctrl.getItemsInListByProp($ctrl.category, $ctrl.categories, '_id') track by $index">
-			      	{{ category.name }}
-						  <button class="md-chip-remove" ng-click="$ctrl.removeItemFromList(category._id, $ctrl.category)">&times;</button>
-			      </md-chip>
-					</md-chips>
-				</div> -->
 
 			  <md-input-container>
 			    <label>Feature collection</label>
-			    <md-select ng-model="$ctrl.collection" md-on-open="$ctrl.loadCollections()" ng-disabled="!$ctrl.category.length" multiple filter-input="filters.collection" name="group" md-on-close="$ctrl.loadFeatures($ctrl.filter)">
-			      <md-optgroup ng-repeat="group in $ctrl.getItemsInListByProp($ctrl.category, $ctrl.categories, '_id')" label="{{ ::group.name }}">
-			        <md-option ng-repeat="collection in $ctrl.collections | filter: { category: group._id }" ng-value="::collection._id" ng-disabled="$ctrl.collection === collection">
+			    <md-select ng-model="$ctrl.collection" ng-disabled="!$ctrl.category.length" multiple filter-input="filters.collection" name="group">
+			      <md-optgroup ng-repeat="group in $ctrl.categories | filterFrom: $ctrl.category : '_id'" label="{{ ::group.name }}">
+			        <md-option ng-repeat="collection in $ctrl.collections | filter: { category: group._id, location: $ctrl.location }" ng-value="::collection._id" ng-disabled="$ctrl.collection === collection">
 			          {{ ::collection.name }}
 			        </md-option>
 			      </md-optgroup>
@@ -75,17 +67,8 @@
 						Select all collections
 	        </md-checkbox>
         </div>
-				<small><pre>{{ $ctrl.filter | json }}</pre></small>
 			</filter-builder>
-	<!--   <div layout="column">
-
-	    <md-button class="md-primary" ng-click="$ctrl.showAll()">
-	    	Show all
-	      <md-tooltip md-direction="bottom">
-	        Turn on visibility for all available map features
-	      </md-tooltip>
-	    </md-button>
-	  </div> -->
+			<pre>{{ $ctrl.filter | json }}</pre>
 	  </md-content>
 	</md-sidenav>
 </div>

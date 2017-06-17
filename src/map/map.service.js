@@ -49,6 +49,7 @@ export class CampusMapService {
     const instance = await this.getMap();
 		await instance.data.addGeoJson(collection);
 		this.fitBounds(instance);
+		return instance;
   }
 
   async clearData() {
