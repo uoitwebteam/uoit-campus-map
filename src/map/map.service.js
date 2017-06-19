@@ -26,10 +26,10 @@ export class CampusMapService {
     });
   }
 
-  async getMap() {
+  async getMap(element = null) {
     if (this._mapInstance) {
       return this._mapInstance;
-    } else {
+    } else if (element) {
       const google = await this.getGoogle();
       const mapOptions = {
         center: new google.maps.LatLng({ lat: 43.9443802, lng: -78.8975857 }),
@@ -39,9 +39,10 @@ export class CampusMapService {
         tilt: 45,
         heading: 0
       }
-      const mapInstance = this.$document[0].getElementById('map-instance');
-      this._mapInstance = new google.maps.Map(mapInstance, mapOptions);
+      this._mapInstance = new google.maps.Map(element, mapOptions);
       return this._mapInstance;
+    } else {
+    	throw new Error('No valid map instance is available!');
     }
   }
 

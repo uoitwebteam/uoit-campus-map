@@ -1,9 +1,9 @@
 import { CampusMapService } from './map/map.service';
 import { CampusMapUiService } from './map/map-ui.service';
 
-import { CampusMapComponent } from './map/map.component'
+import { AppComponent } from './app.component';
+import { CampusMapComponent } from './map/map.component';
 import { CampusMapControlsComponent } from './map/map-controls/map-controls.component';
-// import { FilterBuilderComponent } from './filter/filter-builder.component';
 
 import { FilterBuilderDirective } from './filter/filter-builder.directive';
 import { FilterInputDirective } from './filter/filter-input.directive';
@@ -22,14 +22,14 @@ head.insertBefore = (newElement, referenceElement) =>
     console.info('Prevented Roboto from loading!') :
   	insertBefore.call(head, newElement, referenceElement);
 
-export default angular.module('campusMap', [])
+export default angular.module('uoitCampusMap', [])
 
   .service('$campusMap', CampusMapService)
   .service('$mapInterface', CampusMapUiService)
 
+  .component('uoitCampusMap', AppComponent)
   .component('campusMap', CampusMapComponent)
   .component('campusMapControls', CampusMapControlsComponent)
-  // .component('filterBuilder', FilterBuilderComponent)
 
   .directive('filterBuilder', FilterBuilderDirective)
   .directive('filterInput', FilterInputDirective)

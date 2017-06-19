@@ -1,9 +1,10 @@
-<div
+<campus-map
 	class="campus-map"
-	id="map-instance"
+	map-data="$ctrl.mapData"
+	on-goto-building="$ctrl.onGotoBldg($event)"
   layout
   layout-fill>
-</div>
+</campus-map>
 <div class="map-controls">
 	<campus-map-controls layout="column" flex="grow" on-change="$ctrl.onControlChanged($event)"></campus-map-controls>
 </div>

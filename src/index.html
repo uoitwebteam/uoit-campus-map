@@ -24,12 +24,11 @@
 </head>
 <body ng-app="app" ng-cloak layout="column" ng-controller="mainCtrl as $ctrl">
 
-  <campus-map
+  <uoit-campus-map
   	map-data="$ctrl.mapData"
-  	on-goto-bldg="$ctrl.onGotoBldg()"
   	layout
   	flex="grow">
-  </campus-map>
+  </uoit-campus-map>
 
   <!-- Google Maps -->
 <!--   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1jk1XLwGumgFRELljo2fjUeXNh3Oh-Ls"></script> -->
@@ -45,7 +44,7 @@
   <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js"></script>
   <!-- Mock resources and controller -->
   <script type="text/javascript">
-    angular.module('app', ['ngMaterial', 'ngResource', 'campusMap'])
+    angular.module('app', ['ngMaterial', 'ngResource', 'uoitCampusMap'])
     	.constant('API_URL', 'http://localhost:3000/api/v1') // https://virtualtour.uoit.ca/api/v1
     	.factory('$mapApi', ['$resource', 'API_URL', function($resource, API_URL){
     		return {
@@ -68,11 +67,6 @@
 			  };
     	}])
     	.controller('mainCtrl', function() {
-    		this.onGotoBldg = function() {
-    			return function(data) {
-	    			alert(JSON.stringify(data));
-	    		}
-    		}
     		this.mapData = {};
     	});
   </script>

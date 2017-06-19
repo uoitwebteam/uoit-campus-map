@@ -1,16 +1,11 @@
 import { MapCtrl as controller } from './map.controller.js'
-import template from './map.component.html';
 import './map.scss';
 
 export const CampusMapComponent = {
-  // transclude: true,
   bindings: {
-    onGotoBldg: '&?',
-    mapData: '<?'
-    // location: '<?',
-    // building: '<?',
-    // feature: '<?'
+    mapData: '<?',
+    onGotoBuilding: '&?'
   },
-  template,
+  template: `<div class="campus-map"></div>`,
   controller
 }

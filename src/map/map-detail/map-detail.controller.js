@@ -88,9 +88,11 @@ export class MapDetailCtrl {
 	gotoBldg() {
 		const { location, building } = this;
 		return this.close().then(() => {
-			this.onGotoBldg({
-				location: location.code,
-				building: building.code
+			this.onGotoBuilding({
+				$event: {
+					location: location.code,
+					building: building.code
+				}
 			});
 		});
 	}

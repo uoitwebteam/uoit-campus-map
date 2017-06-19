@@ -9,38 +9,22 @@ import template from './map-detail/map-detail.component.html';
 export class MapCtrl {
 	static get $inject() {
 		return [
-			'$timeout', '$scope', '$window', // angular core
+			'$element', // ng services
 			'$campusMap', '$mapInterface', // services
-			'$mdToast', '$mdPanel', // md deps
-			'MAP_DEFAULTS' // constants
+			'$mdPanel', // md deps
 		];
 	}
-	/**
-	 * Initialize the controller's dependencies.
-	 * 
-	 * @param  {Object} $timeout     Angular's setTimeout wrapper
-	 * @param  {Object} $scope       The current scope
-	 * @param  {Object} $window      Angular's window wrapper
-	 * @param  {Object} $campusMap   CampusMapService
-	 * @param  {Object} $mdToast     Material toast service
-	 * @param  {Object} $mdPanel     Material panel service
-	 * @param  {Object} MAP_SETTINGS Constant for map config object
-	 * @param  {Object} MAP_ICONS    Constant for map icon definitions
-	 */
-	constructor($timeout, $scope, $window, $campusMap, $mapInterface, $mdToast, $mdPanel, MAP_DEFAULTS) {
-    this._$timeout = $timeout;
-    this._$scope = $scope;
-    this._$window = $window;
-    this._$mdToast = $mdToast;
+
+	constructor($element, $campusMap, $mapInterface, $mdPanel) {
+		this._$element = $element;
     this._$mdPanel = $mdPanel;
-    this._defaults = MAP_DEFAULTS;
 
     this.$campusMap = $campusMap;
     this.$mapInterface = $mapInterface;
   }
 
   async $onInit() {
-    	const instance = await this.$campusMap.getMap();
+    	const instance = await this.$campusMap.getMap(this._$element[0]);
 
       this.$mapInterface.updateStyles();
 
@@ -68,7 +52,7 @@ export class MapCtrl {
 	async $onChanges({ mapData }) {
 		if (mapData.isFirstChange()) return;	
 		console.log('map component detected external changes:', mapData);
-		this.updateMapData(mapData);
+		this.updateMapData(mapData.currentValue);
 	}
 
 	/**
@@ -84,11 +68,6 @@ export class MapCtrl {
 		google.maps.event.clearInstanceListeners(instance.data);
 	}
 
-	onControlChanged(data) {
-		console.log('FILTERCHANGE', data);
-		this.updateMapData(data);
-	}
-
 	/**
 	 * Handler method for map data `$watch`; watches incoming geoJSON
 	 * data for changes and adds it to the map if detected. If the
@@ -98,11 +77,12 @@ export class MapCtrl {
 	 * @param  {Object} newVal New incoming map data
 	 */
 	async updateMapData(data) {
+		console.log('[map.controller] updateMapData', data);
 		const	{ location, category, collection } = data;
 		if (location && collection) {
     	this.location = location;
 			await this.clearMapData();
-			console.log('updating map data...', data);
+			console.log('updating map data...');
 			if (data.collection.features.length && data.category.length) {
 	      await this.$campusMap.addData(data.collection);
 				console.log('map data updated!');
@@ -144,6 +124,8 @@ export class MapCtrl {
       .closeTo({ top, left })
 			.withAnimation(this._$mdPanel.animation.SCALE);
 
+		const { location, onGotoBuilding } = this;
+
 	  return this._$mdPanel.open({
 	    controller,
 	    controllerAs: 'ctrl',
@@ -152,8 +134,8 @@ export class MapCtrl {
 	    hasBackdrop: true,
 	    panelClass: 'map-detail',
 	    locals: {
-	    	onGotoBldg: this.onGotoBldg(),
-	    	location: this.location,
+	    	onGotoBuilding,
+	    	location,
 	    	feature
 	    },
 	    trapFocus: true,
