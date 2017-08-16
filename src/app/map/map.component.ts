@@ -8,7 +8,7 @@ import {
 import { MapService } from './';
 
 @Component({
-  selector: 'app-map',
+  selector: 'campus-map',
   template: `<div class="campus-map" #mapEl></div>`,
   styleUrls: ['./map.component.scss'],
 })

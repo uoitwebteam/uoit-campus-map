@@ -1,0 +1,14 @@
+:host { 
+  &, .campus-map { 
+    display: flex; 
+    flex: 1 0 auto; 
+    flex-direction: column;
+  }
+  &, .campus-map > /deep/ div { 
+    background-color: transparent !important; 
+  }
+} 
+ 
+.campus-map { 
+  background: linear-gradient(135deg, rgba(0,119,202,0.7) 0%,rgba(199,21,102,0.5) 100%); 
+}
