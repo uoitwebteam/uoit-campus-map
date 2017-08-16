@@ -78,4 +78,47 @@ export class MapService {
     //   throw new Error('No valid map instance is available!');
     // }
   }
+
+  addData(collection) {
+    this.mapInstance.data.addGeoJson(collection);
+    this.fitBounds(this.mapInstance);
+  }
+
+  clearData() {
+    this.mapInstance.data.forEach(feature => {
+      this.mapInstance.data.remove(feature);
+    });
+  }
+
+  /**
+   * Direct port of Google Maps `processBounds` example function
+   * for recalculation of map boundaries based on map data.
+   *
+   * @param {google.maps.LatLng | google.maps.Data.Point | google.maps.Data.Geometry} geometry LatLng geometry object
+   * @param {any} callback Recursion callback
+   * @param {any} thisArg Context for `this`
+   * @memberof MapService
+   */
+  processBounds(geometry, callback, thisArg) {
+    if (geometry instanceof google.maps.LatLng) {
+      callback.call(thisArg, geometry);
+    } else if (geometry instanceof google.maps.Data.Point) {
+      callback.call(thisArg, geometry.get());
+    } else {
+      geometry.getArray().forEach(g => {
+        this.processBounds(g, callback, thisArg);
+      });
+    }
+  }
+
+  /**
+   * Resizes map view to fit recalculated bounds.
+   */
+  fitBounds(instance) {
+    const bounds = new google.maps.LatLngBounds();
+    instance.data.forEach(feature => {
+      this.processBounds(feature.getGeometry(), bounds.extend, bounds);
+    });
+    instance.fitBounds(bounds);
+  }
 }
