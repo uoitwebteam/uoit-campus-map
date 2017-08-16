@@ -4,7 +4,9 @@ import {
 } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/operator/shareReplay';
 import 'rxjs/add/operator/map';
 
 import {
@@ -17,42 +19,46 @@ import {
 @Injectable()
 export class MapService {
 
-  private googleInstance;
+  private googleSubject = new Subject<Google>();
+  private googleInstance: Google;
+
+  private mapSubject = new Subject<google.maps.Map>();
   private mapInstance: google.maps.Map;
 
   constructor(
     private ngZone: NgZone
-  ) {}
-  private loadGoogle(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (this.googleInstance) {
-        resolve(this.googleInstance);
-      } else {
+  ) {
+    this.loadGoogle();
+  }
 
-        this.ngZone.runOutsideAngular(() => {
-          const callbackId = 'g' + (new Date()).getTime().toString(12);
-          window[callbackId] = () => {
-            console.log('[map.service] getGoogle', window.google);
-            this.ngZone.run(() => {
-              this.googleInstance = window.google;
-              resolve(this.googleInstance);
-              delete window[callbackId];
-            });
-          };
-          const script = (<Document>document).createElement('script');
-          script.async = true;
-          script.defer = true;
-          script.onerror = reject;
-          script.src = `${API_URL}?key=${API_KEY}&callback=${callbackId}`;
-          document.getElementsByTagName('head')[0].appendChild(script);
-        });
-      }
-    });
+  private loadGoogle() {
+    if (this.googleInstance) {
+      this.googleSubject.next(this.googleInstance);
+    } else {
+      this.ngZone.runOutsideAngular(() => {
+        const callbackId = 'g' + (new Date()).getTime().toString(12);
+        window[callbackId] = () => {
+          console.log('[map.service] getGoogle', window.google);
+          this.ngZone.run(() => {
+            this.googleInstance = window.google;
+            this.googleSubject.next(this.googleInstance);
+            delete window[callbackId];
+          });
+        };
+        const script = (<Document>document).createElement('script');
+        script.async = true;
+        script.defer = true;
+        script.onerror = () => {
+          throw new Error('couldn\'t load Google Maps script')
+        };
+        script.src = `${API_URL}?key=${API_KEY}&callback=${callbackId}`;
+        document.getElementsByTagName('head')[0].appendChild(script);
+      });
+    }
   }
 
   getGoogle(): Observable<any> {
-    const googlePromise = this.loadGoogle();
-    return Observable.fromPromise(googlePromise)
+    return this.googleSubject.asObservable().shareReplay();
   }
 
   getMap(element?: HTMLElement): Observable<google.maps.Map> {
