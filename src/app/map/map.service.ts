@@ -13,7 +13,7 @@ import {
   API_URL,
   API_KEY,
   MAP_STYLES,
-  ICON_STYLES
+  ICON_STYLES,
 } from '.';
 
 @Injectable()

@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import {
   MapService,
+  CategoryService,
   MapComponent,
 } from '.';
 
@@ -17,6 +18,7 @@ import {
   ],
   providers: [
     MapService,
+    CategoryService,
   ],
   exports: [
     MapComponent,
