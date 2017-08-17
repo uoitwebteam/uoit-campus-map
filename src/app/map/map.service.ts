@@ -30,6 +30,7 @@ export class MapService {
     private categoryService: CategoryService
   ) {
     this.loadGoogle();
+    this.getCategories();
   }
 
   private loadGoogle() {

@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 
 import {
-  Anchor,
   Category,
 } from '.';
 
@@ -17,7 +16,7 @@ export class CategoryService {
   ) { }
 
   getCategories() {
-    return this.http.get<any[]>('/api/v1/categories')
+    return this.http.get<Category[]>('/api/v1/categories')
       .flatMap(categories => Observable.from(categories))
       .map(category => new Category(category));
   }

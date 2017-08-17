@@ -1,18 +1,26 @@
-export interface Anchor {
+export interface AnchorPoint extends google.maps.Point {
   left: number;
   top: number;
 }
 
-export class Category {
-  // fillColor;
-  // fillOpacity;
-  icon: google.maps.Icon | {
-    anchor: Anchor;
-    size: google.maps.Size
-  };
+export class Category implements google.maps.Data.StyleOptions {
+  clickable?: boolean;
+  cursor?: string;
+  draggable?: boolean;
+  editable?: boolean;
+  fillColor?: string;
+  fillOpacity?: number;
+  shape?: google.maps.MarkerShape;
+  strokeColor?: string;
+  strokeOpacity?: number;
+  strokeWeight?: number;
+  title?: string;
+  visible?: boolean;
+  zIndex?: number;
+  icon?: google.maps.Icon;
   constructor(category: Category) {
     Object.assign(this, category);
-    const anchor = <Anchor>category.icon.anchor;
+    const anchor = <AnchorPoint>category.icon.anchor;
     const size = category.icon.size;
     this.icon.anchor = new google.maps.Point(anchor.left, anchor.top);
     this.icon.size =  new google.maps.Size(size.width, size.height);
