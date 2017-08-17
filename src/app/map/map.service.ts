@@ -5,16 +5,15 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/observable/fromPromise';
-import 'rxjs/add/operator/shareReplay';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
 
 import {
   API_URL,
   API_KEY,
   MAP_STYLES,
   ICON_STYLES
-} from './map-defaults';
+} from '.';
 
 @Injectable()
 export class MapService {
@@ -26,7 +25,7 @@ export class MapService {
   private mapInstance: google.maps.Map;
 
   constructor(
-    private ngZone: NgZone
+    private zone: NgZone
   ) {
     this.loadGoogle();
   }
@@ -35,11 +34,11 @@ export class MapService {
     if (this.googleInstance) {
       this.googleSubject.next(this.googleInstance);
     } else {
-      this.ngZone.runOutsideAngular(() => {
+      this.zone.runOutsideAngular(() => {
         const callbackId = 'g' + (new Date()).getTime().toString(12);
         window[callbackId] = () => {
           console.log('[map.service] getGoogle', window.google);
-          this.ngZone.run(() => {
+          this.zone.run(() => {
             this.googleInstance = window.google;
             this.googleSubject.next(this.googleInstance);
             delete window[callbackId];
@@ -58,7 +57,7 @@ export class MapService {
   }
 
   getGoogle(): Observable<any> {
-    return this.googleSubject.asObservable().shareReplay();
+    return this.googleSubject.asObservable()
   }
 
   getMap(element?: HTMLElement): Observable<google.maps.Map> {
@@ -72,7 +71,7 @@ export class MapService {
           styles: MAP_STYLES,
           disableDefaultUI: true,
           tilt: 45,
-          heading: 0
+          heading: 0,
         }))
     // } else {
     //   throw new Error('No valid map instance is available!');

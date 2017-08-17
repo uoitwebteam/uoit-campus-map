@@ -9,7 +9,6 @@ interface NodeModule {
 declare interface Google {
   maps?: {
     Map: google.maps.Map;
-    test?: number;
   };
 }
 

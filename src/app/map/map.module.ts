@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import {
   MapService,
   MapComponent,
-} from './';
+} from '.';
 
 @NgModule({
   imports: [

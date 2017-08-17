@@ -5,7 +5,7 @@ import {
   ElementRef,
 } from '@angular/core';
 
-import { MapService } from './';
+import { MapService } from '.';
 
 @Component({
   selector: 'campus-map',
