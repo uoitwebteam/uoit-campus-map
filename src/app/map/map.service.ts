@@ -9,6 +9,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 
 import {
+  CategoryService,
   API_URL,
   API_KEY,
   MAP_STYLES,
@@ -25,7 +26,8 @@ export class MapService {
   private mapInstance: google.maps.Map;
 
   constructor(
-    private zone: NgZone
+    private zone: NgZone,
+    private categoryService: CategoryService
   ) {
     this.loadGoogle();
   }
@@ -76,6 +78,11 @@ export class MapService {
     // } else {
     //   throw new Error('No valid map instance is available!');
     // }
+  }
+
+  getCategories() {
+    this.categoryService.getCategories()
+      .subscribe(category => console.log('[category]', category));
   }
 
   addData(collection) {
