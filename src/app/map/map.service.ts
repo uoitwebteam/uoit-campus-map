@@ -10,6 +10,7 @@ import 'rxjs/add/operator/mergeMap';
 
 import {
   CategoryService,
+  FeatureService,
   API_URL,
   API_KEY,
   MAP_STYLES,
@@ -27,10 +28,12 @@ export class MapService {
 
   constructor(
     private zone: NgZone,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private featureService: FeatureService
   ) {
     this.loadGoogle();
     this.getCategories();
+    this.getFeatures();
   }
 
   private loadGoogle() {
@@ -84,6 +87,11 @@ export class MapService {
   getCategories() {
     this.categoryService.getCategories()
       .subscribe(category => console.log('[category]', category));
+  }
+
+  getFeatures() {
+    this.featureService.getFeatures()
+      .subscribe(featureCollection => this.addData(featureCollection));
   }
 
   addData(collection) {
