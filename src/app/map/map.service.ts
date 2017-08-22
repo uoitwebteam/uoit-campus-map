@@ -6,7 +6,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/share';
 
 import {
   CategoryService,
@@ -14,7 +14,6 @@ import {
   API_URL,
   API_KEY,
   MAP_STYLES,
-  ICON_STYLES,
 } from '.';
 
 @Injectable()
@@ -32,8 +31,6 @@ export class MapService {
     private featureService: FeatureService
   ) {
     this.loadGoogle();
-    this.getCategories();
-    this.getFeatures();
   }
 
   private loadGoogle() {
@@ -67,31 +64,16 @@ export class MapService {
   }
 
   getMap(element?: HTMLElement): Observable<google.maps.Map> {
-    // if (this.mapInstance) {
-    //   return Observable.of(this.mapInstance);
-    // } else if (element) {
-      return this.getGoogle()
-        .map(google => this.mapInstance = new google.maps.Map(element, {
-          center: new google.maps.LatLng({ lat: 43.9443802, lng: -78.8975857 }),
-          zoom: 17,
-          styles: MAP_STYLES,
-          disableDefaultUI: true,
-          tilt: 45,
-          heading: 0,
-        }))
-    // } else {
-    //   throw new Error('No valid map instance is available!');
-    // }
-  }
-
-  getCategories() {
-    this.categoryService.getCategories()
-      .subscribe(category => console.log('[category]', category));
-  }
-
-  getFeatures() {
-    this.featureService.getFeatures()
-      .subscribe(featureCollection => this.addData(featureCollection));
+    return this.getGoogle()
+      .map(google => this.mapInstance = new google.maps.Map(element, {
+        center: new google.maps.LatLng({ lat: 43.9443802, lng: -78.8975857 }),
+        zoom: 17,
+        styles: MAP_STYLES,
+        disableDefaultUI: true,
+        tilt: 45,
+        heading: 0,
+      }))
+      .share();
   }
 
   addData(collection) {
