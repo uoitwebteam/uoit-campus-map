@@ -40,6 +40,7 @@ export class MapComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.mapData && changes.mapData.currentValue) {
+      this.mapService.clearData();
       this.mapService.addData(changes.mapData.currentValue);
     }
     if (changes.categories && changes.categories.currentValue) {
