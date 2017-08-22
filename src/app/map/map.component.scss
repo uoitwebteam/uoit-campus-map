@@ -1,4 +1,5 @@
-:host { 
+:host {
+  position: relative;
   &, .campus-map { 
     display: flex; 
     flex: 1 0 auto; 

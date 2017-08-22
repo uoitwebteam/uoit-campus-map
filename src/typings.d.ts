@@ -36,4 +36,13 @@ declare namespace vt {
   }
 
   export type Metadata = MongoMetadata & CMSMetadata;
+
+  export interface TourDefinition {
+    name: string;
+    label: string;
+    code: string;
+    parent?: MongoId;
+    default?: MongoId;
+    state?: 'draft' | 'published' | 'archived'
+  }
 }
