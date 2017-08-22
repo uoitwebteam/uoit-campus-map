@@ -1,4 +1,5 @@
 /// <reference types="googlemaps" />
+/// <reference types="geojson" />
 
 /* SystemJS module definition */
 declare var module: NodeModule;
