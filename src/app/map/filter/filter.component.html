@@ -1,2 +1,6 @@
-<button>North</button>
-<button>Downtown</button>
+<form [formGroup]="filterControls" novalidate>
+  <label *ngFor="let location of locations">
+    {{ location.label }}
+    <input type="radio" formControlName="location" [value]="location._id">
+  </label>
+</form>

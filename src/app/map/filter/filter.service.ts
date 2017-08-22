@@ -8,17 +8,17 @@ export class FilterService {
     private http: HttpClient
   ) { }
 
-  getLocations(filter) {
+  getLocations(filter?) {
     const params = this.formatFilter(filter);
     return this.http.get<vt.TourDefinition[]>('/api/v1/locations', { params });
   }
 
-  getBuildings(filter) {
+  getBuildings(filter?) {
     const params = this.formatFilter(filter);
     return this.http.get<vt.TourDefinition[]>('/api/v1/buildings', { params });
   }
 
-  getScenes(filter) {
+  getScenes(filter?) {
     const params = this.formatFilter(filter);
     return this.http.get<vt.TourDefinition[]>('/api/v1/scenes', { params });
   }
