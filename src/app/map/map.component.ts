@@ -1,13 +1,12 @@
 import {
   Component,
   OnInit,
+  OnChanges,
+  SimpleChanges,
+  Input,
   ViewChild,
   ElementRef,
 } from '@angular/core';
-
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/zip';
-import 'rxjs/add/operator/do';
 
 import {
   MapService,
@@ -23,11 +22,14 @@ import {
   template: `<div class="campus-map" #mapEl></div>`,
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnChanges {
+
+  mapInstance: google.maps.Map;
+
+  @Input() mapData: GeoJSON.FeatureCollection<GeoJSON.GeometryObject>;
+  @Input() categories: Category[];
 
   @ViewChild('mapEl', {read: ElementRef}) mapEl: ElementRef;
-
-  categories: Category[];
 
   constructor(
     private mapService: MapService,
@@ -38,15 +40,17 @@ export class MapComponent implements OnInit {
   }
 
   ngOnInit() {
-    Observable.zip(
-      this.categoryService.getCategories(),
-      this.mapService.getMap(this.mapEl.nativeElement)
-    ) .do(
-      ([categories, instance]) => (this.categories = categories) && instance.data.setStyle(this.setStylesByCategory)
-    ).subscribe(map => console.log('[map]', map));
+    this.mapService.getMap(this.mapEl.nativeElement)
+      .subscribe(instance => this.mapInstance = instance);
+  }
 
-    this.featureService.getFeatures()
-      .subscribe(featureCollection => this.mapService.addData(featureCollection));
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.mapData && changes.mapData.currentValue) {
+      this.mapService.addData(changes.mapData.currentValue);
+    }
+    if (changes.categories && changes.categories.currentValue) {
+      this.mapService.setStyle(this.setStylesByCategory);
+    }
   }
 
   setStylesByCategory(feature) {

@@ -65,14 +65,18 @@ export class MapService {
 
   getMap(element?: HTMLElement): Observable<google.maps.Map> {
     return this.getGoogle()
-      .map(google => this.mapInstance = new google.maps.Map(element, {
-        center: new google.maps.LatLng({ lat: 43.9443802, lng: -78.8975857 }),
-        zoom: 17,
-        styles: MAP_STYLES,
-        disableDefaultUI: true,
-        tilt: 45,
-        heading: 0,
-      }))
+      .map(
+        google => this.mapInstance || (
+          this.mapInstance = new google.maps.Map(element, {
+            center: new google.maps.LatLng({ lat: 43.9443802, lng: -78.8975857 }),
+            zoom: 17,
+            styles: MAP_STYLES,
+            disableDefaultUI: true,
+            tilt: 45,
+            heading: 0,
+          })
+        )
+      )
       .share();
   }
 
@@ -85,6 +89,10 @@ export class MapService {
     this.mapInstance.data.forEach(feature => {
       this.mapInstance.data.remove(feature);
     });
+  }
+
+  setStyle(styleFn) {
+    this.mapInstance.data.setStyle(styleFn);
   }
 
   /**
