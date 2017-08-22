@@ -10,8 +10,6 @@ import {
 
 import {
   MapService,
-  CategoryService,
-  FeatureService,
   Category,
   GEOMETRY_STYLES,
   ICON_STYLES
@@ -31,11 +29,7 @@ export class MapComponent implements OnInit, OnChanges {
 
   @ViewChild('mapEl', {read: ElementRef}) mapEl: ElementRef;
 
-  constructor(
-    private mapService: MapService,
-    private categoryService: CategoryService,
-    private featureService: FeatureService
-  ) {
+  constructor(private mapService: MapService) {
     this.setStylesByCategory = this.setStylesByCategory.bind(this);
   }
 

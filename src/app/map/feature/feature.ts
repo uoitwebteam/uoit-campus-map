@@ -24,11 +24,10 @@ export interface FeatureProperties {
  * @export
  * @class Feature
  * @implements {GeoJSON.Feature<T>}
- * @implements {vt.MongoMetadata}
- * @implements {vt.CMSMetadata}
+ * @implements {vt.Metadata}
  * @template T
  */
-export class Feature<T extends GeoJSON.GeometryObject> implements GeoJSON.Feature<T>, vt.MongoMetadata, vt.CMSMetadata {
+export class Feature<T extends GeoJSON.GeometryObject> implements GeoJSON.Feature<T>, vt.Metadata {
   _id: MongoId;
   updatedAt?: Date;
   updatedBy?: string;

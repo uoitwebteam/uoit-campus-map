@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/from';
+import 'rxjs/add/operator/map';
 
 import {
   Category,
@@ -17,7 +16,6 @@ export class CategoryService {
 
   getCategories() {
     return this.http.get<Category[]>('/api/v1/categories')
-      // .flatMap(categories => Observable.from(categories))
       .map(categories => categories.map(category => new Category(category)))
   }
 
