@@ -17,8 +17,8 @@ export class CategoryService {
 
   getCategories() {
     return this.http.get<Category[]>('/api/v1/categories')
-      .flatMap(categories => Observable.from(categories))
-      .map(category => new Category(category));
+      // .flatMap(categories => Observable.from(categories))
+      .map(categories => categories.map(category => new Category(category)))
   }
 
 }
