@@ -4,6 +4,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 
+import { Feature } from '.';
+
 @Injectable()
 export class FeatureService {
 
@@ -11,11 +13,11 @@ export class FeatureService {
     private http: HttpClient
   ) { }
 
-  getFeatures() {
+  getFeatures<T extends GeoJSON.GeometryObject>() {
     const params = new HttpParams().set('filter', '{}');
-    return this.http.get<any[]>('/api/v1/features', { params })
+    return this.http.get<Feature<T>[]>('/api/v1/features', { params })
       // .flatMap(features => Observable.from(features))
-      .map(features => ({
+      .map(features => <GeoJSON.FeatureCollection<T>>({
         type: 'FeatureCollection',
         features,
       }));
