@@ -6,7 +6,7 @@ import {
 } from './map';
 
 @Component({
-  selector: 'app-root',
+  selector: 'campus-map-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
