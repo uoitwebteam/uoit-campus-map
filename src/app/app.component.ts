@@ -24,6 +24,6 @@ export class AppComponent {
 
   onFilterChange(filter) {
     console.log('[onFilterChange]', filter);
-    this.mapData = this.featureService.getFeatures({ location });
+    this.mapData = this.featureService.getFeatures(filter);
   }
 }
