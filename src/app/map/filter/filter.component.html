@@ -3,4 +3,7 @@
     {{ location.label }}
     <input type="radio" formControlName="location" [value]="location._id">
   </label>
+  <fieldset>
+    <input type="checkbox" *ngFor="let category of categories" formControlName="category" [value]="category._id">
+  </fieldset>
 </form>

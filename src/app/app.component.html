@@ -1,2 +1,2 @@
-<campus-map-filter [locations]="locations | async" (filterChange)="onFilterChange($event)"></campus-map-filter>
+<campus-map-filter [locations]="locations | async" [categories]="categories | async" (filterChange)="onFilterChange($event)"></campus-map-filter>
 <campus-map [mapData]="mapData | async" [categories]="categories | async"></campus-map>

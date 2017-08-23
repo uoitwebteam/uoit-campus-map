@@ -22,8 +22,8 @@ export class AppComponent {
     private filterService: FilterService
   ) { }
 
-  onFilterChange({ location, category, group }) {
-    console.log('[onFilterChange]', { location, category, group });
+  onFilterChange(filter) {
+    console.log('[onFilterChange]', filter);
     this.mapData = this.featureService.getFeatures({ location });
   }
 }
