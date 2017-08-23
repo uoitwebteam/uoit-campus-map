@@ -11,6 +11,8 @@ import {
   Validators
 } from '@angular/forms';
 
+import 'rxjs/add/operator/map';
+
 import { Category } from '../category';
 
 interface FilterControls {
@@ -39,18 +41,21 @@ export class FilterComponent implements OnInit {
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.filterControls.valueChanges.subscribe((filters: FilterControls) => {
-      const filterValues = Object.entries(filters)
-        .map(([name, value]) => this.getFilterValue(name, value))
-        .filter(Boolean);
-      const length = filterValues.length;
-      const formattedFilter = length > 1 ?
-        { $and: filterValues } :
-        length === 1 ?
-          filterValues[0] :
-          {};
-      this.filterChange.emit(formattedFilter)
-    });
+    this.filterControls.valueChanges
+      .map((filters: FilterControls) =>
+        Object.entries(filters)
+          .map(([name, value]) => this.getFilterValue(name, value))
+          .filter(Boolean)
+      )
+      .map(filterValues => {
+        const length = filterValues.length;
+        return length > 1 ?
+          { $and: filterValues } :
+          length === 1 ?
+            filterValues[0] :
+            {};
+      })
+      .subscribe(result => this.filterChange.emit(result));
   }
 
   private getFilterValue(name: string, value: string | Array<string>) {
