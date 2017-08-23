@@ -6,7 +6,7 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
-import { Feature } from '.';
+import { Feature, FeatureCollection } from '.';
 
 @Injectable()
 export class FeatureService {
@@ -28,6 +28,10 @@ export class FeatureService {
           features,
         }))
         .do(result => this.cachedResults.set(paramString, result));
+  }
+
+  getFeatureCollections() {
+    return this.http.get<FeatureCollection[]>('/api/v1/feature-collections');
   }
 
   private formatFilter(filter = {}) {
