@@ -1,9 +1,18 @@
 <form [formGroup]="filterControls" novalidate>
-  <label *ngFor="let location of locations">
-    {{ location.label }}
-    <input type="radio" formControlName="location" [value]="location._id">
-  </label>
-  <fieldset>
-    <input type="checkbox" *ngFor="let category of categories" formControlName="category" [value]="category._id">
+  <fieldset *ngFor="let filter of filters" [ngSwitch]="filter.type">
+    <strong>{{ filter.title }}</strong>
+    <div *ngSwitchCase="'radio'">
+      <label *ngFor="let option of filter.options; let i = index;">
+        <input type="radio" [formControl]="filterControls.get(filter.name)" [value]="option[filter.value]">
+        {{ option[filter.label] }}
+      </label>
+    </div>
+    <div *ngSwitchCase="'select'">
+      <select multiple [formControl]="filterControls.get(filter.name)">
+        <option *ngFor="let option of filter.options; let i = index;" [value]="option[filter.value]">
+          {{ option[filter.label] }}
+        </option>
+      </select>
+    </div>
   </fieldset>
 </form>

@@ -1,16 +1,17 @@
 import {
   Component,
   OnInit,
+  OnChanges,
+  SimpleChanges,
   Input,
   Output,
   EventEmitter,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/map';
 
 import { Category } from '../category';
@@ -21,10 +22,11 @@ import { Filter, FilterControls } from '.';
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
 })
-export class FilterComponent implements OnInit {
+export class FilterComponent implements OnInit, OnChanges {
 
   @Input() locations: vt.TourDefinition[];
   @Input() categories: Category[];
+  @Input() filters: Filter[];
   @Output() filterChange = new EventEmitter();
 
   filterControls = this.fb.group({
@@ -32,13 +34,15 @@ export class FilterComponent implements OnInit {
     category: null,
     group: null,
   });
+  filterChangeSubscription: Subscription;
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.filterControls.valueChanges
+    this.filterChangeSubscription = this.filterControls.valueChanges
+      .debounceTime(10)
       .map((filters: FilterControls) =>
-        Object.entries(filters)
+        Object.entries(filters || [])
           .map(([name, value]) => this.getFilterValue(name, value))
           .filter(Boolean)
       )
@@ -53,10 +57,24 @@ export class FilterComponent implements OnInit {
       .subscribe(result => this.filterChange.emit(result));
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.filters && changes.filters.currentValue) {
+      (<Filter[]>changes.filters.currentValue)
+        .forEach(filter => this.filterControls.setControl(
+          filter.name,
+          this.fb.control(
+            filter.type === 'select' ?
+              filter.options.map(v => v[filter.value]) :
+              filter.options.find(v => v.code === 'north')._id
+          )
+        ));
+    }
+  }
+
   private getFilterValue(name: string, value: string | Array<string>) {
     return (value && value instanceof Array) ?
       value.length ?
-        { [name]: { $in: value } } :
+        { [name === 'category' ? 'properties.category' : name]: { $in: value } } :
         null :
       value ?
         { [name]: value } :
