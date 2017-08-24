@@ -14,12 +14,7 @@ import {
 import 'rxjs/add/operator/map';
 
 import { Category } from '../category';
-
-interface FilterControls {
-  location: string;
-  category: string;
-  group: string[];
-}
+import { Filter, FilterControls } from '.';
 
 @Component({
   selector: 'campus-map-filter',
@@ -33,9 +28,9 @@ export class FilterComponent implements OnInit {
   @Output() filterChange = new EventEmitter();
 
   filterControls = this.fb.group({
-    location: '',
-    category: [''],
-    group: [''],
+    location: null,
+    category: null,
+    group: null,
   });
 
   constructor(private fb: FormBuilder) { }

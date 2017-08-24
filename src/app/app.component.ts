@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+
 import {
   CategoryService,
   FeatureService,
   FilterService,
+  Filter
 } from './map';
 
 @Component({
@@ -12,9 +17,42 @@ import {
 })
 export class AppComponent {
 
-  mapData = this.featureService.getFeatures();
+  mapData: Observable<GeoJSON.FeatureCollection<GeoJSON.GeometryObject>>;
+
+  collections = this.featureService.getFeatureCollections();
   categories = this.categoryService.getCategories();
   locations = this.filterService.getLocations();
+
+  filters = Observable.forkJoin(
+    this.collections,
+    this.categories,
+    this.locations
+  ).map(([group, category, location]) => ([
+    new Filter({
+      title: 'Locations',
+      name: 'location',
+      label: 'name',
+      value: '_id',
+      options: location,
+      type: 'radio',
+    }),
+    new Filter({
+      title: 'Categories',
+      name: 'category',
+      label: 'name',
+      value: '_id',
+      options: category,
+      type: 'select',
+    }),
+    new Filter({
+      title: 'Collections',
+      name: 'group',
+      label: 'name',
+      value: '_id',
+      options: group,
+      type: 'select',
+    }),
+  ]));
 
   constructor(
     private featureService: FeatureService,
