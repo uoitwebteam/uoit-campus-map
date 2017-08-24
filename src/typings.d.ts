@@ -37,7 +37,7 @@ declare namespace vt {
 
   export type Metadata = MongoMetadata & CMSMetadata;
 
-  export interface TourDefinition {
+  export interface TourDefinition extends Metadata {
     name: string;
     label: string;
     code: string;
