@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
@@ -23,6 +24,7 @@ export class FeatureService {
     return this.cachedResults.has(paramString) ?
       Observable.of(this.cachedResults.get(paramString)) :
       this.http.get<Feature<T>[]>('/api/v1/features', { params })
+        .filter(features => !!features.length)
         .map(features => <GeoJSON.FeatureCollection<T>>({
           type: 'FeatureCollection',
           features,
