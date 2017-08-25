@@ -16,7 +16,7 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/map';
 
 import { Category } from '../category';
-import { Filter, FilterControls } from '.';
+import { FilterControl, FilterControls } from '.';
 
 @Component({
   selector: 'campus-map-filter',
@@ -27,7 +27,7 @@ export class FilterComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() locations: vt.TourDefinition[];
   @Input() categories: Category[];
-  @Input() filters: Filter[];
+  @Input() filters: FilterControl[];
   @Output() filterChange = new EventEmitter();
 
   filterControls = this.fb.group({
@@ -60,7 +60,7 @@ export class FilterComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.filters && changes.filters.currentValue) {
-      (<Filter[]>changes.filters.currentValue)
+      (<FilterControl[]>changes.filters.currentValue)
         .forEach(filter => this.filterControls.setControl(
           filter.name,
           this.fb.control(

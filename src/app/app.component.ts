@@ -7,7 +7,7 @@ import {
   CategoryService,
   FeatureService,
   FilterService,
-  Filter
+  FilterControl
 } from './map';
 
 @Component({
@@ -28,7 +28,7 @@ export class AppComponent {
     this.categories,
     this.locations
   ).map(([group, category, location]) => ([
-    new Filter({
+    new FilterControl({
       title: 'Locations',
       name: 'location',
       label: 'name',
@@ -36,7 +36,7 @@ export class AppComponent {
       options: location,
       type: 'radio',
     }),
-    new Filter({
+    new FilterControl({
       title: 'Categories',
       name: 'category',
       label: 'name',
@@ -44,7 +44,7 @@ export class AppComponent {
       options: category,
       type: 'select',
     }),
-    new Filter({
+    new FilterControl({
       title: 'Collections',
       name: 'group',
       label: 'name',

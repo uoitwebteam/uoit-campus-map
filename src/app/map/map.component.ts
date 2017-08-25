@@ -11,6 +11,7 @@ import {
 import {
   MapService,
   Category,
+  FeatureCollection,
   GEOMETRY_STYLES,
   ICON_STYLES
 } from '.';
@@ -24,7 +25,7 @@ export class MapComponent implements OnInit, OnChanges {
 
   mapInstance: google.maps.Map;
 
-  @Input() mapData: GeoJSON.FeatureCollection<GeoJSON.GeometryObject>;
+  @Input() mapData: FeatureCollection;
   @Input() categories: Category[];
 
   @ViewChild('mapEl', {read: ElementRef}) mapEl: ElementRef;

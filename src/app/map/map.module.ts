@@ -10,6 +10,7 @@ import {
   FilterService,
   MapComponent,
   FilterComponent,
+  FilterControlComponent,
 } from '.';
 
 @NgModule({
@@ -21,6 +22,7 @@ import {
   declarations: [
     MapComponent,
     FilterComponent,
+    FilterControlComponent,
   ],
   providers: [
     MapService,
@@ -31,6 +33,7 @@ import {
   exports: [
     MapComponent,
     FilterComponent,
+    FilterControlComponent,
   ],
 })
 export class MapModule { }
