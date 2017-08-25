@@ -7,7 +7,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
-import { Feature, FeatureCollection } from '.';
+import { Feature } from '.';
 
 @Injectable()
 export class FeatureService {
@@ -30,10 +30,6 @@ export class FeatureService {
           features,
         }))
         .do(result => this.cachedResults.set(paramString, result));
-  }
-
-  getFeatureCollections() {
-    return this.http.get<FeatureCollection[]>('/api/v1/feature-collections');
   }
 
   private formatFilter(filter = {}) {

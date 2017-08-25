@@ -6,6 +6,7 @@ import 'rxjs/add/observable/forkJoin';
 import {
   CategoryService,
   FeatureService,
+  CollectionService,
   FilterService,
   FilterControl,
 } from '.';
@@ -19,7 +20,7 @@ export class AppComponent {
 
   mapData: Observable<GeoJSON.FeatureCollection<GeoJSON.GeometryObject>>;
 
-  collections = this.featureService.getFeatureCollections();
+  collections = this.collectionService.getFeatureCollections();
   categories = this.categoryService.getCategories();
   locations = this.filterService.getLocations();
 
@@ -57,6 +58,7 @@ export class AppComponent {
   constructor(
     private featureService: FeatureService,
     private categoryService: CategoryService,
+    private collectionService: CollectionService,
     private filterService: FilterService
   ) { }
 
