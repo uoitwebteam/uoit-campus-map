@@ -1,16 +1,19 @@
 <ng-container [ngSwitch]="filter.type">
   <strong>{{ filter.title }}</strong>
-  <div *ngSwitchCase="'radio'">
+  <ng-container *ngSwitchCase="'radio'">
     <label *ngFor="let option of filter.options; let i = index;">
-      <input type="radio" [formControl]="form.get(filter.name)" [value]="option[filter.value]">
+      <input type="radio" [formControl]="formControl" [value]="option[filter.value]">
       {{ option[filter.label] }}
     </label>
-  </div>
-  <div *ngSwitchCase="'select'">
-    <select multiple [formControl]="form.get(filter.name)">
+  </ng-container>
+  <ng-container *ngSwitchCase="'select'">
+    <select multiple [formControl]="formControl">
       <option *ngFor="let option of filter.options; let i = index;" [value]="option[filter.value]">
         {{ option[filter.label] }}
       </option>
     </select>
-  </div>
+    <label>Select all
+      <input type="checkbox" (change)="select($event)" [indeterminate]="indeterminate | async" [checked]="checked | async" />
+    </label>
+  </ng-container>
 </ng-container>
