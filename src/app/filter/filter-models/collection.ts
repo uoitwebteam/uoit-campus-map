@@ -1,4 +1,4 @@
-import { Feature } from '..';
+import { Feature } from '../..';
 
 export class FeatureCollection implements vt.Metadata {
   _id: MongoId;

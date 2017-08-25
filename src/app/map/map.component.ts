@@ -13,11 +13,13 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 import {
   MapService,
-  Category,
-  FeatureCollection,
   GEOMETRY_STYLES,
   ICON_STYLES
 } from '.';
+import {
+  Category,
+  FeatureCollection,
+} from '../filter';
 
 @Component({
   selector: 'campus-map',
