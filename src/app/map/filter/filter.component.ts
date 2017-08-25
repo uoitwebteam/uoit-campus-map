@@ -2,6 +2,7 @@ import {
   Component,
   OnInit,
   OnChanges,
+  OnDestroy,
   SimpleChanges,
   Input,
   Output,
@@ -22,7 +23,7 @@ import { Filter, FilterControls } from '.';
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
 })
-export class FilterComponent implements OnInit, OnChanges {
+export class FilterComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() locations: vt.TourDefinition[];
   @Input() categories: Category[];
@@ -38,7 +39,7 @@ export class FilterComponent implements OnInit, OnChanges {
 
   constructor(private fb: FormBuilder) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.filterChangeSubscription = this.filterControls.valueChanges
       .debounceTime(10)
       .map((filters: FilterControls) =>
@@ -68,6 +69,12 @@ export class FilterComponent implements OnInit, OnChanges {
               filter.options.find(v => v.code === 'north')._id
           )
         ));
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.filterChangeSubscription) {
+      this.filterChangeSubscription.unsubscribe();
     }
   }
 
