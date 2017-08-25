@@ -6,7 +6,10 @@ import {
   Input,
   ViewChild,
   ElementRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
+
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 import {
   MapService,
@@ -20,7 +23,9 @@ import {
   selector: 'campus-map',
   template: `<div class="campus-map" #mapEl></div>`,
   styleUrls: ['./map.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
+@AutoUnsubscribe()
 export class MapComponent implements OnInit, OnChanges {
 
   mapInstance: google.maps.Map;

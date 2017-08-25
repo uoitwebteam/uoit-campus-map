@@ -3,6 +3,7 @@ import {
   OnInit,
   AfterViewInit,
   Input,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
@@ -19,6 +20,7 @@ import { FilterControl } from '.';
   selector: 'filter-control',
   templateUrl: './filter-control.component.html',
   styleUrls: ['./filter-control.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 @AutoUnsubscribe()
 export class FilterControlComponent implements OnInit, AfterViewInit {

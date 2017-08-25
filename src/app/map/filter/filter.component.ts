@@ -2,11 +2,11 @@ import {
   Component,
   OnInit,
   OnChanges,
-  OnDestroy,
   SimpleChanges,
   Input,
   Output,
   EventEmitter,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
@@ -14,14 +14,18 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/map';
 
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+
 import { FilterControl, FilterControls } from '.';
 
 @Component({
   selector: 'campus-map-filter',
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterComponent implements OnInit, OnChanges, OnDestroy {
+@AutoUnsubscribe()
+export class FilterComponent implements OnInit, OnChanges {
 
   @Input() filters: FilterControl[];
   @Output() filterChange = new EventEmitter();
@@ -68,12 +72,6 @@ export class FilterComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    if (this.filterChangeSubscription) {
-      this.filterChangeSubscription.unsubscribe();
-    }
-  }
-
   private getFilterValue(name: string, value: string | Array<string>) {
     return (value && value instanceof Array) ?
       value.length ?
@@ -83,5 +81,4 @@ export class FilterComponent implements OnInit, OnChanges, OnDestroy {
         { [name]: value } :
         null;
   }
-
 }
