@@ -10,12 +10,10 @@ import {
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
-import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/map';
 
-import { Category } from '../category';
 import { FilterControl, FilterControls } from '.';
 
 @Component({
@@ -25,8 +23,6 @@ import { FilterControl, FilterControls } from '.';
 })
 export class FilterComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() locations: vt.TourDefinition[];
-  @Input() categories: Category[];
   @Input() filters: FilterControl[];
   @Output() filterChange = new EventEmitter();
 
