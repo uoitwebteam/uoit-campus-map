@@ -9,7 +9,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/share';
 
 import {
-  CategoryService,
   FeatureService,
   API_URL,
   API_KEY,
@@ -27,7 +26,6 @@ export class MapService {
 
   constructor(
     private zone: NgZone,
-    private categoryService: CategoryService,
     private featureService: FeatureService
   ) {
     this.loadGoogle();

@@ -4,9 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
 
 import {
-  CategoryService,
   FeatureService,
-  CollectionService,
   FilterService,
   FilterControl,
 } from '.';
@@ -20,8 +18,8 @@ export class AppComponent {
 
   mapData: Observable<GeoJSON.FeatureCollection<GeoJSON.GeometryObject>>;
 
-  collections = this.collectionService.getFeatureCollections();
-  categories = this.categoryService.getCategories();
+  collections = this.filterService.getFeatureCollections();
+  categories = this.filterService.getCategories();
   locations = this.filterService.getLocations();
 
   filters = Observable.forkJoin(
@@ -57,8 +55,6 @@ export class AppComponent {
 
   constructor(
     private featureService: FeatureService,
-    private categoryService: CategoryService,
-    private collectionService: CollectionService,
     private filterService: FilterService
   ) { }
 
