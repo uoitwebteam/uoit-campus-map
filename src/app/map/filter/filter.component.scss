@@ -7,3 +7,19 @@
   flex: 1 0 auto; 
   flex-direction: row;
 }
+
+form, .filter-control {
+  display: flex; 
+  flex: 1 0 auto; 
+  flex-direction: row;
+}
+
+fieldset, .filter-control {
+  flex: 1 0 auto;
+}
+
+.filter-control {
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+}

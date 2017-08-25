@@ -1,18 +1,20 @@
 <form [formGroup]="filterControls" novalidate>
   <fieldset *ngFor="let filter of filters" [ngSwitch]="filter.type">
-    <strong>{{ filter.title }}</strong>
-    <div *ngSwitchCase="'radio'">
-      <label *ngFor="let option of filter.options; let i = index;">
-        <input type="radio" [formControl]="filterControls.get(filter.name)" [value]="option[filter.value]">
-        {{ option[filter.label] }}
-      </label>
-    </div>
-    <div *ngSwitchCase="'select'">
-      <select multiple [formControl]="filterControls.get(filter.name)">
-        <option *ngFor="let option of filter.options; let i = index;" [value]="option[filter.value]">
+    <div class="filter-control">
+      <strong>{{ filter.title }}</strong>
+      <div *ngSwitchCase="'radio'">
+        <label *ngFor="let option of filter.options; let i = index;">
+          <input type="radio" [formControl]="filterControls.get(filter.name)" [value]="option[filter.value]">
           {{ option[filter.label] }}
-        </option>
-      </select>
+        </label>
+      </div>
+      <div *ngSwitchCase="'select'">
+        <select multiple [formControl]="filterControls.get(filter.name)">
+          <option *ngFor="let option of filter.options; let i = index;" [value]="option[filter.value]">
+            {{ option[filter.label] }}
+          </option>
+        </select>
+      </div>
     </div>
   </fieldset>
 </form>
