@@ -1,25 +1,15 @@
+:host, form, fieldset {
+  flex: 1 0 auto;
+  flex-direction: row;
+}
+
+:host, form {
+  display: flex; 
+}
+
 :host {
   position: absolute;
   z-index: 1;
   width: 100%;
   height: auto;
-  display: flex; 
-  flex: 1 0 auto; 
-  flex-direction: row;
-}
-
-form, .filter-control {
-  display: flex; 
-  flex: 1 0 auto; 
-  flex-direction: row;
-}
-
-fieldset, .filter-control {
-  flex: 1 0 auto;
-}
-
-.filter-control {
-  height: 100%;
-  align-items: center;
-  justify-content: space-between;
 }

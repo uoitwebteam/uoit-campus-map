@@ -1,3 +1,16 @@
-<p>
-  filter-control works!
-</p>
+<ng-container [ngSwitch]="filter.type">
+  <strong>{{ filter.title }}</strong>
+  <div *ngSwitchCase="'radio'">
+    <label *ngFor="let option of filter.options; let i = index;">
+      <input type="radio" [formControl]="form.get(filter.name)" [value]="option[filter.value]">
+      {{ option[filter.label] }}
+    </label>
+  </div>
+  <div *ngSwitchCase="'select'">
+    <select multiple [formControl]="form.get(filter.name)">
+      <option *ngFor="let option of filter.options; let i = index;" [value]="option[filter.value]">
+        {{ option[filter.label] }}
+      </option>
+    </select>
+  </div>
+</ng-container>
