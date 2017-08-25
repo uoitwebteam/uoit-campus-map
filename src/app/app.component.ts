@@ -6,9 +6,11 @@ import 'rxjs/add/observable/forkJoin';
 import {
   CategoryService,
   FeatureService,
-  FilterService,
-  FilterControl
 } from './map';
+import {
+  FilterService,
+  FilterControl,
+} from './filter';
 
 @Component({
   selector: 'campus-map-root',

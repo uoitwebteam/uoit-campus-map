@@ -2,7 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
-import { MapModule, FilterModule } from './map';
+import { MapModule } from './map';
+import { FilterModule } from './filter';
 import { AppComponent } from './app.component';
 
 @NgModule({
