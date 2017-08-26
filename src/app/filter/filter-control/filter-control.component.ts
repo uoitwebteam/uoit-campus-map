@@ -49,7 +49,7 @@ export class FilterControlComponent implements OnInit, AfterViewInit {
   }
 
   select(event: Event) {
-    const newValue = (<HTMLInputElement>event.target).checked ?
+    const newValue = (<HTMLInputElement>(event.target || event)).checked ?
       [...this.filter.options.map(f => f[this.filter.value])] :
       [];
     this.formControl.setValue(newValue);

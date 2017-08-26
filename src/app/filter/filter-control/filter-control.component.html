@@ -1,19 +1,37 @@
 <ng-container [ngSwitch]="filter.type">
-  <strong>{{ filter.title }}</strong>
+  <strong class="button">{{ filter.title }}</strong>
   <ng-container *ngSwitchCase="'radio'">
-    <label *ngFor="let option of filter.options; let i = index;">
+    <!-- <label *ngFor="let option of filter.options; let i = index;">
       <input type="radio" [formControl]="formControl" [value]="option[filter.value]">
       {{ option[filter.label] }}
-    </label>
+    </label> -->
+    <md-button-toggle-group [formControl]="formControl">
+      <md-button-toggle *ngFor="let option of filter.options; let i = index;" [value]="option[filter.value]">
+        {{ option[filter.label] }}
+      </md-button-toggle>
+    </md-button-toggle-group>
+    <!-- <md-radio-group [formControl]="formControl">
+      <md-radio-button *ngFor="let option of filter.options; let i = index;" [value]="option[filter.value]">
+        {{ option[filter.label] }}
+      </md-radio-button>
+    </md-radio-group> -->
   </ng-container>
   <ng-container *ngSwitchCase="'select'">
-    <select multiple [formControl]="formControl">
+    <!-- <select multiple [formControl]="formControl">
       <option *ngFor="let option of filter.options; let i = index;" [value]="option[filter.value]">
         {{ option[filter.label] }}
       </option>
-    </select>
-    <label>Select all
+    </select> -->
+    <md-select multiple [formControl]="formControl">
+      <md-option *ngFor="let option of filter.options; let i = index;" [value]="option[filter.value]">
+        {{ option[filter.label] }}
+      </md-option>
+    </md-select>
+    <!-- <label>Select all
       <input type="checkbox" (change)="select($event)" [indeterminate]="indeterminate | async" [checked]="checked | async" />
-    </label>
+    </label> -->
+    <md-checkbox [indeterminate]="indeterminate | async" [checked]="checked | async" (change)="select($event)">
+      Select all
+    </md-checkbox>
   </ng-container>
 </ng-container>
