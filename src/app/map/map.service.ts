@@ -14,6 +14,12 @@ import {
   API_KEY,
   MAP_STYLES,
 } from '.';
+import { FeatureCollection } from '../filter';
+
+type DataBounds = google.maps.LatLng
+  | google.maps.Data.Point
+  | google.maps.Data.Geometry
+  | google.maps.Data.GeometryCollection;
 
 @Injectable()
 export class MapService {
@@ -31,7 +37,7 @@ export class MapService {
     this.loadGoogle();
   }
 
-  private loadGoogle() {
+  private loadGoogle(): void {
     if (this.googleInstance) {
       this.googleSubject.next(this.googleInstance);
     } else {
@@ -78,18 +84,18 @@ export class MapService {
       .share();
   }
 
-  addData(collection) {
+  addData(collection: FeatureCollection) {
     this.mapInstance.data.addGeoJson(collection);
     this.fitBounds(this.mapInstance);
   }
 
-  clearData() {
+  clearData(): void {
     this.mapInstance.data.forEach(feature => {
       this.mapInstance.data.remove(feature);
     });
   }
 
-  setStyle(styleFn) {
+  setStyle(styleFn: google.maps.Data.StylingFunction): void {
     this.mapInstance.data.setStyle(styleFn);
   }
 
@@ -102,13 +108,13 @@ export class MapService {
    * @param {any} thisArg Context for `this`
    * @memberof MapService
    */
-  processBounds(geometry, callback, thisArg) {
+  processBounds(geometry: DataBounds, callback, thisArg) {
     if (geometry instanceof google.maps.LatLng) {
       callback.call(thisArg, geometry);
     } else if (geometry instanceof google.maps.Data.Point) {
       callback.call(thisArg, geometry.get());
     } else {
-      geometry.getArray().forEach(g => {
+      (<google.maps.Data.GeometryCollection>geometry).getArray().forEach(g => {
         this.processBounds(g, callback, thisArg);
       });
     }
