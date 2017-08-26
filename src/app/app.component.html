@@ -1,2 +1,5 @@
 <campus-map-filter [filters]="filters | async" (filterChange)="onFilterChange($event)"></campus-map-filter>
 <campus-map [mapData]="mapData | async" [categories]="categories | async"></campus-map>
+<campus-map-infowindow>
+  <p>That's a foo!</p>
+</campus-map-infowindow>

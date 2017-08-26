@@ -62,4 +62,8 @@ export class AppComponent {
     console.log('[onFilterChange]', filter);
     this.mapData = this.featureService.getFeatures(filter);
   }
+
+  onGotoBuilding(building) {
+    console.log('[onGotoBuilding]', building);
+  }
 }

@@ -10,6 +10,7 @@ interface NodeModule {
 declare interface Google {
   maps?: {
     Map: google.maps.Map;
+    InfoWindow: google.maps.InfoWindow;
   };
 }
 

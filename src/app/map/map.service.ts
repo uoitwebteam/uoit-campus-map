@@ -64,7 +64,7 @@ export class MapService {
   }
 
   getGoogle(): Observable<any> {
-    return this.googleSubject.asObservable()
+    return this.googleSubject.asObservable().share();
   }
 
   getMap(element?: HTMLElement): Observable<google.maps.Map> {
@@ -82,6 +82,11 @@ export class MapService {
         )
       )
       .share();
+  }
+
+  addInfoWindow(options: google.maps.InfoWindowOptions) {
+    return this.getGoogle()
+      .map(google => new google.maps.InfoWindow(options));
   }
 
   addData(collection: FeatureCollection) {
@@ -103,7 +108,7 @@ export class MapService {
    * Direct port of Google Maps `processBounds` example function
    * for recalculation of map boundaries based on map data.
    *
-   * @param {google.maps.LatLng | google.maps.Data.Point | google.maps.Data.Geometry} geometry LatLng geometry object
+   * @param {DataBounds} geometry LatLng geometry object
    * @param {any} callback Recursion callback
    * @param {any} thisArg Context for `this`
    * @memberof MapService

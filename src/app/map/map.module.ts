@@ -6,6 +6,7 @@ import {
   FeatureService,
   MapService,
   MapComponent,
+  InfowindowComponent
 } from '.';
 
 @NgModule({
@@ -15,6 +16,7 @@ import {
   ],
   declarations: [
     MapComponent,
+    InfowindowComponent,
   ],
   providers: [
     FeatureService,
@@ -22,6 +24,7 @@ import {
   ],
   exports: [
     MapComponent,
+    InfowindowComponent,
   ],
 })
 export class MapModule { }
