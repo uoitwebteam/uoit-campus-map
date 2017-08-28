@@ -6,6 +6,7 @@ import {
   FeatureService,
   MapService,
   MapComponent,
+  InfowindowService,
   InfowindowComponent
 } from '.';
 
@@ -21,6 +22,7 @@ import {
   providers: [
     FeatureService,
     MapService,
+    InfowindowService,
   ],
   exports: [
     MapComponent,

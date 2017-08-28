@@ -4,6 +4,8 @@ import {
   OnChanges,
   SimpleChanges,
   Input,
+  Output,
+  EventEmitter,
   ViewChild,
   ElementRef,
   ChangeDetectionStrategy
@@ -14,7 +16,8 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import {
   MapService,
   GEOMETRY_STYLES,
-  ICON_STYLES
+  ICON_STYLES,
+  HOVER_STYLES
 } from '.';
 import {
   Category,
@@ -23,7 +26,10 @@ import {
 
 @Component({
   selector: 'campus-map',
-  template: `<div class="campus-map" #mapEl></div>`,
+  template: `<ng-content select="campus-map-filter"></ng-content>
+    <div class="campus-map" #mapEl>
+      <ng-content select="campus-map-infowindow"></ng-content>
+    </div>`,
   styleUrls: ['./map.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -31,6 +37,7 @@ import {
 export class MapComponent implements OnInit, OnChanges {
 
   mapInstance: google.maps.Map;
+  mapMarkers: google.maps.Marker[] = [];
   private featureListeners: {
     mouseover(event): void,
     mouseout(event): void,
@@ -79,13 +86,30 @@ export class MapComponent implements OnInit, OnChanges {
     }
   }
 
-  setStylesByCategory(feature) {
-    return Object.assign({}, GEOMETRY_STYLES, {
-      icon: ICON_STYLES,
-      title: feature.getProperty('name'),
-    }, this.categories.find(
-      category => category._id === feature.getProperty('category')
-    ));
+  setStylesByCategory(feature: google.maps.Data.Feature) {
+    const category = feature.getProperty('category');
+    return Object.assign(
+      {},
+      GEOMETRY_STYLES,
+      { icon: ICON_STYLES },
+      // this.showLabels ? { label } : {},
+      this.categories.find(c => c._id === category)
+    );
+  }
+
+  setLabelsByBuilding(feature) {
+    const building = feature.getProperty('building');
+    if (building) {
+      const marker = new google.maps.Marker({
+        map: this.mapInstance,
+        position: this.mapService.getCenter(feature),
+        icon: 'none',
+        label: building.name,
+      });
+      console.log(marker);
+      this.mapMarkers.push(marker);
+    }
+  }
 
   // event handler functions
   //

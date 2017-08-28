@@ -6,6 +6,7 @@ export interface AnchorPoint extends google.maps.Point {
 export class Category implements google.maps.Data.StyleOptions, vt.Metadata {
   _id: MongoId;
   __v?: number;
+  name?: string;
   clickable?: boolean;
   cursor?: string;
   draggable?: boolean;

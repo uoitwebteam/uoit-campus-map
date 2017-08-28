@@ -85,9 +85,10 @@ export class MapService {
       });
   }
 
-  addInfoWindow(options: google.maps.InfoWindowOptions) {
+  createInfoWindow(options: google.maps.InfoWindowOptions): Observable<google.maps.InfoWindow> {
     return this.getGoogle()
-      .map(google => new google.maps.InfoWindow(options));
+      .map(google => new google.maps.InfoWindow(options))
+      .take(1);
   }
 
   addData(collection: FeatureCollection) {
