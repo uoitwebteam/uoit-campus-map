@@ -4,22 +4,29 @@ import {
   ElementRef
 } from '@angular/core';
 
-import { MapService } from '../map.service';
+import { InfowindowService } from '.';
 
 @Component({
   selector: 'campus-map-infowindow',
-  templateUrl: './infowindow.component.html',
+  template: `<div class="info-window"><ng-content></ng-content></div>`,
   styleUrls: ['./infowindow.component.scss'],
 })
 export class InfowindowComponent implements OnInit {
 
-  constructor(private mapService: MapService, private el: ElementRef) { }
+  content: HTMLElement;
+
+  constructor(
+    private infowindowService: InfowindowService,
+    private el: ElementRef
+  ) { }
 
   ngOnInit() {
-    const content = this.el.nativeElement.innerHTML;
-    this.mapService.addInfoWindow({
-      content,
-    }).subscribe(infowindow => console.log(infowindow));
+    this.content = this.el.nativeElement.querySelector('.info-window');
+    this.infowindowService.add(this);
+  }
+
+  open(feature) {
+    this.infowindowService.open(this, feature);
   }
 
 }
