@@ -4,9 +4,10 @@ import {
 } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/share';
+import 'rxjs/add/operator/take';
 
 import {
   FeatureService,
@@ -24,7 +25,7 @@ type DataBounds = google.maps.LatLng
 @Injectable()
 export class MapService {
 
-  private googleSubject = new Subject<Google>();
+  private googleSubject = new ReplaySubject<Google>();
   private googleInstance: Google;
 
   private mapSubject = new Subject<google.maps.Map>();
@@ -64,13 +65,13 @@ export class MapService {
   }
 
   getGoogle(): Observable<any> {
-    return this.googleSubject.asObservable().share();
+    return this.googleSubject.asObservable();
   }
 
   getMap(element?: HTMLElement): Observable<google.maps.Map> {
     return this.getGoogle()
-      .map(
-        google => this.mapInstance || (
+      .map(google => {
+        if (!this.mapInstance) {
           this.mapInstance = new google.maps.Map(element, {
             center: new google.maps.LatLng({ lat: 43.9443802, lng: -78.8975857 }),
             zoom: 17,
@@ -79,9 +80,9 @@ export class MapService {
             tilt: 45,
             heading: 0,
           })
-        )
-      )
-      .share();
+        }
+        return this.mapInstance;
+      });
   }
 
   addInfoWindow(options: google.maps.InfoWindowOptions) {
@@ -102,6 +103,14 @@ export class MapService {
 
   setStyle(styleFn: google.maps.Data.StylingFunction): void {
     this.mapInstance.data.setStyle(styleFn);
+  }
+
+  setFeatureStyle(feature: google.maps.Data.Feature, styles): void {
+    this.mapInstance.data.overrideStyle(feature, styles);
+  }
+
+  resetFeatureStyles(): void {
+    this.mapInstance.data.revertStyle();
   }
 
   /**
@@ -134,5 +143,11 @@ export class MapService {
       this.processBounds(feature.getGeometry(), bounds.extend, bounds);
     });
     instance.fitBounds(bounds);
+  }
+
+  getCenter(feature) {
+    const bounds = new google.maps.LatLngBounds();
+    this.processBounds(feature.getGeometry(), bounds.extend, bounds);
+    return bounds.getCenter();
   }
 }
