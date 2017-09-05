@@ -69,21 +69,26 @@ export class MapComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.mapService.getMap(this.mapEl.nativeElement)
       .subscribe(instance => {
-        Object.keys(this.featureListeners).forEach(event => instance.data.addListener(event, this.featureListeners[event]));
-        Object.keys(this.mapListeners).forEach(event => instance.addListener(event, this.mapListeners[event]));
         this.mapInstance = instance;
+        this.attachListeners(this.mapListeners);
       });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.mapData && changes.mapData.currentValue) {
-      this.mapService.clearData();
-      this.mapService.addData(changes.mapData.currentValue);
       this.mapInstance.data.forEach(this.setLabelsByBuilding)
+  ngOnChanges({ mapData, categories }: SimpleChanges): void {
+    if (mapData && mapData.currentValue) {
+      this.updateMapData(mapData.currentValue);
+      this.attachListeners(this.featureListeners);
+      this.onMapZoomChanged();
     }
-    if (changes.categories && changes.categories.currentValue) {
+    if (categories && categories.currentValue) {
       this.mapService.setStyle(this.setStylesByCategory);
     }
+  }
+
+  updateMapData(data) {
+    this.mapService.clearData();
+    this.mapService.addData(data);
   }
 
   setStylesByCategory(feature: google.maps.Data.Feature) {
@@ -122,12 +127,15 @@ export class MapComponent implements OnInit, OnChanges {
   private onFeatureClick(event) {
     this.featureClick.emit(event);
   }
-  private onMapZoomChanged(event) {
-    if (this.mapInstance.getZoom() > 16) {
+  private onMapZoomChanged() {
+    if (this.mapInstance.getZoom() > 17) {
       this.mapMarkers.forEach(marker => marker.setMap(this.mapInstance));
     } else {
       this.mapMarkers.forEach(marker => marker.setMap(null));
     }
+  }
+  private attachListeners(listeners: object) {
+    Object.keys(listeners).forEach(event => this.mapInstance.data.addListener(event, listeners[event]));
   }
 
 }
