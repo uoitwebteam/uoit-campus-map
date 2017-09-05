@@ -24,6 +24,14 @@ import {
   FeatureCollection,
 } from '../filter';
 
+interface ListenerMap {
+  [key: string]: (event?: google.maps.Data.MouseEvent) => void
+}
+
+interface StylingFunctionMap {
+  [key: string]: google.maps.Data.StylingFunction
+}
+
 @Component({
   selector: 'campus-map',
   template: `<ng-content select="campus-map-filter"></ng-content>
@@ -38,14 +46,17 @@ export class MapComponent implements OnInit, OnChanges {
 
   mapInstance: google.maps.Map;
   mapMarkers: google.maps.Marker[] = [];
-  private featureListeners: {
-    mouseover(event): void,
-    mouseout(event): void,
-    click(event): void
+  private featureListeners: ListenerMap = {
+    mouseover: this.onFeatureMouseover.bind(this),
+    mouseout: this.onFeatureMouseout.bind(this),
+    click: this.onFeatureClick.bind(this),
   };
-  private mapListeners: {
-    zoom_changed(event): void
+  private mapListeners: ListenerMap = {
+    zoom_changed: this.onMapZoomChanged.bind(this),
   };
+  private stylingFunctions: StylingFunctionMap = {
+    categories: this.setStylesByCategory.bind(this),
+  }
 
   @Input() mapData: FeatureCollection;
   @Input() categories: Category[];
@@ -53,23 +64,13 @@ export class MapComponent implements OnInit, OnChanges {
 
   @ViewChild('mapEl', {read: ElementRef}) mapEl: ElementRef;
 
-  constructor(private mapService: MapService) {
-    this.setStylesByCategory = this.setStylesByCategory.bind(this);
-    this.featureListeners = {
-      mouseover: this.onFeatureMouseover.bind(this),
-      mouseout: this.onFeatureMouseout.bind(this),
-      click: this.onFeatureClick.bind(this),
-    };
-    this.mapListeners = {
-      zoom_changed: this.onMapZoomChanged.bind(this),
-    };
-  }
+  constructor(private mapService: MapService) { }
 
   ngOnInit() {
     this.mapService.getMap(this.mapEl.nativeElement)
       .subscribe(instance => {
         this.mapInstance = instance;
-        this.attachListeners(this.mapListeners);
+        this.attachListeners(this.mapInstance, this.mapListeners);
       });
   }
 
@@ -77,12 +78,12 @@ export class MapComponent implements OnInit, OnChanges {
     if (mapData && mapData.currentValue) {
       this.clearBuildingLabels();
       this.updateMapData(mapData.currentValue);
-      this.attachListeners(this.featureListeners);
+      this.attachListeners(this.mapInstance.data, this.featureListeners);
       this.setBuildingLabels();
       this.onMapZoomChanged();
     }
     if (categories && categories.currentValue) {
-      this.mapService.setStyle(this.setStylesByCategory);
+      this.mapService.setStyle(this.stylingFunctions.categories);
     }
   }
 
@@ -91,7 +92,7 @@ export class MapComponent implements OnInit, OnChanges {
     this.mapService.addData(data);
   }
 
-  setStylesByCategory(feature: google.maps.Data.Feature) {
+  setStylesByCategory(feature: google.maps.Data.Feature): google.maps.Data.StyleOptions {
     const category = feature.getProperty('category');
     return Object.assign(
       {},
@@ -135,8 +136,8 @@ export class MapComponent implements OnInit, OnChanges {
       this.mapMarkers.forEach(marker => marker.setMap(null));
     }
   }
-  private attachListeners(listeners: object) {
-    Object.keys(listeners).forEach(event => this.mapInstance.data.addListener(event, listeners[event]));
+  private attachListeners(target: google.maps.Map | google.maps.Data, listeners: object) {
+    Object.keys(listeners).forEach(event => target.addListener(event, listeners[event]));
   }
 
 }
