@@ -1,4 +1,4 @@
 <campus-map [mapData]="mapData | async" [categories]="categories | async" (featureClick)="infoWindow.open($event)">
   <campus-map-filter [filters]="filters | async" (filterChange)="onFilterChange($event)"></campus-map-filter>
-  <campus-map-infowindow #infoWindow></campus-map-infowindow>
+  <campus-map-infowindow #infoWindow (action)="onInfowindowAction($event)"></campus-map-infowindow>
 </campus-map>

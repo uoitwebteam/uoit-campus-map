@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import {
+  MdButtonModule
+} from '@angular/material';
 
 import {
   FeatureService,
@@ -14,6 +17,7 @@ import {
   imports: [
     CommonModule,
     HttpClientModule,
+    MdButtonModule,
   ],
   declarations: [
     MapComponent,

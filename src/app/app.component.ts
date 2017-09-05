@@ -63,7 +63,7 @@ export class AppComponent {
     this.mapData = this.featureService.getFeatures(filter);
   }
 
-  onGotoBuilding(building) {
-    console.log('[onGotoBuilding]', building);
+  onInfowindowAction(event) {
+    console.log('[onInfowindowAction]', event);
   }
 }

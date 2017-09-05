@@ -17,16 +17,13 @@ export class InfowindowService {
       .subscribe(infowindow => this.cache.set(instance, infowindow))
   }
 
-  open(instance: InfowindowComponent, event: google.maps.Data.MouseEvent) {
+  open(instance: InfowindowComponent, position) {
     const infowindow = this.cache.get(instance);
-    const { feature, latLng } = event;
-    const title = feature.getProperty('name');
-    const building = feature.getProperty('building');
-    const description = feature.getProperty('desc') || (building ? building.desc : 'No description available');
     this.mapService.getMap()
       .subscribe(map => {
-        infowindow.setPosition(latLng);
-        infowindow.setContent(`<h2>${title}</h2>${description}`);
+        console.log('infowindow content', instance.content);
+        infowindow.setPosition(position);
+        infowindow.setContent(instance.content);
         infowindow.open(map);
       });
   }
