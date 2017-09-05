@@ -14,8 +14,12 @@ import {
   API_URL,
   API_KEY,
   MAP_STYLES,
+  LABEL_STYLES,
 } from '.';
 import { FeatureCollection } from '../filter';
+
+import markerWithLabelFactory from 'markerwithlabel';
+let MarkerWithLabel;
 
 type DataBounds = google.maps.LatLng
   | google.maps.Data.Point
@@ -46,6 +50,7 @@ export class MapService {
         const callbackId = 'g' + (new Date()).getTime().toString(12);
         window[callbackId] = () => {
           console.log('[map.service] getGoogle', window.google);
+          MarkerWithLabel = markerWithLabelFactory(google.maps)
           this.zone.run(() => {
             this.googleInstance = window.google;
             this.googleSubject.next(this.googleInstance);
@@ -89,6 +94,16 @@ export class MapService {
     return this.getGoogle()
       .map(google => new google.maps.InfoWindow(options))
       .take(1);
+  }
+
+  createMarker(position, labelContent) {
+    return new MarkerWithLabel({
+      position,
+      labelContent,
+      labelStyle: LABEL_STYLES,
+      map: this.mapInstance,
+      icon: { path: '' },
+    });
   }
 
   addData(collection: FeatureCollection) {

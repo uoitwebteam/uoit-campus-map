@@ -55,7 +55,6 @@ export class MapComponent implements OnInit, OnChanges {
 
   constructor(private mapService: MapService) {
     this.setStylesByCategory = this.setStylesByCategory.bind(this);
-    this.setLabelsByBuilding = this.setLabelsByBuilding.bind(this);
     this.featureListeners = {
       mouseover: this.onFeatureMouseover.bind(this),
       mouseout: this.onFeatureMouseout.bind(this),
@@ -74,11 +73,12 @@ export class MapComponent implements OnInit, OnChanges {
       });
   }
 
-      this.mapInstance.data.forEach(this.setLabelsByBuilding)
   ngOnChanges({ mapData, categories }: SimpleChanges): void {
     if (mapData && mapData.currentValue) {
+      this.clearBuildingLabels();
       this.updateMapData(mapData.currentValue);
       this.attachListeners(this.featureListeners);
+      this.setBuildingLabels();
       this.onMapZoomChanged();
     }
     if (categories && categories.currentValue) {
@@ -97,23 +97,24 @@ export class MapComponent implements OnInit, OnChanges {
       {},
       GEOMETRY_STYLES,
       { icon: ICON_STYLES },
-      // this.showLabels ? { label } : {},
       this.categories.find(c => c._id === category)
     );
   }
 
-  setLabelsByBuilding(feature) {
-    const building = feature.getProperty('building');
-    if (building) {
-      const marker = new google.maps.Marker({
-        map: this.mapInstance,
-        position: this.mapService.getCenter(feature),
-        icon: 'none',
-        label: building.name,
-      });
-      console.log(marker);
-      this.mapMarkers.push(marker);
-    }
+  setBuildingLabels() {
+    this.mapInstance.data.forEach(feature => {
+      const building = feature.getProperty('building');
+      const position = this.mapService.getCenter(feature);
+      if (building) {
+        const marker = this.mapService.createMarker(position, building.name);
+        this.mapMarkers.push(marker);
+      }
+    });
+  }
+
+  clearBuildingLabels() {
+    this.mapMarkers.forEach(marker => marker.setMap(null));
+    this.mapMarkers = [];
   }
 
   // event handler functions

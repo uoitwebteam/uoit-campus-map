@@ -112,3 +112,14 @@ export const HOVER_STYLES = {
   strokeColor: '#FFFFFF',
   strokeOpacity: 0.7,
 };
+
+export const LABEL_STYLES = {
+  transform: 'translateX(-50%) translateY(-50%)',
+  textTransform: 'uppercase',
+  color: 'white',
+  fontSize: '0.88rem',
+  fontWeight: 900,
+  maxWidth: '200px',
+  textShadow: '1px 1px 1px rgba(0,0,0,0.7)',
+  textAlign: 'center',
+};
