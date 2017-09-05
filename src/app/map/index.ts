@@ -1,6 +1,7 @@
 export * from './feature';
 export * from './infowindow';
 
+export * from './map-styles';
 export * from './map-defaults';
 export * from './map.service';
 export * from './map.component';

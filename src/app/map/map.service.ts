@@ -80,7 +80,7 @@ export class MapService {
           this.mapInstance = new google.maps.Map(element, {
             center: new google.maps.LatLng({ lat: 43.9443802, lng: -78.8975857 }),
             zoom: 17,
-            styles: MAP_STYLES,
+            styles: MAP_STYLES.basic,
             disableDefaultUI: true,
             tilt: 45,
             heading: 0,
